@@ -14,6 +14,7 @@ module.tx_mindshapeseo_web_mindshapeseoseo < plugin.tx_mindshapeseo
 
 # sitemap.xml page type
 # make a htaccess redirect "RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]"
+# if you use multiple sitemaps also add "RewriteRule sitemap_(.*).xml$ /index.php?type=10000&pageuid=$1 [L,R=301]"
 # and robot.txt add "Sitemap: /index.php?type=10000"
 sitemap = PAGE
 sitemap {
