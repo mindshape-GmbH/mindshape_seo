@@ -29,5 +29,5 @@ sitemap {
     }
 
     10 = USER_INT
-    10.userFunc = Mindshape\MindshapeSeo\Service\SitemapXmlService->main
+    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapXmlController->sitemapAction
 }

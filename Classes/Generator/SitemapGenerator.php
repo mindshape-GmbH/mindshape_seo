@@ -36,7 +36,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class SitemapGenerator implements SingletonInterface
 {
-    const DEFAULT_PAGE = 1;
     const DEFAULT_PRIORITY = 0.5;
 
     const TAG_URL = 'url';
@@ -66,7 +65,7 @@ class SitemapGenerator implements SingletonInterface
      * @param int $page
      * @return string
      */
-    public function generateSitemapXml($page = self::DEFAULT_PAGE)
+    public function generateSitemapXml($page)
     {
         return $this->getStartTags() . $this->getUrls($page) . $this->getEndTags();
     }

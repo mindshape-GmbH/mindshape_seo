@@ -1,5 +1,5 @@
 <?php
-namespace Mindshape\MindshapeSeo\Service;
+namespace Mindshape\MindshapeSeo\Controller;
 
 /***************************************************************
  *
@@ -35,7 +35,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  * @package mindshape_seo
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class SitemapXmlService implements SingletonInterface
+class SitemapXmlController implements SingletonInterface
 {
     /**
      * @var \Mindshape\MindshapeSeo\Generator\SitemapGenerator
@@ -43,7 +43,7 @@ class SitemapXmlService implements SingletonInterface
     protected $sitemapGenerator;
 
     /**
-     * @return SitemapXmlService
+     * @return SitemapXmlController
      */
     public function __construct()
     {
@@ -57,12 +57,12 @@ class SitemapXmlService implements SingletonInterface
      * @param array $conf
      * @return string
      */
-    public function main($content, $conf)
+    public function sitemapAction($content, $conf)
     {
         if (1 < (int) GeneralUtility::_GET('pageuid')) {
             $pageUid = (int) GeneralUtility::_GET('pageuid');
         } else {
-            $pageUid = SitemapGenerator::DEFAULT_PAGE;
+            $pageUid = $GLOBALS['TSFE']->rootLine[0]['uid'];
         }
 
         return $this->sitemapGenerator->generateSitemapXml($pageUid);
