@@ -1,0 +1,32 @@
+plugin.tx_mindshapeseo {
+    persistence {
+        storagePid = {$module.tx_mindshapeseo_seo.persistence.storagePid}
+    }
+
+    view {
+        templateRootPaths.0 = {$module.tx_mindshapeseo_seo.view.templateRootPath}
+        partialRootPaths.0 = {$module.tx_mindshapeseo_seo.view.partialRootPath}
+        layoutRootPaths.0 = {$module.tx_mindshapeseo_seo.view.layoutRootPath}
+    }
+}
+
+module.tx_mindshapeseo_web_mindshapeseoseo < plugin.tx_mindshapeseo
+
+# sitemap.xml page type
+# make a htaccess redirect "RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]"
+# and robot.txt add "Sitemap: /index.php?type=10000"
+sitemap = PAGE
+sitemap {
+    typeNum = 10000
+    config {
+        disableAllHeaderCode = 1
+        xhtml_cleaning = 0
+        admPanel = 0
+        debug = 0
+        no_cache = 1
+        additionalHeaders = Content-type:application/xml
+    }
+
+    10 = USER_INT
+    10.userFunc = Mindshape\MindshapeSeo\Service\SitemapXmlService->main
+}
