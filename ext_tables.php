@@ -103,6 +103,13 @@ $facebookColumns = array(
 unset($facebookColumns);
 
 $seoColumns = array(
+    'mindshapeseo_disable_title_attachment' => array(
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_disable_title_attachment',
+        'exclude' => 1,
+        'config' => array(
+            'type' => 'check',
+        ),
+    ),
     'mindshapeseo_priority' => array(
         'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_priority',
         'exclude' => 1,
@@ -169,6 +176,6 @@ $seoColumns = array(
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $seoColumns, 1);
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('pages', '--div--;SEO,mindshapeseo_priority, mindshapeseo_change_frequency, mindshapeseo_no_index, mindshapeseo_no_follow, mindshapeseo_exclude_from_sitemap, mindshapeseo_exclude_suppages_from_sitemap, mindshapeseo_sub_sitemap', '', '');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('pages', '--div--;SEO,mindshapeseo_disable_title_attachment, mindshapeseo_priority, mindshapeseo_change_frequency, mindshapeseo_no_index, mindshapeseo_no_follow, mindshapeseo_exclude_from_sitemap, mindshapeseo_exclude_suppages_from_sitemap, mindshapeseo_sub_sitemap', '', '');
 
 unset($seoColumns);

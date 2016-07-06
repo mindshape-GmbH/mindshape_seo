@@ -25,7 +25,10 @@ namespace Mindshape\MindshapeSeo\Hook;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Service\HeaderDataService;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package mindshape_seo
@@ -34,30 +37,17 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 class RenderPreProcessHook
 {
     /**
-     * @var array
-     */
-    protected $extConf = array();
-
-    /**
-     * @return RenderPreProcessHook
-     */
-    public function __construct()
-    {
-        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mindshape_seo']);
-
-        if (is_array($extConf)) {
-            $this->extConf = $extConf;
-        }
-    }
-
-    /**
      * @param array        $params
      * @param PageRenderer $pageRenderer
      */
     public function main(array &$params, PageRenderer $pageRenderer)
     {
         if ('FE' === TYPO3_MODE) {
-            
+            /** @var ObjectManager $objectManager */
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+            /** @var HeaderDataService $headerDataService */
+            $headerDataService = $objectManager->get(HeaderDataService::class, $pageRenderer);
+            $headerDataService->manipulateHeaderData();
         }
     }
 }
