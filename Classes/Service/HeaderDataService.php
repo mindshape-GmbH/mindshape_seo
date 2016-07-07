@@ -29,8 +29,8 @@ namespace Mindshape\MindshapeSeo\Service;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
@@ -39,12 +39,20 @@ use TYPO3\CMS\Frontend\Page\PageRepository;
  */
 class HeaderDataService
 {
-    const DEFAULT_TITLE = '<title>|</title>';
-
     /**
      * @var \TYPO3\CMS\Core\Page\PageRenderer
      */
     protected $pageRenderer;
+
+    /**
+     * @var \TYPO3\CMS\Frontend\Page\PageRepository
+     */
+    protected $pageRepository;
+
+    /**
+     * @var \Mindshape\MindshapeSeo\Service\PageService
+     */
+    protected $pageService;
 
     /**
      * @var array
@@ -59,14 +67,16 @@ class HeaderDataService
     {
         $this->pageRenderer = $pageRenderer;
 
-        /** @var ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var PageRepository $pageRepository */
-        $pageRepository = $objectManager->get(PageRepository::class);
         /** @var DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
-        $page = $pageRepository->getPage($GLOBALS['TSFE']->id);
+        /** @var ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->pageRepository = $objectManager->get(PageRepository::class);
+        $this->uriBuilder = $objectManager->get(UriBuilder::class);
+        $this->pageService = $objectManager->get(PageService::class);
+
+        $page = $this->pageRepository->getPage($GLOBALS['TSFE']->id);
         $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
 
         $ogimage = '';
@@ -84,9 +94,10 @@ class HeaderDataService
         }
 
         $this->settings = array(
-            'domainSettings' => array(),
-            'pageSettings' => array(
-                'originalTitle' => $page['title'],
+            'domain' => array(),
+            'page' => array(
+                'uid' => $page['uid'],
+                'title' => $page['title'],
                 'facebook' => array(
                     'title' => $page['mindshapeseo_ogtitle'],
                     'url' => $page['mindshapeseo_ogurl'],
@@ -108,9 +119,9 @@ class HeaderDataService
         );
 
         foreach ($domains as $domain) {
-            $this->settings['domainSettings'] = array(
-                'googleAnalytics' => $domain['google_analytics'],
-                'titleAttachment' => $domain['title_attachment'],
+            $this->settings['domain'] = array(
+                'googleAnalytics' => trim($domain['google_analytics']),
+                'titleAttachment' => trim($domain['title_attachment']),
                 'addHreflang' => (bool) $domain['add_hreflang'],
             );
         }
@@ -122,6 +133,7 @@ class HeaderDataService
     public function manipulateHeaderData()
     {
         $this->attachTitleAttachment();
+        $this->addHreflang();
     }
 
     /**
@@ -129,10 +141,51 @@ class HeaderDataService
      */
     protected function attachTitleAttachment()
     {
-        if (!$this->settings['pageSettings']['seo']['disableTitleAttachment']) {
+        if (
+            '' !== $this->settings['domain']['titleAttachment'] &&
+            !$this->settings['page']['seo']['disableTitleAttachment']
+        ) {
             $this->pageRenderer->setTitle(
-                $this->settings['pageSettings']['originalTitle'] . ' | ' . $this->settings['domainSettings']['titleAttachment']
+                $this->settings['page']['title'] . ' | ' . $this->settings['domain']['titleAttachment']
             );
         }
+    }
+
+    /**
+     * @return void
+     */
+    protected function addHreflang()
+    {
+        if (!$this->settings['domain']['addHreflang']) {
+            return;
+        }
+
+        /** @var DatabaseConnection $databaseConnection */
+        $databaseConnection = $GLOBALS['TYPO3_DB'];
+
+        $result = $databaseConnection->exec_SELECTgetRows(
+            '*',
+            'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.sys_language_uid',
+            'o.pid = ' . $this->settings['page']['uid']
+        );
+
+        foreach ($result as $language) {
+            $this->pageRenderer->addHeaderData(
+                $this->renderHreflang(
+                    $this->pageService->getPageLink($this->settings['page']['uid'], $language['uid']),
+                    $language['language_isocode']
+                )
+            );
+        }
+    }
+
+    /**
+     * @param string$url
+     * @param string $languageKey
+     * @return string
+     */
+    protected function renderHreflang($url, $languageKey)
+    {
+        return '<link rel="alternate" href="' . $url . '" hreflang="' . $languageKey . '"/>';
     }
 }

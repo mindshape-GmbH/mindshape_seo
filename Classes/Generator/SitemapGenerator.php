@@ -26,9 +26,11 @@ namespace Mindshape\MindshapeSeo\Generator;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Service\PageService;
 use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package mindshape_seo
@@ -56,10 +58,16 @@ class SitemapGenerator implements SingletonInterface
     protected $pageRepository;
 
     /**
-     * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
-     * @inject
+     * @var \Mindshape\MindshapeSeo\Service\PageService
      */
-    protected $contentObjectRenderer;
+    protected $pageService;
+
+    public function __construct()
+    {
+        /** @var ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->pageService = $objectManager->get(PageService::class);
+    }
 
     /**
      * @param int $page
@@ -154,10 +162,10 @@ class SitemapGenerator implements SingletonInterface
                 false === $isSitemapPage
             ) {
                 $tag = self::TAG_SITEMAP;
-                $url = $this->getPageLink($GLOBALS['TSFE']->rootLine[0]['uid']) . 'sitemap_' . $page['uid'] . '.xml';
+                $url = $this->pageService->getPageLink($GLOBALS['TSFE']->rootLine[0]['uid']) . 'sitemap_' . $page['uid'] . '.xml';
             } else {
                 $tag = self::TAG_URL;
-                $url = $this->getPageLink($page['uid']);
+                $url = $this->pageService->getPageLink($page['uid']);
             }
 
             $lastmod = new \DateTime();
@@ -225,25 +233,5 @@ class SitemapGenerator implements SingletonInterface
         }
 
         return '<' . $tag . '>' . $content . '</' . $tag . '>';
-    }
-
-    /**
-     * Creates a link to a single page
-     *
-     * @param int $pageId
-     * @return string
-     */
-    protected function getPageLink($pageId)
-    {
-        return GeneralUtility::locationHeaderUrl(
-            htmlspecialchars(
-                $this->contentObjectRenderer->typoLink_URL(
-                    array(
-                        'parameter' => $pageId,
-                        'returnLast' => 'url',
-                    )
-                )
-            )
-        );
     }
 }
