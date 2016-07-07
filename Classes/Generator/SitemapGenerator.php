@@ -107,7 +107,7 @@ class SitemapGenerator implements SingletonInterface
     {
         $urls = '';
 
-        $pages = $this->getPagesFromPageUid($pageUid);
+        $pages = $this->pageService->getSubPagesFromPageUid($pageUid);
 
         $excludePids = array();
 
@@ -135,7 +135,7 @@ class SitemapGenerator implements SingletonInterface
                 $excludePids = array_merge(
                     $excludePids,
                     array_diff(
-                        $this->getChildPageUidsFromPageUid($page['uid']),
+                        $this->pageService->getSubPageUidsFromPageUid($page['uid']),
                         array($page['uid'])
                     )
                 );
@@ -175,35 +175,6 @@ class SitemapGenerator implements SingletonInterface
         }
 
         return $urls;
-    }
-
-    /**
-     * @param int $pageUid
-     * @return array
-     */
-    protected function getPagesFromPageUid($pageUid)
-    {
-        $pages = array();
-
-        foreach ($this->getChildPageUidsFromPageUid($pageUid) as $uid) {
-            $pages[] = $this->pageRepository->getPage($uid);
-        }
-
-        return $pages;
-    }
-
-    /**
-     * @param int $pageUid
-     * @return array
-     */
-    protected function getChildPageUidsFromPageUid($pageUid)
-    {
-        /** @var QueryGenerator $queryGenerator */
-        $queryGenerator = GeneralUtility::makeInstance(QueryGenerator::class);
-        return GeneralUtility::trimExplode(
-            ',',
-            $queryGenerator->getTreeList($pageUid, 9999999, 0, 1)
-        );
     }
 
     /**

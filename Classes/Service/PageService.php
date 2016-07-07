@@ -26,12 +26,14 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
  * @package mindshape_seo
@@ -43,6 +45,11 @@ class PageService implements SingletonInterface
      * @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder
      */
     protected $uriBuilder;
+
+    /**
+     * @var \TYPO3\CMS\Frontend\Page\PageRepository
+     */
+    protected $pageRepository;
 
     /**
      * @return PageService
@@ -58,6 +65,7 @@ class PageService implements SingletonInterface
         $configurationManager->setContentObject($contentObjectRenderer);
         $this->uriBuilder = $objectManager->get(UriBuilder::class);
         $this->uriBuilder->injectConfigurationManager($configurationManager);
+        $this->pageRepository = $objectManager->get(PageRepository::class);
     }
 
     /**
@@ -76,5 +84,34 @@ class PageService implements SingletonInterface
                 0 < $sysLanguageUid ? array('L' => $sysLanguageUid) : array()
             )
             ->buildFrontendUri();
+    }
+
+    /**
+     * @param int $pageUid
+     * @return array
+     */
+    public function getSubPageUidsFromPageUid($pageUid)
+    {
+        /** @var QueryGenerator $queryGenerator */
+        $queryGenerator = GeneralUtility::makeInstance(QueryGenerator::class);
+        return GeneralUtility::trimExplode(
+            ',',
+            $queryGenerator->getTreeList($pageUid, 9999999, 0, 1)
+        );
+    }
+
+    /**
+     * @param int $pageUid
+     * @return array
+     */
+    public function getSubPagesFromPageUid($pageUid)
+    {
+        $pages = array();
+
+        foreach ($this->getSubPageUidsFromPageUid($pageUid) as $uid) {
+            $pages[] = $this->pageRepository->getPage($uid);
+        }
+
+        return $pages;
     }
 }
