@@ -37,20 +37,21 @@ CREATE TABLE pages_language_overlay (
 
 CREATE TABLE tx_mindshapeseo_configuration (
 
-  uid              int(11)                         NOT NULL AUTO_INCREMENT,
-  pid              int(11) DEFAULT '0'             NOT NULL,
+  uid                    int(11)                         NOT NULL AUTO_INCREMENT,
+  pid                    int(11) DEFAULT '0'             NOT NULL,
 
-  domain           varchar(255) DEFAULT ''         NOT NULL,
-  google_analytics varchar(255) DEFAULT ''         NOT NULL,
-  title_attachment varchar(255) DEFAULT ''         NOT NULL,
-  generate_sitemap tinyint(4) unsigned DEFAULT '1' NOT NULL,
-  add_hreflang     tinyint(4) unsigned DEFAULT '1' NOT NULL,
+  domain                 varchar(255) DEFAULT ''         NOT NULL,
+  google_analytics       varchar(255) DEFAULT ''         NOT NULL,
+  title_attachment       varchar(255) DEFAULT ''         NOT NULL,
+  generate_sitemap       tinyint(4) unsigned DEFAULT '1' NOT NULL,
+  add_hreflang           tinyint(4) unsigned DEFAULT '1' NOT NULL,
+  facebook_default_image text                            NOT NULL,
 
-  tstamp           int(11) unsigned DEFAULT '0'    NOT NULL,
-  crdate           int(11) unsigned DEFAULT '0'    NOT NULL,
-  cruser_id        int(11) unsigned DEFAULT '0'    NOT NULL,
-  disabled         tinyint(4) unsigned DEFAULT '0' NOT NULL,
-  deleted          tinyint(4) unsigned DEFAULT '0' NOT NULL,
+  tstamp                 int(11) unsigned DEFAULT '0'    NOT NULL,
+  crdate                 int(11) unsigned DEFAULT '0'    NOT NULL,
+  cruser_id              int(11) unsigned DEFAULT '0'    NOT NULL,
+  disabled               tinyint(4) unsigned DEFAULT '0' NOT NULL,
+  deleted                tinyint(4) unsigned DEFAULT '0' NOT NULL,
 
   PRIMARY KEY (uid),
   KEY parent (pid)

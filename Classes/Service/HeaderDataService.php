@@ -86,27 +86,6 @@ class HeaderDataService
         $page = $this->pageRepository->getPage($GLOBALS['TSFE']->id);
         $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
 
-        $ogimage = '';
-
-        if (0 < $page['mindshapeseo_ogimage']) {
-            /** @var FileRepository $fileRepository */
-            $fileRepository = $objectManager->get(FileRepository::class);
-            /** @var ImageService $imageService */
-            $imageService = $objectManager->get(ImageService::class);
-            $files = $fileRepository->findByRelation('pages', 'ogimage', $page['uid']);
-            /** @var FileReference $file */
-            $file = $files[0];
-            /** @var ProcessedFile $processedFile */
-            $processedFile = $imageService->applyProcessingInstructions(
-                $file,
-                array(
-                    'crop' => $file->getReferenceProperties()['crop'],
-                )
-            );
-
-            $ogimage = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
-        }
-
         $this->settings = array(
             'domain' => array(),
             'sitename' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
@@ -116,7 +95,6 @@ class HeaderDataService
                 'facebook' => array(
                     'title' => $page['mindshapeseo_ogtitle'],
                     'url' => $page['mindshapeseo_ogurl'],
-                    'image' => $ogimage,
                     'description' => $page['mindshapeseo_ogdescription'],
                 ),
                 'seo' => array(
@@ -138,7 +116,29 @@ class HeaderDataService
                 'googleAnalytics' => trim($result['google_analytics']),
                 'titleAttachment' => trim($result['title_attachment']),
                 'addHreflang' => (bool) $result['add_hreflang'],
+                'facebookDefaultImage' => $result['facebook_default_image'],
             );
+        }
+
+        if (0 === (int) $page['mindshapeseo_ogimage']) {
+            $this->settings['page']['facebook']['image'] = $this->settings['domain']['facebookDefaultImage'];
+        } else {
+            /** @var FileRepository $fileRepository */
+            $fileRepository = $objectManager->get(FileRepository::class);
+            /** @var ImageService $imageService */
+            $imageService = $objectManager->get(ImageService::class);
+            $files = $fileRepository->findByRelation('pages', 'ogimage', $page['uid']);
+            /** @var FileReference $file */
+            $file = $files[0];
+            /** @var ProcessedFile $processedFile */
+            $processedFile = $imageService->applyProcessingInstructions(
+                $file,
+                array(
+                    'crop' => $file->getReferenceProperties()['crop'],
+                )
+            );
+
+            $this->settings['page']['facebook']['image'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
         }
     }
 
@@ -219,7 +219,7 @@ class HeaderDataService
         );
 
         foreach ($metaData as $property => $content) {
-            if ('' !== $content) {
+            if (!empty($content)) {
                 $this->pageRenderer->addHeaderData(
                     $this->renderMetaTag($property, $content)
                 );
