@@ -113,10 +113,28 @@ class HeaderDataService
 
         if (is_array($result)) {
             $this->settings['domain'] = array(
+                'url' => $this->pageService->getPageLink(
+                    $GLOBALS['TSFE']->rootLine[0]['uid']
+                ),
                 'googleAnalytics' => trim($result['google_analytics']),
                 'titleAttachment' => trim($result['title_attachment']),
                 'addHreflang' => (bool) $result['add_hreflang'],
                 'facebookDefaultImage' => $result['facebook_default_image'],
+                'addJsonLd' => (bool) $result['add_jsonld'],
+                'json-ld' => array(
+                    'type' => $result['jsonld_type'],
+                    'telephone' => $result['jsonld_telephone'],
+                    'fax' => $result['jsonld_fax'],
+                    'email' => $result['jsonld_email'],
+                    'contactType' => $result['jsonld_contacttype'],
+                    'sameAs' => $result['jsonld_same_as'],
+                    'logo' => $result['jsonld_logo'],
+                    'address' => array(
+                        'locality' => $result['jsonld_address_locality'],
+                        'postalcode' => $result['jsonld_address_postalcode'],
+                        'street' => $result['jsonld_address_street'],
+                    ),
+                ),
             );
         }
 
@@ -148,8 +166,15 @@ class HeaderDataService
     public function manipulateHeaderData()
     {
         $this->attachTitleAttachment();
-        $this->addHreflang();
         $this->addFacebookData();
+
+        if ($this->settings['domain']['addHreflang']) {
+            $this->addHreflang();
+        }
+
+        if ($this->settings['domain']['addJsonLd']) {
+            $this->addJsonLd();
+        }
     }
 
     /**
@@ -172,10 +197,6 @@ class HeaderDataService
      */
     protected function addHreflang()
     {
-        if (!$this->settings['domain']['addHreflang']) {
-            return;
-        }
-
         /** @var DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
@@ -235,5 +256,101 @@ class HeaderDataService
     protected function renderMetaTag($property, $content)
     {
         return '<meta property="' . $property . '" content="' . $content . '"/>';
+    }
+
+    /**
+     * @return void
+     */
+    protected function addJsonLd()
+    {
+        $jsonLdArray = array();
+
+        $jsonLdArray[] = $this->renderJsonWebsiteName();
+        $jsonLdArray[] = $this->renderJsonLdInformation();
+        $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
+
+        if (0 < count($jsonLdbreadcrumb['itemListElement'])) {
+            $jsonLdArray[] = $jsonLdbreadcrumb;
+        }
+
+        if (0 < count($jsonLdArray)) {
+            $this->pageRenderer->addHeaderData(
+                '<script type="application/ld+json" data-ignore="1">' . json_encode($jsonLdArray) . '</script>'
+            );
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function renderJsonWebsiteName()
+    {
+        return array(
+            '@context' => 'http://schema.org',
+            '@type' => 'WebSite',
+            'url' => $this->settings['domain']['url'],
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function renderJsonLdInformation()
+    {
+        return array(
+            '@context' => 'http://schema.org',
+            '@type' => $this->settings['domain']['json-ld']['type'],
+            'url' => $this->settings['domain']['url'],
+            'contactPoint' => array(
+                '@type' => 'ContactPoint',
+                'telephone' => $this->settings['domain']['json-ld']['telephone'],
+                'faxNumber' => $this->settings['domain']['json-ld']['fax'],
+                'email' => $this->settings['domain']['json-ld']['email'],
+                'contactType' => $this->settings['domain']['json-ld']['contactType'],
+            ),
+            'logo' => $this->settings['domain']['json-ld']['logo'],
+            'address' => array(
+                '@type' => 'PostalAddress',
+                'addressLocality' => $this->settings['domain']['json-ld']['address']['locality'],
+                'postalcode' => $this->settings['domain']['json-ld']['address']['postalcode'],
+                'streetAddress' => $this->settings['domain']['json-ld']['address']['street'],
+            ),
+        );
+    }
+
+    /**
+     * @return array
+     */
+    protected function renderJsonLdBreadcrum()
+    {
+        $breadcrumb = array(
+            '@context' => 'http://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => array(),
+        );
+
+        $rootLineUids = $GLOBALS['TSFE']->rootLine;
+        array_pop($rootLineUids);
+        $rootLineUids = array_reverse($rootLineUids);
+
+        foreach ($rootLineUids as $index => $page) {
+            if (
+                1 !== (int) $page['doktype'] &&
+                4 !== (int) $page['doktype']
+            ) {
+                continue;
+            }
+
+            $breadcrumb['itemListElement'][] = array(
+                '@type' => 'ListItem',
+                'position' => $index + 1,
+                'item' => array(
+                    '@id' => $this->pageService->getPageLink($page['uid']),
+                    'name' => $page['title'],
+                ),
+            );
+        }
+
+        return $breadcrumb;
     }
 }
