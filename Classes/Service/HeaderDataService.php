@@ -28,9 +28,14 @@ namespace Mindshape\MindshapeSeo\Service;
 
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\Core\Resource\FileRepository;
+use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Service\ImageService;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
@@ -39,6 +44,8 @@ use TYPO3\CMS\Frontend\Page\PageRepository;
  */
 class HeaderDataService
 {
+    const DEFAULT_DOMAIN = '*';
+
     /**
      * @var \TYPO3\CMS\Core\Page\PageRenderer
      */
@@ -82,26 +89,34 @@ class HeaderDataService
         $ogimage = '';
 
         if (0 < $page['mindshapeseo_ogimage']) {
-            $result = $databaseConnection->exec_SELECTgetSingleRow(
-                'identifier',
-                'sys_file s INNER JOIN sys_file_reference f ON f.uid_local = s.uid',
-                'f.tablenames = "pages" AND f.fieldname = "ogimage"'
+            /** @var FileRepository $fileRepository */
+            $fileRepository = $objectManager->get(FileRepository::class);
+            /** @var ImageService $imageService */
+            $imageService = $objectManager->get(ImageService::class);
+            $files = $fileRepository->findByRelation('pages', 'ogimage', $page['uid']);
+            /** @var FileReference $file */
+            $file = $files[0];
+            /** @var ProcessedFile $processedFile */
+            $processedFile = $imageService->applyProcessingInstructions(
+                $file,
+                array(
+                    'crop' => $file->getReferenceProperties()['crop'],
+                )
             );
 
-            if (is_array($result)) {
-                $ogimage = $result['identifier'];
-            }
+            $ogimage = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
         }
 
         $this->settings = array(
             'domain' => array(),
+            'sitename' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
             'page' => array(
                 'uid' => $page['uid'],
                 'title' => $page['title'],
                 'facebook' => array(
                     'title' => $page['mindshapeseo_ogtitle'],
                     'url' => $page['mindshapeseo_ogurl'],
-                    'image' => GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . $ogimage,
+                    'image' => $ogimage,
                     'description' => $page['mindshapeseo_ogdescription'],
                 ),
                 'seo' => array(
@@ -112,17 +127,17 @@ class HeaderDataService
             ),
         );
 
-        $domains = $databaseConnection->exec_SELECTgetRows(
+        $result = $databaseConnection->exec_SELECTgetSingleRow(
             '*',
             'tx_mindshapeseo_configuration t',
-            't.domain = "*" OR t.domain = "' . $currentDomain . '"'
+            't.domain = "' . self::DEFAULT_DOMAIN . '" OR t.domain = "' . $currentDomain . '"'
         );
 
-        foreach ($domains as $domain) {
+        if (is_array($result)) {
             $this->settings['domain'] = array(
-                'googleAnalytics' => trim($domain['google_analytics']),
-                'titleAttachment' => trim($domain['title_attachment']),
-                'addHreflang' => (bool) $domain['add_hreflang'],
+                'googleAnalytics' => trim($result['google_analytics']),
+                'titleAttachment' => trim($result['title_attachment']),
+                'addHreflang' => (bool) $result['add_hreflang'],
             );
         }
     }
@@ -134,6 +149,7 @@ class HeaderDataService
     {
         $this->attachTitleAttachment();
         $this->addHreflang();
+        $this->addFacebookData();
     }
 
     /**
@@ -180,12 +196,44 @@ class HeaderDataService
     }
 
     /**
-     * @param string$url
+     * @param string $url
      * @param string $languageKey
      * @return string
      */
     protected function renderHreflang($url, $languageKey)
     {
         return '<link rel="alternate" href="' . $url . '" hreflang="' . $languageKey . '"/>';
+    }
+
+    /**
+     * @return void
+     */
+    protected function addFacebookData()
+    {
+        $metaData = array(
+            'og:site_name' => $this->settings['sitename'],
+            'og:url' => $this->settings['page']['facebook']['url'],
+            'og:title' => $this->settings['page']['facebook']['title'],
+            'og:description' => $this->settings['page']['facebook']['description'],
+            'og:image' => $this->settings['page']['facebook']['image'],
+        );
+
+        foreach ($metaData as $property => $content) {
+            if ('' !== $content) {
+                $this->pageRenderer->addHeaderData(
+                    $this->renderMetaTag($property, $content)
+                );
+            }
+        }
+    }
+
+    /**
+     * @param string $property
+     * @param string $content
+     * @return string
+     */
+    protected function renderMetaTag($property, $content)
+    {
+        return '<meta property="' . $property . '" content="' . $content . '"/>';
     }
 }
