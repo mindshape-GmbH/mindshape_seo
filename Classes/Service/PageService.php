@@ -90,6 +90,15 @@ class PageService implements SingletonInterface
      * @param int $pageUid
      * @return array
      */
+    public function getPage($pageUid)
+    {
+        return $this->pageRepository->getPage($pageUid);
+    }
+
+    /**
+     * @param int $pageUid
+     * @return array
+     */
     public function getSubPageUidsFromPageUid($pageUid)
     {
         /** @var QueryGenerator $queryGenerator */

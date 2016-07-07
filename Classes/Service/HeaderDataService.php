@@ -32,11 +32,8 @@ use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
  * @package mindshape_seo
@@ -50,11 +47,6 @@ class HeaderDataService
      * @var \TYPO3\CMS\Core\Page\PageRenderer
      */
     protected $pageRenderer;
-
-    /**
-     * @var \TYPO3\CMS\Frontend\Page\PageRepository
-     */
-    protected $pageRepository;
 
     /**
      * @var \Mindshape\MindshapeSeo\Service\PageService
@@ -79,11 +71,9 @@ class HeaderDataService
 
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->pageRepository = $objectManager->get(PageRepository::class);
-        $this->uriBuilder = $objectManager->get(UriBuilder::class);
         $this->pageService = $objectManager->get(PageService::class);
 
-        $page = $this->pageRepository->getPage($GLOBALS['TSFE']->id);
+        $page = $this->pageService->getPage($GLOBALS['TSFE']->id);
         $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
 
         $this->settings = array(
@@ -175,6 +165,10 @@ class HeaderDataService
         if ($this->settings['domain']['addJsonLd']) {
             $this->addJsonLd();
         }
+
+        if ('' !== $this->settings['domain']['googleAnalytics']) {
+            $this->addGoogleAnalytics();
+        }
     }
 
     /**
@@ -256,6 +250,25 @@ class HeaderDataService
     protected function renderMetaTag($property, $content)
     {
         return '<meta property="' . $property . '" content="' . $content . '"/>';
+    }
+
+    /**
+     * @return void
+     */
+    protected function addGoogleAnalytics()
+    {
+        $this->pageRenderer->addHeaderData(
+            '<script type="text/javascript" data-ignore="1">' . PHP_EOL .
+            '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){' . PHP_EOL .
+            '(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),' . PHP_EOL .
+            'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)' . PHP_EOL .
+            '})(window,document,\'script\',\'www.google-analytics.com/analytics.js\',\'ga\');' . PHP_EOL .
+            PHP_EOL .
+            'ga(\'create\', \'' . $this->settings['domain']['googleAnalytics'] . '\', \'auto\');' . PHP_EOL .
+            'ga(\'set\', \'anonymizeIp\', true);' . PHP_EOL .
+            'ga(\'send\', \'pageview\');' . PHP_EOL .
+            '</script>'
+        );
     }
 
     /**
