@@ -54,6 +54,11 @@ class HeaderDataService
     protected $pageService;
 
     /**
+     * @var \Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService
+     */
+    protected $standaloneTemplateRendererService;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -72,6 +77,7 @@ class HeaderDataService
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->pageService = $objectManager->get(PageService::class);
+        $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
 
         $page = $this->pageService->getPage($GLOBALS['TSFE']->id);
         $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
@@ -107,6 +113,8 @@ class HeaderDataService
                     $GLOBALS['TSFE']->rootLine[0]['uid']
                 ),
                 'googleAnalytics' => trim($result['google_analytics']),
+                'piwikUrl' => trim($result['piwik_url']),
+                'piwikIdSite' => trim($result['piwik_idsite']),
                 'titleAttachment' => trim($result['title_attachment']),
                 'addHreflang' => (bool) $result['add_hreflang'],
                 'facebookDefaultImage' => $result['facebook_default_image'],
@@ -168,6 +176,14 @@ class HeaderDataService
 
         if ('' !== $this->settings['domain']['googleAnalytics']) {
             $this->addGoogleAnalytics();
+        }
+
+        if (
+            '' === $this->settings['domain']['googleAnalytics'] &&
+            '' !== $this->settings['domain']['piwikUrl'] &&
+            '' !== $this->settings['domain']['piwikIdSite']
+        ) {
+            $this->addPiwik();
         }
     }
 
@@ -257,17 +273,27 @@ class HeaderDataService
      */
     protected function addGoogleAnalytics()
     {
+        $view = $this->standaloneTemplateRendererService->getView('Analytics', 'Google');
+        $view->assign('analyticsId', $this->settings['domain']['googleAnalytics']);
+
         $this->pageRenderer->addHeaderData(
-            '<script type="text/javascript" data-ignore="1">' . PHP_EOL .
-            '(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){' . PHP_EOL .
-            '(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),' . PHP_EOL .
-            'm=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)' . PHP_EOL .
-            '})(window,document,\'script\',\'www.google-analytics.com/analytics.js\',\'ga\');' . PHP_EOL .
-            PHP_EOL .
-            'ga(\'create\', \'' . $this->settings['domain']['googleAnalytics'] . '\', \'auto\');' . PHP_EOL .
-            'ga(\'set\', \'anonymizeIp\', true);' . PHP_EOL .
-            'ga(\'send\', \'pageview\');' . PHP_EOL .
-            '</script>'
+            $view->render()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    protected function addPiwik()
+    {
+        $view = $this->standaloneTemplateRendererService->getView('Analytics', 'Piwik');
+        $view->assignMultiple(array(
+            'piwikUrl' => $this->settings['domain']['piwikUrl'],
+            'piwikIdSite' => $this->settings['domain']['piwikIdSite'],
+        ));
+
+        $this->pageRenderer->addHeaderData(
+            $view->render()
         );
     }
 

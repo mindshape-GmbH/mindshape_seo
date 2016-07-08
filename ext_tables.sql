@@ -35,6 +35,8 @@ CREATE TABLE tx_mindshapeseo_configuration (
 
   domain                    varchar(255) DEFAULT ''         NOT NULL,
   google_analytics          varchar(255) DEFAULT ''         NOT NULL,
+  piwik_url                 varchar(255) DEFAULT ''         NOT NULL,
+  piwik_idsite              varchar(255) DEFAULT ''         NOT NULL,
   title_attachment          varchar(255) DEFAULT ''         NOT NULL,
   generate_sitemap          tinyint(4) unsigned DEFAULT '1' NOT NULL,
   add_hreflang              tinyint(4) unsigned DEFAULT '1' NOT NULL,

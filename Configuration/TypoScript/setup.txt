@@ -1,12 +1,12 @@
 plugin.tx_mindshapeseo {
     persistence {
-        storagePid = {$module.tx_mindshapeseo_seo.persistence.storagePid}
+        storagePid = {$plugin.tx_mindshapeseo_seo.persistence.storagePid}
     }
 
     view {
-        templateRootPaths.0 = {$module.tx_mindshapeseo_seo.view.templateRootPath}
-        partialRootPaths.0 = {$module.tx_mindshapeseo_seo.view.partialRootPath}
-        layoutRootPaths.0 = {$module.tx_mindshapeseo_seo.view.layoutRootPath}
+        templateRootPaths.0 = {$plugin.tx_mindshapeseo_seo.view.templateRootPath}
+        partialRootPaths.0 = {plugin.tx_mindshapeseo_seo.view.partialRootPath}
+        layoutRootPaths.0 = {$plugin.tx_mindshapeseo_seo.view.layoutRootPath}
     }
 }
 
