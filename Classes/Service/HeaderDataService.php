@@ -104,7 +104,9 @@ class HeaderDataService
         $result = $databaseConnection->exec_SELECTgetSingleRow(
             '*',
             'tx_mindshapeseo_configuration t',
-            't.domain = "' . self::DEFAULT_DOMAIN . '" OR t.domain = "' . $currentDomain . '"'
+            't.domain = "' . self::DEFAULT_DOMAIN . '" OR t.domain = "' . $currentDomain . '"',
+            '',
+            'domain DESC'
         );
 
         if (is_array($result)) {
