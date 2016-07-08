@@ -88,6 +88,12 @@ class HeaderDataService
             'page' => array(
                 'uid' => $page['uid'],
                 'title' => $page['title'],
+                'meta' => array(
+                    'author' => $page['author'],
+                    'contact' => $page['author_email'],
+                    'description' => $page['description'],
+                    'keywords' => $page['keywords'],
+                ),
                 'facebook' => array(
                     'title' => $page['mindshapeseo_ogtitle'],
                     'url' => $page['mindshapeseo_ogurl'],
@@ -171,6 +177,7 @@ class HeaderDataService
     public function manipulateHeaderData()
     {
         $this->attachTitleAttachment();
+        $this->addMetaData();
         $this->addFacebookData();
 
         if ($this->settings['domain']['addHreflang']) {
@@ -256,6 +263,27 @@ class HeaderDataService
             'og:image' => $this->settings['page']['facebook']['image'],
         );
 
+        $this->addMetaDataArray($metaData);
+    }
+
+    protected function addMetaData()
+    {
+        $metaData = array(
+            'author' => $this->settings['page']['meta']['author'],
+            'contact' => $this->settings['page']['meta']['contact'],
+            'description' => $this->settings['page']['meta']['description'],
+            'keywords' => $this->settings['page']['meta']['keywords'],
+        );
+
+        $this->addMetaDataArray($metaData);
+    }
+
+    /**
+     * @param array $metaData
+     * @return void
+     */
+    protected function addMetaDataArray(array $metaData)
+    {
         foreach ($metaData as $property => $content) {
             if (!empty($content)) {
                 $this->pageRenderer->addHeaderData(
