@@ -112,10 +112,11 @@ class HeaderDataService
                 'url' => $this->pageService->getPageLink(
                     $GLOBALS['TSFE']->rootLine[0]['uid']
                 ),
-                'googleAnalytics' => trim($result['google_analytics']),
-                'piwikUrl' => trim($result['piwik_url']),
-                'piwikIdSite' => trim($result['piwik_idsite']),
-                'titleAttachment' => trim($result['title_attachment']),
+                'customUrl' => $result['custom_url'],
+                'googleAnalytics' => $result['google_analytics'],
+                'piwikUrl' => $result['piwik_url'],
+                'piwikIdSite' => $result['piwik_idsite'],
+                'titleAttachment' => $result['title_attachment'],
                 'addHreflang' => (bool) $result['add_hreflang'],
                 'facebookDefaultImage' => $result['facebook_default_image'],
                 'addJsonLd' => (bool) $result['add_jsonld'],
@@ -326,7 +327,9 @@ class HeaderDataService
         return array(
             '@context' => 'http://schema.org',
             '@type' => 'WebSite',
-            'url' => $this->settings['domain']['url'],
+            'url' => '' !== $this->settings['domain']['customUrl'] ?
+                $this->settings['domain']['customUrl'] :
+                GeneralUtility::getIndpEnv('HTTP_HOST'),
         );
     }
 
