@@ -46,7 +46,6 @@ CREATE TABLE tx_mindshapeseo_configuration (
   jsonld_telephone          varchar(255) DEFAULT ''         NOT NULL,
   jsonld_fax                varchar(255) DEFAULT ''         NOT NULL,
   jsonld_email              varchar(255) DEFAULT ''         NOT NULL,
-  jsonld_contacttype        varchar(255) DEFAULT ''         NOT NULL,
   jsonld_same_as            text                            NOT NULL,
   jsonld_logo               text                            NOT NULL,
   jsonld_address_locality   varchar(255) DEFAULT ''         NOT NULL,

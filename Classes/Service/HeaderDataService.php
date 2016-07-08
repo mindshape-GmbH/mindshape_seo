@@ -124,7 +124,6 @@ class HeaderDataService
                     'telephone' => $result['jsonld_telephone'],
                     'fax' => $result['jsonld_fax'],
                     'email' => $result['jsonld_email'],
-                    'contactType' => $result['jsonld_contacttype'],
                     'sameAs' => $result['jsonld_same_as'],
                     'logo' => $result['jsonld_logo'],
                     'address' => array(
@@ -340,13 +339,9 @@ class HeaderDataService
             '@context' => 'http://schema.org',
             '@type' => $this->settings['domain']['json-ld']['type'],
             'url' => $this->settings['domain']['url'],
-            'contactPoint' => array(
-                '@type' => 'ContactPoint',
-                'telephone' => $this->settings['domain']['json-ld']['telephone'],
-                'faxNumber' => $this->settings['domain']['json-ld']['fax'],
-                'email' => $this->settings['domain']['json-ld']['email'],
-                'contactType' => $this->settings['domain']['json-ld']['contactType'],
-            ),
+            'telephone' => $this->settings['domain']['json-ld']['telephone'],
+            'faxNumber' => $this->settings['domain']['json-ld']['fax'],
+            'email' => $this->settings['domain']['json-ld']['email'],
             'logo' => $this->settings['domain']['json-ld']['logo'],
             'address' => array(
                 '@type' => 'PostalAddress',
