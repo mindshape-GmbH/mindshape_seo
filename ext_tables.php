@@ -45,7 +45,7 @@ if (TYPO3_MODE === 'BE') {
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'mindshape SEO');
 
-$facebookColumns = array(
+$columns = array(
     'mindshapeseo_ogtitle' => array(
         'exclude' => 0,
         'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_ogtitle',
@@ -95,14 +95,6 @@ $facebookColumns = array(
             'eval' => 'trim',
         ),
     ),
-);
-
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $facebookColumns, 1);
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('pages', '--div--;Facebook Metadaten,mindshapeseo_ogtitle, mindshapeseo_ogurl, mindshapeseo_ogimage, mindshapeseo_ogdescription', '', '');
-
-unset($facebookColumns);
-
-$seoColumns = array(
     'mindshapeseo_disable_title_attachment' => array(
         'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_disable_title_attachment',
         'exclude' => 1,
@@ -175,7 +167,62 @@ $seoColumns = array(
     ),
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $seoColumns, 1);
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('pages', '--div--;SEO,mindshapeseo_disable_title_attachment, mindshapeseo_priority, mindshapeseo_change_frequency, mindshapeseo_no_index, mindshapeseo_no_follow, mindshapeseo_exclude_from_sitemap, mindshapeseo_exclude_suppages_from_sitemap, mindshapeseo_sub_sitemap', '', '');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $columns);
+unset($columns);
 
-unset($seoColumns);
+$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_general_pallette'] = array(
+    'showitem' => 'mindshapeseo_disable_title_attachment',
+);
+
+$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_sitemap_pallette'] = array(
+    'showitem' => 'mindshapeseo_priority, --linebreak--, 
+                   mindshapeseo_change_frequency, --linebreak--,
+                   mindshapeseo_exclude_from_sitemap, --linebreak--, 
+                   mindshapeseo_exclude_suppages_from_sitemap, --linebreak--, 
+                   mindshapeseo_sub_sitemap',
+);
+
+$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_indexing_pallette'] = array(
+    'showitem' => 'mindshapeseo_no_index, --linebreak--, 
+                   mindshapeseo_no_follow',
+);
+
+$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_meta_pallette']['showitem'] =
+    $GLOBALS['TCA']['pages']['palettes']['abstract']['showitem'] .
+    ',--linebreak--,' .
+    $GLOBALS['TCA']['pages']['palettes']['metatags']['showitem'];
+
+$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_editorial_pallette'] = $GLOBALS['TCA']['pages']['palettes']['editorial'];
+
+unset(
+    $GLOBALS['TCA']['pages']['palettes']['abstract'],
+    $GLOBALS['TCA']['pages']['palettes']['metatags'],
+    $GLOBALS['TCA']['pages']['palettes']['editorial']
+);
+
+// Facebook metadata tab
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    'pages',
+    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend.xlf:label.facebook_metadata,
+    mindshapeseo_ogtitle,
+    mindshapeseo_ogurl,
+    mindshapeseo_ogimage,
+    mindshapeseo_ogdescription',
+    '',
+    ''
+);
+
+// SEO tab
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    'pages',
+    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend.xlf:label.seo,
+    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend.xlf:label.general;mindshape_seo_general_pallette,
+    --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata;mindshape_seo_meta_pallette, 
+    --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.editorial;mindshape_seo_editorial_pallette, 
+    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend.xlf:label.indexing;mindshape_seo_indexing_pallette, 
+    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend.xlf:label.sitemap;mindshape_seo_sitemap_pallette',
+    '1,4',
+    ''
+);
+
+
