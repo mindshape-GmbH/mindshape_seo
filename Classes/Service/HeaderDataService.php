@@ -144,17 +144,22 @@ class HeaderDataService
             /** @var ImageService $imageService */
             $imageService = $objectManager->get(ImageService::class);
             $files = $fileRepository->findByRelation('pages', 'ogimage', $page['uid']);
-            /** @var FileReference $file */
-            $file = $files[0];
-            /** @var ProcessedFile $processedFile */
-            $processedFile = $imageService->applyProcessingInstructions(
-                $file,
-                array(
-                    'crop' => $file->getReferenceProperties()['crop'],
-                )
-            );
 
-            $this->settings['page']['facebook']['image'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
+            if (0 < count($files)) {
+                /** @var FileReference $file */
+                $file = $files[0];
+                /** @var ProcessedFile $processedFile */
+                $processedFile = $imageService->applyProcessingInstructions(
+                    $file,
+                    array(
+                        'crop' => $file->getReferenceProperties()['crop'],
+                    )
+                );
+
+                $this->settings['page']['facebook']['image'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
+            } else {
+                $this->settings['page']['facebook']['image'] = $this->settings['domain']['facebookDefaultImage'];
+            }
         }
     }
 
