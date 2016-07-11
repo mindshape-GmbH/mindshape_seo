@@ -3,7 +3,7 @@ CREATE TABLE pages (
   mindshapeseo_ogurl                         varchar(255) DEFAULT ''      NOT NULL,
   mindshapeseo_ogimage                       int(11) unsigned             NOT NULL DEFAULT '0',
   mindshapeseo_ogdescription                 text                         NOT NULL,
-  mindshapeseo_priority                      double(11, 2) DEFAULT '0.50' NOT NULL,
+  mindshapeseo_priority                      double(11,2) DEFAULT '0.50' NOT NULL,
   mindshapeseo_change_frequency              varchar(255) DEFAULT ''      NOT NULL,
   mindshapeseo_no_index                      tinyint(4) DEFAULT '0'       NOT NULL,
   mindshapeseo_no_follow                     tinyint(4) DEFAULT '0'       NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE pages_language_overlay (
   mindshapeseo_ogurl                         varchar(255) DEFAULT ''      NOT NULL,
   mindshapeseo_ogimage                       int(11) unsigned             NOT NULL DEFAULT '0',
   mindshapeseo_ogdescription                 text                         NOT NULL,
-  mindshapeseo_priority                      double(11, 2) DEFAULT '0.50' NOT NULL,
+  mindshapeseo_priority                      double(11,2) DEFAULT '0.50' NOT NULL,
   mindshapeseo_change_frequency              varchar(255) DEFAULT ''      NOT NULL,
   mindshapeseo_no_index                      tinyint(4) DEFAULT '0'       NOT NULL,
   mindshapeseo_no_follow                     tinyint(4) DEFAULT '0'       NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE pages_language_overlay (
 
 CREATE TABLE tx_mindshapeseo_domain_model_configuration (
 
-  uid                       int(11)                         NOT NULL AUTO_INCREMENT,
+  uid                       int(11)                         NOT NULL auto_increment,
   pid                       int(11) DEFAULT '0'             NOT NULL,
 
   domain                    varchar(255) DEFAULT ''         NOT NULL,

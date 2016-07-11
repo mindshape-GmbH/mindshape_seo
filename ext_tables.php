@@ -4,40 +4,33 @@ if (!defined('TYPO3_MODE')) {
 }
 
 if (TYPO3_MODE === 'BE') {
-
-    /**
-     * Registers a Backend Module
-     */
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Mindshape.' . $_EXTKEY,
-        'web',     // Make module a submodule of 'web'
-        'settings',    // Submodule key
-        '',                        // Position
+        'web',
+        'preview',
+        '',
         array(
-            'Seo' => 'index',
+            'Backend' => 'preview',
         ),
         array(
             'access' => 'user,group',
             'icon' => 'EXT:' . $_EXTKEY . '/ext_icon.png',
-            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_backend.xlf',
+            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_backend_preview.xlf',
         )
     );
 
-    /**
-     * Registers a Backend Module
-     */
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Mindshape.' . $_EXTKEY,
-        'tools',     // Make module a submodule of 'web'
-        'settings_general',    // Submodule key
-        '',                        // Position
+        'tools',
+        'settings',
+        '',
         array(
-            'Seo' => 'index',
+            'Backend' => 'settings',
         ),
         array(
             'access' => 'user,group',
             'icon' => 'EXT:' . $_EXTKEY . '/ext_icon.png',
-            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_backend.xlf',
+            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_backend_settings.xlf',
         )
     );
 
@@ -204,7 +197,7 @@ unset(
 // Facebook metadata tab
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
-    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend.xlf:label.facebook_metadata,
+    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.facebook_metadata,
     mindshapeseo_ogtitle,
     mindshapeseo_ogurl,
     mindshapeseo_ogimage,
@@ -216,12 +209,12 @@ unset(
 // SEO tab
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
-    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend.xlf:label.seo,
-    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend.xlf:label.general;mindshape_seo_general_pallette,
+    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.seo,
+    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:label.general;mindshape_seo_general_pallette,
     --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata;mindshape_seo_meta_pallette, 
     --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.editorial;mindshape_seo_editorial_pallette, 
-    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend.xlf:label.indexing;mindshape_seo_indexing_pallette, 
-    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend.xlf:label.sitemap;mindshape_seo_sitemap_pallette',
+    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.indexing;mindshape_seo_indexing_pallette, 
+    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.sitemap;mindshape_seo_sitemap_pallette',
     '1,4',
     ''
 );

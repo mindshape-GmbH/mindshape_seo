@@ -1,6 +1,35 @@
 plugin.tx_mindshapeseo {
     persistence {
         storagePid = {$plugin.tx_mindshapeseo_seo.persistence.storagePid}
+
+        classes {
+            Mindshape\MindshapeSeo\Domain\Model\Configuration {
+                mapping {
+                    tableName = tx_mindshapeseo_domain_model_configuration
+                    columns {
+                        domain.mapOnProperty = domain
+                        custom_url.mapOnProperty = customUrl
+                        google_analytics.mapOnProperty = googleAnalytics
+                        piwik_url.mapOnProperty = piwikUrl
+                        piwik_idsite.mapOnProperty = piwikIdsite
+                        title_attachment.mapOnProperty = titleAttachment
+                        generate_sitemap.mapOnProperty = generateSitemap
+                        add_hreflang.mapOnProperty = addHreflang
+                        facebook_default_image.mapOnProperty = facebookDefaultImage
+                        add_jsonld.mapOnProperty = addJsonld
+                        jsonld_type.mapOnProperty = jsonldType
+                        jsonld_telephone.mapOnProperty = jsonldTelephone
+                        jsonld_fax.mapOnProperty = jsonldFax
+                        jsonld_email.mapOnProperty = jsonldEmail
+                        jsonld_same_as.mapOnProperty = jsonldSameAs
+                        jsonld_logo.mapOnProperty = jsonldLogo
+                        jsonld_address_locality.mapOnProperty = jsonldAddressLocality
+                        jsonld_address_postalcode.mapOnProperty = jsonldAddressPostalcode
+                        jsonld_address_street.mapOnProperty = jsonldAddressStreet
+                    }
+                }
+            }
+        }
     }
 
     view {
@@ -10,7 +39,7 @@ plugin.tx_mindshapeseo {
     }
 }
 
-module.tx_mindshapeseo_web_mindshapeseoseo < plugin.tx_mindshapeseo
+module.tx_mindshapeseo < plugin.tx_mindshapeseo
 
 # sitemap.xml page type
 # make a htaccess redirect "RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]"

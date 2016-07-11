@@ -26,6 +26,7 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Resource\FileReference;
@@ -41,8 +42,6 @@ use TYPO3\CMS\Extbase\Service\ImageService;
  */
 class HeaderDataService
 {
-    const DEFAULT_DOMAIN = '*';
-
     /**
      * @var \TYPO3\CMS\Core\Page\PageRenderer
      */
@@ -110,7 +109,7 @@ class HeaderDataService
         $result = $databaseConnection->exec_SELECTgetSingleRow(
             '*',
             'tx_mindshapeseo_domain_model_configuration t',
-            't.domain = "' . self::DEFAULT_DOMAIN . '" OR t.domain = "' . $currentDomain . '"',
+            't.domain = "' . Configuration::DEFAULT_DOMAIN . '" OR t.domain = "' . $currentDomain . '"',
             '',
             'domain DESC'
         );

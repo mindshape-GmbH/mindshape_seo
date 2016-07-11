@@ -65,6 +65,22 @@
             <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_sub_sitemap">
                 <source>Generate a new sitemap by this page</source>
             </trans-unit>
+
+            <trans-unit id="tx_minshapeseo_label.seo">
+                <source>SEO</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.general">
+                <source>General</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.indexing">
+                <source>Indexing</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.sitemap">
+                <source>Sitemap.xml</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.facebook_metadata">
+                <source>Facebook Metadata</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

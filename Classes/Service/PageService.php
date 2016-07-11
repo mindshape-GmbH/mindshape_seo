@@ -2,7 +2,6 @@
 namespace Mindshape\MindshapeSeo\Service;
 
 /***************************************************************
- *
  *  Copyright notice
  *
  *  (c) 2016 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
