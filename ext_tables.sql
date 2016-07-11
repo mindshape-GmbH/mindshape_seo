@@ -28,7 +28,7 @@ CREATE TABLE pages_language_overlay (
   mindshapeseo_disable_title_attachment      tinyint(4) DEFAULT '0'       NOT NULL
 );
 
-CREATE TABLE tx_mindshapeseo_configuration (
+CREATE TABLE tx_mindshapeseo_domain_model_configuration (
 
   uid                       int(11)                         NOT NULL AUTO_INCREMENT,
   pid                       int(11) DEFAULT '0'             NOT NULL,
