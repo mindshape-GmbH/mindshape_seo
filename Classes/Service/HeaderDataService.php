@@ -2,7 +2,6 @@
 namespace Mindshape\MindshapeSeo\Service;
 
 /***************************************************************
- *
  *  Copyright notice
  *
  *  (c) 2016 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
@@ -91,7 +90,10 @@ class HeaderDataService
                     'author' => $page['author'],
                     'contact' => $page['author_email'],
                     'description' => $page['description'],
-                    'keywords' => $page['keywords'],
+                    'robots' => array(
+                        'noindex' => (bool) $page['mindshapeseo_no_index'],
+                        'nofollow' => (bool) $page['mindshapeseo_no_follow'],
+                    ),
                 ),
                 'facebook' => array(
                     'title' => $page['mindshapeseo_ogtitle'],
@@ -119,7 +121,6 @@ class HeaderDataService
                 'url' => $this->pageService->getPageLink(
                     $GLOBALS['TSFE']->rootLine[0]['uid']
                 ),
-                'customUrl' => $result['custom_url'],
                 'googleAnalytics' => $result['google_analytics'],
                 'piwikUrl' => $result['piwik_url'],
                 'piwikIdSite' => $result['piwik_idsite'],
@@ -128,6 +129,7 @@ class HeaderDataService
                 'facebookDefaultImage' => $result['facebook_default_image'],
                 'addJsonLd' => (bool) $result['add_jsonld'],
                 'json-ld' => array(
+                    'customUrl' => $result['jsonld_custom_url'],
                     'type' => $result['jsonld_type'],
                     'telephone' => $result['jsonld_telephone'],
                     'fax' => $result['jsonld_fax'],
@@ -267,11 +269,21 @@ class HeaderDataService
 
     protected function addMetaData()
     {
+        $robots = array();
+
+        if ($this->settings['page']['meta']['robots']['noindex']) {
+            $robots[] = 'noindex';
+        }
+
+        if ($this->settings['page']['meta']['robots']['nofollow']) {
+            $robots[] = 'nofollow';
+        }
+
         $metaData = array(
             'author' => $this->settings['page']['meta']['author'],
             'contact' => $this->settings['page']['meta']['contact'],
             'description' => $this->settings['page']['meta']['description'],
-            'keywords' => $this->settings['page']['meta']['keywords'],
+            'robots' => implode(',', $robots),
         );
 
         $this->addMetaDataArray($metaData);
@@ -361,8 +373,8 @@ class HeaderDataService
         return array(
             '@context' => 'http://schema.org',
             '@type' => 'WebSite',
-            'url' => '' !== $this->settings['domain']['customUrl'] ?
-                $this->settings['domain']['customUrl'] :
+            'url' => '' !== $this->settings['domain']['json-ld']['customUrl'] ?
+                $this->settings['domain']['json-ld']['customUrl'] :
                 GeneralUtility::getIndpEnv('HTTP_HOST'),
         );
     }

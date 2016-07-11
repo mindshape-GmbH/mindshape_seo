@@ -44,6 +44,11 @@ $columns = array(
             'type' => 'passthrough',
         ),
     ),
+    'keywords' => array(
+        'config' => array(
+            'type' => 'passthrough',
+        ),
+    ),
     'mindshapeseo_ogtitle' => array(
         'exclude' => 0,
         'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_ogtitle',
@@ -185,7 +190,10 @@ $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_indexing_pallette'] = array(
                    mindshapeseo_no_follow',
 );
 
-$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_meta_pallette']['showitem'] = $GLOBALS['TCA']['pages']['palettes']['metatags']['showitem'];
+$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_meta_pallette']['showitem'] =
+    $GLOBALS['TCA']['pages']['palettes']['metatags']['showitem'] . ',--linebreak--,' .
+    $GLOBALS['TCA']['pages']['palettes']['abstract']['showitem'];
+
 $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_editorial_pallette'] = $GLOBALS['TCA']['pages']['palettes']['editorial'];
 
 unset(

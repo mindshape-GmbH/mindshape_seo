@@ -116,7 +116,6 @@ class SitemapGenerator implements SingletonInterface
             $isExcludeFromSitemap = (bool) $page['mindshapeseo_exclude_from_sitemap'];
             $isSubSitemap = (bool) $page['mindshapeseo_sub_sitemap'];
             $isNoIndex = (bool) $page['mindshapeseo_no_index'];
-            $isNoFollow = (bool) $page['mindshapeseo_no_follow'];
             $changeFrequency = $page['mindshapeseo_change_frequency'];
             $priority = (double) $page['mindshapeseo_priority'];
             $isPage = 1 === (int) $page['doktype'];
@@ -124,8 +123,6 @@ class SitemapGenerator implements SingletonInterface
 
             if (
                 $isExcludeSubpagesFromSitemap ||
-                $isNoIndex ||
-                $isNoFollow ||
                 (
                     true === $isSubSitemap &&
                     false === $isSitemapPage
@@ -143,7 +140,6 @@ class SitemapGenerator implements SingletonInterface
 
             if (
                 $isNoIndex ||
-                $isNoFollow ||
                 $isExcludeFromSitemap ||
                 false === $isPage ||
                 ($isSubSitemap && $isExcludeSubpagesFromSitemap) ||

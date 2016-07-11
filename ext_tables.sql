@@ -34,7 +34,6 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration (
   pid                       int(11) DEFAULT '0'             NOT NULL,
 
   domain                    varchar(255) DEFAULT ''         NOT NULL,
-  custom_url                varchar(255) DEFAULT ''         NOT NULL,
   google_analytics          varchar(255) DEFAULT ''         NOT NULL,
   piwik_url                 varchar(255) DEFAULT ''         NOT NULL,
   piwik_idsite              varchar(255) DEFAULT ''         NOT NULL,
@@ -43,6 +42,7 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration (
   add_hreflang              tinyint(4) unsigned DEFAULT '1' NOT NULL,
   facebook_default_image    text                            NOT NULL,
   add_jsonld                tinyint(4) unsigned DEFAULT '1' NOT NULL,
+  jsonld_custom_url         varchar(255) DEFAULT ''         NOT NULL,
   jsonld_type               varchar(255) DEFAULT ''         NOT NULL,
   jsonld_telephone          varchar(255) DEFAULT ''         NOT NULL,
   jsonld_fax                varchar(255) DEFAULT ''         NOT NULL,
