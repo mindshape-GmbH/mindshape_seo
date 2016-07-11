@@ -95,6 +95,25 @@ class PageService implements SingletonInterface
     }
 
     /**
+     * @return array
+     */
+    public function getCurrentPage()
+    {
+        return $this->getPage($GLOBALS['TSFE']->id);
+    }
+
+    public function getRootline()
+    {
+        $pages = array();
+
+        foreach ($GLOBALS['TSFE']->rootLine as $index => $page) {
+            $pages[] = $this->getPage($page['uid']);
+        }
+
+        return $pages;
+    }
+
+    /**
      * @param int $pageUid
      * @return array
      */

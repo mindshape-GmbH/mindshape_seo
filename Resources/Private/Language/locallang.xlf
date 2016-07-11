@@ -53,8 +53,14 @@
             <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_no_index">
                 <source>No Index</source>
             </trans-unit>
+            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_no_index_recursive">
+                <source>No Index recursive</source>
+            </trans-unit>
             <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow">
                 <source>No Follow</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive">
+                <source>No Follow recursive</source>
             </trans-unit>
             <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap">
                 <source>Exclude page from sitemap</source>

@@ -34,6 +34,7 @@ use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * @package mindshape_seo
@@ -77,7 +78,7 @@ class HeaderDataService
         $this->pageService = $objectManager->get(PageService::class);
         $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
 
-        $page = $this->pageService->getPage($GLOBALS['TSFE']->id);
+        $page = $this->pageService->getCurrentPage();
         $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
 
         $this->settings = array(
@@ -271,11 +272,24 @@ class HeaderDataService
     {
         $robots = array();
 
-        if ($this->settings['page']['meta']['robots']['noindex']) {
+        if (
+            !$this->settings['page']['meta']['robots']['noindex'] ||
+            !$this->settings['page']['meta']['robots']['nofollow']
+        ) {
+            $robots = $this->getParentRobotsMetaData();
+        }
+
+        if (
+            $this->settings['page']['meta']['robots']['noindex'] &&
+            !in_array('noindex', $robots, true)
+        ) {
             $robots[] = 'noindex';
         }
 
-        if ($this->settings['page']['meta']['robots']['nofollow']) {
+        if (
+            $this->settings['page']['meta']['robots']['nofollow'] &&
+            !in_array('nofollow', $robots, true)
+        ) {
             $robots[] = 'nofollow';
         }
 
@@ -287,6 +301,37 @@ class HeaderDataService
         );
 
         $this->addMetaDataArray($metaData);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getParentRobotsMetaData()
+    {
+        $robots = array();
+
+        $noindex = false;
+        $nofollow = false;
+
+        foreach ($this->pageService->getRootline() as $page) {
+            if (!$noindex && $page['mindshapeseo_no_index_recursive']) {
+                $noindex = true;
+
+                if ($page['mindshapeseo_no_index']) {
+                    $robots[] = 'noindex';
+                }
+            }
+
+            if (!$nofollow && $page['mindshapeseo_no_follow_recursive']) {
+                $nofollow = true;
+
+                if ($page['mindshapeseo_no_follow']) {
+                    $robots[] = 'nofollow';
+                }
+            }
+        }
+
+        return $robots;
     }
 
     /**

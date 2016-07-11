@@ -140,8 +140,22 @@ $columns = array(
             'type' => 'check',
         ),
     ),
+    'mindshapeseo_no_index_recursive' => array(
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_no_index_recursive',
+        'exclude' => 1,
+        'config' => array(
+            'type' => 'check',
+        ),
+    ),
     'mindshapeseo_no_follow' => array(
         'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow',
+        'exclude' => 1,
+        'config' => array(
+            'type' => 'check',
+        ),
+    ),
+    'mindshapeseo_no_follow_recursive' => array(
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
@@ -186,8 +200,11 @@ $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_sitemap_pallette'] = array(
 );
 
 $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_indexing_pallette'] = array(
-    'showitem' => 'mindshapeseo_no_index, --linebreak--, 
-                   mindshapeseo_no_follow',
+    'showitem' => 'mindshapeseo_no_index,
+                   mindshapeseo_no_index_recursive, 
+                   --linebreak--,
+                   mindshapeseo_no_follow,
+                   mindshapeseo_no_follow_recursive',
 );
 
 $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_meta_pallette']['showitem'] =
