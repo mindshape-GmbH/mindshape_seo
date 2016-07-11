@@ -34,7 +34,6 @@ use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * @package mindshape_seo
@@ -87,6 +86,7 @@ class HeaderDataService
             'page' => array(
                 'uid' => $page['uid'],
                 'title' => $page['title'],
+                'canonicalPageUid' => (int) $page['mindshapeseo_canonical'],
                 'meta' => array(
                     'author' => $page['author'],
                     'contact' => $page['author_email'],
@@ -182,6 +182,10 @@ class HeaderDataService
         $this->addMetaData();
         $this->addFacebookData();
 
+        if (0 < $this->settings['page']['canonicalPageUid']) {
+            $this->addCanonicalUrl();
+        }
+
         if ($this->settings['domain']['addHreflang']) {
             $this->addHreflang();
         }
@@ -201,6 +205,21 @@ class HeaderDataService
         ) {
             $this->addPiwik();
         }
+    }
+
+    /**
+     * @return void
+     */
+    protected function addCanonicalUrl()
+    {
+        $this->pageRenderer->addHeaderData(
+            '<link rel="canonical" href="' .
+            $this->pageService->getPageLink(
+                $this->settings['page']['canonicalPageUid'],
+                $GLOBALS['TSFE']->sys_language_uid
+            ) .
+            '"/>'
+        );
     }
 
     /**

@@ -120,9 +120,9 @@ $columns = array(
         'config' => array(
             'type' => 'select',
             'renderType' => 'selectSingle',
-            'default' => NULL,
+            'default' => null,
             'items' => array(
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.none', NULL),
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.none', null),
                 array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.always', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_ALWAYS),
                 array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.hourly', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_HOULRY),
                 array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.daily', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_DAILY),
@@ -182,6 +182,27 @@ $columns = array(
             'type' => 'check',
         ),
     ),
+    'mindshapeseo_canonical' => array(
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_canonical',
+        'exclude' => 1,
+        'config' => array(
+            'type' => 'group',
+            'internal_type' => 'db',
+            'allowed' => 'pages',
+            'default' => 0,
+            'size' => 1,
+            'maxitems' => 1,
+            'minitems' => 0,
+            'wizards' => array(
+                'suggest' => array(
+                    'type' => 'suggest',
+                    'default' => array(
+                        'additionalSearchFields' => 'nav_title, alias, url',
+                    ),
+                ),
+            ),
+        ),
+    ),
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $columns);
@@ -209,7 +230,8 @@ $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_indexing_pallette'] = array(
 
 $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_meta_pallette']['showitem'] =
     $GLOBALS['TCA']['pages']['palettes']['metatags']['showitem'] . ',--linebreak--,' .
-    $GLOBALS['TCA']['pages']['palettes']['abstract']['showitem'];
+    $GLOBALS['TCA']['pages']['palettes']['abstract']['showitem'] . ',--linebreak--,
+    mindshapeseo_canonical';
 
 $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_editorial_pallette'] = $GLOBALS['TCA']['pages']['palettes']['editorial'];
 

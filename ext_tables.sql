@@ -12,7 +12,8 @@ CREATE TABLE pages (
   mindshapeseo_exclude_from_sitemap          tinyint(4) DEFAULT '0'       NOT NULL,
   mindshapeseo_exclude_suppages_from_sitemap tinyint(4) DEFAULT '0'       NOT NULL,
   mindshapeseo_sub_sitemap                   tinyint(4) DEFAULT '0'       NOT NULL,
-  mindshapeseo_disable_title_attachment      tinyint(4) DEFAULT '0'       NOT NULL
+  mindshapeseo_disable_title_attachment      tinyint(4) DEFAULT '0'       NOT NULL,
+  mindshapeseo_canonical                     int(11) unsigned             NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE pages_language_overlay (
@@ -29,7 +30,8 @@ CREATE TABLE pages_language_overlay (
   mindshapeseo_exclude_from_sitemap          tinyint(4) DEFAULT '0'       NOT NULL,
   mindshapeseo_exclude_suppages_from_sitemap tinyint(4) DEFAULT '0'       NOT NULL,
   mindshapeseo_sub_sitemap                   tinyint(4) DEFAULT '0'       NOT NULL,
-  mindshapeseo_disable_title_attachment      tinyint(4) DEFAULT '0'       NOT NULL
+  mindshapeseo_disable_title_attachment      tinyint(4) DEFAULT '0'       NOT NULL,
+  mindshapeseo_canonical                     int(11) unsigned             NOT NULL DEFAULT '0'
 );
 
 CREATE TABLE tx_mindshapeseo_domain_model_configuration (

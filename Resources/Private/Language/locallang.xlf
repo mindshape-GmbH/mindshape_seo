@@ -71,6 +71,9 @@
             <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_sub_sitemap">
                 <source>Generate a new sitemap by this page</source>
             </trans-unit>
+            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_canonical">
+                <source>Canonical URL</source>
+            </trans-unit>
 
             <trans-unit id="tx_minshapeseo_label.seo">
                 <source>SEO</source>
