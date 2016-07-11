@@ -8,9 +8,14 @@
                 <div class="typo3-docheader-functions">
                     <div class="left">
                         <f:be.buttons.csh/>
-                        <f:be.menus.actionMenu>
-                            <f:be.menus.actionMenuItem label="Main" controller="Seo" action="index"/>
-                        </f:be.menus.actionMenu>
+                        <f:if condition="0 < {domains -> f:count()}">
+                            <f:be.menus.actionMenu>
+                                <f:be.menus.actionMenuItem label="{f:translate(key: 'tx_minshapeseo_label.default_settings')}" controller="Seo" action="settings"/>
+                                <f:for each="{domains}" as="domain">
+                                    <f:be.menus.actionMenuItem label="{domain}" controller="Seo" action="settings" arguments="{domain: domain}"/>
+                                </f:for>
+                            </f:be.menus.actionMenu>
+                        </f:if>
                     </div>
                     <div class="right">
                         <f:be.pagePath/>

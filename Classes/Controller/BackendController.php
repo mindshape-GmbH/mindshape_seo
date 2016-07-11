@@ -26,16 +26,53 @@ namespace Mindshape\MindshapeSeo\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
 /**
  * @package mindshape_seo
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class SeoController extends ActionController
+class BackendController extends ActionController
 {
-    public function indexAction()
+    /**
+     * @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository
+     * @inject
+     */
+    protected $configurationRepository;
+
+    /**
+     * @var \Mindshape\MindshapeSeo\Service\DomainService
+     * @inject
+     */
+    protected $domainService;
+
+    /**
+     * @param string $domain
+     * @return void
+     */
+    public function settingsAction($domain = Configuration::DEFAULT_DOMAIN)
     {
-        $this->view->render();
+        $configuration = $this->configurationRepository->findByDomain($domain);
+
+        if (null === $configuration) {
+            $configuration = new Configuration();
+            $configuration->setDomain($domain);
+
+            $this->configurationRepository->add($configuration);
+        }
+
+        $this->view->assignMultiple(array(
+            'domains' => $this->domainService->getAvailableDomains(),
+            'currentDomain' => $domain,
+            'configuration' => $configuration,
+        ));
+    }
+
+    /**
+     * @return void
+     */
+    public function previewAction()
+    {
     }
 }
