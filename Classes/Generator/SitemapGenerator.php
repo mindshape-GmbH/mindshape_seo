@@ -2,7 +2,6 @@
 namespace Mindshape\MindshapeSeo\Generator;
 
 /***************************************************************
- *
  *  Copyright notice
  *
  *  (c) 2016 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
@@ -27,7 +26,6 @@ namespace Mindshape\MindshapeSeo\Generator;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Service\PageService;
-use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -117,8 +115,6 @@ class SitemapGenerator implements SingletonInterface
             $isSubSitemap = (bool) $page['mindshapeseo_sub_sitemap'];
             $isNoIndex = (bool) $page['mindshapeseo_no_index'];
             $isNoIndexRecurive = (bool) $page['mindshapeseo_no_index_recursive'];
-            $changeFrequency = $page['mindshapeseo_change_frequency'];
-            $priority = (double) $page['mindshapeseo_priority'];
             $isPage = 1 === (int) $page['doktype'];
             $isSitemapPage = $pageUid === (int) $page['uid'];
 
@@ -169,10 +165,52 @@ class SitemapGenerator implements SingletonInterface
             $lastmod = new \DateTime();
             $lastmod->setTimestamp($page['SYS_LASTCHANGED']);
 
+            $changeFrequency = $page['mindshapeseo_change_frequency'];
+            $priority = (double) $page['mindshapeseo_priority'];
+
+            $parentsProperties = $this->getParentProperties();
+
+            if (empty($changeFrequency)) {
+                $changeFrequency = $parentsProperties['changeFrequenzy'];
+            }
+
+            if (empty($priority)) {
+                $priority = $parentsProperties['priority'];
+            }
+
             $urls .= $this->renderEntry($tag, $url, $lastmod, $changeFrequency, $priority);
         }
 
         return $urls;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getParentProperties()
+    {
+        $properties = array(
+            'changeFrequenzy' => '',
+            'priority' => self::DEFAULT_PRIORITY,
+        );
+
+        foreach ($this->pageService->getRootline() as $page) {
+            if (
+                !empty($page['mindshapeseo_change_frequency']) &&
+                empty($properties['changeFrequenzy'])
+            ) {
+                $properties['changeFrequenzy'] = $page['mindshapeseo_change_frequency'];
+            }
+
+            if (
+                self::DEFAULT_PRIORITY !== (double) $page['mindshapeseo_priority'] &&
+                self::DEFAULT_PRIORITY === $properties['priority']
+            ) {
+                $properties['priority'] = (double) $page['mindshapeseo_priority'];
+            }
+        }
+
+        return $properties;
     }
 
     /**
