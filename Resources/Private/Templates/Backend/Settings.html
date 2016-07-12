@@ -6,7 +6,19 @@
 
     <f:section name="Main">
 
-        <h1>Backendmodul</h1>
+        <h1>
+            <f:translate key="tx_minshapeseo_label.seo_settings_for"/>
+            <f:if condition="{currentDomain} == '*'">
+                <f:then>
+                    <b>
+                        <f:translate key="tx_minshapeseo_label.default_settings"/>
+                    </b>
+                </f:then>
+                <f:else>
+                    <b>{currentDomain}</b>
+                </f:else>
+            </f:if>
+        </h1>
 
     </f:section>
 

@@ -94,6 +94,9 @@
             <trans-unit id="tx_minshapeseo_label.default_settings">
                 <source>Default Settings</source>
             </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.seo_settings_for">
+                <source>SEO Settings for</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
