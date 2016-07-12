@@ -44,11 +44,6 @@ class Configuration extends AbstractEntity
     /**
      * @var string
      */
-    protected $customUrl = '';
-
-    /**
-     * @var string
-     */
     protected $googleAnalytics = '';
 
     /**
@@ -85,6 +80,11 @@ class Configuration extends AbstractEntity
      * @var bool
      */
     protected $addJsonld = false;
+
+    /**
+     * @var string
+     */
+    protected $jsonldCustomUrl = '';
 
     /**
      * @var string
@@ -145,22 +145,6 @@ class Configuration extends AbstractEntity
     public function setDomain($domain)
     {
         $this->domain = $domain;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCustomUrl()
-    {
-        return $this->customUrl;
-    }
-
-    /**
-     * @param string $customUrl
-     */
-    public function setCustomUrl($customUrl)
-    {
-        $this->customUrl = $customUrl;
     }
 
     /**
@@ -289,6 +273,22 @@ class Configuration extends AbstractEntity
     public function setAddJsonld($addJsonld)
     {
         $this->addJsonld = $addJsonld;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJsonldCustomUrl()
+    {
+        return $this->jsonldCustomUrl;
+    }
+
+    /**
+     * @param string $jsonldCustomUrl
+     */
+    public function setJsonldCustomUrl($jsonldCustomUrl)
+    {
+        $this->jsonldCustomUrl = $jsonldCustomUrl;
     }
 
     /**

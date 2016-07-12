@@ -8,7 +8,6 @@ plugin.tx_mindshapeseo {
                     tableName = tx_mindshapeseo_domain_model_configuration
                     columns {
                         domain.mapOnProperty = domain
-                        custom_url.mapOnProperty = customUrl
                         google_analytics.mapOnProperty = googleAnalytics
                         piwik_url.mapOnProperty = piwikUrl
                         piwik_idsite.mapOnProperty = piwikIdsite
@@ -17,6 +16,7 @@ plugin.tx_mindshapeseo {
                         add_hreflang.mapOnProperty = addHreflang
                         facebook_default_image.mapOnProperty = facebookDefaultImage
                         add_jsonld.mapOnProperty = addJsonld
+                        jsonld_custom_url.mapOnProperty = jsonldCustomUrl
                         jsonld_type.mapOnProperty = jsonldType
                         jsonld_telephone.mapOnProperty = jsonldTelephone
                         jsonld_fax.mapOnProperty = jsonldFax
