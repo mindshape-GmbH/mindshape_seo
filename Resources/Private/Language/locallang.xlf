@@ -97,6 +97,83 @@
             <trans-unit id="tx_minshapeseo_label.seo_settings_for">
                 <source>SEO Settings for</source>
             </trans-unit>
+
+
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration">
+                <source>Configuration</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.domain">
+                <source>Domain</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment">
+                <source>Title attachment</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
+                <source>Facebook Default Image</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.generate_sitemap">
+                <source>Generate Sitemap</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
+                <source>Add Hreflang</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld">
+                <source>Add JSON-LD</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.analytics">
+                <source>Analytics</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics">
+                <source>Google Analytics</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_idsite">
+                <source>Piwik Site ID</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_url">
+                <source>Piwik Site ID</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld">
+                <source>JSON-LD</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url">
+                <source>Custom URL</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
+                <source>Type</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type.organization">
+                <source>Organization</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type.person">
+                <source>Person</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.address">
+                <source>Address</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.address.locality">
+                <source>City</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.address.postalcode">
+                <source>Postalcode</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.address.street">
+                <source>Street</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.telephone">
+                <source>Telephone</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.fax">
+                <source>Fax</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.email">
+                <source>E-Mail</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
+                <source>Social Media Links</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.logo">
+                <source>Logo</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

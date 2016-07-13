@@ -2,7 +2,6 @@
 namespace Mindshape\MindshapeSeo\Domain\Model;
 
 /***************************************************************
- *
  *  Copyright notice
  *
  *  (c) 2016 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
@@ -26,6 +25,7 @@ namespace Mindshape\MindshapeSeo\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
@@ -35,104 +35,147 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 class Configuration extends AbstractEntity
 {
     const DEFAULT_DOMAIN = '*';
-    
+
+    const JSONLD_TYPE_ORGANIZATION = 'organization';
+    const JSONLD_TYPE_PERSON = 'person';
+
     /**
+     * domain
+     *
      * @var string
      */
     protected $domain = '';
 
     /**
+     * googleAnalytics
+     *
      * @var string
      */
     protected $googleAnalytics = '';
 
     /**
+     * piwikUrl
+     *
      * @var string
      */
     protected $piwikUrl = '';
 
     /**
+     * piwikIdsite
+     *
      * @var string
      */
     protected $piwikIdsite = '';
 
     /**
+     * titleAttachment
+     *
      * @var string
      */
     protected $titleAttachment = '';
 
     /**
-     * @var string
+     * generateSitemap
+     *
+     * @var bool
      */
-    protected $generateSitemap = '';
+    protected $generateSitemap = false;
 
     /**
+     * addHreflang
+     *
      * @var bool
      */
     protected $addHreflang = false;
 
     /**
-     * @var string
-     */
-    protected $facebookDefaultImage = '';
-
-    /**
+     * addJsonld
+     *
      * @var bool
      */
     protected $addJsonld = false;
 
     /**
+     * facebookDefaultImage
+     *
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     */
+    protected $facebookDefaultImage;
+
+    /**
+     * jsonldCustomUrl
+     *
      * @var string
      */
     protected $jsonldCustomUrl = '';
 
     /**
+     * jsonldType
+     *
      * @var string
      */
     protected $jsonldType = '';
 
     /**
+     * jsonldTelephone
+     *
      * @var string
      */
     protected $jsonldTelephone = '';
 
     /**
+     * jsonldFax
+     *
      * @var string
      */
-    protected $jsonldTFax = '';
+    protected $jsonldFax = '';
 
     /**
+     * jsonldEmail
+     *
      * @var string
      */
     protected $jsonldEmail = '';
 
     /**
+     * jsonldSameAs
+     *
      * @var string
      */
     protected $jsonldSameAs = '';
 
     /**
-     * @var string
+     * jsonldLogo
+     *
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
      */
-    protected $jsonldLogo = '';
+    protected $jsonldLogo;
 
     /**
+     * jsonldAddressLocality
+     *
      * @var string
      */
     protected $jsonldAddressLocality = '';
 
     /**
+     * jsonldAddressPostalcode
+     *
      * @var string
      */
     protected $jsonldAddressPostalcode = '';
 
     /**
+     * jsonldAddressStreet
+     *
      * @var string
      */
     protected $jsonldAddressStreet = '';
 
     /**
-     * @return string
+     * Returns the domain
+     *
+     * @return string $domain
      */
     public function getDomain()
     {
@@ -140,7 +183,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the domain
+     *
      * @param string $domain
+     * @return void
      */
     public function setDomain($domain)
     {
@@ -148,7 +194,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the googleAnalytics
+     *
+     * @return string $googleAnalytics
      */
     public function getGoogleAnalytics()
     {
@@ -156,7 +204,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the googleAnalytics
+     *
      * @param string $googleAnalytics
+     * @return void
      */
     public function setGoogleAnalytics($googleAnalytics)
     {
@@ -164,7 +215,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the piwikUrl
+     *
+     * @return string $piwikUrl
      */
     public function getPiwikUrl()
     {
@@ -172,7 +225,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the piwikUrl
+     *
      * @param string $piwikUrl
+     * @return void
      */
     public function setPiwikUrl($piwikUrl)
     {
@@ -180,7 +236,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the piwikIdsite
+     *
+     * @return string $piwikIdsite
      */
     public function getPiwikIdsite()
     {
@@ -188,7 +246,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the piwikIdsite
+     *
      * @param string $piwikIdsite
+     * @return void
      */
     public function setPiwikIdsite($piwikIdsite)
     {
@@ -196,7 +257,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the titleAttachment
+     *
+     * @return string $titleAttachment
      */
     public function getTitleAttachment()
     {
@@ -204,7 +267,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the titleAttachment
+     *
      * @param string $titleAttachment
+     * @return void
      */
     public function setTitleAttachment($titleAttachment)
     {
@@ -212,7 +278,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the generateSitemap
+     *
+     * @return bool $generateSitemap
      */
     public function getGenerateSitemap()
     {
@@ -220,7 +288,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @param string $generateSitemap
+     * Sets the generateSitemap
+     *
+     * @param bool $generateSitemap
+     * @return void
      */
     public function setGenerateSitemap($generateSitemap)
     {
@@ -228,7 +299,19 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Returns the boolean state of generateSitemap
+     *
      * @return bool
+     */
+    public function isGenerateSitemap()
+    {
+        return $this->generateSitemap;
+    }
+
+    /**
+     * Returns the addHreflang
+     *
+     * @return bool $addHreflang
      */
     public function getAddHreflang()
     {
@@ -236,7 +319,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the addHreflang
+     *
      * @param bool $addHreflang
+     * @return void
      */
     public function setAddHreflang($addHreflang)
     {
@@ -244,23 +330,19 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
-     */
-    public function getFacebookDefaultImage()
-    {
-        return $this->facebookDefaultImage;
-    }
-
-    /**
-     * @param string $facebookDefaultImage
-     */
-    public function setFacebookDefaultImage($facebookDefaultImage)
-    {
-        $this->facebookDefaultImage = $facebookDefaultImage;
-    }
-
-    /**
+     * Returns the boolean state of addHreflang
+     *
      * @return bool
+     */
+    public function isAddHreflang()
+    {
+        return $this->addHreflang;
+    }
+
+    /**
+     * Returns the addJsonld
+     *
+     * @return bool $addJsonld
      */
     public function getAddJsonld()
     {
@@ -268,7 +350,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the addJsonld
+     *
      * @param bool $addJsonld
+     * @return void
      */
     public function setAddJsonld($addJsonld)
     {
@@ -276,7 +361,40 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the boolean state of addJsonld
+     *
+     * @return bool
+     */
+    public function isAddJsonld()
+    {
+        return $this->addJsonld;
+    }
+
+    /**
+     * Returns the facebookDefaultImage
+     *
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference $facebookDefaultImage
+     */
+    public function getFacebookDefaultImage()
+    {
+        return $this->facebookDefaultImage;
+    }
+
+    /**
+     * Sets the facebookDefaultImage
+     *
+     * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $facebookDefaultImage
+     * @return void
+     */
+    public function setFacebookDefaultImage(FileReference $facebookDefaultImage)
+    {
+        $this->facebookDefaultImage = $facebookDefaultImage;
+    }
+
+    /**
+     * Returns the jsonldCustomUrl
+     *
+     * @return string $jsonldCustomUrl
      */
     public function getJsonldCustomUrl()
     {
@@ -284,7 +402,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the jsonldCustomUrl
+     *
      * @param string $jsonldCustomUrl
+     * @return void
      */
     public function setJsonldCustomUrl($jsonldCustomUrl)
     {
@@ -292,7 +413,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the jsonldType
+     *
+     * @return string $jsonldType
      */
     public function getJsonldType()
     {
@@ -300,7 +423,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the jsonldType
+     *
      * @param string $jsonldType
+     * @return void
      */
     public function setJsonldType($jsonldType)
     {
@@ -308,7 +434,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the jsonldTelephone
+     *
+     * @return string $jsonldTelephone
      */
     public function getJsonldTelephone()
     {
@@ -316,7 +444,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the jsonldTelephone
+     *
      * @param string $jsonldTelephone
+     * @return void
      */
     public function setJsonldTelephone($jsonldTelephone)
     {
@@ -324,23 +455,30 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the jsonldFax
+     *
+     * @return string $jsonldFax
      */
-    public function getJsonldTFax()
+    public function getJsonldFax()
     {
-        return $this->jsonldTFax;
+        return $this->jsonldFax;
     }
 
     /**
-     * @param string $jsonldTFax
+     * Sets the jsonldFax
+     *
+     * @param string $jsonldFax
+     * @return void
      */
-    public function setJsonldTFax($jsonldTFax)
+    public function setJsonldFax($jsonldFax)
     {
-        $this->jsonldTFax = $jsonldTFax;
+        $this->jsonldFax = $jsonldFax;
     }
 
     /**
-     * @return string
+     * Returns the jsonldEmail
+     *
+     * @return string $jsonldEmail
      */
     public function getJsonldEmail()
     {
@@ -348,7 +486,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the jsonldEmail
+     *
      * @param string $jsonldEmail
+     * @return void
      */
     public function setJsonldEmail($jsonldEmail)
     {
@@ -356,7 +497,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the jsonldSameAs
+     *
+     * @return string $jsonldSameAs
      */
     public function getJsonldSameAs()
     {
@@ -364,7 +507,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the jsonldSameAs
+     *
      * @param string $jsonldSameAs
+     * @return void
      */
     public function setJsonldSameAs($jsonldSameAs)
     {
@@ -372,7 +518,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the jsonldLogo
+     *
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference $jsonldLogo
      */
     public function getJsonldLogo()
     {
@@ -380,15 +528,20 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @param string $jsonldLogo
+     * Sets the jsonldLogo
+     *
+     * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $jsonldLogo
+     * @return void
      */
-    public function setJsonldLogo($jsonldLogo)
+    public function setJsonldLogo(FileReference $jsonldLogo)
     {
         $this->jsonldLogo = $jsonldLogo;
     }
 
     /**
-     * @return string
+     * Returns the jsonldAddressLocality
+     *
+     * @return string $jsonldAddressLocality
      */
     public function getJsonldAddressLocality()
     {
@@ -396,7 +549,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the jsonldAddressLocality
+     *
      * @param string $jsonldAddressLocality
+     * @return void
      */
     public function setJsonldAddressLocality($jsonldAddressLocality)
     {
@@ -404,7 +560,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the jsonldAddressPostalcode
+     *
+     * @return string $jsonldAddressPostalcode
      */
     public function getJsonldAddressPostalcode()
     {
@@ -412,7 +570,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the jsonldAddressPostalcode
+     *
      * @param string $jsonldAddressPostalcode
+     * @return void
      */
     public function setJsonldAddressPostalcode($jsonldAddressPostalcode)
     {
@@ -420,7 +581,9 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * Returns the jsonldAddressStreet
+     *
+     * @return string $jsonldAddressStreet
      */
     public function getJsonldAddressStreet()
     {
@@ -428,7 +591,10 @@ class Configuration extends AbstractEntity
     }
 
     /**
+     * Sets the jsonldAddressStreet
+     *
      * @param string $jsonldAddressStreet
+     * @return void
      */
     public function setJsonldAddressStreet($jsonldAddressStreet)
     {

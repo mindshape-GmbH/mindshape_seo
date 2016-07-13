@@ -26,6 +26,7 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
@@ -41,6 +42,18 @@ class ConfigurationRepository extends Repository
     protected $defaultOrderings = array(
         'domain' => QueryInterface::ORDER_DESCENDING,
     );
+
+    /**
+     * @return void
+     */
+    public function initializeObject()
+    {
+        /** @var Typo3QuerySettings $querySettings */
+        $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        $querySettings->setRespectStoragePage(false);
+
+        $this->setDefaultQuerySettings($querySettings);
+    }
 
     /**
      * @param string $domain
