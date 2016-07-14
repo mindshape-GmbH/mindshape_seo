@@ -103,6 +103,11 @@ return array(
                     'appearance' => array(
                         'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference',
                     ),
+                    'foreign_match_fields' => array(
+                        'fieldname' => 'facebook_default_image',
+                        'tablenames' => 'tx_mindshapeseo_domain_model_configuration',
+                        'table_local' => 'sys_file',
+                    ),
                     'foreign_types' => array(
                         \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => array(
                             'showitem' => '
@@ -184,6 +189,11 @@ return array(
                 array(
                     'appearance' => array(
                         'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference',
+                    ),
+                    'foreign_match_fields' => array(
+                        'fieldname' => 'jsonld_logo',
+                        'tablenames' => 'tx_mindshapeseo_domain_model_configuration',
+                        'table_local' => 'sys_file',
                     ),
                     'foreign_types' => array(
                         \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => array(

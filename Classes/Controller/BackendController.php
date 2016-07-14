@@ -26,7 +26,10 @@ namespace Mindshape\MindshapeSeo\Controller;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * @package mindshape_seo
@@ -57,15 +60,47 @@ class BackendController extends ActionController
         if (null === $configuration) {
             $configuration = new Configuration();
             $configuration->setDomain($domain);
-
-            $this->configurationRepository->add($configuration);
         }
 
         $this->view->assignMultiple(array(
             'domains' => $this->domainService->getAvailableDomains(),
             'currentDomain' => $domain,
             'configuration' => $configuration,
+            'jsonldTypeOptions' => array(
+                Configuration::JSONLD_TYPE_ORGANIZATION => LocalizationUtility::translate('tx_minshapeseo_configuration.jsonld.type.organization', 'mindshape_seo'),
+                Configuration::JSONLD_TYPE_PERSON => LocalizationUtility::translate('tx_minshapeseo_configuration.jsonld.type.person', 'mindshape_seo'),
+            ),
         ));
+    }
+
+    /**
+     * @return void
+     */
+    public function initializeSaveConfigurationAction()
+    {
+        $this->setTypeConverterConfigurationForImageUpload('configuration');
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
+     * @return void
+     */
+    public function saveConfigurationAction(Configuration $configuration)
+    {
+        if ($configuration->_isNew()) {
+            $this->configurationRepository->update($configuration);
+        } else {
+            $this->configurationRepository->add($configuration);
+        }
+
+        $this->redirect(
+            'settings',
+            'Backend',
+            null,
+            array(
+                'domain' => $configuration->getDomain(),
+            )
+        );
     }
 
     /**
@@ -73,5 +108,31 @@ class BackendController extends ActionController
      */
     public function previewAction()
     {
+    }
+
+    /**
+     * @param $argumentName
+     * @return void
+     */
+    protected function setTypeConverterConfigurationForImageUpload($argumentName)
+    {
+        $uploadConfiguration = array(
+            UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+            UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER => '1:/mindshape_seo/',
+        );
+
+        /** @var PropertyMappingConfiguration $newExampleConfiguration */
+        $newExampleConfiguration = $this->arguments[$argumentName]->getPropertyMappingConfiguration();
+        $newExampleConfiguration
+            ->forProperty('facebookDefaultImage')
+            ->setTypeConverterOptions(
+                UploadedFileReferenceConverter::class,
+                $uploadConfiguration
+            )
+            ->forProperty('jsonldLogo')
+            ->setTypeConverterOptions(
+                UploadedFileReferenceConverter::class,
+                $uploadConfiguration
+            );
     }
 }
