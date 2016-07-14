@@ -69,4 +69,95 @@ class ConfigurationRepository extends Repository
 
         return $query->execute()->getFirst();
     }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
+     * @return void
+     */
+    public function update($configuration)
+    {
+        $this->checkFilerefenreces($configuration);
+
+        parent::update($configuration);
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
+     * @return void
+     */
+    public function add($configuration)
+    {
+        $this->checkFilerefenreces($configuration);
+
+        parent::update($configuration);
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
+     * @return void
+     */
+    protected function checkFilerefenreces(Configuration $configuration)
+    {
+        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
+        $databaseConnection = $GLOBALS['TYPO3_DB'];
+
+        if (null === $configuration->getFacebookDefaultImage()) {
+            $fileReference = $databaseConnection->exec_SELECTgetSingleRow(
+                '*',
+                'sys_file_reference',
+                'deleted != 1 AND tablenames = "tx_mindshapeseo_domain_model_configuration" AND fieldname = "facebook_default_image" AND uid_foreign = ' . $configuration->getUid()
+            );
+
+            if (is_array($fileReference)) {
+                $this->updateFileReferences(
+                    $configuration->getUid(),
+                    'facebook_default_image',
+                    $fileReference
+                );
+            }
+        }
+
+        if (null === $configuration->getFacebookDefaultImage()) {
+            $fileReference = $databaseConnection->exec_SELECTgetSingleRow(
+                '*',
+                'sys_file_reference',
+                'deleted != 1 AND tablenames = "tx_mindshapeseo_domain_model_configuration" AND fieldname = "jsonld_logo" AND uid_foreign = ' . $configuration->getUid()
+            );
+
+            if (is_array($fileReference)) {
+                $this->updateFileReferences(
+                    $configuration->getUid(),
+                    'jsonld_logo',
+                    $fileReference
+                );
+            }
+        }
+    }
+
+    /**
+     * @param int $configurationUid
+     * @param string $field
+     * @param array $fileReference
+     */
+    protected function updateFileReferences($configurationUid, $field, array $fileReference)
+    {
+        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
+        $databaseConnection = $GLOBALS['TYPO3_DB'];
+
+        $databaseConnection->exec_UPDATEquery(
+            'sys_file_reference',
+            'uid = ' . $fileReference['uid'],
+            array(
+                'deleted' => 1,
+            )
+        );
+
+        $databaseConnection->exec_UPDATEquery(
+            'tx_mindshapeseo_domain_model_configuration',
+            'uid = ' . $configurationUid,
+            array(
+                $field => 0,
+            )
+        );
+    }
 }

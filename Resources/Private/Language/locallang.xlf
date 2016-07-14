@@ -90,6 +90,9 @@
             <trans-unit id="tx_minshapeseo_label.facebook_metadata">
                 <source>Facebook Metadata</source>
             </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.save">
+                <source>Save</source>
+            </trans-unit>
 
             <trans-unit id="tx_minshapeseo_label.default_settings">
                 <source>Default Settings</source>

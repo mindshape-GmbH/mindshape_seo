@@ -21,22 +21,21 @@
             </f:if>
         </h1>
 
-        <f:form action="saveConfiguration" name="configuration" object="{configuration}" enctype="multipart/form-data">
+        <f:form id="mindshape-seo-configuration" action="saveConfiguration" name="configuration" object="{configuration}" enctype="multipart/form-data">
             <fieldset class="form-section">
-                <f:form.submit value="Submit" class="btn btn-default"/>
                 <div class="form-group">
                     <label>
                         <f:translate key="tx_mindshapeseo_domain_model_configuration.title_attachment"/>
                     </label>
                     <f:form.textfield property="titleAttachment" class="form-control"/>
                 </div>
-                <div class="form-group">
+                <div class="form-group mindshape-seo-upload">
                     <label>
                         <f:translate key="tx_mindshapeseo_domain_model_configuration.facebook_default_image"/>
                     </label>
                     <msh:form.upload property="facebookDefaultImage">
                         <f:if condition="{resource}">
-                            <div class="row">
+                            <div class="image row">
                                 <div class="col-xs-4 col-sm-3 col-md-2">
                                     <div class="thumbnail">
                                         <f:image image="{resource}" alt="" width="200"/>
@@ -45,6 +44,7 @@
                             </div>
                         </f:if>
                     </msh:form.upload>
+                    <button class="mindshape-seo-delete">Delete</button>
                 </div>
                 <div class="form-group">
                     <label>
@@ -116,13 +116,13 @@
                     </label>
                     <f:form.select property="jsonldType" options="{jsonldTypeOptions}" class="form-control"/>
                 </div>
-                <div class="form-group">
+                <div class="form-group mindshape-seo-upload">
                     <label>
                         <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.logo"/>
                     </label>
                     <msh:form.upload property="jsonldLogo">
                         <f:if condition="{resource}">
-                            <div class="row">
+                            <div class="image row">
                                 <div class="col-xs-4 col-sm-3 col-md-2">
                                     <div class="thumbnail">
                                         <f:image image="{resource}" alt="" width="200"/>
@@ -131,6 +131,7 @@
                             </div>
                         </f:if>
                     </msh:form.upload>
+                    <button class="mindshape-seo-delete">Delete</button>
                 </div>
                 <fieldset class="form-section form-group">
                     <h3 class="form-section-headline">
@@ -181,6 +182,25 @@
                 </div>
             </fieldset>
         </f:form>
+
+        <script>
+            (function ($) {
+                $(document).ready(function() {
+                    $('.mindshape-seo-savebutton').on('click', function (e) {
+                        e.preventDefault();
+                        $('#mindshape-seo-configuration').submit();
+                    });
+
+                    $('.mindshape-seo-upload').on('click', '.mindshape-seo-delete', function (e) {
+                        e.preventDefault();
+                        var $uploadContainer = $(this).parent('.mindshape-seo-upload');
+
+                        $uploadContainer.find('input[type="hidden"]').remove();
+                        $uploadContainer.find('.image').remove();
+                    })
+                });
+            })(TYPO3.jQuery || jQuery);
+        </script>
 
     </f:section>
 

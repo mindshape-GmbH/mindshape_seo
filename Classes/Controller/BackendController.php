@@ -27,7 +27,14 @@ namespace Mindshape\MindshapeSeo\Controller;
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\View\BackendTemplateView;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -48,6 +55,95 @@ class BackendController extends ActionController
      * @inject
      */
     protected $domainService;
+
+    /**
+     * @var \TYPO3\CMS\Backend\View\BackendTemplateView
+     */
+    protected $view;
+
+    /**
+     * @var \TYPO3\CMS\Backend\View\BackendTemplateView
+     */
+    protected $defaultViewObjectName = BackendTemplateView::class;
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @return void
+     */
+    protected function initializeView(ViewInterface $view)
+    {
+        /** @var BackendTemplateView $view */
+        parent::initializeView($view);
+
+        if ($this->request->getControllerActionName() === 'settings') {
+            $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
+
+            $domains = $this->domainService->getAvailableDomains();
+
+            if (0 < count($domains)) {
+                $this->buildMenu($domains);
+            }
+
+            $this->buildButtons();
+        }
+    }
+
+    /**
+     * @param array $domains
+     * @return void
+     */
+    protected function buildMenu(array $domains)
+    {
+        /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
+        $uriBuilder = $this->objectManager->get(UriBuilder::class);
+        $uriBuilder->setRequest($this->request);
+
+        $menu = $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $menu->setIdentifier('mindshape_seo');
+
+        $arguments = $this->request->getArguments();
+
+        $defaultMenuItem = $menu->makeMenuItem()
+            ->setTitle(LocalizationUtility::translate('tx_minshapeseo_label.default_settings', 'mindshape_seo'))
+            ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => '*'), 'Backend'))
+            ->setActive(!array_key_exists('domain', $arguments) || $arguments['domain'] === Configuration::DEFAULT_DOMAIN);
+
+        $menu->addMenuItem($defaultMenuItem);
+
+        foreach ($domains as $domain) {
+            $menu->addMenuItem(
+                $menu->makeMenuItem()
+                    ->setTitle($domain)
+                    ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => $domain), 'Backend'))
+                    ->setActive($arguments['domain'] === $domain)
+            );
+        }
+
+        $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
+    }
+
+    /**
+     * @return void
+     */
+    protected function buildButtons()
+    {
+        /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
+        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+
+        $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
+
+        /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
+        $uriBuilder = $this->objectManager->get(UriBuilder::class);
+        $uriBuilder->setRequest($this->request);
+
+        $saveButton = $buttonBar->makeLinkButton()
+            ->setClasses('mindshape-seo-savebutton')
+            ->setHref('#')
+            ->setTitle(LocalizationUtility::translate('tx_minshapeseo_label.save', 'mindshape_seo'))
+            ->setIcon($iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL));
+
+        $buttonBar->addButton($saveButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+    }
 
     /**
      * @param string $domain
