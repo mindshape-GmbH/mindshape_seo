@@ -13,7 +13,7 @@
                             <f:be.menus.actionMenu>
                                 <msh:be.menus.domainActionMenuItem label="{f:translate(key: 'tx_minshapeseo_label.default_settings')}" controller="Backend" action="settings"/>
                                 <f:for each="{domains}" as="domain">
-                                    <msh:be.menus.domainActionMenuItem label="{domain}" controller="Backend" action="settings" arguments="{domain: domain}"/>
+                                    <msh:be.menus.domainActionMenuItem label="{domain}" controller="Backend" action="settings" domain="{domain}"/>
                                 </f:for>
                             </f:be.menus.actionMenu>
                         </f:if>
