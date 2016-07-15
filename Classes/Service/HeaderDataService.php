@@ -133,9 +133,7 @@ class HeaderDataService
             $GLOBALS['TSFE']->rootLine[0]['uid']
         );
 
-        if (0 === (int) $page['mindshapeseo_ogimage']) {
-            $this->currentPage['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage();
-        } else {
+        if (0 < (int) $page['mindshapeseo_ogimage']) {
             /** @var FileRepository $fileRepository */
             $fileRepository = $objectManager->get(FileRepository::class);
             /** @var ImageService $imageService */
@@ -154,9 +152,9 @@ class HeaderDataService
                 );
 
                 $this->currentPage['facebook']['image'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
-            } else {
-                $this->currentPage['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage();
             }
+        } elseif (null !== $this->domainConfiguration->getFacebookDefaultImage()) {
+            $this->currentPage['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage()->getOriginalResource()->getPublicUrl();
         }
     }
 
@@ -270,8 +268,11 @@ class HeaderDataService
             'og:url' => $this->currentPage['facebook']['url'],
             'og:title' => $this->currentPage['facebook']['title'],
             'og:description' => $this->currentPage['facebook']['description'],
-            'og:image' => $this->currentPage['facebook']['image'],
         );
+
+        if (array_key_exists('image', $this->currentPage['facebook'])) {
+            $metaData['og:image'] = $this->currentPage['facebook']['image'];
+        }
 
         $this->addMetaDataArray($metaData);
     }
@@ -437,14 +438,13 @@ class HeaderDataService
      */
     protected function renderJsonLdInformation()
     {
-        return array(
+        $jsonld = array(
             '@context' => 'http://schema.org',
             '@type' => $this->domainConfiguration->getJsonldType(),
             'url' => $this->currentDomainUrl,
             'telephone' => $this->domainConfiguration->getJsonldTelephone(),
             'faxNumber' => $this->domainConfiguration->getJsonldFax(),
             'email' => $this->domainConfiguration->getJsonldEmail(),
-            'logo' => $this->domainConfiguration->getJsonldLogo(),
             'address' => array(
                 '@type' => 'PostalAddress',
                 'addressLocality' => $this->domainConfiguration->getJsonldAddressLocality(),
@@ -452,6 +452,15 @@ class HeaderDataService
                 'streetAddress' => $this->domainConfiguration->getJsonldAddressStreet(),
             ),
         );
+
+        if (null !== $this->domainConfiguration->getJsonldLogo()) {
+            $jsonld['logo'] = $this->domainConfiguration
+                ->getJsonldLogo()
+                ->getOriginalResource()
+                ->getPublicUrl();
+        }
+
+        return $jsonld;
     }
 
     /**
