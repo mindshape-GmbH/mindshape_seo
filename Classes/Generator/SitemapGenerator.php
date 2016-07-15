@@ -156,10 +156,10 @@ class SitemapGenerator implements SingletonInterface
                 false === $isSitemapPage
             ) {
                 $tag = self::TAG_SITEMAP;
-                $url = $this->pageService->getPageLink($GLOBALS['TSFE']->rootLine[0]['uid']) . 'sitemap_' . $page['uid'] . '.xml';
+                $url = $this->pageService->getPageLink($GLOBALS['TSFE']->rootLine[0]['uid'], true) . 'sitemap_' . $page['uid'] . '.xml';
             } else {
                 $tag = self::TAG_URL;
-                $url = $this->pageService->getPageLink($page['uid']);
+                $url = $this->pageService->getPageLink($page['uid'], true);
             }
 
             $lastmod = new \DateTime();

@@ -107,7 +107,8 @@ class HeaderDataService
         $this->domainConfiguration = $this->configurationRepository->findByDomain($currentDomain, true);
 
         $this->currentDomainUrl = $this->pageService->getPageLink(
-            $GLOBALS['TSFE']->rootLine[0]['uid']
+            $GLOBALS['TSFE']->rootLine[0]['uid'],
+            true
         );
 
         if (0 < (int) $page['mindshapeseo_ogimage']) {
@@ -180,6 +181,7 @@ class HeaderDataService
             '<link rel="canonical" href="' .
             $this->pageService->getPageLink(
                 $this->currentPageMetaData['canonicalPageUid'],
+                true,
                 $GLOBALS['TSFE']->sys_language_uid
             ) .
             '"/>'
@@ -218,7 +220,7 @@ class HeaderDataService
         foreach ($result as $language) {
             $this->pageRenderer->addHeaderData(
                 $this->renderHreflang(
-                    $this->pageService->getPageLink($this->currentPageMetaData['uid'], $language['uid']),
+                    $this->pageService->getPageLink($this->currentPageMetaData['uid'], true, $language['uid']),
                     $language['language_isocode']
                 )
             );
@@ -467,7 +469,7 @@ class HeaderDataService
                 '@type' => 'ListItem',
                 'position' => $index + 1,
                 'item' => array(
-                    '@id' => $this->pageService->getPageLink($page['uid']),
+                    '@id' => $this->pageService->getPageLink($page['uid'], true),
                     'name' => $page['title'],
                 ),
             );

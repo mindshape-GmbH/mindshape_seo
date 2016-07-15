@@ -25,8 +25,11 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
@@ -34,6 +37,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Page\PageRepository;
+use TYPO3\CMS\Frontend\Utility\EidUtility;
 
 /**
  * @package mindshape_seo
@@ -63,44 +67,56 @@ class PageService implements SingletonInterface
         $configurationManager = $objectManager->get(ConfigurationManager::class);
         $this->pageRepository = $objectManager->get(PageRepository::class);
 
-        if ('FE' === TYPO3_MODE) {
-            /** @var ContentObjectRenderer $contentObjectRenderer */
-            $contentObjectRenderer = $objectManager->get(ContentObjectRenderer::class);
-        } elseif ('BE' === TYPO3_MODE) {
-            /** @var TypoScriptFrontendController $typoScriptFrontendController */
-            $typoScriptFrontendController = $objectManager->get(
+        if ('BE' === TYPO3_MODE) {
+            if (!is_object($GLOBALS['TT'])) {
+                $GLOBALS['TT'] = GeneralUtility::makeInstance(NullTimeTracker::class);
+                $GLOBALS['TT']->start();
+            }
+
+            $GLOBALS['TSFE'] = $objectManager->get(
                 TypoScriptFrontendController::class,
                 $GLOBALS['TYPO3_CONF_VARS'],
                 GeneralUtility::_GET('id'),
                 GeneralUtility::_GET('type')
             );
 
-            $typoScriptFrontendController->sys_page = $this->pageRepository;
-            $typoScriptFrontendController->initTemplate();
+            $GLOBALS['TSFE']->connectToDB();
+            $GLOBALS['TSFE']->initFEuser();
+            $GLOBALS['TSFE']->determineId();
+            $GLOBALS['TSFE']->initTemplate();
+            $GLOBALS['TSFE']->getConfigArray();
 
-            $contentObjectRenderer = $objectManager->get(ContentObjectRenderer::class, $typoScriptFrontendController);
-        } else {
+            if (ExtensionManagementUtility::isLoaded('realurl')) {
+                $_SERVER['HTTP_HOST'] = BackendUtility::firstDomainRecord(
+                    BackendUtility::BEgetRootLine(GeneralUtility::_GET('id'))
+                );
+            }
+        } elseif ('FE' !== TYPO3_MODE) {
             throw new Exception('Illegal TYPO3_MODE');
         }
 
-        $configurationManager->setContentObject($contentObjectRenderer);
+        $configurationManager->setContentObject(
+            $objectManager->get(ContentObjectRenderer::class)
+        );
+
         $this->uriBuilder = $objectManager->get(UriBuilder::class);
         $this->uriBuilder->injectConfigurationManager($configurationManager);
-
     }
 
     /**
      * Creates a link to a single page
      *
      * @param int $pageId
+     * @param bool $absolute
      * @param int $sysLanguageUid
      * @return string
      */
-    public function getPageLink($pageId, $sysLanguageUid = 0)
+    public function getPageLink($pageId, $absolute = false, $sysLanguageUid = 0)
     {
         return $this->uriBuilder
             ->reset()
             ->setTargetPageUid($pageId)
+            ->setCreateAbsoluteUri($absolute)
             ->setArguments(
                 0 < $sysLanguageUid ? array('L' => $sysLanguageUid) : array()
             )
@@ -138,6 +154,7 @@ class PageService implements SingletonInterface
             'canonicalUrl' => 0 < (int) $page['mindshapeseo_canonical'] ?
                 $this->getPageLink(
                     (int) $page['mindshapeseo_canonical'],
+                    true,
                     $GLOBALS['TSFE']->sys_language_uid
                 ) :
                 null,
