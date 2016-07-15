@@ -57,6 +57,12 @@ class BackendController extends ActionController
     protected $domainService;
 
     /**
+     * @var \Mindshape\MindshapeSeo\Service\PageService
+     * @inject
+     */
+    protected $pageService;
+
+    /**
      * @var \TYPO3\CMS\Backend\View\BackendTemplateView
      */
     protected $view;
@@ -65,6 +71,19 @@ class BackendController extends ActionController
      * @var \TYPO3\CMS\Backend\View\BackendTemplateView
      */
     protected $defaultViewObjectName = BackendTemplateView::class;
+
+    /**
+     * @var int
+     */
+    protected $currentPageUid;
+
+    /**
+     * @return void
+     */
+    protected function initializeAction()
+    {
+        $this->currentPageUid = (int) GeneralUtility::_GET('id');
+    }
 
     /**
      * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
@@ -210,6 +229,10 @@ class BackendController extends ActionController
      */
     public function previewAction()
     {
+        $this->view->assignMultiple(array(
+            'currentPageMetaData' => $this->pageService->getPageMetaData($this->currentPageUid),
+            'subPagesMetaData' => $this->pageService->getSubpagesMetaData($this->currentPageUid),
+        ));
     }
 
     /**
