@@ -185,7 +185,9 @@ class PageService implements SingletonInterface
         $metadata = array();
 
         foreach ($this->getSubPageUidsFromPageUid($pageUid) as $subPageUid) {
-            $metadata[] = $this->getPageMetaData($subPageUid);
+            if ((int) $subPageUid !== $pageUid) {
+                $metadata[] = $this->getPageMetaData($subPageUid);
+            }
         }
 
         return $metadata;
