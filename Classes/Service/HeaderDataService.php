@@ -70,7 +70,7 @@ class HeaderDataService
     /**
      * @var array
      */
-    protected $currentPage;
+    protected $currentPageMetaData;
 
     /**
      * @var string
@@ -98,30 +98,7 @@ class HeaderDataService
 
         $page = $this->pageService->getCurrentPage();
 
-        $this->currentPage = array(
-            'uid' => $page['uid'],
-            'title' => $page['title'],
-            'canonicalPageUid' => (int) $page['mindshapeseo_canonical'],
-            'meta' => array(
-                'author' => $page['author'],
-                'contact' => $page['author_email'],
-                'description' => $page['description'],
-                'robots' => array(
-                    'noindex' => (bool) $page['mindshapeseo_no_index'],
-                    'nofollow' => (bool) $page['mindshapeseo_no_follow'],
-                ),
-            ),
-            'facebook' => array(
-                'title' => $page['mindshapeseo_ogtitle'],
-                'url' => $page['mindshapeseo_ogurl'],
-                'description' => $page['mindshapeseo_ogdescription'],
-            ),
-            'seo' => array(
-                'noIndex' => (bool) $page['mindshapeseo_no_index'],
-                'noFollow' => (bool) $page['mindshapeseo_no_follow'],
-                'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
-            ),
-        );
+        $this->currentPageMetaData = $this->pageService->getPageMetaData($page['uid']);
 
         $this->currentSitename = $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
 
@@ -151,10 +128,10 @@ class HeaderDataService
                     )
                 );
 
-                $this->currentPage['facebook']['image'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
+                $this->currentPageMetaData['facebook']['image'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
             }
         } elseif (null !== $this->domainConfiguration->getFacebookDefaultImage()) {
-            $this->currentPage['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage()->getOriginalResource()->getPublicUrl();
+            $this->currentPageMetaData['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage()->getOriginalResource()->getPublicUrl();
         }
     }
 
@@ -167,7 +144,7 @@ class HeaderDataService
         $this->addMetaData();
         $this->addFacebookData();
 
-        if (0 < $this->currentPage['canonicalPageUid']) {
+        if (0 < $this->currentPageMetaData['canonicalPageUid']) {
             $this->addCanonicalUrl();
         }
 
@@ -202,7 +179,7 @@ class HeaderDataService
         $this->pageRenderer->addHeaderData(
             '<link rel="canonical" href="' .
             $this->pageService->getPageLink(
-                $this->currentPage['canonicalPageUid'],
+                $this->currentPageMetaData['canonicalPageUid'],
                 $GLOBALS['TSFE']->sys_language_uid
             ) .
             '"/>'
@@ -215,11 +192,11 @@ class HeaderDataService
     protected function attachTitleAttachment()
     {
         if (
-            !$this->currentPage['seo']['disableTitleAttachment'] &&
+            !$this->currentPageMetaData['seo']['disableTitleAttachment'] &&
             '' !== $this->domainConfiguration->getTitleAttachment()
         ) {
             $this->pageRenderer->setTitle(
-                $this->currentPage['title'] . ' | ' . $this->domainConfiguration->getTitleAttachment()
+                $this->currentPageMetaData['title'] . ' | ' . $this->domainConfiguration->getTitleAttachment()
             );
         }
     }
@@ -235,13 +212,13 @@ class HeaderDataService
         $result = $databaseConnection->exec_SELECTgetRows(
             '*',
             'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.sys_language_uid',
-            'o.pid = ' . $this->currentPage['uid']
+            'o.pid = ' . $this->currentPageMetaData['uid']
         );
 
         foreach ($result as $language) {
             $this->pageRenderer->addHeaderData(
                 $this->renderHreflang(
-                    $this->pageService->getPageLink($this->currentPage['uid'], $language['uid']),
+                    $this->pageService->getPageLink($this->currentPageMetaData['uid'], $language['uid']),
                     $language['language_isocode']
                 )
             );
@@ -265,13 +242,13 @@ class HeaderDataService
     {
         $metaData = array(
             'og:site_name' => $this->currentSitename,
-            'og:url' => $this->currentPage['facebook']['url'],
-            'og:title' => $this->currentPage['facebook']['title'],
-            'og:description' => $this->currentPage['facebook']['description'],
+            'og:url' => $this->currentPageMetaData['facebook']['url'],
+            'og:title' => $this->currentPageMetaData['facebook']['title'],
+            'og:description' => $this->currentPageMetaData['facebook']['description'],
         );
 
-        if (array_key_exists('image', $this->currentPage['facebook'])) {
-            $metaData['og:image'] = $this->currentPage['facebook']['image'];
+        if (array_key_exists('image', $this->currentPageMetaData['facebook'])) {
+            $metaData['og:image'] = $this->currentPageMetaData['facebook']['image'];
         }
 
         $this->addMetaDataArray($metaData);
@@ -282,30 +259,30 @@ class HeaderDataService
         $robots = array();
 
         if (
-            !$this->currentPage['meta']['robots']['noindex'] ||
-            !$this->currentPage['meta']['robots']['nofollow']
+            !$this->currentPageMetaData['meta']['robots']['noindex'] ||
+            !$this->currentPageMetaData['meta']['robots']['nofollow']
         ) {
             $robots = $this->getParentRobotsMetaData();
         }
 
         if (
-            $this->currentPage['meta']['robots']['noindex'] &&
+            $this->currentPageMetaData['meta']['robots']['noindex'] &&
             !in_array('noindex', $robots, true)
         ) {
             $robots[] = 'noindex';
         }
 
         if (
-            $this->currentPage['meta']['robots']['nofollow'] &&
+            $this->currentPageMetaData['meta']['robots']['nofollow'] &&
             !in_array('nofollow', $robots, true)
         ) {
             $robots[] = 'nofollow';
         }
 
         $metaData = array(
-            'author' => $this->currentPage['meta']['author'],
-            'contact' => $this->currentPage['meta']['contact'],
-            'description' => $this->currentPage['meta']['description'],
+            'author' => $this->currentPageMetaData['meta']['author'],
+            'contact' => $this->currentPageMetaData['meta']['contact'],
+            'description' => $this->currentPageMetaData['meta']['description'],
             'robots' => implode(',', $robots),
         );
 

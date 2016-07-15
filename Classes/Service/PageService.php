@@ -124,6 +124,60 @@ class PageService implements SingletonInterface
         return $this->getPage($GLOBALS['TSFE']->id);
     }
 
+    /**
+     * @param int $pageUid
+     * @return array
+     */
+    public function getPageMetaData($pageUid)
+    {
+        $page = $this->getPage($pageUid);
+
+        return array(
+            'uid' => $page['uid'],
+            'title' => $page['title'],
+            'canonicalUrl' => 0 < (int) $page['mindshapeseo_canonical'] ?
+                $this->getPageLink(
+                    (int) $page['mindshapeseo_canonical'],
+                    $GLOBALS['TSFE']->sys_language_uid
+                ) :
+                null,
+            'meta' => array(
+                'author' => $page['author'],
+                'contact' => $page['author_email'],
+                'description' => $page['description'],
+                'robots' => array(
+                    'noindex' => (bool) $page['mindshapeseo_no_index'],
+                    'nofollow' => (bool) $page['mindshapeseo_no_follow'],
+                ),
+            ),
+            'facebook' => array(
+                'title' => $page['mindshapeseo_ogtitle'],
+                'url' => $page['mindshapeseo_ogurl'],
+                'description' => $page['mindshapeseo_ogdescription'],
+            ),
+            'seo' => array(
+                'noIndex' => (bool) $page['mindshapeseo_no_index'],
+                'noFollow' => (bool) $page['mindshapeseo_no_follow'],
+                'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
+            ),
+        );
+    }
+
+    /**
+     * @param int $pageUid
+     * @return array
+     */
+    public function getSubpagesMetaData($pageUid)
+    {
+        $metadata = array();
+
+        foreach ($this->getSubPageUidsFromPageUid($pageUid) as $subPageUid) {
+            $metadata[] = $this->getPageMetaData($subPageUid);
+        }
+
+        return $metadata;
+    }
+
     public function getRootline()
     {
         $pages = array();
@@ -143,6 +197,7 @@ class PageService implements SingletonInterface
     {
         /** @var QueryGenerator $queryGenerator */
         $queryGenerator = GeneralUtility::makeInstance(QueryGenerator::class);
+
         return GeneralUtility::trimExplode(
             ',',
             $queryGenerator->getTreeList($pageUid, 9999999, 0, 1)
