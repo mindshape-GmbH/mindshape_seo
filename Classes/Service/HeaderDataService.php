@@ -194,11 +194,15 @@ class HeaderDataService
     protected function attachTitleAttachment()
     {
         if (
-            !$this->currentPageMetaData['seo']['disableTitleAttachment'] &&
+            !$this->currentPageMetaData['disableTitleAttachment'] &&
             '' !== $this->domainConfiguration->getTitleAttachment()
         ) {
             $this->pageRenderer->setTitle(
                 $this->currentPageMetaData['title'] . ' | ' . $this->domainConfiguration->getTitleAttachment()
+            );
+        } else {
+            $this->pageRenderer->setTitle(
+                $this->currentPageMetaData['title']
             );
         }
     }

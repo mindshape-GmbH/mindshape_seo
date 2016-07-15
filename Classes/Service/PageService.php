@@ -151,6 +151,7 @@ class PageService implements SingletonInterface
         return array(
             'uid' => $page['uid'],
             'title' => $page['title'],
+            'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             'canonicalUrl' => 0 < (int) $page['mindshapeseo_canonical'] ?
                 $this->getPageLink(
                     (int) $page['mindshapeseo_canonical'],
@@ -171,11 +172,6 @@ class PageService implements SingletonInterface
                 'title' => $page['mindshapeseo_ogtitle'],
                 'url' => $page['mindshapeseo_ogurl'],
                 'description' => $page['mindshapeseo_ogdescription'],
-            ),
-            'seo' => array(
-                'noIndex' => (bool) $page['mindshapeseo_no_index'],
-                'noFollow' => (bool) $page['mindshapeseo_no_follow'],
-                'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             ),
         );
     }
