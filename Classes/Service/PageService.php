@@ -37,8 +37,6 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Page\PageRepository;
-use TYPO3\CMS\Frontend\Utility\EidUtility;
-
 /**
  * @package mindshape_seo
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
@@ -125,11 +123,16 @@ class PageService implements SingletonInterface
 
     /**
      * @param int $pageUid
+     * @param int $sysLanguageUid
      * @return array
      */
-    public function getPage($pageUid)
+    public function getPage($pageUid, $sysLanguageUid = 0)
     {
-        return $this->pageRepository->getPage($pageUid);
+        if (0 === $sysLanguageUid) {
+            return $this->pageRepository->getPage($pageUid);
+        } else {
+            return $this->pageRepository->getPageOverlay($pageUid, $sysLanguageUid);
+        }
     }
 
     /**
@@ -142,11 +145,12 @@ class PageService implements SingletonInterface
 
     /**
      * @param int $pageUid
+     * @param int $sysLanguageUid
      * @return array
      */
-    public function getPageMetaData($pageUid)
+    public function getPageMetaData($pageUid, $sysLanguageUid = 0)
     {
-        $page = $this->getPage($pageUid);
+        $page = $this->getPage($pageUid, $sysLanguageUid);
 
         return array(
             'uid' => $page['uid'],
@@ -178,21 +182,25 @@ class PageService implements SingletonInterface
 
     /**
      * @param int $pageUid
+     * @param int $sysLanguageUid
      * @return array
      */
-    public function getSubpagesMetaData($pageUid)
+    public function getSubpagesMetaData($pageUid, $sysLanguageUid = 0)
     {
         $metadata = array();
 
         foreach ($this->getSubPageUidsFromPageUid($pageUid) as $subPageUid) {
             if ((int) $subPageUid !== $pageUid) {
-                $metadata[] = $this->getPageMetaData($subPageUid);
+                $metadata[] = $this->getPageMetaData($subPageUid, $sysLanguageUid);
             }
         }
 
         return $metadata;
     }
 
+    /**
+     * @return array
+     */
     public function getRootline()
     {
         $pages = array();

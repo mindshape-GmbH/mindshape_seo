@@ -63,6 +63,12 @@ class BackendController extends ActionController
     protected $pageService;
 
     /**
+     * @var \Mindshape\MindshapeSeo\Service\LanguageService
+     * @inject
+     */
+    protected $languageService;
+
+    /**
      * @var \TYPO3\CMS\Backend\View\BackendTemplateView
      */
     protected $view;
@@ -94,16 +100,24 @@ class BackendController extends ActionController
         /** @var BackendTemplateView $view */
         parent::initializeView($view);
 
-        if ($this->request->getControllerActionName() === 'settings') {
-            $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
+        $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
 
+        if ($this->request->getControllerActionName() === 'settings') {
             $domains = $this->domainService->getAvailableDomains();
 
             if (0 < count($domains)) {
-                $this->buildMenu($domains);
+                $this->buildDomainMenu($domains);
             }
 
             $this->buildButtons();
+        }
+
+        if ($this->request->getControllerActionName() === 'preview') {
+            $languages = $this->languageService->getPageLanguagesAvailable(GeneralUtility::_GET('id'));
+
+            if (0 < count($languages)) {
+                $this->buildLanguageMenu($languages);
+            }
         }
     }
 
@@ -112,7 +126,7 @@ class BackendController extends ActionController
      * @return void
      * @throws \InvalidArgumentException
      */
-    protected function buildMenu(array $domains)
+    protected function buildDomainMenu(array $domains)
     {
         /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
         $uriBuilder = $this->objectManager->get(UriBuilder::class);
@@ -136,6 +150,41 @@ class BackendController extends ActionController
                     ->setTitle($domain)
                     ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => $domain), 'Backend'))
                     ->setActive($arguments['domain'] === $domain)
+            );
+        }
+
+        $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
+    }
+
+    /**
+     * @param array $languages
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    protected function buildLanguageMenu(array $languages)
+    {
+        /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
+        $uriBuilder = $this->objectManager->get(UriBuilder::class);
+        $uriBuilder->setRequest($this->request);
+
+        $menu = $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
+        $menu->setIdentifier('mindshape_seo');
+
+        $arguments = $this->request->getArguments();
+
+        $defaultMenuItem = $menu->makeMenuItem()
+            ->setTitle(LocalizationUtility::translate('tx_minshapeseo_label.default_language', 'mindshape_seo'))
+            ->setHref($uriBuilder->reset()->uriFor('preview', array('sysLanguageUid' => 0), 'Backend'))
+            ->setActive(!array_key_exists('sysLanguageUid', $arguments) || $arguments['sysLanguageUid'] === 0);
+
+        $menu->addMenuItem($defaultMenuItem);
+
+        foreach ($languages as $language) {
+            $menu->addMenuItem(
+                $menu->makeMenuItem()
+                    ->setTitle($language['title'])
+                    ->setHref($uriBuilder->reset()->uriFor('preview', array('sysLanguageUid' => $language['uid']), 'Backend'))
+                    ->setActive($arguments['sysLanguageUid'] === $language['uid'])
             );
         }
 
@@ -225,13 +274,14 @@ class BackendController extends ActionController
     }
 
     /**
+     * @param int $sysLanguageUid
      * @return void
      */
-    public function previewAction()
+    public function previewAction($sysLanguageUid = 0)
     {
         $this->view->assignMultiple(array(
-            'currentPageMetaData' => $this->pageService->getPageMetaData($this->currentPageUid),
-            'subPagesMetaData' => $this->pageService->getSubpagesMetaData($this->currentPageUid),
+            'currentPageMetaData' => $this->pageService->getPageMetaData($this->currentPageUid, $sysLanguageUid),
+            'subPagesMetaData' => $this->pageService->getSubpagesMetaData($this->currentPageUid, $sysLanguageUid),
         ));
     }
 
