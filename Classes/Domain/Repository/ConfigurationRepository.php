@@ -57,14 +57,21 @@ class ConfigurationRepository extends Repository
 
     /**
      * @param string $domain
-     * @return Configuration
+     * @param bool $returnDefaultIfNotFound
+     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration
      */
-    public function findByDomain($domain)
+    public function findByDomain($domain, $returnDefaultIfNotFound = false)
     {
         $query = $this->createQuery();
 
+        $constraint[] = $query->equals('domain', $domain);
+
+        if ($returnDefaultIfNotFound) {
+            $constraint[] = $query->equals('domain', Configuration::DEFAULT_DOMAIN);
+        }
+
         $query->matching(
-            $query->equals('domain', $domain)
+            $query->logicalOr($constraint)
         );
 
         return $query->execute()->getFirst();

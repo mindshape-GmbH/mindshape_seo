@@ -26,6 +26,7 @@ namespace Mindshape\MindshapeSeo\Service;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Resource\FileReference;
@@ -57,9 +58,29 @@ class HeaderDataService
     protected $standaloneTemplateRendererService;
 
     /**
+     * @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository
+     */
+    protected $configurationRepository;
+
+    /**
+     * @var \Mindshape\MindshapeSeo\Domain\Model\Configuration
+     */
+    protected $domainConfiguration;
+
+    /**
      * @var array
      */
-    protected $settings;
+    protected $currentPage;
+
+    /**
+     * @var string
+     */
+    protected $currentDomainUrl;
+
+    /**
+     * @var string
+     */
+    protected $currentSitename;
 
     /**
      * @param PageRenderer $pageRenderer
@@ -69,85 +90,51 @@ class HeaderDataService
     {
         $this->pageRenderer = $pageRenderer;
 
-        /** @var DatabaseConnection $databaseConnection */
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
-
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->pageService = $objectManager->get(PageService::class);
         $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
+        $this->configurationRepository = $objectManager->get(ConfigurationRepository::class);
 
         $page = $this->pageService->getCurrentPage();
-        $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
 
-        $this->settings = array(
-            'domain' => array(),
-            'sitename' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'],
-            'page' => array(
-                'uid' => $page['uid'],
-                'title' => $page['title'],
-                'canonicalPageUid' => (int) $page['mindshapeseo_canonical'],
-                'meta' => array(
-                    'author' => $page['author'],
-                    'contact' => $page['author_email'],
-                    'description' => $page['description'],
-                    'robots' => array(
-                        'noindex' => (bool) $page['mindshapeseo_no_index'],
-                        'nofollow' => (bool) $page['mindshapeseo_no_follow'],
-                    ),
+        $this->currentPage = array(
+            'uid' => $page['uid'],
+            'title' => $page['title'],
+            'canonicalPageUid' => (int) $page['mindshapeseo_canonical'],
+            'meta' => array(
+                'author' => $page['author'],
+                'contact' => $page['author_email'],
+                'description' => $page['description'],
+                'robots' => array(
+                    'noindex' => (bool) $page['mindshapeseo_no_index'],
+                    'nofollow' => (bool) $page['mindshapeseo_no_follow'],
                 ),
-                'facebook' => array(
-                    'title' => $page['mindshapeseo_ogtitle'],
-                    'url' => $page['mindshapeseo_ogurl'],
-                    'description' => $page['mindshapeseo_ogdescription'],
-                ),
-                'seo' => array(
-                    'noIndex' => (bool) $page['mindshapeseo_no_index'],
-                    'noFollow' => (bool) $page['mindshapeseo_no_follow'],
-                    'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
-                ),
+            ),
+            'facebook' => array(
+                'title' => $page['mindshapeseo_ogtitle'],
+                'url' => $page['mindshapeseo_ogurl'],
+                'description' => $page['mindshapeseo_ogdescription'],
+            ),
+            'seo' => array(
+                'noIndex' => (bool) $page['mindshapeseo_no_index'],
+                'noFollow' => (bool) $page['mindshapeseo_no_follow'],
+                'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             ),
         );
 
-        $result = $databaseConnection->exec_SELECTgetSingleRow(
-            '*',
-            'tx_mindshapeseo_domain_model_configuration t',
-            't.domain = "' . Configuration::DEFAULT_DOMAIN . '" OR t.domain = "' . $currentDomain . '"',
-            '',
-            'domain DESC'
+        $this->currentSitename = $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
+
+        $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
+
+        $this->domainConfiguration = $this->configurationRepository->findByDomain($currentDomain, true);
+
+        $this->currentDomainUrl = $this->pageService->getPageLink(
+            $GLOBALS['TSFE']->rootLine[0]['uid']
         );
 
-        if (is_array($result)) {
-            $this->settings['domain'] = array(
-                'url' => $this->pageService->getPageLink(
-                    $GLOBALS['TSFE']->rootLine[0]['uid']
-                ),
-                'googleAnalytics' => $result['google_analytics'],
-                'piwikUrl' => $result['piwik_url'],
-                'piwikIdSite' => $result['piwik_idsite'],
-                'titleAttachment' => $result['title_attachment'],
-                'addHreflang' => (bool) $result['add_hreflang'],
-                'facebookDefaultImage' => $result['facebook_default_image'],
-                'addJsonLd' => (bool) $result['add_jsonld'],
-                'json-ld' => array(
-                    'customUrl' => $result['jsonld_custom_url'],
-                    'type' => $result['jsonld_type'],
-                    'telephone' => $result['jsonld_telephone'],
-                    'fax' => $result['jsonld_fax'],
-                    'email' => $result['jsonld_email'],
-                    'sameAs' => $result['jsonld_same_as'],
-                    'logo' => $result['jsonld_logo'],
-                    'address' => array(
-                        'locality' => $result['jsonld_address_locality'],
-                        'postalcode' => $result['jsonld_address_postalcode'],
-                        'street' => $result['jsonld_address_street'],
-                    ),
-                ),
-            );
-        }
-
         if (0 === (int) $page['mindshapeseo_ogimage']) {
-            $this->settings['page']['facebook']['image'] = $this->settings['domain']['facebookDefaultImage'];
+            $this->currentPage['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage();
         } else {
             /** @var FileRepository $fileRepository */
             $fileRepository = $objectManager->get(FileRepository::class);
@@ -166,9 +153,9 @@ class HeaderDataService
                     )
                 );
 
-                $this->settings['page']['facebook']['image'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
+                $this->currentPage['facebook']['image'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
             } else {
-                $this->settings['page']['facebook']['image'] = $this->settings['domain']['facebookDefaultImage'];
+                $this->currentPage['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage();
             }
         }
     }
@@ -182,28 +169,30 @@ class HeaderDataService
         $this->addMetaData();
         $this->addFacebookData();
 
-        if (0 < $this->settings['page']['canonicalPageUid']) {
+        if (0 < $this->currentPage['canonicalPageUid']) {
             $this->addCanonicalUrl();
         }
 
-        if ($this->settings['domain']['addHreflang']) {
-            $this->addHreflang();
-        }
+        if ($this->domainConfiguration instanceof Configuration) {
+            if ($this->domainConfiguration->getAddHreflang()) {
+                $this->addHreflang();
+            }
 
-        if ($this->settings['domain']['addJsonLd']) {
-            $this->addJsonLd();
-        }
+            if ($this->domainConfiguration->getAddJsonld()) {
+                $this->addJsonLd();
+            }
 
-        if ('' !== $this->settings['domain']['googleAnalytics']) {
-            $this->addGoogleAnalytics();
-        }
+            if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
+                $this->addGoogleAnalytics();
+            }
 
-        if (
-            '' === $this->settings['domain']['googleAnalytics'] &&
-            '' !== $this->settings['domain']['piwikUrl'] &&
-            '' !== $this->settings['domain']['piwikIdSite']
-        ) {
-            $this->addPiwik();
+            if (
+                '' === $this->domainConfiguration->getGoogleAnalytics() &&
+                '' !== $this->domainConfiguration->getPiwikUrl() &&
+                '' !== $this->domainConfiguration->getPiwikIdsite()
+            ) {
+                $this->addPiwik();
+            }
         }
     }
 
@@ -215,7 +204,7 @@ class HeaderDataService
         $this->pageRenderer->addHeaderData(
             '<link rel="canonical" href="' .
             $this->pageService->getPageLink(
-                $this->settings['page']['canonicalPageUid'],
+                $this->currentPage['canonicalPageUid'],
                 $GLOBALS['TSFE']->sys_language_uid
             ) .
             '"/>'
@@ -228,11 +217,11 @@ class HeaderDataService
     protected function attachTitleAttachment()
     {
         if (
-            '' !== $this->settings['domain']['titleAttachment'] &&
-            !$this->settings['page']['seo']['disableTitleAttachment']
+            !$this->currentPage['seo']['disableTitleAttachment'] &&
+            '' !== $this->domainConfiguration->getTitleAttachment()
         ) {
             $this->pageRenderer->setTitle(
-                $this->settings['page']['title'] . ' | ' . $this->settings['domain']['titleAttachment']
+                $this->currentPage['title'] . ' | ' . $this->domainConfiguration->getTitleAttachment()
             );
         }
     }
@@ -248,13 +237,13 @@ class HeaderDataService
         $result = $databaseConnection->exec_SELECTgetRows(
             '*',
             'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.sys_language_uid',
-            'o.pid = ' . $this->settings['page']['uid']
+            'o.pid = ' . $this->currentPage['uid']
         );
 
         foreach ($result as $language) {
             $this->pageRenderer->addHeaderData(
                 $this->renderHreflang(
-                    $this->pageService->getPageLink($this->settings['page']['uid'], $language['uid']),
+                    $this->pageService->getPageLink($this->currentPage['uid'], $language['uid']),
                     $language['language_isocode']
                 )
             );
@@ -277,11 +266,11 @@ class HeaderDataService
     protected function addFacebookData()
     {
         $metaData = array(
-            'og:site_name' => $this->settings['sitename'],
-            'og:url' => $this->settings['page']['facebook']['url'],
-            'og:title' => $this->settings['page']['facebook']['title'],
-            'og:description' => $this->settings['page']['facebook']['description'],
-            'og:image' => $this->settings['page']['facebook']['image'],
+            'og:site_name' => $this->currentSitename,
+            'og:url' => $this->currentPage['facebook']['url'],
+            'og:title' => $this->currentPage['facebook']['title'],
+            'og:description' => $this->currentPage['facebook']['description'],
+            'og:image' => $this->currentPage['facebook']['image'],
         );
 
         $this->addMetaDataArray($metaData);
@@ -292,30 +281,30 @@ class HeaderDataService
         $robots = array();
 
         if (
-            !$this->settings['page']['meta']['robots']['noindex'] ||
-            !$this->settings['page']['meta']['robots']['nofollow']
+            !$this->currentPage['meta']['robots']['noindex'] ||
+            !$this->currentPage['meta']['robots']['nofollow']
         ) {
             $robots = $this->getParentRobotsMetaData();
         }
 
         if (
-            $this->settings['page']['meta']['robots']['noindex'] &&
+            $this->currentPage['meta']['robots']['noindex'] &&
             !in_array('noindex', $robots, true)
         ) {
             $robots[] = 'noindex';
         }
 
         if (
-            $this->settings['page']['meta']['robots']['nofollow'] &&
+            $this->currentPage['meta']['robots']['nofollow'] &&
             !in_array('nofollow', $robots, true)
         ) {
             $robots[] = 'nofollow';
         }
 
         $metaData = array(
-            'author' => $this->settings['page']['meta']['author'],
-            'contact' => $this->settings['page']['meta']['contact'],
-            'description' => $this->settings['page']['meta']['description'],
+            'author' => $this->currentPage['meta']['author'],
+            'contact' => $this->currentPage['meta']['contact'],
+            'description' => $this->currentPage['meta']['description'],
             'robots' => implode(',', $robots),
         );
 
@@ -384,7 +373,7 @@ class HeaderDataService
     protected function addGoogleAnalytics()
     {
         $view = $this->standaloneTemplateRendererService->getView('Analytics', 'Google');
-        $view->assign('analyticsId', $this->settings['domain']['googleAnalytics']);
+        $view->assign('analyticsId', $this->domainConfiguration->getGoogleAnalytics());
 
         $this->pageRenderer->addHeaderData(
             $view->render()
@@ -398,8 +387,8 @@ class HeaderDataService
     {
         $view = $this->standaloneTemplateRendererService->getView('Analytics', 'Piwik');
         $view->assignMultiple(array(
-            'piwikUrl' => $this->settings['domain']['piwikUrl'],
-            'piwikIdSite' => $this->settings['domain']['piwikIdSite'],
+            'piwikUrl' => $this->domainConfiguration->getPiwikUrl(),
+            'piwikIdSite' => $this->domainConfiguration->getPiwikIdsite(),
         ));
 
         $this->pageRenderer->addHeaderData(
@@ -437,8 +426,8 @@ class HeaderDataService
         return array(
             '@context' => 'http://schema.org',
             '@type' => 'WebSite',
-            'url' => '' !== $this->settings['domain']['json-ld']['customUrl'] ?
-                $this->settings['domain']['json-ld']['customUrl'] :
+            'url' => '' !== $this->domainConfiguration->getJsonldCustomUrl() ?
+                $this->domainConfiguration->getJsonldCustomUrl() :
                 GeneralUtility::getIndpEnv('HTTP_HOST'),
         );
     }
@@ -450,17 +439,17 @@ class HeaderDataService
     {
         return array(
             '@context' => 'http://schema.org',
-            '@type' => $this->settings['domain']['json-ld']['type'],
-            'url' => $this->settings['domain']['url'],
-            'telephone' => $this->settings['domain']['json-ld']['telephone'],
-            'faxNumber' => $this->settings['domain']['json-ld']['fax'],
-            'email' => $this->settings['domain']['json-ld']['email'],
-            'logo' => $this->settings['domain']['json-ld']['logo'],
+            '@type' => $this->domainConfiguration->getJsonldType(),
+            'url' => $this->currentDomainUrl,
+            'telephone' => $this->domainConfiguration->getJsonldTelephone(),
+            'faxNumber' => $this->domainConfiguration->getJsonldFax(),
+            'email' => $this->domainConfiguration->getJsonldEmail(),
+            'logo' => $this->domainConfiguration->getJsonldLogo(),
             'address' => array(
                 '@type' => 'PostalAddress',
-                'addressLocality' => $this->settings['domain']['json-ld']['address']['locality'],
-                'postalcode' => $this->settings['domain']['json-ld']['address']['postalcode'],
-                'streetAddress' => $this->settings['domain']['json-ld']['address']['street'],
+                'addressLocality' => $this->domainConfiguration->getJsonldAddressLocality(),
+                'postalcode' => $this->domainConfiguration->getJsonldAddressPostalcode(),
+                'streetAddress' => $this->domainConfiguration->getJsonldAddressStreet(),
             ),
         );
     }

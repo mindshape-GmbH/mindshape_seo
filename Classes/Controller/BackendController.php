@@ -91,6 +91,7 @@ class BackendController extends ActionController
     /**
      * @param array $domains
      * @return void
+     * @throws \InvalidArgumentException
      */
     protected function buildMenu(array $domains)
     {
@@ -124,6 +125,7 @@ class BackendController extends ActionController
 
     /**
      * @return void
+     * @throws \InvalidArgumentException
      */
     protected function buildButtons()
     {
@@ -180,6 +182,8 @@ class BackendController extends ActionController
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      */
