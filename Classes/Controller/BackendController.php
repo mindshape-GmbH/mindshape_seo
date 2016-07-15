@@ -180,13 +180,15 @@ class BackendController extends ActionController
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      */
     public function saveConfigurationAction(Configuration $configuration)
     {
         if ($configuration->_isNew()) {
-            $this->configurationRepository->update($configuration);
-        } else {
             $this->configurationRepository->add($configuration);
+        } else {
+            $this->configurationRepository->update($configuration);
         }
 
         $this->redirect(

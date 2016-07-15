@@ -73,10 +73,12 @@ class ConfigurationRepository extends Repository
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function update($configuration)
     {
-        $this->checkFilerefenreces($configuration);
+        $this->checkFileReferences($configuration);
 
         parent::update($configuration);
     }
@@ -85,18 +87,7 @@ class ConfigurationRepository extends Repository
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
      * @return void
      */
-    public function add($configuration)
-    {
-        $this->checkFilerefenreces($configuration);
-
-        parent::update($configuration);
-    }
-
-    /**
-     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
-     * @return void
-     */
-    protected function checkFilerefenreces(Configuration $configuration)
+    protected function checkFileReferences(Configuration $configuration)
     {
         /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
@@ -144,6 +135,8 @@ class ConfigurationRepository extends Repository
         /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
+        $databaseConnection->sql_query('START TRANSACTION');
+
         $databaseConnection->exec_UPDATEquery(
             'sys_file_reference',
             'uid = ' . $fileReference['uid'],
@@ -159,5 +152,7 @@ class ConfigurationRepository extends Repository
                 $field => 0,
             )
         );
+
+        $databaseConnection->sql_query('COMMIT');
     }
 }
