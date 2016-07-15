@@ -32,6 +32,7 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
@@ -52,6 +53,7 @@ class PageService implements SingletonInterface
 
     /**
      * @return PageService
+     * @throws \Mindshape\MindshapeSeo\Service\Exception
      */
     public function __construct()
     {
@@ -59,12 +61,32 @@ class PageService implements SingletonInterface
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
-        /** @var ContentObjectRenderer $contentObjectRenderer */
-        $contentObjectRenderer = $objectManager->get(ContentObjectRenderer::class);
+        $this->pageRepository = $objectManager->get(PageRepository::class);
+
+        if ('FE' === TYPO3_MODE) {
+            /** @var ContentObjectRenderer $contentObjectRenderer */
+            $contentObjectRenderer = $objectManager->get(ContentObjectRenderer::class);
+        } elseif ('BE' === TYPO3_MODE) {
+            /** @var TypoScriptFrontendController $typoScriptFrontendController */
+            $typoScriptFrontendController = $objectManager->get(
+                TypoScriptFrontendController::class,
+                $GLOBALS['TYPO3_CONF_VARS'],
+                GeneralUtility::_GET('id'),
+                GeneralUtility::_GET('type')
+            );
+
+            $typoScriptFrontendController->sys_page = $this->pageRepository;
+            $typoScriptFrontendController->initTemplate();
+
+            $contentObjectRenderer = $objectManager->get(ContentObjectRenderer::class, $typoScriptFrontendController);
+        } else {
+            throw new Exception('Illegal TYPO3_MODE');
+        }
+
         $configurationManager->setContentObject($contentObjectRenderer);
         $this->uriBuilder = $objectManager->get(UriBuilder::class);
         $this->uriBuilder->injectConfigurationManager($configurationManager);
-        $this->pageRepository = $objectManager->get(PageRepository::class);
+
     }
 
     /**
