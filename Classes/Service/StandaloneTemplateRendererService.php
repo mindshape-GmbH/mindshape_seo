@@ -51,6 +51,9 @@ class StandaloneTemplateRendererService implements SingletonInterface
      */
     protected $settings;
 
+    /**
+     * @return StandaloneTemplateRendererService
+     */
     public function __construct()
     {
         /** @var ObjectManager $objectManager */
@@ -68,15 +71,33 @@ class StandaloneTemplateRendererService implements SingletonInterface
     /**
      * @param string $templateFolder
      * @param string $templateName
+     * @param array $variables
      * @param string $format
-     * @return \TYPO3\CMS\Fluid\View\StandaloneView
+     * @return string
      */
-    public function getView($templateFolder = self::TEMPLATES_DEFAULT_FOLDER, $templateName, $format = 'html')
+    public function render($templateFolder = self::TEMPLATES_DEFAULT_FOLDER, $templateName, array $variables, $format = 'html')
     {
         if ('/' !== $templateFolder[-1]) {
             $templateFolder .= '/';
         }
 
+        $view = $this->getView($templateFolder, $templateName, $format);
+
+        if (0 < count($variables)) {
+            $view->assignMultiple($variables);
+        }
+
+        return $view->render();
+    }
+
+    /**
+     * @param string $templateFolder
+     * @param string $templateName
+     * @param string $format
+     * @return \TYPO3\CMS\Fluid\View\StandaloneView
+     */
+    protected function getView($templateFolder = self::TEMPLATES_DEFAULT_FOLDER, $templateName, $format = 'html')
+    {
         /** @var StandaloneView $view */
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setFormat($format);
@@ -85,6 +106,7 @@ class StandaloneTemplateRendererService implements SingletonInterface
         $view->setLayoutRootPaths($this->settings['view']['layoutRootPaths']);
         $view->setPartialRootPaths($this->settings['view']['partialRootPaths']);
         $view->setTemplate($templateFolder . $templateName . '.' . $format);
+
         return $view;
     }
 }

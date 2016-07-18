@@ -47,7 +47,7 @@ class DomainService implements SingletonInterface
     }
 
     /**
-     * @return array|null
+     * @return array
      */
     public function getAvailableDomains()
     {
@@ -57,10 +57,12 @@ class DomainService implements SingletonInterface
             'TRIM(redirectTo) = ""'
         );
 
-        $domains = null;
+        $domains = array();
 
-        foreach ($result as $domain) {
-            $domains[] = $domain['domainName'];
+        if (is_array($result)) {
+            foreach ($result as $domain) {
+                $domains[] = $domain['domainName'];
+            }
         }
 
         return $domains;

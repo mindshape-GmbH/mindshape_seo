@@ -35,18 +35,23 @@ class LanguageService implements SingletonInterface
 {
     /**
      * @param int $pageUid
-     * @return array|null
-     * @throws \InvalidArgumentException
+     * @return array
      */
     public function getPageLanguagesAvailable($pageUid)
     {
         /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
-        return $databaseConnection->exec_SELECTgetRows(
+        $result = $databaseConnection->exec_SELECTgetRows(
             'l.*',
             'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.pid',
             'o.pid = ' . $pageUid
         );
+
+        if (is_array($result)) {
+            return $result;
+        } else {
+            return array();
+        }
     }
 }

@@ -113,7 +113,7 @@ class BackendController extends ActionController
         }
 
         if ($this->request->getControllerActionName() === 'preview') {
-            $languages = $this->languageService->getPageLanguagesAvailable(GeneralUtility::_GET('id'));
+            $languages = $this->languageService->getPageLanguagesAvailable($this->currentPageUid);
 
             if (0 < count($languages)) {
                 $this->buildLanguageMenu($languages);
@@ -124,7 +124,6 @@ class BackendController extends ActionController
     /**
      * @param array $domains
      * @return void
-     * @throws \InvalidArgumentException
      */
     protected function buildDomainMenu(array $domains)
     {
@@ -159,7 +158,6 @@ class BackendController extends ActionController
     /**
      * @param array $languages
      * @return void
-     * @throws \InvalidArgumentException
      */
     protected function buildLanguageMenu(array $languages)
     {
@@ -193,7 +191,6 @@ class BackendController extends ActionController
 
     /**
      * @return void
-     * @throws \InvalidArgumentException
      */
     protected function buildButtons()
     {
@@ -250,10 +247,6 @@ class BackendController extends ActionController
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
      * @return void
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      */
     public function saveConfigurationAction(Configuration $configuration)
     {

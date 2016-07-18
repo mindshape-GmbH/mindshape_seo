@@ -356,11 +356,10 @@ class HeaderDataService
      */
     protected function addGoogleAnalytics()
     {
-        $view = $this->standaloneTemplateRendererService->getView('Analytics', 'Google');
-        $view->assign('analyticsId', $this->domainConfiguration->getGoogleAnalytics());
-
         $this->pageRenderer->addHeaderData(
-            $view->render()
+            $this->standaloneTemplateRendererService->render('Analytics', 'Google', array(
+                'analyticsId' => $this->domainConfiguration->getGoogleAnalytics(),
+            ))
         );
     }
 
@@ -369,14 +368,11 @@ class HeaderDataService
      */
     protected function addPiwik()
     {
-        $view = $this->standaloneTemplateRendererService->getView('Analytics', 'Piwik');
-        $view->assignMultiple(array(
-            'piwikUrl' => $this->domainConfiguration->getPiwikUrl(),
-            'piwikIdSite' => $this->domainConfiguration->getPiwikIdsite(),
-        ));
-
         $this->pageRenderer->addHeaderData(
-            $view->render()
+            $this->standaloneTemplateRendererService->render('Analytics', 'Piwik', array(
+                'piwikUrl' => $this->domainConfiguration->getPiwikUrl(),
+                'piwikIdSite' => $this->domainConfiguration->getPiwikIdsite(),
+            ))
         );
     }
 
