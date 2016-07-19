@@ -45,7 +45,7 @@ use TYPO3\CMS\Frontend\Page\PageRepository;
  */
 class PageService implements SingletonInterface
 {
-    const TREE_DEPTH_INFINITY = 'infinity';
+    const TREE_DEPTH_INFINITY = -1;
     const TREE_DEPTH_DEFAULT = 2;
 
     /**

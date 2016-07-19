@@ -337,7 +337,7 @@ class BackendController extends ActionController
                 8 => '8',
                 9 => '9',
                 10 => '10',
-            )
+            ),
         ));
     }
 
