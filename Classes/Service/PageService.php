@@ -180,9 +180,7 @@ class PageService implements SingletonInterface
         }
 
         if ($useGoogleBreadcrumb) {
-            $rootline = $this->getRootline($pageUid);
-            array_pop($rootline);
-            $rootline = array_reverse($rootline);
+            $rootline = $this->getRootlineReverse($pageUid);
 
             $googleBreadcrumb = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('HTTP_HOST');
 
@@ -269,6 +267,17 @@ class PageService implements SingletonInterface
         }
 
         return $pages;
+    }
+
+    /**
+     * @param int $pageUid
+     * @return array
+     */
+    public function getRootlineReverse($pageUid = null)
+    {
+        $rootline = $this->getRootline($pageUid);
+        array_pop($rootline);
+        return array_reverse($rootline);
     }
 
     /**
