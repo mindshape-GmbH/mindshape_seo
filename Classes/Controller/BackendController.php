@@ -27,6 +27,7 @@ namespace Mindshape\MindshapeSeo\Controller;
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter;
+use Mindshape\MindshapeSeo\Service\PageService;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Imaging\Icon;
@@ -67,6 +68,12 @@ class BackendController extends ActionController
      * @inject
      */
     protected $languageService;
+
+    /**
+     * @var \Mindshape\MindshapeSeo\Service\SessionService
+     * @inject
+     */
+    protected $sessionService;
 
     /**
      * @var \TYPO3\CMS\Backend\View\BackendTemplateView
@@ -278,14 +285,60 @@ class BackendController extends ActionController
     }
 
     /**
+     * @param int $depth
      * @param int $sysLanguageUid
      * @return void
      */
-    public function previewAction($sysLanguageUid = 0)
+    public function previewAction($depth = null, $sysLanguageUid = 0)
     {
+        if (null === $depth) {
+            $depth = $this->sessionService->hasKey('depth') ?
+                $this->sessionService->getKey('depth') :
+                PageService::TREE_DEPTH_DEFAULT;
+        } else {
+            $this->sessionService->setKey('depth', $depth);
+        }
+
+        $configuration = $this->domainService->getPageDomainConfiguration();
+
+        if ($configuration instanceof Configuration) {
+            $this->view->assign(
+                'pageTree',
+                $this->pageService->getPageMetadataTree(
+                    $this->currentPageUid,
+                    $depth,
+                    $sysLanguageUid,
+                    $configuration->getTitleAttachment(),
+                    $configuration->getJsonldCustomUrl(),
+                    $configuration->getAddJsonld()
+                )
+            );
+        } else {
+            $this->view->assign(
+                'pageTree',
+                $this->pageService->getPageMetadataTree(
+                    $this->currentPageUid,
+                    $depth,
+                    $sysLanguageUid
+                )
+            );
+        }
+
         $this->view->assignMultiple(array(
-            'currentPageMetaData' => $this->pageService->getPageMetaData($this->currentPageUid, $sysLanguageUid),
-            'subPagesMetaData' => $this->pageService->getSubpagesMetaData($this->currentPageUid, $sysLanguageUid),
+            'depth' => $depth,
+            'levelOptions' => array(
+                PageService::TREE_DEPTH_INFINITY => LocalizationUtility::translate('tx_minshapeseo_label.preview.levels.infinity', 'mindshape_seo'),
+                1 => '1',
+                2 => '2',
+                3 => '3',
+                4 => '4',
+                5 => '5',
+                6 => '6',
+                7 => '7',
+                8 => '8',
+                9 => '9',
+                10 => '10',
+            )
         ));
     }
 

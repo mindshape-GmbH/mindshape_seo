@@ -11,6 +11,37 @@
             {currentPageMetaData.title}
         </h1>
 
+        <div class="row">
+            <div class="col-sm-2">
+                <f:form id="depthselect-form" action="preview" controller="Backend">
+                    <div class="form-group">
+                        <label>
+                            <f:translate key="tx_minshapeseo_label.preview.levels"/>
+                        </label>
+                        <f:form.select id="depthselect" name="depth" options="{levelOptions}" value="{depth}" class="form-control"/>
+                    </div>
+                </f:form>
+            </div>
+        </div>
+
+        <f:if condition="{pageTree}">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <f:render partial="PagePreviewTree" arguments="{pageTree: pageTree}"/>
+                    </div>
+                </div>
+            </div>
+        </f:if>
+
+        <script>
+            var form = document.getElementById('depthselect-form');
+
+            document.getElementById('depthselect').addEventListener('change', function () {
+                form.submit();
+            })
+        </script>
+
     </f:section>
 
 </html>

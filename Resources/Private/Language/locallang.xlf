@@ -91,8 +91,27 @@
             <trans-unit id="tx_minshapeseo_label.facebook_metadata">
                 <source>Facebook Metadata</source>
             </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.metadata">
+                <source>Metadata</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.google_search_preview">
+                <source>Google search preview</source>
+            </trans-unit>
             <trans-unit id="tx_minshapeseo_label.save">
                 <source>Save</source>
+            </trans-unit>
+
+            <trans-unit id="tx_minshapeseo_label.preview">
+                <source>Preview</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.preview.levels">
+                <source>Levels</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.preview.levels.infinity">
+                <source>Infinity</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.preview.page">
+                <source>Page</source>
             </trans-unit>
 
             <trans-unit id="tx_minshapeseo_label.default_settings">

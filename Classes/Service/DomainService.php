@@ -25,6 +25,7 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -37,6 +38,18 @@ class DomainService implements SingletonInterface
      * @var \TYPO3\CMS\Core\Database\DatabaseConnection
      */
     protected $databaseConnection;
+
+    /**
+     * @var \Mindshape\MindshapeSeo\Service\PageService
+     * @inject
+     */
+    protected $pageService;
+
+    /**
+     * @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository
+     * @inject
+     */
+    protected $configurationRepository;
 
     /**
      * @return DomainService
@@ -66,5 +79,31 @@ class DomainService implements SingletonInterface
         }
 
         return $domains;
+    }
+
+    /**
+     * @return null|\Mindshape\MindshapeSeo\Domain\Model\Configuration
+     */
+    public function getPageDomainConfiguration()
+    {
+        $configuration = null;
+
+        foreach ($this->pageService->getRootline() as $parentPage) {
+            $result = $this->databaseConnection->exec_SELECTgetSingleRow(
+                '*',
+                'sys_domain',
+                'TRIM(redirectTo) = "" AND pid = ' . $parentPage['uid']
+            );
+
+            if (is_array($result)) {
+                $configuration = $this->configurationRepository->findByDomain($result['domainName']);
+
+                if ($configuration instanceof Configuration) {
+                    return $configuration;
+                }
+            }
+        }
+
+        return $this->configurationRepository->findByDomain(Configuration::DEFAULT_DOMAIN);
     }
 }

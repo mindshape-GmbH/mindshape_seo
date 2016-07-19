@@ -1,0 +1,61 @@
+<html data-namespace-typo3-fluid="true" lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://typo3.org/ns/fluid/ViewHelpers">
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <f:translate key="tx_minshapeseo_label.preview.page"/>
+                </th>
+                <th>
+                    <f:translate key="tx_minshapeseo_label.preview"/>
+                </th>
+                <th>
+                    <f:translate key="tx_minshapeseo_label.metadata"/>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <f:for each="{pageTree}" as="page">
+                <tr>
+                    <td width="25%">
+                        {page.title}
+                    </td>
+                    <td width="50%" style="vertical-align: top;">
+                        <f:render partial="GoogleSearchPreview" arguments="{
+                            title: page.title,
+                            url: page.url,
+                            previewUrl: page.previewUrl,
+                            description: page.meta.description
+                        }"/>
+                    </td>
+                    <td width="25%" style="vertical-align: top;">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label>
+                                    <f:form.checkbox name="noindex" value="1" checked="{page.meta.robots.noindex}"/>
+                                    <f:translate key="tx_minshapeseo_domain_model_pages.mindshapeseo_no_index"/>
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <f:form.checkbox name="nofollow" value="1" checked="{page.meta.robots.nofollow}"/>
+                                    <f:translate key="tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow"/>
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <f:if condition="{page.subpages}">
+                    <tr>
+                        <td colspan="3">
+                            <f:render partial="PagePreviewTree" arguments="{pageTree: page.subpages}"/>
+                        </td>
+                    </tr>
+                </f:if>
+            </f:for>
+        </tbody>
+    </table>
+
+</html>

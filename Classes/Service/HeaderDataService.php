@@ -453,11 +453,11 @@ class HeaderDataService
             'itemListElement' => array(),
         );
 
-        $rootLineUids = $GLOBALS['TSFE']->rootLine;
-        array_pop($rootLineUids);
-        $rootLineUids = array_reverse($rootLineUids);
+        $rootLine = $this->pageService->getRootline();
+        array_pop($rootLine);
+        $rootLine = array_reverse($rootLine);
 
-        foreach ($rootLineUids as $index => $page) {
+        foreach ($rootLine as $index => $page) {
             if (
                 1 !== (int) $page['doktype'] &&
                 4 !== (int) $page['doktype']
