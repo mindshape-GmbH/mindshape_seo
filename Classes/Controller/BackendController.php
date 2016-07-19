@@ -100,9 +100,20 @@ class BackendController extends ActionController
         /** @var BackendTemplateView $view */
         parent::initializeView($view);
 
-        $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
+        $currentAction = $this->request->getControllerActionName();
 
-        if ($this->request->getControllerActionName() === 'settings') {
+        if (
+            $currentAction === 'settings' ||
+            $currentAction === 'preview'
+        ) {
+            $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
+
+            $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
+            $pageRenderer->loadJquery();
+            $pageRenderer->setBackPath('../typo3/');
+        }
+
+        if ($currentAction === 'settings') {
             $domains = $this->domainService->getAvailableDomains();
 
             if (0 < count($domains)) {
@@ -112,7 +123,7 @@ class BackendController extends ActionController
             $this->buildButtons();
         }
 
-        if ($this->request->getControllerActionName() === 'preview') {
+        if ($currentAction === 'preview') {
             $languages = $this->languageService->getPageLanguagesAvailable($this->currentPageUid);
 
             if (0 < count($languages)) {
