@@ -114,9 +114,6 @@
                 <source>Page</source>
             </trans-unit>
 
-            <trans-unit id="tx_minshapeseo_label.default_settings">
-                <source>Default Settings</source>
-            </trans-unit>
             <trans-unit id="tx_minshapeseo_label.default_language">
                 <source>Default Language</source>
             </trans-unit>

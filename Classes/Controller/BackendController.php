@@ -123,7 +123,7 @@ class BackendController extends ActionController
         if ($currentAction === 'settings') {
             $domains = $this->domainService->getAvailableDomains();
 
-            if (0 < count($domains)) {
+            if (2 <= count($domains)) {
                 $this->buildDomainMenu($domains);
             }
 
@@ -153,13 +153,6 @@ class BackendController extends ActionController
         $menu->setIdentifier('mindshape_seo');
 
         $arguments = $this->request->getArguments();
-
-        $defaultMenuItem = $menu->makeMenuItem()
-            ->setTitle(LocalizationUtility::translate('tx_minshapeseo_label.default_settings', 'mindshape_seo'))
-            ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => '*'), 'Backend'))
-            ->setActive(!array_key_exists('domain', $arguments) || $arguments['domain'] === Configuration::DEFAULT_DOMAIN);
-
-        $menu->addMenuItem($defaultMenuItem);
 
         foreach ($domains as $domain) {
             $menu->addMenuItem(
@@ -236,6 +229,12 @@ class BackendController extends ActionController
      */
     public function settingsAction($domain = Configuration::DEFAULT_DOMAIN)
     {
+        $domains = $this->domainService->getAvailableDomains();
+
+        if (1 === count($domains)) {
+            $domain = $domains[0];
+        }
+
         $configuration = $this->configurationRepository->findByDomain($domain);
 
         if (null === $configuration) {
