@@ -80,6 +80,19 @@ class ConfigurationRepository extends Repository
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
      * @return void
+     */
+    public function save(Configuration $configuration)
+    {
+        if ($configuration->_isNew()) {
+            $this->add($configuration);
+        } else {
+            $this->update($configuration);
+        }
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
+     * @return void
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */

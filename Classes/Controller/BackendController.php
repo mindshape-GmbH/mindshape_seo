@@ -267,11 +267,7 @@ class BackendController extends ActionController
      */
     public function saveConfigurationAction(Configuration $configuration)
     {
-        if ($configuration->_isNew()) {
-            $this->configurationRepository->add($configuration);
-        } else {
-            $this->configurationRepository->update($configuration);
-        }
+        $this->configurationRepository->save($configuration);
 
         $this->redirect(
             'settings',
