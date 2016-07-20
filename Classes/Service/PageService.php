@@ -25,9 +25,12 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Database\QueryGenerator;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -331,39 +334,47 @@ class PageService implements SingletonInterface
      * @param int $sysLanguageUid
      * @param string $titleAttachment
      * @param string $customUrl
-     * @param $useGoogleBreadcrumb
+     * @param bool $useGoogleBreadcrumb
      * @return array
      */
     public function getPageMetadataTree($pageUid, $depth = self::TREE_DEPTH_DEFAULT, $sysLanguageUid = 0, $titleAttachment = '', $customUrl = '', $useGoogleBreadcrumb)
     {
-        /** @var DatabaseConnection $databaseconnection */
-        $databaseconnection = $GLOBALS['TYPO3_DB'];
+        $page = $this->getPage($pageUid, $sysLanguageUid);
 
-        if (0 === self::$pageTreeRoot) {
-            self::$pageTreeRoot = $pageUid;
-        }
+        /** @var PageTreeView $tree */
+        $tree = GeneralUtility::makeInstance(PageTreeView::class);
+        $tree->init('AND (doktype = 1 OR doktype = 4) AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1));
 
-        $page = $this->getPageMetaData($pageUid, $sysLanguageUid, $titleAttachment, $customUrl, $useGoogleBreadcrumb);
-        $page['subpages'] = array();
+        /** @var IconFactory $iconFactory */
+        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
-        $result = $databaseconnection->exec_SELECTgetRows(
-            '*',
+        $html = $iconFactory->getIconForRecord(
             'pages',
-            '(doktype = 1 OR doktype = 4) AND deleted = 0 AND pid = ' . $page['uid'],
-            '',
-            'sorting ASC'
+            $page,
+            Icon::SIZE_SMALL
         );
 
-        if (is_array($result) && 0 < $depth) {
-            foreach ($result as $subpage) {
-                $page['subpages'][] = $this->getPageMetadataTree($subpage['uid'], $depth - 1, $sysLanguageUid, $titleAttachment, $customUrl, $useGoogleBreadcrumb);
-            }
+        $tree->tree[] = array(
+            'row' => $page,
+            'HTML' => $html,
+        );
+
+        if (self::TREE_DEPTH_INFINITY === $depth) {
+            $depth = 9999;
         }
 
-        if ($pageUid === self::$pageTreeRoot) {
-            return array(0 => $page);
-        } else {
-            return $page;
+        $tree->getTree($pageUid, $depth);
+
+        foreach ($tree->tree as $key => $treeItem) {
+            $tree->tree[$key]['metadata'] = $this->getPageMetaData(
+                $treeItem['row']['uid'],
+                $sysLanguageUid,
+                $titleAttachment,
+                $customUrl,
+                $useGoogleBreadcrumb
+            );
         }
+
+        return $tree->tree;
     }
 }

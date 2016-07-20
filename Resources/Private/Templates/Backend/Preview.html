@@ -24,23 +24,71 @@
             </div>
         </div>
 
-        <f:if condition="{pageTree}">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="panel panel-default">
-                        <f:render partial="PagePreviewTree" arguments="{pageTree: pageTree}"/>
-                    </div>
-                </div>
-            </div>
-        </f:if>
-
-        <script>
-            var form = document.getElementById('depthselect-form');
-
-            document.getElementById('depthselect').addEventListener('change', function () {
-                form.submit();
-            })
-        </script>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <f:translate key="tx_minshapeseo_label.preview.page"/>
+                    </th>
+                    <th>
+                        <f:translate key="tx_minshapeseo_label.preview"/>
+                    </th>
+                    <th>
+                        <f:translate key="tx_minshapeseo_label.metadata"/>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <f:for each="{pageTree}" as="page" iteration="iterator">
+                    <tr>
+                        <td class="pagetree-info" width="25%">
+                            <span class="depth-markup{f:if(condition: iterator.isFirst, then: ' rootpage')}">
+                                {page.depthData -> f:format.raw()}
+                                <f:format.raw>{page.HTML}</f:format.raw>
+                                <span class="title">
+                                    <f:if condition="{page.row}">
+                                        <f:then>
+                                            {page.row.title}
+                                        </f:then>
+                                        <f:else>
+                                            [root-level]
+                                        </f:else>
+                                    </f:if>
+                                </span>
+                            </span>
+                        </td>
+                        <td width="50%">
+                            <f:if condition="{page.row}">
+                                <f:render partial="GoogleSearchPreview" arguments="{
+                                title: page.metadata.title,
+                                url: page.metadata.url,
+                                previewUrl: page.metadata.previewUrl,
+                                description: page.metadata.meta.description
+                            }"/>
+                            </f:if>
+                        </td>
+                        <td width="25%">
+                            <f:if condition="{page.row}">
+                                <div class="form-group">
+                                    <div class="checkbox">
+                                        <label>
+                                            <f:form.checkbox name="noindex" value="1" checked="{page.meta.robots.noindex}"/>
+                                            <f:translate key="tx_minshapeseo_domain_model_pages.mindshapeseo_no_index"/>
+                                        </label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            <f:form.checkbox name="nofollow" value="1" checked="{page.meta.robots.nofollow}"/>
+                                            <f:translate key="tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow"/>
+                                        </label>
+                                    </div>
+                                </div>
+                            </f:if>
+                        </td>
+                    </tr>
+                </f:for>
+            </tbody>
+        </table>
 
     </f:section>
 

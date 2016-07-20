@@ -1,0 +1,19 @@
+.treeline-icon {
+    height: 107px !important;
+}
+
+.pagetree-info {
+    position: relative;
+}
+
+.depth-markup:not(.rootpage) .icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.depth-markup:not(.rootpage) .title {
+    position: relative;
+    top: 40px;
+    left: 7%;
+}
