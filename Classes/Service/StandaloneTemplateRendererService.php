@@ -65,7 +65,7 @@ class StandaloneTemplateRendererService implements SingletonInterface
             $configurationManageger->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
         );
 
-        $this->settings = $config['plugin']['tx_mindshapeseo'];
+        $this->settings = $config['plugin']['tx_mindshape_seo'];
     }
 
     /**

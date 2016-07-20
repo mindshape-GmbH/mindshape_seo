@@ -1,16 +1,16 @@
-plugin.tx_mindshapeseo {
-    persistence {
-        storagePid = {$plugin.tx_mindshapeseo_seo.persistence.storagePid}
+plugin.tx_mindshape_seo {
+    view {
+        templateRootPaths.0 = {$plugin.tx_mindshape_seo.view.templateRootPath}
+        partialRootPaths.0 = {plugin.tx_mindshape_seo.view.partialRootPath}
+        layoutRootPaths.0 = {$plugin.tx_mindshape_seo.view.layoutRootPath}
     }
 
-    view {
-        templateRootPaths.0 = {$plugin.tx_mindshapeseo_seo.view.templateRootPath}
-        partialRootPaths.0 = {plugin.tx_mindshapeseo_seo.view.partialRootPath}
-        layoutRootPaths.0 = {$plugin.tx_mindshapeseo_seo.view.layoutRootPath}
+    settings {
+        titleAttachmentSeperator = {$plugin.tx_mindshape_seo.settings.titleAttachmentSeperator}
     }
 }
 
-module.tx_mindshapeseo < plugin.tx_mindshapeseo
+module.tx_mindshape_seo < plugin.tx_mindshape_seo
 
 # sitemap.xml page type
 # make a htaccess redirect "RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]"

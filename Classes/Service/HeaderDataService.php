@@ -33,6 +33,7 @@ use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
 
@@ -83,6 +84,11 @@ class HeaderDataService
     protected $currentSitename;
 
     /**
+     * @var string
+     */
+    protected $titleAttachmentSeperator = '|';
+
+    /**
      * @param PageRenderer $pageRenderer
      * @return HeaderDataService
      */
@@ -95,6 +101,11 @@ class HeaderDataService
         $this->pageService = $objectManager->get(PageService::class);
         $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
         $this->configurationRepository = $objectManager->get(ConfigurationRepository::class);
+        /** @var ConfigurationManager $configurationManager */
+        $configurationManager = $objectManager->get(ConfigurationManager::class);
+
+        $settings = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'mindshape_seo');
+        $this->titleAttachmentSeperator = trim($settings['titleAttachmentSeperator']);
 
         $page = $this->pageService->getCurrentPage();
 
@@ -198,7 +209,7 @@ class HeaderDataService
             '' !== $this->domainConfiguration->getTitleAttachment()
         ) {
             $this->pageRenderer->setTitle(
-                $this->currentPageMetaData['title'] . ' | ' . $this->domainConfiguration->getTitleAttachment()
+                $this->currentPageMetaData['title'] . ' ' . $this->titleAttachmentSeperator . ' ' . $this->domainConfiguration->getTitleAttachment()
             );
         } else {
             $this->pageRenderer->setTitle(
