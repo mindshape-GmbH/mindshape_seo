@@ -67,6 +67,11 @@ class PageService implements SingletonInterface
     protected static $pageTreeRoot = 0;
 
     /**
+     * @var string
+     */
+    protected $titleAttachmentSeperator = '|';
+
+    /**
      * @return PageService
      * @throws \Mindshape\MindshapeSeo\Service\Exception
      */
@@ -77,6 +82,9 @@ class PageService implements SingletonInterface
         /** @var ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
         $this->pageRepository = $objectManager->get(PageRepository::class);
+
+        $settings = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'mindshape_seo');
+        $this->titleAttachmentSeperator = trim($settings['titleAttachmentSeperator']);
 
         if ('BE' === TYPO3_MODE) {
             if (!is_object($GLOBALS['TT'])) {
@@ -195,15 +203,11 @@ class PageService implements SingletonInterface
             $previewUrl = $googleBreadcrumb;
         }
 
-        if ('' !== $titleAttachment && false === (bool) $page['mindshapeseo_disable_title_attachment']) {
-            $title = $page['title'] . ' | ' . $titleAttachment;
-        } else {
-            $title = $page['title'];
-        }
-
         return array(
             'uid' => $page['uid'],
-            'title' => $title,
+            'title' => $page['title'],
+            'titleAttachment' => $titleAttachment,
+            'titleAttachmentSeperator' => $this->titleAttachmentSeperator,
             'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             'url' => $pageUrl,
             'previewUrl' => $previewUrl,

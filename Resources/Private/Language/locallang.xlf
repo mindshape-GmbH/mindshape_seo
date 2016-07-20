@@ -113,6 +113,15 @@
             <trans-unit id="tx_minshapeseo_label.preview.page">
                 <source>Page</source>
             </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.preview.button.edit">
+                <source>Edit</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.preview.button.save">
+                <source>Save</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.preview.button.abort">
+                <source>Abort</source>
+            </trans-unit>
 
             <trans-unit id="tx_minshapeseo_label.default_language">
                 <source>Default Language</source>

@@ -34,6 +34,10 @@ if (TYPO3_MODE === 'BE') {
         )
     );
 
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler (
+        'MindshapeSeoAjaxHandler::savePage',
+        Mindshape\MindshapeSeo\Handler\AjaxHandler::class . '->savePage'
+    );
 }
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'mindshape SEO');

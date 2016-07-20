@@ -1,0 +1,99 @@
+$googleLinkBlue: #1A0DAB;
+$googleUrlGreen: #006621;
+$googleDescriptionGrey: #545454;
+
+.pagetree-info {
+  position: relative;
+
+  .depth-markup {
+    .treeline-icon {height: 107px !important;}
+
+    &:not(.rootpage) {
+      &.icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      &.title {
+        position: relative;
+        top: 40px;
+        left: 7%;
+      }
+    }
+  }
+}
+
+.google-preview {
+  .thumbnail {
+    width: 620px;
+    margin: 0;
+    padding: 10px 10px;
+
+    hr {background-color: rgba(#000, 0.12);}
+  }
+
+  .preview-box {
+    font-family: arial,sans-serif;
+    height: 74px;
+    width: 600px;
+
+    h3 {
+      font-size: 18px;
+      line-height: 1.2;
+      margin: 0;
+      display: block;
+      overflow: hidden;
+      width: 600px;
+      color: #1e0fbe;
+      font-weight: normal;
+      white-space: nowrap;
+      text-decoration: none;
+      text-overflow: ellipsis;
+
+      a {color: $googleLinkBlue;}
+    }
+
+    .url,
+    .description {line-height: 1.4;}
+
+    .url {
+      display: block;
+      font-size: 14px;
+      font-style: normal;
+      line-height: 16px;
+
+      cite {
+        color: $googleUrlGreen;
+        font-style: normal;
+      }
+    }
+
+    .description {
+      height: 40px;
+      font-size: 13px;
+      overflow-y: hidden;
+      color: $googleDescriptionGrey;
+    }
+
+  }
+
+  .edit-panel {
+    display: none;
+
+    .progress {
+      margin: 10px 0;
+      height: 10px;
+    }
+
+    textarea.description {
+      resize: none;
+      height: 65px;
+    }
+  }
+
+  button {
+    &.save {display: none;}
+    &.abort {display: none;}
+  }
+}

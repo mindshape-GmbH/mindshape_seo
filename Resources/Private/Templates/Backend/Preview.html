@@ -60,10 +60,13 @@
                         <td width="50%">
                             <f:if condition="{page.row}">
                                 <f:render partial="GoogleSearchPreview" arguments="{
+                                titleAttachment: page.metadata.titleAttachment,
+                                titleAttachmentSeperator: page.metadata.titleAttachmentSeperator,
                                 title: page.metadata.title,
                                 url: page.metadata.url,
                                 previewUrl: page.metadata.previewUrl,
                                 description: page.metadata.meta.description
+                                pageUid: page.metadata.uid
                             }"/>
                             </f:if>
                         </td>

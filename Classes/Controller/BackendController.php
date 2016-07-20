@@ -119,6 +119,7 @@ class BackendController extends ActionController
             $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
             $pageRenderer->loadJquery();
             $pageRenderer->addCssFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.css');
+            $pageRenderer->addJsFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.js');
             $pageRenderer->setBackPath('../typo3/');
         }
 

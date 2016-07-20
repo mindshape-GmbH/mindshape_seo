@@ -183,25 +183,6 @@
             </fieldset>
         </f:form>
 
-        <script>
-            (function ($) {
-                $(document).ready(function() {
-                    $('.mindshape-seo-savebutton').on('click', function (e) {
-                        e.preventDefault();
-                        $('#mindshape-seo-configuration').submit();
-                    });
-
-                    $('.mindshape-seo-upload').on('click', '.mindshape-seo-delete', function (e) {
-                        e.preventDefault();
-                        var $uploadContainer = $(this).parent('.mindshape-seo-upload');
-
-                        $uploadContainer.find('input[type="hidden"]').remove();
-                        $uploadContainer.find('.image').remove();
-                    })
-                });
-            })(TYPO3.jQuery || jQuery);
-        </script>
-
     </f:section>
 
 </html>
