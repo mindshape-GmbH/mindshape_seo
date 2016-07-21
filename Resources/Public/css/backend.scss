@@ -4,22 +4,80 @@ $googleDescriptionGrey: #545454;
 
 .pagetree-info {
   position: relative;
+  overflow: hidden;
+  padding-bottom: 0;
 
   .depth-markup {
-    .treeline-icon {height: 107px !important;}
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    height: 100%;
 
-    &:not(.rootpage) {
-      &.icon {
+    .treeline-icon {
+      width: 17px;
+      height: 100%;
+      padding: 0;
+      top: 0;
+      margin: 0;
+    }
+
+    .icon {
+      overflow: visible;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .title {
+      position: relative;
+      display: inline-block;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .title-wrapper {
+      position: relative;
+      top: 44%;
+    }
+
+    &.rootpage {
+      .icon {
+        margin-left: 1px;
+      }
+    }
+  }
+
+  .depth-markup.subpages {
+    span:nth-last-child(2) {
+      display: inline-block;
+      height: 100%;
+      position: relative;
+
+      &:before {
+        content: "";
+        width: 1px;
         position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 54%;
+        bottom: 0;
+        left: 50%;
+        border-left: 1px dotted #666666;
       }
+    }
+  }
 
-      &.title {
-        position: relative;
-        top: 40px;
-        left: 7%;
-      }
+  .depth-markup.rootpage {
+    position: absolute;
+    display: inline-block;
+    height: 100%;
+
+    &:before {
+      content: "";
+      width: 1px;
+      position: absolute;
+      top: 54%;
+      bottom: 0;
+      left: 9%;
+      border-left: 1px dotted #666666;
     }
   }
 }
@@ -30,11 +88,13 @@ $googleDescriptionGrey: #545454;
     margin: 0;
     padding: 10px 10px;
 
-    hr {background-color: rgba(#000, 0.12);}
+    hr {
+      background-color: rgba(#000, 0.12);
+    }
   }
 
   .preview-box {
-    font-family: arial,sans-serif;
+    font-family: arial, sans-serif;
     height: 74px;
     width: 600px;
 
@@ -51,11 +111,15 @@ $googleDescriptionGrey: #545454;
       text-decoration: none;
       text-overflow: ellipsis;
 
-      a {color: $googleLinkBlue;}
+      a {
+        color: $googleLinkBlue;
+      }
     }
 
     .url,
-    .description {line-height: 1.4;}
+    .description {
+      line-height: 1.4;
+    }
 
     .url {
       display: block;
@@ -93,7 +157,11 @@ $googleDescriptionGrey: #545454;
   }
 
   button {
-    &.save {display: none;}
-    &.abort {display: none;}
+    &.save {
+      display: none;
+    }
+    &.abort {
+      display: none;
+    }
   }
 }
