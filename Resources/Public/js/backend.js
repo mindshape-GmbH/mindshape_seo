@@ -44,13 +44,15 @@
       });
 
       // Edit click on google preview
-      this.$previewContainers.on('click', '.edit', function () {
+      this.$previewContainers.on('click', '.edit', function (e) {
+        e.preventDefault();
         that.$currentPreviewContainer = $(this).parents('.google-preview');
         that.openCurrentEditPanel();
       });
 
       // Abort click on edit panel
-      this.$previewContainers.on('click', '.abort', function () {
+      this.$previewContainers.on('click', '.abort', function (e) {
+        e.preventDefault();
         that.$currentPreviewContainer = $(this).parents('.google-preview');
         that.closeCurrentEditPanel();
         that.setOriginalData();
@@ -60,7 +62,8 @@
       });
 
       // Save click on edit panel
-      this.$previewContainers.on('click', '.save', function () {
+      this.$previewContainers.on('click', '.save', function (e) {
+        e.preventDefault();
         that.$currentPreviewContainer = $(this).parents('.google-preview');
         that.saveCurrentEditPanel();
         that.closeCurrentEditPanel();

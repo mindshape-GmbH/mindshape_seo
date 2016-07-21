@@ -1,14 +1,15 @@
 plugin.tx_mindshape_seo {
     view {
-        # cat=module.tx_mindshapeseo_seo/file; type=string; label=Path to template root (BE)
+        # cat=module.tx_mindshape_seo/file; type=string; label=Path to template root (BE)
         templateRootPath = EXT:mindshape_seo/Resources/Private/Templates/
-        # cat=module.tx_mindshapeseo_seo/file; type=string; label=Path to template partials (BE)
+        # cat=module.tx_mindshape_seo/file; type=string; label=Path to template partials (BE)
         partialRootPath = EXT:mindshape_seo/Resources/Private/Partials/
-        # cat=module.tx_mindshapeseo_seo/file; type=string; label=Path to template layouts (BE)
+        # cat=module.tx_mindshape_seo/file; type=string; label=Path to template layouts (BE)
         layoutRootPath = EXT:mindshape_seo/Resources/Private/Layouts/
     }
 
     settings {
+        # cat=module.tx_mindshape_seo/settings; type=string; label=Seperator for title attachment
         titleAttachmentSeperator = |
     }
 }
