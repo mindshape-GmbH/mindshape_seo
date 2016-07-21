@@ -55,7 +55,7 @@
         e.preventDefault();
         that.$currentPreviewContainer = $(this).parents('.google-preview');
         that.closeCurrentEditPanel();
-        that.setOriginalData();
+        that.restoreOriginalData();
         that.checkSaveState();
         that.updateProgressBar('title', that.googleTitleLength);
         that.updateProgressBar('description', that.googleDescriptionLength);
@@ -82,6 +82,7 @@
         that.$currentPreviewContainer.find('.preview-box .description').html($(this).val());
         that.renderPreviewDescription();
         that.updateProgressBar('description', that.googleDescriptionLength);
+        that.checkSaveState();
       });
 
       // Re-render description on change
@@ -90,7 +91,7 @@
         that.renderPreviewDescription();
       });
     },
-    setOriginalData: function () {
+    restoreOriginalData: function () {
       this.$currentPreviewContainer.find('.preview-box .title').html($(this.$currentPreviewContainer).attr('data-original-title'));
       this.$currentPreviewContainer.find('.preview-box .description').html($(this.$currentPreviewContainer).attr('data-original-description'));
       this.$currentPreviewContainer.find('.edit-panel .title').val($(this.$currentPreviewContainer).attr('data-original-title'));
@@ -109,14 +110,24 @@
       this.$currentPreviewContainer.find('.preview-box .description').html(description);
     },
     checkSaveState: function () {
-      var input = this.$currentPreviewContainer.find('.edit-panel .title').val();
+      var title = this.$currentPreviewContainer.find('.edit-panel .title').val();
+      var description = this.$currentPreviewContainer.find('.edit-panel .description').val();
 
-      if (0 < input.length) {
+      if (
+        0 < title.length &&
+        (
+          this.$currentPreviewContainer.attr('data-original-title') !== title.trim() ||
+          this.$currentPreviewContainer.attr('data-original-description') !== description.trim()
+        )
+      ) {
         this.$currentPreviewContainer.find('button.save').prop('disabled', false);
         this.$currentPreviewContainer.find('.edit-panel .title-container').removeClass('has-error');
       } else {
         this.$currentPreviewContainer.find('button.save').prop('disabled', true);
-        this.$currentPreviewContainer.find('.edit-panel .title-container').addClass('has-error');
+
+        if (0 === title.length) {
+          this.$currentPreviewContainer.find('.edit-panel .title-container').addClass('has-error')
+        }
       }
     },
     updateProgressBar: function (fieldName, maxLength) {
