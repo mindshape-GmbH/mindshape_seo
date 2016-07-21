@@ -54,6 +54,7 @@
         that.$currentPreviewContainer = $(this).parents('.google-preview');
         that.closeCurrentEditPanel();
         that.setOriginalData();
+        that.checkSaveState();
         that.updateProgressBar('title', that.googleTitleLength);
         that.updateProgressBar('description', that.googleDescriptionLength);
       });
@@ -110,8 +111,10 @@
 
       if (0 < input.length) {
         this.$currentPreviewContainer.find('button.save').prop('disabled', false);
+        this.$currentPreviewContainer.find('.edit-panel .title-container').removeClass('has-error');
       } else {
         this.$currentPreviewContainer.find('button.save').prop('disabled', true);
+        this.$currentPreviewContainer.find('.edit-panel .title-container').addClass('has-error');
       }
     },
     updateProgressBar: function (fieldName, maxLength) {
