@@ -1,5 +1,6 @@
 <html data-namespace-typo3-fluid="true" lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers">
 
     <div class="google-preview" data-original-title="{title}" data-original-description="{description}">
@@ -38,15 +39,19 @@
                     </div>
                 </form>
             </div>
-            <button class="edit btn btn-default">
-                <f:translate key="tx_minshapeseo_label.preview.button.edit"/>
-            </button>
-            <button class="save btn btn-default">
-                <f:translate key="tx_minshapeseo_label.preview.button.save"/>
-            </button>
-            <button class="abort btn btn-default">
-                <f:translate key="tx_minshapeseo_label.preview.button.abort"/>
-            </button>
+            <div class="buttons">
+                <button class="edit btn btn-default">
+                    <f:translate key="tx_minshapeseo_label.preview.button.edit"/>
+                </button>
+                <core:icon identifier="provider-fontawesome-check"/>
+                <core:icon identifier="provider-fontawesome-error"/>
+                <button class="save btn btn-default">
+                    <f:translate key="tx_minshapeseo_label.preview.button.save"/>
+                </button>
+                <button class="abort btn btn-default">
+                    <f:translate key="tx_minshapeseo_label.preview.button.abort"/>
+                </button>
+            </div>
         </div>
     </div>
 

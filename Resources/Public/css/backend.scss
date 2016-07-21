@@ -93,6 +93,18 @@ $googleDescriptionGrey: #545454;
     }
   }
 
+  .icon-provider-fontawesome-check {
+    display: none;
+
+    i {color: green;}
+  }
+
+  .icon-provider-fontawesome-error {
+    display: none;
+
+    i {color: red;}
+  }
+
   .preview-box {
     font-family: arial, sans-serif;
     height: 74px;

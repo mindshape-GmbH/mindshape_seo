@@ -40,6 +40,21 @@ if (TYPO3_MODE === 'BE') {
     );
 }
 
+/** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
+$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+
+$iconRegistry->registerIcon(
+    'provider-fontawesome-check',
+    \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+    [ 'name' => 'check' ]
+);
+
+$iconRegistry->registerIcon(
+    'provider-fontawesome-error',
+    \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+    [ 'name' => 'times' ]
+);
+
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'mindshape SEO');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_mindshapeseo_domain_model_configuration', 'EXT:mindshape_seo/Resources/Private/Language/locallang.xlf');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mindshapeseo_domain_model_configuration');

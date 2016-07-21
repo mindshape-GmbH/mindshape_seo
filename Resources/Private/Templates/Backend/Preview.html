@@ -6,6 +6,19 @@
 
     <f:section name="Main">
 
+        <f:if condition="{noPageSelected}">
+            <f:then>
+                <f:translate key="tx_minshapeseo_label.preview.no_page_selected"/>
+            </f:then>
+            <f:else>
+                <f:render section="Preview" arguments="{_all}"/>
+            </f:else>
+        </f:if>
+
+    </f:section>
+
+    <f:section name="Preview">
+
         <h1>
             <f:translate key="tx_minshapeseo_label.seo_preview_for_page"/>
             {currentPageMetaData.title}
@@ -40,34 +53,25 @@
             </thead>
             <tbody>
                 <f:for each="{pageTree}" as="page" iteration="iterator">
-                    <tr>
+                    <tr class="page{f:if(condition: page.row.uid, else: ' root')}">
                         <td class="pagetree-info" width="25%">
-                            <span class="depth-markup{f:if(condition: iterator.isFirst, then: ' rootpage')}">
+                            <span class="depth-markup{f:if(condition: iterator.isFirst, then: ' rootpage')}{f:if(condition: page.hasSub, then: ' subpages')}">
                                 {page.depthData -> f:format.raw()}
                                 <f:format.raw>{page.HTML}</f:format.raw>
-                                <span class="title">
-                                    <f:if condition="{page.row}">
-                                        <f:then>
-                                            {page.row.title}
-                                        </f:then>
-                                        <f:else>
-                                            [root-level]
-                                        </f:else>
-                                    </f:if>
-                                </span>
+                                <span class="title">{page.row.title}</span>
                             </span>
                         </td>
                         <td width="50%">
                             <f:if condition="{page.row}">
                                 <f:render partial="GoogleSearchPreview" arguments="{
-                                titleAttachment: page.metadata.titleAttachment,
-                                titleAttachmentSeperator: page.metadata.titleAttachmentSeperator,
-                                title: page.metadata.title,
-                                url: page.metadata.url,
-                                previewUrl: page.metadata.previewUrl,
-                                description: page.metadata.meta.description
-                                pageUid: page.metadata.uid
-                            }"/>
+                                    titleAttachment: page.metadata.titleAttachment,
+                                    titleAttachmentSeperator: page.metadata.titleAttachmentSeperator,
+                                    title: page.metadata.title,
+                                    url: page.metadata.url,
+                                    previewUrl: page.metadata.previewUrl,
+                                    description: page.metadata.meta.description
+                                    pageUid: page.metadata.uid
+                                }"/>
                             </f:if>
                         </td>
                         <td width="25%">

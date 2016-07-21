@@ -122,6 +122,9 @@
             <trans-unit id="tx_minshapeseo_label.preview.button.abort">
                 <source>Abort</source>
             </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.preview.no_page_selected">
+                <source>No page selected</source>
+            </trans-unit>
 
             <trans-unit id="tx_minshapeseo_label.default_language">
                 <source>Default Language</source>

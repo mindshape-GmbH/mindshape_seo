@@ -66,7 +66,6 @@
         e.preventDefault();
         that.$currentPreviewContainer = $(this).parents('.google-preview');
         that.saveCurrentEditPanel();
-        that.closeCurrentEditPanel();
       });
 
       // Change preview title when editing title
@@ -150,21 +149,41 @@
         .removeClass('progress-bar-success')
         .addClass(progressbarStatusClass);
     },
-    closeCurrentEditPanel: function () {
-      this.$currentPreviewContainer.find('.edit-panel').hide();
-      this.$currentPreviewContainer.find('button.save, button.abort').hide();
-      this.$currentPreviewContainer.find('button.edit').show();
+    closeCurrentEditPanel: function (callback) {
+      var that = this;
+      this.$currentPreviewContainer.find('.edit-panel').slideUp();
+      this.$currentPreviewContainer.find('button.save, button.abort').fadeOut(function () {
+        that.$currentPreviewContainer.find('button.edit').fadeIn(function () {
+          if (typeof callback === 'function')
+          callback();
+        });
+      });
     },
     openCurrentEditPanel: function () {
-      this.$currentPreviewContainer.find('.edit-panel').show();
-      this.$currentPreviewContainer.find('button.save, button.abort').show();
-      this.$currentPreviewContainer.find('button.edit').hide();
+      var that = this;
+
+      this.$currentPreviewContainer.find('.icon-provider-fontawesome-check').hide();
+      this.$currentPreviewContainer.find('.edit-panel').slideDown();
+      this.$currentPreviewContainer.find('button.edit').fadeOut(function () {
+        that.$currentPreviewContainer.find('button.save, button.abort').fadeIn();
+      });
     },
     saveCurrentEditPanel: function () {
-      $.post(
-        TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::savePage'],
-        this.$currentPreviewContainer.find('.edit-panel form').serialize()
-      );
+      var that = this;
+
+      $.ajax({
+        type: "POST",
+        url: TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::savePage'],
+        data: this.$currentPreviewContainer.find('.edit-panel form').serialize(),
+        success: function () {
+          that.closeCurrentEditPanel(function () {
+            that.$currentPreviewContainer.find('.icon-provider-fontawesome-check').show();
+          });
+        },
+        error: function () {
+          that.$currentPreviewContainer.find('.icon-provider-fontawesome-error').show();
+        }
+      });
     }
   };
 

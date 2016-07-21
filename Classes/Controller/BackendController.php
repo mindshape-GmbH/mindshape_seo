@@ -289,55 +289,65 @@ class BackendController extends ActionController
      */
     public function previewAction($depth = null, $sysLanguageUid = 0)
     {
-        if (null === $depth) {
-            $depth = $this->sessionService->hasKey('depth') ?
-                $this->sessionService->getKey('depth') :
-                PageService::TREE_DEPTH_DEFAULT;
+        if (
+            0 === $this->currentPageUid ||
+            (
+                1 !== (int) $GLOBALS['TSFE']->page['doktype'] &&
+                4 !== (int) $GLOBALS['TSFE']->page['doktype']
+            )
+        ) {
+            $this->view->assign('noPageSelected', true);
         } else {
-            $this->sessionService->setKey('depth', $depth);
+            if (null === $depth) {
+                $depth = $this->sessionService->hasKey('depth') ?
+                    $this->sessionService->getKey('depth') :
+                    PageService::TREE_DEPTH_DEFAULT;
+            } else {
+                $this->sessionService->setKey('depth', $depth);
+            }
+
+            $configuration = $this->domainService->getPageDomainConfiguration();
+
+            if ($configuration instanceof Configuration) {
+                $this->view->assign(
+                    'pageTree',
+                    $this->pageService->getPageMetadataTree(
+                        $this->currentPageUid,
+                        $depth,
+                        $sysLanguageUid,
+                        $configuration->getTitleAttachment(),
+                        $configuration->getJsonldCustomUrl(),
+                        $configuration->getAddJsonld()
+                    )
+                );
+            } else {
+                $this->view->assign(
+                    'pageTree',
+                    $this->pageService->getPageMetadataTree(
+                        $this->currentPageUid,
+                        $depth,
+                        $sysLanguageUid
+                    )
+                );
+            }
+
+            $this->view->assignMultiple(array(
+                'depth' => $depth,
+                'levelOptions' => array(
+                    PageService::TREE_DEPTH_INFINITY => LocalizationUtility::translate('tx_minshapeseo_label.preview.levels.infinity', 'mindshape_seo'),
+                    1 => '1',
+                    2 => '2',
+                    3 => '3',
+                    4 => '4',
+                    5 => '5',
+                    6 => '6',
+                    7 => '7',
+                    8 => '8',
+                    9 => '9',
+                    10 => '10',
+                ),
+            ));
         }
-
-        $configuration = $this->domainService->getPageDomainConfiguration();
-
-        if ($configuration instanceof Configuration) {
-            $this->view->assign(
-                'pageTree',
-                $this->pageService->getPageMetadataTree(
-                    $this->currentPageUid,
-                    $depth,
-                    $sysLanguageUid,
-                    $configuration->getTitleAttachment(),
-                    $configuration->getJsonldCustomUrl(),
-                    $configuration->getAddJsonld()
-                )
-            );
-        } else {
-            $this->view->assign(
-                'pageTree',
-                $this->pageService->getPageMetadataTree(
-                    $this->currentPageUid,
-                    $depth,
-                    $sysLanguageUid
-                )
-            );
-        }
-
-        $this->view->assignMultiple(array(
-            'depth' => $depth,
-            'levelOptions' => array(
-                PageService::TREE_DEPTH_INFINITY => LocalizationUtility::translate('tx_minshapeseo_label.preview.levels.infinity', 'mindshape_seo'),
-                1 => '1',
-                2 => '2',
-                3 => '3',
-                4 => '4',
-                5 => '5',
-                6 => '6',
-                7 => '7',
-                8 => '8',
-                9 => '9',
-                10 => '10',
-            ),
-        ));
     }
 
     /**
