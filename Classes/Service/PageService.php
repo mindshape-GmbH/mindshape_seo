@@ -67,6 +67,11 @@ class PageService implements SingletonInterface
     protected static $pageTreeRoot = 0;
 
     /**
+     * @var int
+     */
+    protected static $pageTreeDepth = 0;
+
+    /**
      * @var string
      */
     protected $titleAttachmentSeperator = '|';
@@ -367,9 +372,20 @@ class PageService implements SingletonInterface
             $depth = 9999;
         }
 
+        if (self::$pageTreeDepth === 0) {
+            self::$pageTreeDepth = $depth;
+        }
+
         $tree->getTree($pageUid, $depth);
 
         foreach ($tree->tree as $key => $treeItem) {
+            if (
+                $treeItem['hasSub'] &&
+                self::$pageTreeDepth - $treeItem['invertedDepth'] === self::$pageTreeDepth - 1
+            ) {
+                $tree->tree[$key]['hasSub'] = false;
+            }
+
             $tree->tree[$key]['metadata'] = $this->getPageMetaData(
                 $treeItem['row']['uid'],
                 $sysLanguageUid,
