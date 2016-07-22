@@ -38,6 +38,11 @@ if (TYPO3_MODE === 'BE') {
         'MindshapeSeoAjaxHandler::savePage',
         Mindshape\MindshapeSeo\Handler\AjaxHandler::class . '->savePage'
     );
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler (
+        'MindshapeSeoAjaxHandler::savePageRobots',
+        Mindshape\MindshapeSeo\Handler\AjaxHandler::class . '->savePageRobots'
+    );
 }
 
 /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
