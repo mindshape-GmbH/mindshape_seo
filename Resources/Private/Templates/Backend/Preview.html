@@ -1,5 +1,6 @@
 <html data-namespace-typo3-fluid="true" lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers">
 
     <f:layout name="Backend"/>
@@ -37,7 +38,7 @@
             </div>
         </div>
 
-        <table class="table">
+        <table class="table mindshapeseo-preview">
             <thead>
                 <tr>
                     <th>
@@ -75,22 +76,27 @@
                             </f:if>
                         </td>
                         <td width="25%">
-                            <f:if condition="{page.row}">
+                            <form name="robots" class="robots-form">
+                                <f:form.hidden name="pageUid" value="{page.row.uid}"/>
                                 <div class="form-group">
-                                    <div class="checkbox">
+                                    <div class="checkbox noindex">
                                         <label>
-                                            <f:form.checkbox name="noindex" value="1" checked="{page.meta.robots.noindex}"/>
+                                            <f:form.checkbox name="noindex" value="1" checked="{page.metadata.meta.robots.noindex}"/>
                                             <f:translate key="tx_minshapeseo_domain_model_pages.mindshapeseo_no_index"/>
+                                            <core:icon identifier="provider-fontawesome-check"/>
+                                            <core:icon identifier="provider-fontawesome-error"/>
                                         </label>
                                     </div>
-                                    <div class="checkbox">
+                                    <div class="checkbox nofollow">
                                         <label>
-                                            <f:form.checkbox name="nofollow" value="1" checked="{page.meta.robots.nofollow}"/>
+                                            <f:form.checkbox name="nofollow" value="1" checked="{page.metadata.meta.robots.nofollow}"/>
                                             <f:translate key="tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow"/>
+                                            <core:icon identifier="provider-fontawesome-check"/>
+                                            <core:icon identifier="provider-fontawesome-error"/>
                                         </label>
                                     </div>
                                 </div>
-                            </f:if>
+                            </form>
                         </td>
                     </tr>
                 </f:for>

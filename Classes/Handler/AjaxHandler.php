@@ -59,7 +59,8 @@ class AjaxHandler implements SingletonInterface
                         array(
                             'title' => $data['title'],
                             'description' => $data['description'],
-                        ));
+                        )
+                    );
                 } else {
                     $ajaxRequestHandler->setError('Invalid Data');
                 }
