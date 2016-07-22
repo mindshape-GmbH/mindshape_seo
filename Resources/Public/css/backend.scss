@@ -48,7 +48,7 @@ $googleDescriptionGrey: #545454;
       }
     }
 
-    .depth-markup.subpages {
+    .depth-markup.subpages:not(.rootpage) {
       span:nth-last-child(2) {
         display: inline-block;
         height: 100%;
@@ -66,7 +66,7 @@ $googleDescriptionGrey: #545454;
       }
     }
 
-    .depth-markup.rootpage {
+    .depth-markup.rootpage.subpages {
       position: absolute;
       display: inline-block;
       height: 100%;

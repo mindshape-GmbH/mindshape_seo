@@ -44,7 +44,7 @@ class LanguageService implements SingletonInterface
 
         $result = $databaseConnection->exec_SELECTgetRows(
             'l.*',
-            'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.pid',
+            'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.sys_language_uid',
             'o.pid = ' . $pageUid
         );
 

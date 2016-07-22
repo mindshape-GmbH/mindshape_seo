@@ -406,6 +406,8 @@ class PageService implements SingletonInterface
             );
         }
 
+        $tree->tree[0]['hasSub'] = 1 < count($tree->tree);
+
         return $tree->tree;
     }
 }

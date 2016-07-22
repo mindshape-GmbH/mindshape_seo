@@ -138,6 +138,8 @@ class BackendController extends ActionController
 
             if (0 < count($languages)) {
                 $this->buildLanguageMenu($languages);
+            } else {
+                $this->arguments->addNewArgument('sysLanguageUid', 'int', false, 0);
             }
         }
     }
