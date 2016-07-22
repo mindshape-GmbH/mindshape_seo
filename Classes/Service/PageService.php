@@ -25,9 +25,8 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Backend\Tree\View\PageTreeView;
+use Mindshape\MindshapeSeo\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -150,14 +149,16 @@ class PageService implements SingletonInterface
     /**
      * @param int $pageUid
      * @param int $sysLanguageUid
-     * @return array
+     * @return array|false
      */
     public function getPage($pageUid, $sysLanguageUid = 0)
     {
-        if (0 === $sysLanguageUid) {
-            return $this->pageRepository->getPage((int) $pageUid);
+        if (0 < $sysLanguageUid) {
+            $overlay = $this->pageRepository->getPageOverlay((int) $pageUid, $sysLanguageUid);
+
+            return 0 < count($overlay) ? $overlay : false;
         } else {
-            return $this->pageRepository->getPageOverlay((int) $pageUid, $sysLanguageUid);
+            return $this->pageRepository->getPage((int) $pageUid);
         }
     }
 
@@ -348,11 +349,21 @@ class PageService implements SingletonInterface
      */
     public function getPageMetadataTree($pageUid, $depth = self::TREE_DEPTH_DEFAULT, $sysLanguageUid = 0, $titleAttachment = '', $customUrl = '', $useGoogleBreadcrumb)
     {
-        $page = $this->getPage($pageUid, $sysLanguageUid);
+        $page = $this->getPage($pageUid);
 
         /** @var PageTreeView $tree */
         $tree = GeneralUtility::makeInstance(PageTreeView::class);
-        $tree->init('AND (doktype = 1 OR doktype = 4) AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1));
+        $tree->init();
+        $tree->table = 'pages p LEFT JOIN pages_language_overlay o ON p.uid = o.pid';
+        $tree->clause = ' AND p.deleted = 0 AND (p.doktype = 1 OR p.doktype = 4) AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
+
+        if (0 < $sysLanguageUid) {
+            $tree->clause .= ' AND o.sys_language_uid = ' . $sysLanguageUid;
+        }
+
+        $tree->parentField = 'p.pid';
+        $tree->fieldArray = array('p.*');
+        $tree->orderByFields = 'p.sorting';
 
         /** @var IconFactory $iconFactory */
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);

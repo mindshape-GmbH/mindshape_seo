@@ -191,12 +191,20 @@ class BackendController extends ActionController
 
         $menu->addMenuItem($defaultMenuItem);
 
+        if (array_key_exists('sysLanguageUid', $arguments)) {
+            $sysLanguageUid = $arguments['sysLanguageUid'];
+        } else {
+            $sysLanguageUid = $this->sessionService->hasKey('sysLanguageUid') ?
+                $this->sessionService->getKey('sysLanguageUid') :
+                0;
+        }
+
         foreach ($languages as $language) {
             $menu->addMenuItem(
                 $menu->makeMenuItem()
                     ->setTitle($language['title'])
                     ->setHref($uriBuilder->reset()->uriFor('preview', array('sysLanguageUid' => $language['uid']), 'Backend'))
-                    ->setActive($arguments['sysLanguageUid'] === $language['uid'])
+                    ->setActive($sysLanguageUid === $language['uid'])
             );
         }
 
@@ -287,7 +295,7 @@ class BackendController extends ActionController
      * @param int $sysLanguageUid
      * @return void
      */
-    public function previewAction($depth = null, $sysLanguageUid = 0)
+    public function previewAction($depth = null, $sysLanguageUid = null)
     {
         if (
             0 === $this->currentPageUid ||
@@ -304,6 +312,14 @@ class BackendController extends ActionController
                     PageService::TREE_DEPTH_DEFAULT;
             } else {
                 $this->sessionService->setKey('depth', $depth);
+            }
+
+            if (null === $sysLanguageUid) {
+                $sysLanguageUid = $this->sessionService->hasKey('sysLanguageUid') ?
+                    $this->sessionService->getKey('sysLanguageUid') :
+                    0;
+            } else {
+                $this->sessionService->setKey('sysLanguageUid', $sysLanguageUid);
             }
 
             $configuration = $this->domainService->getPageDomainConfiguration();
