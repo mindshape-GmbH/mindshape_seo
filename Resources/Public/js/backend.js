@@ -4,7 +4,6 @@
     googleTitleLength: 50,
     googleDescriptionLength: 180,
     $previewContainers: {},
-    $currentPreviewContainer: {},
     init: function () {
       var that = this;
 
@@ -14,10 +13,9 @@
 
       // Initial description rendering (kills whitespace etc.)
       this.$previewContainers.each(function () {
-        that.$currentPreviewContainer = $(this);
-        that.renderPreviewDescription();
-        that.updateProgressBar('title', that.googleTitleLength);
-        that.updateProgressBar('description', that.googleDescriptionLength);
+        that.renderPreviewDescription($(this));
+        that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLength);
+        that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLength);
       });
     },
     registerEvents: function () {
@@ -31,12 +29,14 @@
       // Save configuration form
       $('.mindshape-seo-savebutton').on('click', function (e) {
         e.preventDefault();
+
         $('#mindshape-seo-configuration').submit();
       });
 
       // Configuration form upload fields delete function
       $('.mindshape-seo-upload').on('click', '.mindshape-seo-delete', function (e) {
         e.preventDefault();
+
         var $uploadContainer = $(this).parent('.mindshape-seo-upload');
 
         $uploadContainer.find('input[type="hidden"]').remove();
@@ -46,60 +46,61 @@
       // Edit click on google preview
       this.$previewContainers.on('click', '.edit', function (e) {
         e.preventDefault();
-        that.$currentPreviewContainer = $(this).parents('.google-preview');
-        that.openCurrentEditPanel();
+
+        that.openPreviewEditPanel($(this).parents('.google-preview'));
       });
 
       // Abort click on edit panel
       this.$previewContainers.on('click', '.abort', function (e) {
         e.preventDefault();
-        that.$currentPreviewContainer = $(this).parents('.google-preview');
-        that.closeCurrentEditPanel();
-        that.restoreOriginalData();
-        that.checkSaveState();
-        that.updateProgressBar('title', that.googleTitleLength);
-        that.updateProgressBar('description', that.googleDescriptionLength);
+
+        that.closePreviewEditPanel($(this).parents('.google-preview'));
+        that.restorePreviewOriginalData($(this).parents('.google-preview'));
+        that.checkPreviewEditPanelSaveState($(this).parents('.google-preview'));
+        that.updatePreviewEditPanelProgressBar($(this).parents('.google-preview'), 'title', that.googleTitleLength);
+        that.updatePreviewEditPanelProgressBar($(this).parents('.google-preview'), 'description', that.googleDescriptionLength);
       });
 
       // Save click on edit panel
       this.$previewContainers.on('click', '.save', function (e) {
         e.preventDefault();
-        that.$currentPreviewContainer = $(this).parents('.google-preview');
-        that.saveCurrentEditPanel();
+
+        that.savePreviewEditPanel($(this).parents('.google-preview'));
       });
 
       // Change preview title when editing title
       this.$previewContainers.on('keyup', '.edit-panel .title', function () {
-        that.$currentPreviewContainer = $(this).parents('.google-preview');
-        that.$currentPreviewContainer.find('.preview-box .title').html($(this).val());
-        that.updateProgressBar('title', that.googleTitleLength);
-        that.checkSaveState();
+        var $currentPreview = $(this).parents('.google-preview');
+
+        $currentPreview.find('.preview-box .title').html($(this).val());
+        that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLength);
+        that.checkPreviewEditPanelSaveState($currentPreview);
       });
 
       // Change preview description when editing description
       this.$previewContainers.on('keyup', '.edit-panel .description', function () {
-        that.$currentPreviewContainer = $(this).parents('.google-preview');
-        that.$currentPreviewContainer.find('.preview-box .description').html($(this).val());
-        that.renderPreviewDescription();
-        that.updateProgressBar('description', that.googleDescriptionLength);
-        that.checkSaveState();
+        var $currentPreview = $(this).parents('.google-preview');
+
+        $currentPreview.find('.preview-box .description').html($(this).val());
+        that.renderPreviewDescription($currentPreview);
+        that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
+        that.checkPreviewEditPanelSaveState($currentPreview);
       });
 
       // Re-render description on change
       this.$previewContainers.on('change', '.preview-box .description', function () {
-        that.$currentPreviewContainer = $(this).parents('.google-preview');
-        that.renderPreviewDescription();
+        that.renderPreviewDescription($(this).parents('.google-preview'));
       });
     },
-    restoreOriginalData: function () {
-      this.$currentPreviewContainer.find('.preview-box .title').html($(this.$currentPreviewContainer).attr('data-original-title'));
-      this.$currentPreviewContainer.find('.preview-box .description').html($(this.$currentPreviewContainer).attr('data-original-description'));
-      this.$currentPreviewContainer.find('.edit-panel .title').val($(this.$currentPreviewContainer).attr('data-original-title'));
-      this.$currentPreviewContainer.find('.edit-panel .description').val($(this.$currentPreviewContainer).attr('data-original-description'));
-      this.renderPreviewDescription();
+    restorePreviewOriginalData: function ($previewContainer) {
+      $previewContainer.find('.preview-box .title').html($previewContainer.attr('data-original-title'));
+      $previewContainer.find('.preview-box .description').html($previewContainer.attr('data-original-description'));
+      $previewContainer.find('.edit-panel .title').val($previewContainer.attr('data-original-title'));
+      $previewContainer.find('.edit-panel .description').val($previewContainer.attr('data-original-description'));
+      this.renderPreviewDescription($previewContainer);
     },
-    renderPreviewDescription: function () {
-      var description = this.$currentPreviewContainer.find('.preview-box .description').html();
+    renderPreviewDescription: function ($previewContainer) {
+      var description = $previewContainer.find('.preview-box .description').html();
 
       description = description.trim();
 
@@ -107,31 +108,31 @@
         description = description.substring(0, this.googleDescriptionLength) + ' ...';
       }
 
-      this.$currentPreviewContainer.find('.preview-box .description').html(description);
+      $previewContainer.find('.preview-box .description').html(description);
     },
-    checkSaveState: function () {
-      var title = this.$currentPreviewContainer.find('.edit-panel .title').val();
-      var description = this.$currentPreviewContainer.find('.edit-panel .description').val();
+    checkPreviewEditPanelSaveState: function ($previewContainer) {
+      var title = $previewContainer.find('.edit-panel .title').val();
+      var description = $previewContainer.find('.edit-panel .description').val();
 
       if (
         0 < title.length &&
         (
-          this.$currentPreviewContainer.attr('data-original-title') !== title.trim() ||
-          this.$currentPreviewContainer.attr('data-original-description') !== description.trim()
+          $previewContainer.attr('data-original-title') !== title.trim() ||
+          $previewContainer.attr('data-original-description') !== description.trim()
         )
       ) {
-        this.$currentPreviewContainer.find('button.save').prop('disabled', false);
-        this.$currentPreviewContainer.find('.edit-panel .title-container').removeClass('has-error');
+        $previewContainer.find('button.save').prop('disabled', false);
+        $previewContainer.find('.edit-panel .title-container').removeClass('has-error');
       } else {
-        this.$currentPreviewContainer.find('button.save').prop('disabled', true);
+        $previewContainer.find('button.save').prop('disabled', true);
 
         if (0 === title.length) {
-          this.$currentPreviewContainer.find('.edit-panel .title-container').addClass('has-error')
+          $previewContainer.find('.edit-panel .title-container').addClass('has-error')
         }
       }
     },
-    updateProgressBar: function (fieldName, maxLength) {
-      var fieldText = this.$currentPreviewContainer.find('.edit-panel .' + fieldName).val();
+    updatePreviewEditPanelProgressBar: function ($previewContainer, fieldName, maxLength) {
+      var fieldText = $previewContainer.find('.edit-panel .' + fieldName).val();
       var percent = 0;
       var fieldLength = fieldText.trim().length;
       var progressbarStatusClass = 'progress-bar-';
@@ -152,7 +153,7 @@
         progressbarStatusClass += 'success';
       }
 
-      this.$currentPreviewContainer
+      $previewContainer
         .find('.edit-panel .progress-' + fieldName + ' .progress-bar')
         .css('width', percent + '%')
         .removeClass('progress-bar-danger')
@@ -160,39 +161,40 @@
         .removeClass('progress-bar-success')
         .addClass(progressbarStatusClass);
     },
-    closeCurrentEditPanel: function (callback) {
-      var that = this;
-      this.$currentPreviewContainer.find('.edit-panel').slideUp();
-      this.$currentPreviewContainer.find('button.save, button.abort').fadeOut(function () {
-        that.$currentPreviewContainer.find('button.edit').fadeIn(function () {
+    closePreviewEditPanel: function ($previewContainer, callback) {
+      $previewContainer.find('.edit-panel').slideUp();
+      $previewContainer.find('button.save, button.abort').fadeOut(function () {
+        $previewContainer.find('button.edit').fadeIn(function () {
           if (typeof callback === 'function')
           callback();
         });
       });
     },
-    openCurrentEditPanel: function () {
-      var that = this;
-
-      this.$currentPreviewContainer.find('.icon-provider-fontawesome-check').hide();
-      this.$currentPreviewContainer.find('.edit-panel').slideDown();
-      this.$currentPreviewContainer.find('button.edit').fadeOut(function () {
-        that.$currentPreviewContainer.find('button.save, button.abort').fadeIn();
+    openPreviewEditPanel: function ($previewContainer) {
+      $previewContainer.find('.icon-provider-fontawesome-check').hide();
+      $previewContainer.find('.edit-panel').slideDown();
+      $previewContainer.find('button.edit').fadeOut(function () {
+        $previewContainer.find('button.save, button.abort').fadeIn();
       });
     },
-    saveCurrentEditPanel: function () {
+    savePreviewEditPanel: function ($previewContainer) {
       var that = this;
 
       $.ajax({
         type: "POST",
         url: TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::savePage'],
-        data: this.$currentPreviewContainer.find('.edit-panel form').serialize(),
+        data: $previewContainer.find('.edit-panel form').serialize(),
         success: function () {
-          that.closeCurrentEditPanel(function () {
-            that.$currentPreviewContainer.find('.icon-provider-fontawesome-check').show();
+          $previewContainer.attr('data-original-title', $previewContainer.find('.edit-panel .title').val().trim());
+          $previewContainer.attr('data-original-description', $previewContainer.find('.edit-panel .description').val().trim());
+
+          that.checkPreviewEditPanelSaveState($previewContainer);
+          that.closePreviewEditPanel($previewContainer, function () {
+            $previewContainer.find('.icon-provider-fontawesome-check').show();
           });
         },
         error: function () {
-          that.$currentPreviewContainer.find('.icon-provider-fontawesome-error').show();
+          $previewContainer.find('.icon-provider-fontawesome-error').show();
         }
       });
     }
