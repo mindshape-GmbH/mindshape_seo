@@ -4,10 +4,12 @@
     googleTitleLength: 50,
     googleDescriptionLength: 180,
     $previewContainers: {},
+    $robotForms: {},
     init: function () {
       var that = this;
 
       this.$previewContainers = $('.google-preview');
+      this.$robotForms = $('.robots-form');
 
       this.registerEvents();
 
@@ -91,6 +93,11 @@
       this.$previewContainers.on('change', '.preview-box .description', function () {
         that.renderPreviewDescription($(this).parents('.google-preview'));
       });
+
+      // Save robots data on un-/check
+      this.$robotForms.on('change', 'input', function () {
+        that.saveRobotsData($(this).parents('.robots-form'), $(this));
+      })
     },
     restorePreviewOriginalData: function ($previewContainer) {
       $previewContainer.find('.preview-box .title').html($previewContainer.attr('data-original-title'));
@@ -195,6 +202,31 @@
         },
         error: function () {
           $previewContainer.find('.icon-provider-fontawesome-error').show();
+        }
+      });
+    },
+    saveRobotsData: function ($robotsForm, $input) {
+      $.ajax({
+        type: "POST",
+        url: TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::savePageRobots'],
+        data: $robotsForm.serialize(),
+        success: function () {
+          var $successIcon = $input.parents('.checkbox').find('.icon-provider-fontawesome-check');
+
+          $successIcon.css('display', 'inline-block');
+          $input.prop('disabled', true);
+
+          setTimeout(function () {
+            $successIcon.fadeOut(function () {
+              $input.prop('disabled', false);
+            });
+          }, 2000);
+        },
+        error: function () {
+          var $errorIcon = $input.parents('.checkbox').find('.icon-provider-fontawesome-error');
+
+          $errorIcon.css('display', 'inline-block');
+          $input.prop('disabled', true);
         }
       });
     }

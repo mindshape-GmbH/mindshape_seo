@@ -2,56 +2,74 @@ $googleLinkBlue: #1A0DAB;
 $googleUrlGreen: #006621;
 $googleDescriptionGrey: #545454;
 
-.pagetree-info {
-  position: relative;
-  overflow: hidden;
-  padding-bottom: 0;
+.mindshapeseo-preview {
+  .pagetree-info {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 0;
 
-  .depth-markup {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    height: 100%;
-
-    .treeline-icon {
-      width: 17px;
-      height: 100%;
-      padding: 0;
+    .depth-markup {
+      position: absolute;
       top: 0;
-      margin: 0;
-    }
+      bottom: 0;
+      height: 100%;
 
-    .icon {
-      overflow: visible;
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);
-    }
+      .treeline-icon {
+        width: 17px;
+        height: 100%;
+        padding: 0;
+        top: 0;
+        margin: 0;
+      }
 
-    .title {
-      position: relative;
-      display: inline-block;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .title-wrapper {
-      position: relative;
-      top: 44%;
-    }
-
-    &.rootpage {
       .icon {
-        margin-left: 1px;
+        overflow: visible;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .title {
+        position: relative;
+        display: inline-block;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      .title-wrapper {
+        position: relative;
+        top: 44%;
+      }
+
+      &.rootpage {
+        .icon {
+          margin-left: 1px;
+        }
       }
     }
-  }
 
-  .depth-markup.subpages {
-    span:nth-last-child(2) {
+    .depth-markup.subpages {
+      span:nth-last-child(2) {
+        display: inline-block;
+        height: 100%;
+        position: relative;
+
+        &:before {
+          content: "";
+          width: 1px;
+          position: absolute;
+          top: 54%;
+          bottom: 0;
+          left: 50%;
+          border-left: 1px dotted #666666;
+        }
+      }
+    }
+
+    .depth-markup.rootpage {
+      position: absolute;
       display: inline-block;
       height: 100%;
-      position: relative;
 
       &:before {
         content: "";
@@ -59,38 +77,9 @@ $googleDescriptionGrey: #545454;
         position: absolute;
         top: 54%;
         bottom: 0;
-        left: 50%;
+        left: 14%;
         border-left: 1px dotted #666666;
       }
-    }
-  }
-
-  .depth-markup.rootpage {
-    position: absolute;
-    display: inline-block;
-    height: 100%;
-
-    &:before {
-      content: "";
-      width: 1px;
-      position: absolute;
-      top: 54%;
-      bottom: 0;
-      left: 14%;
-      border-left: 1px dotted #666666;
-    }
-  }
-}
-
-.google-preview {
-  .thumbnail {
-    width: 620px;
-    margin: 0;
-    padding: 10px 10px;
-
-    hr {
-      background-color: rgba(#000, 0.12);
-      margin: 10px 0;
     }
   }
 
@@ -100,80 +89,93 @@ $googleDescriptionGrey: #545454;
   .icon-provider-fontawesome-check i {color: green;}
   .icon-provider-fontawesome-error i {color: red;}
 
-  .preview-box {
-    font-family: arial, sans-serif;
-    max-height: 74px;
-    width: 600px;
-
-    h3 {
-      font-size: 18px;
-      line-height: 1.2;
+  .google-preview {
+    .thumbnail {
+      width: 620px;
       margin: 0;
-      display: block;
-      overflow: hidden;
+      padding: 10px 10px;
+
+      hr {
+        background-color: rgba(#000, 0.12);
+        margin: 10px 0;
+      }
+    }
+
+    .preview-box {
+      font-family: arial, sans-serif;
+      max-height: 74px;
       width: 600px;
-      color: #1e0fbe;
-      font-weight: normal;
-      white-space: nowrap;
-      text-decoration: none;
-      text-overflow: ellipsis;
 
-      a {
-        color: $googleLinkBlue;
+      h3 {
+        font-size: 18px;
+        line-height: 1.2;
+        margin: 0;
+        display: block;
+        overflow: hidden;
+        width: 600px;
+        color: #1e0fbe;
+        font-weight: normal;
+        white-space: nowrap;
+        text-decoration: none;
+        text-overflow: ellipsis;
+
+        a {
+          color: $googleLinkBlue;
+        }
       }
-    }
 
-    .url,
-    .description {
-      line-height: 1.4;
-    }
+      .url,
+      .description {
+        line-height: 1.4;
+      }
 
-    .url {
-      display: block;
-      font-size: 14px;
-      font-style: normal;
-      line-height: 16px;
-
-      cite {
-        color: $googleUrlGreen;
+      .url {
+        display: block;
+        font-size: 14px;
         font-style: normal;
+        line-height: 16px;
+
+        cite {
+          color: $googleUrlGreen;
+          font-style: normal;
+        }
+      }
+
+      .description {
+        height: 34px;
+        font-size: 13px;
+        overflow-y: hidden;
+        color: $googleDescriptionGrey;
+
+        &:empty {display: none;}
+      }
+
+    }
+
+    .edit-panel {
+      display: none;
+
+      .progress {
+        margin: 10px 0;
+        height: 10px;
+      }
+
+      .title-container,
+      .description-container {margin-bottom: 10px;}
+
+      textarea.description {
+        resize: none;
+        height: 65px;
       }
     }
 
-    .description {
-      height: 34px;
-      font-size: 13px;
-      overflow-y: hidden;
-      color: $googleDescriptionGrey;
-
-      &:empty {display: none;}
-    }
-
-  }
-
-  .edit-panel {
-    display: none;
-
-    .progress {
-      margin: 10px 0;
-      height: 10px;
-    }
-
-    .title-container,
-    .description-container {margin-bottom: 10px;}
-
-    textarea.description {
-      resize: none;
-      height: 65px;
-    }
-  }
-
-  button {
-    &.save {
-      display: none;
-    }
-    &.abort {
-      display: none;
+    button {
+      &.save {
+        display: none;
+      }
+      &.abort {
+        display: none;
+      }
     }
   }
 }

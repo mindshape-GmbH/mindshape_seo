@@ -39,7 +39,7 @@ class AjaxHandler implements SingletonInterface
     /**
      * @param array $params
      * @param AjaxRequestHandler $ajaxRequestHandler
-     * @return string
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function savePage(array $params = array(), AjaxRequestHandler $ajaxRequestHandler = null)
     {
@@ -47,14 +47,19 @@ class AjaxHandler implements SingletonInterface
         $request = $params['request'];
 
         if ($request instanceof ServerRequest) {
-            $pageData = $request->getParsedBody();
+            $data = $request->getParsedBody();
 
-            if (is_array($pageData)) {
+            if (is_array($data)) {
                 if (
-                    0 < $pageData['pageUid'] &&
-                    !empty($pageData['title'])
+                    0 < $data['pageUid'] &&
+                    !empty($data['title'])
                 ) {
-                    $this->savePageData($pageData);
+                    $this->savePageData(
+                        $data['pageUid'],
+                        array(
+                            'title' => $data['title'],
+                            'description' => $data['description'],
+                        ));
                 } else {
                     $ajaxRequestHandler->setError('Invalid Data');
                 }
@@ -65,21 +70,49 @@ class AjaxHandler implements SingletonInterface
     }
 
     /**
-     * @param array $pageData
-     * @return void
+     * @param array $params
+     * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler|null $ajaxRequestHandler
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    protected function savePageData(array $pageData)
+    public function savePageRobots(array $params = array(), AjaxRequestHandler $ajaxRequestHandler = null)
+    {
+        /** @var ServerRequest $request */
+        $request = $params['request'];
+
+        if ($request instanceof ServerRequest) {
+            $data = $request->getParsedBody();
+
+            if (is_array($data)) {
+                if (0 < $data['pageUid']) {
+                    $this->savePageData(
+                        $data['pageUid'],
+                        array(
+                            'mindshapeseo_no_index' => (bool) $data['noindex'] ? 1 : 0,
+                            'mindshapeseo_no_follow' => (bool) $data['nofollow'] ? 1 : 0,
+                        )
+                    );
+                } else {
+                    $ajaxRequestHandler->setError('Invalid Data');
+                }
+            }
+        }
+
+        return $ajaxRequestHandler->render();
+    }
+
+    /**
+     * @param $pageUid
+     * @param array $data
+     */
+    protected function savePageData($pageUid, array $data)
     {
         /** @var DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
         $databaseConnection->exec_UPDATEquery(
             'pages',
-            'uid = ' . $pageData['pageUid'],
-            array(
-                'title' => $pageData['title'],
-                'description' => $pageData['description']
-            )
+            'uid = ' . $pageUid,
+            $data
         );
     }
 }
