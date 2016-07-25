@@ -1,4 +1,5 @@
 CREATE TABLE pages (
+  mindshapeseo_focus_keyword                 varchar(255) DEFAULT ''      NOT NULL,
   mindshapeseo_ogtitle                       varchar(255) DEFAULT ''      NOT NULL,
   mindshapeseo_ogurl                         varchar(255) DEFAULT ''      NOT NULL,
   mindshapeseo_ogimage                       int(11) unsigned             NOT NULL DEFAULT '0',
@@ -17,6 +18,7 @@ CREATE TABLE pages (
 );
 
 CREATE TABLE pages_language_overlay (
+  mindshapeseo_focus_keyword                 varchar(255) DEFAULT ''      NOT NULL,
   mindshapeseo_ogtitle                       varchar(255) DEFAULT ''      NOT NULL,
   mindshapeseo_ogurl                         varchar(255) DEFAULT ''      NOT NULL,
   mindshapeseo_ogimage                       int(11) unsigned             NOT NULL DEFAULT '0',

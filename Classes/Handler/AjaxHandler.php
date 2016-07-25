@@ -59,6 +59,7 @@ class AjaxHandler implements SingletonInterface
                         array(
                             'title' => $data['title'],
                             'description' => $data['description'],
+                            'mindshapeseo_focus_keyword' => $data['focusKeyword'],
                         )
                     );
                 } else {

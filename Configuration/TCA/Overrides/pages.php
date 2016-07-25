@@ -14,6 +14,15 @@ $columns = array(
             'type' => 'passthrough',
         ),
     ),
+    'mindshapeseo_focus_keyword' => array(
+        'exclude' => 0,
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_focus_keyword',
+        'config' => array(
+            'type' => 'input',
+            'size' => 30,
+            'eval' => 'trim',
+        ),
+    ),
     'mindshapeseo_ogtitle' => array(
         'exclude' => 0,
         'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_ogtitle',
@@ -178,22 +187,23 @@ $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_general_pallette'] = array(
 );
 
 $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_sitemap_pallette'] = array(
-    'showitem' => 'mindshapeseo_priority, --linebreak--, 
+    'showitem' => 'mindshapeseo_priority, --linebreak--,
                    mindshapeseo_change_frequency, --linebreak--,
-                   mindshapeseo_exclude_from_sitemap, --linebreak--, 
-                   mindshapeseo_exclude_suppages_from_sitemap, --linebreak--, 
+                   mindshapeseo_exclude_from_sitemap, --linebreak--,
+                   mindshapeseo_exclude_suppages_from_sitemap, --linebreak--,
                    mindshapeseo_sub_sitemap',
 );
 
 $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_indexing_pallette'] = array(
     'showitem' => 'mindshapeseo_no_index,
-                   mindshapeseo_no_index_recursive, 
+                   mindshapeseo_no_index_recursive,
                    --linebreak--,
                    mindshapeseo_no_follow,
                    mindshapeseo_no_follow_recursive',
 );
 
 $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_meta_pallette']['showitem'] =
+    'mindshapeseo_focus_keyword,--linebreak--,' .
     $GLOBALS['TCA']['pages']['palettes']['metatags']['showitem'] . ',--linebreak--,' .
     $GLOBALS['TCA']['pages']['palettes']['abstract']['showitem'] . ',--linebreak--,
     mindshapeseo_canonical';

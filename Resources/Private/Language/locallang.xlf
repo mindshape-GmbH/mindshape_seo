@@ -3,6 +3,9 @@
     <file source-language="en" datatype="plaintext" original="messages" date="2016-07-01T13:48:30Z" product-name="mindshape_seo">
         <header/>
         <body>
+            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_focus_keyword">
+                <source>Focus keyword</source>
+            </trans-unit>
             <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_ogtitle">
                 <source>Title</source>
             </trans-unit>

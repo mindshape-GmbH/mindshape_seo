@@ -18,6 +18,7 @@
         that.renderPreviewDescription($(this));
         that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLength);
         that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLength);
+        that.checkFocusKeyword($(this), $(this).find('.focus-keyword input').val());
         that.updatePreviewAlerts($(this));
       });
     },
@@ -120,6 +121,7 @@
 
         that.checkFocusKeyword($currentPreview, focusKeyword);
         that.updatePreviewAlerts($currentPreview);
+        that.checkPreviewEditPanelSaveState($currentPreview);
       });
 
       // Re-render description on change
@@ -153,12 +155,14 @@
     checkPreviewEditPanelSaveState: function ($previewContainer) {
       var title = $previewContainer.find('.edit-panel .title').val();
       var description = $previewContainer.find('.edit-panel .description').val();
+      var focusKeyword = $previewContainer.find('.focus-keyword input').val();
 
       if (
         0 < title.length &&
         (
           $previewContainer.attr('data-original-title') !== title.trim() ||
-          $previewContainer.attr('data-original-description') !== description.trim()
+          $previewContainer.attr('data-original-description') !== description.trim() ||
+          $previewContainer.attr('data-original-focuskeyword') !== focusKeyword.trim()
         )
       ) {
         $previewContainer.find('button.save').prop('disabled', false);
@@ -223,7 +227,7 @@
       $.ajax({
         type: "POST",
         url: TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::savePage'],
-        data: $previewContainer.find('.edit-panel form').serialize(),
+        data: $previewContainer.find('form').serialize(),
         success: function () {
           $previewContainer.attr('data-original-title', $previewContainer.find('.edit-panel .title').val().trim());
           $previewContainer.attr('data-original-description', $previewContainer.find('.edit-panel .description').val().trim());

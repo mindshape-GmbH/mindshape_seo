@@ -228,6 +228,7 @@ class PageService implements SingletonInterface
                 'author' => $page['author'],
                 'contact' => $page['author_email'],
                 'description' => $page['description'],
+                'focusKeyword' => $page['mindshapeseo_focus_keyword'],
                 'robots' => array(
                     'noindex' => (bool) $page['mindshapeseo_no_index'],
                     'nofollow' => (bool) $page['mindshapeseo_no_follow'],
