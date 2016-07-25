@@ -268,6 +268,8 @@
       });
     },
     checkFocusKeyword: function ($previewContainer, fokusKeyword) {
+      if ('' === fokusKeyword.trim()) { return; }
+
       var title = $previewContainer.find('.preview-box .title').text();
       var descriptionEdit = $previewContainer.find('.edit-panel .description').text();
       var descriptionPreview = $previewContainer.find('.preview-box .description').text();
@@ -284,9 +286,7 @@
         $previewContainer.attr('data-keyword-title-matches', 0);
       } else {
         $previewContainer.find('.preview-box .title').html(
-          title.replace(regex, function (match) {
-            return ' <span class="focus-keyword">' + match.trim() + '</span> ';
-          })
+          title.replace(regex, '$1<span class="focus-keyword">$2</span>$3')
         );
 
         $previewContainer.attr('data-keyword-title-matches', titleMatches.length);
@@ -296,9 +296,7 @@
         $previewContainer.attr('data-keyword-description-matches', 0);
       } else {
         $previewContainer.find('.preview-box .description').html(
-          descriptionPreview.replace(regex, function (match) {
-            return ' <span class="focus-keyword">' + match.trim() + '</span> ';
-          })
+          descriptionPreview.replace(regex, '$1<span class="focus-keyword">$2</span>$3')
         );
 
         $previewContainer.attr('data-keyword-description-matches', descriptionMatches.length);
@@ -308,9 +306,7 @@
         $previewContainer.attr('data-keyword-url-matches', 0);
       } else {
         $previewContainer.find('.preview-box .url cite').html(
-          url.replace(regex, function (match) {
-            return '<span class="focus-keyword">' + match.trim() + '</span>';
-          })
+          url.replace(regex, '$1<span class="focus-keyword">$2</span>$3')
         );
 
         $previewContainer.attr('data-keyword-url-matches', urlMatches.length);
