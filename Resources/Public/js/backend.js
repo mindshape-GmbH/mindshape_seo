@@ -18,6 +18,7 @@
         that.renderPreviewDescription($(this));
         that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLength);
         that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLength);
+        that.updatePreviewAlerts($(this));
       });
     },
     registerEvents: function () {
@@ -57,12 +58,18 @@
         e.preventDefault();
 
         var $currentPreview = $(this).parents('.google-preview');
+        var fokuskeyword = $currentPreview.find('.focus-keyword input').val();
 
         that.closePreviewEditPanel($currentPreview);
         that.restorePreviewOriginalData($currentPreview);
         that.checkPreviewEditPanelSaveState($currentPreview);
         that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLength);
         that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
+        that.updatePreviewAlerts($currentPreview);
+
+        if (fokuskeyword.trim().length) {
+          that.checkFocusKeyword($currentPreview, fokuskeyword);
+        }
       });
 
       // Save click on edit panel
@@ -72,6 +79,19 @@
         that.savePreviewEditPanel($(this).parents('.google-preview'));
       });
 
+      // Show SEO alerts
+      this.$previewContainers.on('click', '.alerts', function (e) {
+        e.preventDefault();
+
+        var $alertsContainer = $(this).parents('.google-preview').find('.alerts-container');
+
+        if ($alertsContainer.is(':hidden')) {
+          $alertsContainer.slideDown();
+        } else {
+          $alertsContainer.slideUp();
+        }
+      });
+
       // Change preview title when editing title
       this.$previewContainers.on('keyup', '.edit-panel .title', function () {
         var $currentPreview = $(this).parents('.google-preview');
@@ -79,6 +99,7 @@
         $currentPreview.find('.preview-box .title').html($(this).val());
         that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLength);
         that.checkPreviewEditPanelSaveState($currentPreview);
+        that.updatePreviewAlerts($currentPreview);
       });
 
       // Change preview description when editing description
@@ -89,11 +110,16 @@
         that.renderPreviewDescription($currentPreview);
         that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
         that.checkPreviewEditPanelSaveState($currentPreview);
+        that.updatePreviewAlerts($currentPreview);
       });
 
       // Update focus keyword check
       this.$previewContainers.on('keyup', '.focus-keyword input', function () {
-        that.checkFocusKeyword($(this).parents('.google-preview'), $(this).val())
+        var $currentPreview = $(this).parents('.google-preview');
+        var focusKeyword = $(this).val().trim();
+
+        that.checkFocusKeyword($currentPreview, focusKeyword);
+        that.updatePreviewAlerts($currentPreview);
       });
 
       // Re-render description on change
@@ -276,7 +302,58 @@
       $previewContainer.find('.preview-box .title').html(
         $previewContainer.find('.edit-panel .title').val().trim()
       );
+    },
+    updatePreviewAlerts: function ($previewContainer) {
+      var titleLength = $previewContainer.find('.preview-box .title').text().length + $previewContainer.find('.preview-box .attachment').text().length;
+      var description = $previewContainer.find('.preview-box .description').text();
+      var alertsCount = 0;
+      var $alertsContainer = $previewContainer.find('.alerts-container');
 
+      if (titleLength > this.googleTitleLength) {
+        $alertsContainer.find('.title-length').show();
+        alertsCount++;
+      } else {
+        $alertsContainer.find('.title-length').hide();
+      }
+
+      if (description.length > this.googleDescriptionLength) {
+        $alertsContainer.find('.description-length').show();
+        alertsCount++;
+      } else {
+        $alertsContainer.find('.description-length').hide();
+      }
+
+      if (0 === $previewContainer.find('.focus-keyword input').val().trim().length) {
+        $alertsContainer.find('.focus-keyword').hide();
+      } else {
+        if (0 < parseInt($previewContainer.attr('data-keyword-title-matches'))) {
+          $alertsContainer.find('.focus-keyword.missing-title').hide();
+          $alertsContainer.find('.focus-keyword.found-title').show();
+        } else {
+          $alertsContainer.find('.focus-keyword.missing-title').show();
+          $alertsContainer.find('.focus-keyword.found-title').hide();
+        }
+
+        if (0 < parseInt($previewContainer.attr('data-keyword-description-matches'))) {
+          $alertsContainer.find('.focus-keyword.missing-description').hide();
+          $alertsContainer.find('.focus-keyword.found-description').show();
+        } else {
+          $alertsContainer.find('.focus-keyword.missing-description').show();
+          $alertsContainer.find('.focus-keyword.found-description').hide();
+        }
+      }
+
+      if (0 < $previewContainer.find('.alerts-container .alert-danger:not(:hidden)').length || 0 < alertsCount) {
+        $previewContainer.find('.buttons .alerts').prop('disabled', false);
+        $previewContainer.find('.buttons .alerts')
+          .removeClass('btn-success')
+          .addClass('btn-danger');
+      } else {
+        $previewContainer.find('.buttons .alerts').prop('disabled', true);
+        $previewContainer.find('.buttons .alerts')
+          .removeClass('btn-danger')
+          .addClass('btn-success');
+      }
     }
   };
 

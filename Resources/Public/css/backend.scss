@@ -182,5 +182,19 @@ $googleDescriptionGrey: #545454;
         display: none;
       }
     }
+
+    .alerts-container {
+      display: none;
+
+      .well {
+        margin: 10px 0 0;
+        padding-top: 0;
+      }
+
+      .alert {
+        display: none;
+        margin: 9px 0 0;
+      }
+    }
   }
 }
