@@ -85,17 +85,21 @@
                                         <label>
                                             <f:form.checkbox name="noindex" value="1" checked="{page.metadata.meta.robots.noindex}"/>
                                             <f:translate key="tx_minshapeseo_domain_model_pages.mindshapeseo_no_index"/>
-                                            <core:icon identifier="provider-fontawesome-check"/>
                                             <core:icon identifier="provider-fontawesome-error"/>
                                         </label>
+                                        <span class="loader">
+                                            <f:image src="{f:uri.resource(path: 'Icons/loading.svg', extensionName: 'mindshape_seo')}" title="Loading..."/>
+                                        </span>
                                     </div>
                                     <div class="checkbox nofollow">
                                         <label>
                                             <f:form.checkbox name="nofollow" value="1" checked="{page.metadata.meta.robots.nofollow}"/>
                                             <f:translate key="tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow"/>
-                                            <core:icon identifier="provider-fontawesome-check"/>
                                             <core:icon identifier="provider-fontawesome-error"/>
                                         </label>
+                                        <span class="loader">
+                                            <f:image src="{f:uri.resource(path: 'Icons/loading.svg', extensionName: 'mindshape_seo')}" title="Loading..."/>
+                                        </span>
                                     </div>
                                 </div>
                             </form>

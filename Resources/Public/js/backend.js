@@ -261,16 +261,16 @@
         url: TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::savePageRobots'],
         data: $robotsForm.serialize(),
         success: function () {
-          var $successIcon = $input.parents('.checkbox').find('.icon-provider-fontawesome-check');
+          var $loadingIcon = $input.parents('.checkbox').find('.loader');
 
-          $successIcon.css('display', 'inline-block');
+          $loadingIcon.css('display', 'inline');
           $input.prop('disabled', true);
 
           setTimeout(function () {
-            $successIcon.fadeOut(function () {
+            $loadingIcon.fadeOut(function () {
               $input.prop('disabled', false);
             });
-          }, 2000);
+          }, 1000);
         },
         error: function () {
           var $errorIcon = $input.parents('.checkbox').find('.icon-provider-fontawesome-error');

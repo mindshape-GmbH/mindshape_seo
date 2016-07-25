@@ -88,6 +88,14 @@ $googleDescriptionGrey: #545454;
 
   .icon-provider-fontawesome-check i {color: green;}
   .icon-provider-fontawesome-error i {color: red;}
+
+  .loader {
+    display: none;
+    img {
+      height: 16px;
+      width: 16px;
+    }
+  }
 }
 
 .google-preview {
