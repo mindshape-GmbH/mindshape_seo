@@ -150,6 +150,9 @@ $googleDescriptionGrey: #545454;
         &:empty {display: none;}
       }
 
+      .focus-keyword {
+        font-weight: bold;
+      }
     }
 
     .edit-panel {

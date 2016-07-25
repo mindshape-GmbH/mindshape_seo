@@ -89,6 +89,11 @@
         that.checkPreviewEditPanelSaveState($currentPreview);
       });
 
+      // Update focus keyword check
+      this.$previewContainers.on('keyup', '.focus-keyword input', function () {
+        that.checkFocusKeyword($(this).parents('.google-preview'), $(this).val())
+      });
+
       // Re-render description on change
       this.$previewContainers.on('change', '.preview-box .description', function () {
         that.renderPreviewDescription($(this).parents('.google-preview'));
@@ -229,6 +234,40 @@
           $input.prop('disabled', true);
         }
       });
+    },
+    checkFocusKeyword: function ($previewContainer, fokusKeyword) {
+      var title = $previewContainer.find('.preview-box .title').text();
+      var description = $previewContainer.find('.preview-box .description').text();
+      var regex = new RegExp('(^|\\s)(' + fokusKeyword.trim() + ')(\\s|$)', 'ig');
+      var titleMatches = title.match(regex);
+      var descriptionMatches = description.match(regex);
+
+      this.clearPreview($previewContainer);
+
+      if (null !== titleMatches) {
+        $previewContainer.find('.preview-box .title').html(
+          title.replace(regex, function (match) {
+            return ' <span class="focus-keyword">' + match.trim() + '</span> ';
+          })
+        );
+      }
+
+      if (null !== descriptionMatches) {
+        $previewContainer.find('.preview-box .description').html(
+          description.replace(regex, function (match) {
+            return ' <span class="focus-keyword">' + match.trim() + '</span> ';
+          })
+        );
+      }
+    },
+    clearPreview: function ($previewContainer) {
+      $previewContainer.find('.preview-box .title').html(
+        $previewContainer.find('.preview-box .title').text()
+      );
+
+      $previewContainer.find('.preview-box .description').html(
+        $previewContainer.find('.preview-box .description').text()
+      );
     }
   };
 

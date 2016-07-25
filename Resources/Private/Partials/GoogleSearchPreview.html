@@ -39,18 +39,25 @@
                     </div>
                 </form>
             </div>
-            <div class="buttons">
-                <button class="edit btn btn-default">
-                    <f:translate key="tx_minshapeseo_label.preview.button.edit"/>
-                </button>
-                <core:icon identifier="provider-fontawesome-check"/>
-                <core:icon identifier="provider-fontawesome-error"/>
-                <button class="save btn btn-default" disabled="disabled">
-                    <f:translate key="tx_minshapeseo_label.preview.button.save"/>
-                </button>
-                <button class="abort btn btn-default">
-                    <f:translate key="tx_minshapeseo_label.preview.button.abort"/>
-                </button>
+            <div class="row">
+                <div class="buttons col-sm-4">
+                    <button class="edit btn btn-default">
+                        <f:translate key="tx_minshapeseo_label.preview.button.edit"/>
+                    </button>
+                    <core:icon identifier="provider-fontawesome-check"/>
+                    <button class="save btn btn-default" disabled="disabled">
+                        <f:translate key="tx_minshapeseo_label.preview.button.save"/>
+                    </button>
+                    <core:icon identifier="provider-fontawesome-error"/>
+                    <button class="abort btn btn-default">
+                        <f:translate key="tx_minshapeseo_label.preview.button.abort"/>
+                    </button>
+                </div>
+                <div class="col-sm-8">
+                    <div class="form-group focus-keyword">
+                        <f:form.textfield name="focusKeyword" placeholder="{f:translate(key: 'tx_minshapeseo_label.preview.focus_keyword')}" class="form-control"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
