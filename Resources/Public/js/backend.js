@@ -268,6 +268,10 @@
       });
     },
     checkFocusKeyword: function ($previewContainer, fokusKeyword) {
+      this.renderPreviewDescription($previewContainer);
+      this.clearPreviewTitle($previewContainer);
+      this.clearUrlTitle($previewContainer);
+
       if ('' === fokusKeyword.trim()) { return; }
 
       var title = $previewContainer.find('.preview-box .title').text();
@@ -278,9 +282,6 @@
       var titleMatches = title.match(regex);
       var descriptionMatches = descriptionEdit.match(regex);
       var urlMatches = url.match(regex);
-
-      this.renderPreviewDescription($previewContainer);
-      this.clearPreviewTitle($previewContainer);
 
       if (null === titleMatches) {
         $previewContainer.attr('data-keyword-title-matches', 0);
@@ -315,6 +316,11 @@
     clearPreviewTitle: function ($previewContainer) {
       $previewContainer.find('.preview-box .title').html(
         $previewContainer.find('.edit-panel .title').val().trim()
+      );
+    },
+    clearUrlTitle: function ($previewContainer) {
+      $previewContainer.find('.preview-box .url cite').html(
+        $previewContainer.find('.preview-box .url').text().trim()
       );
     },
     updatePreviewAlerts: function ($previewContainer) {
