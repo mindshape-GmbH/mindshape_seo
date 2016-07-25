@@ -56,11 +56,13 @@
       this.$previewContainers.on('click', '.abort', function (e) {
         e.preventDefault();
 
-        that.closePreviewEditPanel($(this).parents('.google-preview'));
-        that.restorePreviewOriginalData($(this).parents('.google-preview'));
-        that.checkPreviewEditPanelSaveState($(this).parents('.google-preview'));
-        that.updatePreviewEditPanelProgressBar($(this).parents('.google-preview'), 'title', that.googleTitleLength);
-        that.updatePreviewEditPanelProgressBar($(this).parents('.google-preview'), 'description', that.googleDescriptionLength);
+        var $currentPreview = $(this).parents('.google-preview');
+
+        that.closePreviewEditPanel($currentPreview);
+        that.restorePreviewOriginalData($currentPreview);
+        that.checkPreviewEditPanelSaveState($currentPreview);
+        that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLength);
+        that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
       });
 
       // Save click on edit panel
@@ -112,7 +114,7 @@
       this.renderPreviewDescription($previewContainer);
     },
     renderPreviewDescription: function ($previewContainer) {
-      var description = $previewContainer.find('.preview-box .description').html();
+      var description = $previewContainer.find('.preview-box .description').text();
 
       description = description.trim();
 
@@ -237,12 +239,14 @@
     },
     checkFocusKeyword: function ($previewContainer, fokusKeyword) {
       var title = $previewContainer.find('.preview-box .title').text();
-      var description = $previewContainer.find('.preview-box .description').text();
-      var regex = new RegExp('(^|\\s)(' + fokusKeyword.trim() + ')(\\s|$)', 'ig');
+      var descriptionEdit = $previewContainer.find('.edit-panel .description').text();
+      var descriptionPreview = $previewContainer.find('.preview-box .description').text();
+      var regex = new RegExp('(^|\\s)(' + fokusKeyword.trim() + ')(\\s|$)', 'igm');
       var titleMatches = title.match(regex);
-      var descriptionMatches = description.match(regex);
+      var descriptionMatches = descriptionEdit.match(regex);
 
-      this.clearPreview($previewContainer);
+      this.renderPreviewDescription($previewContainer);
+      this.clearPreviewTitle($previewContainer);
 
       if (null !== titleMatches) {
         $previewContainer.find('.preview-box .title').html(
@@ -250,24 +254,29 @@
             return ' <span class="focus-keyword">' + match.trim() + '</span> ';
           })
         );
+
+        $previewContainer.attr('data-keyword-title-matches', titleMatches.length);
+      } else {
+        $previewContainer.attr('data-keyword-title-matches', 0);
       }
 
       if (null !== descriptionMatches) {
         $previewContainer.find('.preview-box .description').html(
-          description.replace(regex, function (match) {
+          descriptionPreview.replace(regex, function (match) {
             return ' <span class="focus-keyword">' + match.trim() + '</span> ';
           })
         );
+
+        $previewContainer.attr('data-keyword-description-matches', descriptionMatches.length);
+      } else {
+        $previewContainer.attr('data-keyword-description-matches', 0);
       }
     },
-    clearPreview: function ($previewContainer) {
+    clearPreviewTitle: function ($previewContainer) {
       $previewContainer.find('.preview-box .title').html(
-        $previewContainer.find('.preview-box .title').text()
+        $previewContainer.find('.edit-panel .title').val().trim()
       );
 
-      $previewContainer.find('.preview-box .description').html(
-        $previewContainer.find('.preview-box .description').text()
-      );
     }
   };
 
