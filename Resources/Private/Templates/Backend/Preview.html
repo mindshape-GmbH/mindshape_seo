@@ -64,7 +64,7 @@
                         </td>
                         <td width="50%">
                             <f:if condition="{page.row}">
-                                <f:render partial="GoogleSearchPreview" arguments="{
+                                <f:render partial="GoogleSearchPreview" section="Main" arguments="{
                                     titleAttachment: page.metadata.titleAttachment,
                                     titleAttachmentSeperator: page.metadata.titleAttachmentSeperator,
                                     title: page.metadata.title,
@@ -73,6 +73,7 @@
                                     description: page.metadata.meta.description
                                     focusKeyword: page.metadata.meta.focusKeyword
                                     pageUid: page.metadata.uid
+                                    editing: 1
                                 }"/>
                             </f:if>
                         </td>

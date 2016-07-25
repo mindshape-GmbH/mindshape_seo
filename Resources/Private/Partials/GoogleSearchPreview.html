@@ -3,96 +3,121 @@
       xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers">
 
-    <div class="google-preview" data-original-title="{title}" data-original-description="{description}" data-original-focuskeyword="{focusKeyword}">
-        <div class="thumbnail">
-            <form name="page">
-                <div class="preview-box">
-                    <h3>
-                        <a href="{url}" target="_blank">
-                            <span class="title">{title}</span>
-                            <span class="attachment">{titleAttachmentSeperator}&nbsp;{titleAttachment}</span>
-                        </a>
-                    </h3>
-                    <div class="url">
-                        <cite>
-                            <f:format.raw>{previewUrl}</f:format.raw>
-                        </cite>
-                    </div>
-                    <div class="description">
-                        <f:format.raw>{description}</f:format.raw>
-                    </div>
-                </div>
-                <hr/>
-                <div class="edit-panel">
-                    <f:form.hidden name="pageUid" value="{pageUid}"/>
-                    <div class="form-group title-container">
-                        <f:form.textfield name="title" value="{title}" class="title form-control"/>
-                        <div class="progress progress-title">
-                            <div class="progress-bar" role="progressbar"></div>
-                        </div>
-                    </div>
-                    <div class="form-group description-container">
-                        <f:form.textarea name="description" value="{description}" class="description form-control"/>
-                        <div class="progress progress-description">
-                            <div class="progress-bar" role="progressbar"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="buttons col-sm-4">
-                        <button class="alerts btn btn-success" disabled="disabled">
-                            <f:translate key="tx_minshapeseo_label.preview.button.seo_stats"/>
-                        </button>
-                        <button class="edit btn btn-default">
-                            <f:translate key="tx_minshapeseo_label.preview.button.edit"/>
-                        </button>
-                        <core:icon identifier="provider-fontawesome-check"/>
-                        <button class="save btn btn-default" disabled="disabled">
-                            <f:translate key="tx_minshapeseo_label.preview.button.save"/>
-                        </button>
-                        <core:icon identifier="provider-fontawesome-error"/>
-                        <button class="abort btn btn-default">
-                            <f:translate key="tx_minshapeseo_label.preview.button.abort"/>
-                        </button>
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="form-group focus-keyword">
-                            <f:form.textfield name="focusKeyword" value="{focusKeyword}" placeholder="{f:translate(key: 'tx_minshapeseo_label.preview.focus_keyword')}" class="form-control"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 alerts-container">
-                        <div class="well well-sm">
-                            <div class="alert alert-danger title-length" role="alert">
-                                <f:translate key="tx_minshapeseo_label.preview.alert.title_length"/>
-                            </div>
-                            <div class="alert alert-danger description-length" role="alert">
-                                <f:translate key="tx_minshapeseo_label.preview.alert.description_length"/>
-                            </div>
-                            <div class="alert alert-danger focus-keyword missing-title" role="alert">
-                                <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_missing_title"/>
-                            </div>
-                            <div class="alert alert-danger focus-keyword missing-description" role="alert">
-                                <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_missing_description"/>
-                            </div>
-                            <div class="alert alert-danger focus-keyword missing-url" role="alert">
-                                <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_missing_url"/>
-                            </div>
-                            <div class="alert alert-success focus-keyword found-title" role="alert">
-                                <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_found_title"/>
-                            </div>
-                            <div class="alert alert-success focus-keyword found-description" role="alert">
-                                <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_found_description"/>
-                            </div>
-                            <div class="alert alert-success focus-keyword found-url" role="alert">
-                                <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_found_url"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
+    <f:section name="Main">
+
+        <div class="google-preview" data-editing="{f:if(condition: editing: then: 1, else: 0)}" data-original-title="{title}" data-original-description="{description}" data-original-focuskeyword="{focusKeyword}">
+            <div class="thumbnail">
+                <f:if condition="{editing}">
+                    <f:then>
+                        <f:render section="Form" arguments="{_all}"/>
+                    </f:then>
+                    <f:else>
+                        <f:render section="PreviewAndFields" arguments="{_all}"/>
+                    </f:else>
+                </f:if>
+            </div>
         </div>
-    </div>
+
+    </f:section>
+
+    <f:section name="Form">
+
+        <form name="page">
+            <f:render section="PreviewAndFields" arguments="{_all}"/>
+        </form>
+
+    </f:section>
+
+    <f:section name="PreviewAndFields">
+
+        <div class="preview-box">
+            <h3>
+                <a href="{url}" target="_blank">
+                    <span class="title">{title}</span>
+                    <span class="attachment">{titleAttachmentSeperator}&nbsp;{titleAttachment}</span>
+                </a>
+            </h3>
+            <div class="url">
+                <cite>
+                    <f:format.raw>{previewUrl}</f:format.raw>
+                </cite>
+            </div>
+            <div class="description">
+                <f:format.raw>{description}</f:format.raw>
+            </div>
+        </div>
+        <hr/>
+        <div class="edit-panel">
+            <f:form.hidden name="pageUid" value="{pageUid}"/>
+            <div class="form-group title-container">
+                <f:form.textfield name="title" value="{title}" class="title form-control"/>
+                <div class="progress progress-title">
+                    <div class="progress-bar" role="progressbar"></div>
+                </div>
+            </div>
+            <div class="form-group description-container">
+                <f:form.textarea name="description" value="{description}" class="description form-control"/>
+                <div class="progress progress-description">
+                    <div class="progress-bar" role="progressbar"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="buttons col-sm-4">
+                <button class="alerts btn btn-success" disabled="disabled">
+                    <f:translate key="tx_minshapeseo_label.preview.button.seo_stats"/>
+                </button>
+                <f:if condition="{editing}">
+                    <button class="edit btn btn-default">
+                        <f:translate key="tx_minshapeseo_label.preview.button.edit"/>
+                    </button>
+                    <core:icon identifier="provider-fontawesome-check"/>
+                    <button class="save btn btn-default" disabled="disabled">
+                        <f:translate key="tx_minshapeseo_label.preview.button.save"/>
+                    </button>
+                    <core:icon identifier="provider-fontawesome-error"/>
+                    <button class="abort btn btn-default">
+                        <f:translate key="tx_minshapeseo_label.preview.button.abort"/>
+                    </button>
+                </f:if>
+            </div>
+            <div class="col-sm-8">
+                <div class="form-group focus-keyword">
+                    <f:form.textfield name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" placeholder="{f:translate(key: 'tx_minshapeseo_label.preview.focus_keyword')}" class="form-control"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 alerts-container">
+                <div class="well well-sm">
+                    <div class="alert alert-danger title-length" role="alert">
+                        <f:translate key="tx_minshapeseo_label.preview.alert.title_length"/>
+                    </div>
+                    <div class="alert alert-danger description-length" role="alert">
+                        <f:translate key="tx_minshapeseo_label.preview.alert.description_length"/>
+                    </div>
+                    <div class="alert alert-danger focus-keyword missing-title" role="alert">
+                        <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_missing_title"/>
+                    </div>
+                    <div class="alert alert-danger focus-keyword missing-description" role="alert">
+                        <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_missing_description"/>
+                    </div>
+                    <div class="alert alert-danger focus-keyword missing-url" role="alert">
+                        <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_missing_url"/>
+                    </div>
+                    <div class="alert alert-success focus-keyword found-title" role="alert">
+                        <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_found_title"/>
+                    </div>
+                    <div class="alert alert-success focus-keyword found-description" role="alert">
+                        <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_found_description"/>
+                    </div>
+                    <div class="alert alert-success focus-keyword found-url" role="alert">
+                        <f:translate key="tx_minshapeseo_label.preview.alert.focus_keyword_found_url"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </f:section>
 
 </html>

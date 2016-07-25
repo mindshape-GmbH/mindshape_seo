@@ -82,13 +82,14 @@ class DomainService implements SingletonInterface
     }
 
     /**
-     * @return null|\Mindshape\MindshapeSeo\Domain\Model\Configuration
+     * @param int $pageUid
+     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
      */
-    public function getPageDomainConfiguration()
+    public function getPageDomainConfiguration($pageUid = null)
     {
         $configuration = null;
 
-        foreach ($this->pageService->getRootline() as $parentPage) {
+        foreach ($this->pageService->getRootline($pageUid) as $parentPage) {
             $result = $this->databaseConnection->exec_SELECTgetSingleRow(
                 '*',
                 'sys_domain',

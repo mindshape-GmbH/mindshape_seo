@@ -16,11 +16,11 @@ $columns = array(
     ),
     'mindshapeseo_focus_keyword' => array(
         'exclude' => 0,
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_focus_keyword',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.google_search_preview',
         'config' => array(
-            'type' => 'input',
+            'type' => 'user',
             'size' => 30,
-            'eval' => 'trim',
+            'userFunc' => \Mindshape\MindshapeSeo\Userfuncs\Tca\GooglePreviewField::class . '->render',
         ),
     ),
     'mindshapeseo_ogtitle' => array(
@@ -186,6 +186,10 @@ $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_general_pallette'] = array(
     'showitem' => 'mindshapeseo_disable_title_attachment',
 );
 
+$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_google_preview_pallette'] = array(
+    'showitem' => 'mindshapeseo_google_preview',
+);
+
 $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_sitemap_pallette'] = array(
     'showitem' => 'mindshapeseo_priority, --linebreak--,
                    mindshapeseo_change_frequency, --linebreak--,
@@ -232,6 +236,7 @@ unset(
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
     '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.seo,
+    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:label.general;mindshape_seo_google_preview_pallette,
     --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:label.general;mindshape_seo_general_pallette,
     --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata;mindshape_seo_meta_pallette, 
     --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.editorial;mindshape_seo_editorial_pallette, 

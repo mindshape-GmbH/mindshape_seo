@@ -88,113 +88,113 @@ $googleDescriptionGrey: #545454;
 
   .icon-provider-fontawesome-check i {color: green;}
   .icon-provider-fontawesome-error i {color: red;}
+}
 
-  .google-preview {
-    .thumbnail {
-      width: 620px;
+.google-preview {
+  .thumbnail {
+    width: 620px;
+    margin: 0;
+    padding: 10px 10px;
+
+    hr {
+      background-color: rgba(#000, 0.12);
+      margin: 10px 0;
+    }
+  }
+
+  .preview-box {
+    font-family: arial, sans-serif;
+    max-height: 74px;
+    width: 600px;
+
+    h3 {
+      font-size: 18px;
+      line-height: 1.2;
       margin: 0;
-      padding: 10px 10px;
-
-      hr {
-        background-color: rgba(#000, 0.12);
-        margin: 10px 0;
-      }
-    }
-
-    .preview-box {
-      font-family: arial, sans-serif;
-      max-height: 74px;
+      display: block;
+      overflow: hidden;
       width: 600px;
+      color: #1e0fbe;
+      font-weight: normal;
+      white-space: nowrap;
+      text-decoration: none;
+      text-overflow: ellipsis;
 
-      h3 {
-        font-size: 18px;
-        line-height: 1.2;
-        margin: 0;
-        display: block;
-        overflow: hidden;
-        width: 600px;
-        color: #1e0fbe;
-        font-weight: normal;
-        white-space: nowrap;
-        text-decoration: none;
-        text-overflow: ellipsis;
-
-        a {
-          color: $googleLinkBlue;
-        }
+      a {
+        color: $googleLinkBlue;
       }
+    }
 
-      .url,
-      .description {
-        line-height: 1.4;
-      }
+    .url,
+    .description {
+      line-height: 1.4;
+    }
 
-      .url {
-        display: block;
-        font-size: 14px;
+    .url {
+      display: block;
+      font-size: 14px;
+      font-style: normal;
+      line-height: 16px;
+
+      cite {
+        color: $googleUrlGreen;
         font-style: normal;
-        line-height: 16px;
-
-        cite {
-          color: $googleUrlGreen;
-          font-style: normal;
-        }
-      }
-
-      .description {
-        height: 34px;
-        font-size: 13px;
-        overflow-y: hidden;
-        color: $googleDescriptionGrey;
-
-        &:empty {display: none;}
-      }
-
-      .focus-keyword {
-        font-weight: bold;
       }
     }
 
-    .edit-panel {
+    .description {
+      height: 34px;
+      font-size: 13px;
+      overflow-y: hidden;
+      color: $googleDescriptionGrey;
+
+      &:empty {display: none;}
+    }
+
+    .focus-keyword {
+      font-weight: bold;
+    }
+  }
+
+  .edit-panel {
+    display: none;
+
+    .progress {
+      margin: 10px 0;
+      height: 10px;
+    }
+
+    .title-container,
+    .description-container {margin-bottom: 10px;}
+
+    textarea.description {
+      resize: none;
+      height: 65px;
+    }
+  }
+
+  .form-group.focus-keyword {margin-bottom: 0;}
+
+  button {
+    &.save {
       display: none;
-
-      .progress {
-        margin: 10px 0;
-        height: 10px;
-      }
-
-      .title-container,
-      .description-container {margin-bottom: 10px;}
-
-      textarea.description {
-        resize: none;
-        height: 65px;
-      }
     }
-
-    .form-group.focus-keyword {margin-bottom: 0;}
-
-    button {
-      &.save {
-        display: none;
-      }
-      &.abort {
-        display: none;
-      }
-    }
-
-    .alerts-container {
+    &.abort {
       display: none;
+    }
+  }
 
-      .well {
-        margin: 10px 0 0;
-        padding-top: 0;
-      }
+  .alerts-container {
+    display: none;
 
-      .alert {
-        display: none;
-        margin: 9px 0 0;
-      }
+    .well {
+      margin: 10px 0 0;
+      padding-top: 0;
+    }
+
+    .alert {
+      display: none;
+      margin: 9px 0 0;
     }
   }
 }

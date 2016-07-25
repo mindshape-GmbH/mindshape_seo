@@ -5,6 +5,7 @@
     googleDescriptionLength: 180,
     $previewContainers: {},
     $robotForms: {},
+    editing: true,
     init: function () {
       var that = this;
 
@@ -15,6 +16,7 @@
 
       // Initial description rendering (kills whitespace etc.)
       this.$previewContainers.each(function () {
+        that.editing = 0 < parseInt($(this).attr('data-editing'));
         that.renderPreviewDescription($(this));
         that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLength);
         that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLength);
@@ -99,8 +101,11 @@
 
         $currentPreview.find('.preview-box .title').html($(this).val());
         that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLength);
-        that.checkPreviewEditPanelSaveState($currentPreview);
         that.updatePreviewAlerts($currentPreview);
+
+        if (that.editing) {
+          that.checkPreviewEditPanelSaveState($currentPreview);
+        }
       });
 
       // Change preview description when editing description
@@ -110,8 +115,11 @@
         $currentPreview.find('.preview-box .description').html($(this).val());
         that.renderPreviewDescription($currentPreview);
         that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
-        that.checkPreviewEditPanelSaveState($currentPreview);
         that.updatePreviewAlerts($currentPreview);
+
+        if (that.editing) {
+          that.checkPreviewEditPanelSaveState($currentPreview);
+        }
       });
 
       // Update focus keyword check
@@ -121,7 +129,10 @@
 
         that.checkFocusKeyword($currentPreview, focusKeyword);
         that.updatePreviewAlerts($currentPreview);
-        that.checkPreviewEditPanelSaveState($currentPreview);
+
+        if (that.editing) {
+          that.checkPreviewEditPanelSaveState($currentPreview);
+        }
       });
 
       // Re-render description on change
@@ -223,6 +234,8 @@
     },
     savePreviewEditPanel: function ($previewContainer) {
       var that = this;
+
+      if (!this.editing) { return; }
 
       $.ajax({
         type: "POST",
