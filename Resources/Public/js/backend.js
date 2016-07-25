@@ -271,14 +271,18 @@
       var title = $previewContainer.find('.preview-box .title').text();
       var descriptionEdit = $previewContainer.find('.edit-panel .description').text();
       var descriptionPreview = $previewContainer.find('.preview-box .description').text();
-      var regex = new RegExp('(^|\\s)(' + fokusKeyword.trim() + ')(\\s|$)', 'igm');
+      var url = $previewContainer.find('.preview-box .url').text();
+      var regex = new RegExp('(^|\\.|\\s)(' + fokusKeyword.trim() + ')(\\s|\\.|$)', 'igm');
       var titleMatches = title.match(regex);
       var descriptionMatches = descriptionEdit.match(regex);
+      var urlMatches = url.match(regex);
 
       this.renderPreviewDescription($previewContainer);
       this.clearPreviewTitle($previewContainer);
 
-      if (null !== titleMatches) {
+      if (null === titleMatches) {
+        $previewContainer.attr('data-keyword-title-matches', 0);
+      } else {
         $previewContainer.find('.preview-box .title').html(
           title.replace(regex, function (match) {
             return ' <span class="focus-keyword">' + match.trim() + '</span> ';
@@ -286,11 +290,11 @@
         );
 
         $previewContainer.attr('data-keyword-title-matches', titleMatches.length);
-      } else {
-        $previewContainer.attr('data-keyword-title-matches', 0);
       }
 
-      if (null !== descriptionMatches) {
+      if (null === descriptionMatches) {
+        $previewContainer.attr('data-keyword-description-matches', 0);
+      } else {
         $previewContainer.find('.preview-box .description').html(
           descriptionPreview.replace(regex, function (match) {
             return ' <span class="focus-keyword">' + match.trim() + '</span> ';
@@ -298,8 +302,18 @@
         );
 
         $previewContainer.attr('data-keyword-description-matches', descriptionMatches.length);
+      }
+
+      if (null === urlMatches) {
+        $previewContainer.attr('data-keyword-url-matches', 0);
       } else {
-        $previewContainer.attr('data-keyword-description-matches', 0);
+        $previewContainer.find('.preview-box .url cite').html(
+          url.replace(regex, function (match) {
+            return '<span class="focus-keyword">' + match.trim() + '</span>';
+          })
+        );
+
+        $previewContainer.attr('data-keyword-url-matches', urlMatches.length);
       }
     },
     clearPreviewTitle: function ($previewContainer) {
@@ -344,6 +358,14 @@
         } else {
           $alertsContainer.find('.focus-keyword.missing-description').show();
           $alertsContainer.find('.focus-keyword.found-description').hide();
+        }
+
+        if (0 < parseInt($previewContainer.attr('data-keyword-url-matches'))) {
+          $alertsContainer.find('.focus-keyword.missing-url').hide();
+          $alertsContainer.find('.focus-keyword.found-url').show();
+        } else {
+          $alertsContainer.find('.focus-keyword.missing-url').show();
+          $alertsContainer.find('.focus-keyword.found-url').hide();
         }
       }
 
