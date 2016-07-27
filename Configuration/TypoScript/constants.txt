@@ -13,3 +13,6 @@ plugin.tx_mindshape_seo {
         titleAttachmentSeperator = |
     }
 }
+
+# cat=module.tx_mindshape_seo/settings; type=string; label=Sitemap.xml page typeNum
+sitemap.typeNum = 10000

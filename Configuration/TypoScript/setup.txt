@@ -18,7 +18,7 @@ module.tx_mindshape_seo < plugin.tx_mindshape_seo
 # and robot.txt add "Sitemap: /index.php?type=10000"
 sitemap = PAGE
 sitemap {
-    typeNum = 10000
+    typeNum = {$sitemap.typeNum}
     config {
         disableAllHeaderCode = 1
         xhtml_cleaning = 0
