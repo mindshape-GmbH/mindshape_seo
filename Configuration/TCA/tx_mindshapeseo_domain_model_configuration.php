@@ -9,6 +9,7 @@ return array(
         'dividers2tabs' => true,
         'versioningWS' => 2,
         'versioning_followPages' => true,
+        'hideTable' => true,
 
         'delete' => 'deleted',
         'enablecolumns' => array(),
