@@ -116,8 +116,8 @@
             <trans-unit id="tx_minshapeseo_label.preview.page">
                 <source>Page</source>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.button.seo_stats">
-                <source>SEO stats</source>
+            <trans-unit id="tx_minshapeseo_label.preview.button.seo_check">
+                <source>SEO check</source>
             </trans-unit>
             <trans-unit id="tx_minshapeseo_label.preview.button.edit">
                 <source>Edit</source>

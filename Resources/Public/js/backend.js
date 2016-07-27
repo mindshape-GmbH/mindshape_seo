@@ -16,10 +16,13 @@
       this.$previewContainers.each(function () {
         that.editing = 0 < parseInt($(this).attr('data-editing'));
         that.renderPreviewDescription($(this));
-        that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLength);
-        that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLength);
         that.checkFocusKeyword($(this), $(this).find('.focus-keyword input').val());
         that.updatePreviewAlerts($(this));
+
+        if (this.editing) {
+          that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLength);
+          that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLength);
+        }
       });
 
       this.registerEvents();
@@ -148,7 +151,33 @@
       // Save robots data on un-/check
       this.$robotForms.on('change', 'input', function () {
         that.saveRobotsData($(this).parents('.robots-form'), $(this));
-      })
+      });
+
+      if (!this.editing) {
+        var $tcaForm = $('form');
+        var $currentPreview = $('.google-preview');
+        var currentPageUid = $currentPreview.find('input[name="pageUid"]').val();
+        var fokusKeyword = $currentPreview.find('.focus-keyword input').val().trim();
+
+        $tcaForm.find('input[data-formengine-input-name="data[pages][' + currentPageUid + '][title]"]').on('keyup', function () {
+          $currentPreview.find('.preview-box .title').html($(this).val());
+          that.updatePreviewAlerts($currentPreview);
+
+          if (0 < fokusKeyword.length) {
+            that.checkFocusKeyword($currentPreview, fokusKeyword);
+          }
+        });
+
+        $tcaForm.find('textarea[name="data[pages][' + currentPageUid + '][description]"]').on('keyup', function () {
+          $currentPreview.find('.preview-box .description').html($(this).val());
+          that.renderPreviewDescription($currentPreview);
+          that.updatePreviewAlerts($currentPreview);
+
+          if (0 < fokusKeyword.length) {
+            that.checkFocusKeyword($currentPreview, fokusKeyword);
+          }
+        });
+      }
     },
     restorePreviewOriginalData: function ($previewContainer) {
       $previewContainer.find('.preview-box .title').html($previewContainer.attr('data-original-title'));
@@ -297,12 +326,11 @@
       }
 
       var title = $previewContainer.find('.preview-box .title').text();
-      var descriptionEdit = $previewContainer.find('.edit-panel .description').text();
-      var descriptionPreview = $previewContainer.find('.preview-box .description').text();
+      var description = $previewContainer.find('.preview-box .description').text();
       var url = $previewContainer.find('.preview-box .url').text();
       var regex = new RegExp('(^|\\.|\\s)(' + fokusKeyword.trim() + ')(\\s|\\.|$)', 'igm');
       var titleMatches = title.match(regex);
-      var descriptionMatches = descriptionEdit.match(regex);
+      var descriptionMatches = description.match(regex);
       var urlMatches = url.match(regex);
 
       if (null === titleMatches) {
@@ -319,7 +347,7 @@
         $previewContainer.attr('data-keyword-description-matches', 0);
       } else {
         $previewContainer.find('.preview-box .description').html(
-          descriptionPreview.replace(regex, '$1<span class="focus-keyword">$2</span>$3')
+          description.replace(regex, '$1<span class="focus-keyword">$2</span>$3')
         );
 
         $previewContainer.attr('data-keyword-description-matches', descriptionMatches.length);
@@ -337,7 +365,7 @@
     },
     clearPreviewTitle: function ($previewContainer) {
       $previewContainer.find('.preview-box .title').html(
-        $previewContainer.find('.edit-panel .title').val().trim()
+        $previewContainer.find('.preview-box .title').text().trim()
       );
     },
     clearUrlTitle: function ($previewContainer) {

@@ -96,7 +96,6 @@ class GooglePreviewField
 
         return $this->standaloneTemplateRendererService->render('TCA', 'GooglePreview', array(
             'metadata' => $metadata,
-            'editing' => false,
             'tcaName' => $params['itemFormElName'],
         ));
     }
