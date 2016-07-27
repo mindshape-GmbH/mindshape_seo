@@ -12,8 +12,6 @@
       this.$previewContainers = $('.google-preview');
       this.$robotForms = $('.robots-form');
 
-      this.registerEvents();
-
       // Initial description rendering (kills whitespace etc.)
       this.$previewContainers.each(function () {
         that.editing = 0 < parseInt($(this).attr('data-editing'));
@@ -23,6 +21,8 @@
         that.checkFocusKeyword($(this), $(this).find('.focus-keyword input').val());
         that.updatePreviewAlerts($(this));
       });
+
+      this.registerEvents();
     },
     registerEvents: function () {
       var that = this;
@@ -111,11 +111,16 @@
       // Change preview description when editing description
       this.$previewContainers.on('keyup', '.edit-panel .description', function () {
         var $currentPreview = $(this).parents('.google-preview');
+        var fokusKeyword = $currentPreview.find('.focus-keyword input').val().trim();
 
         $currentPreview.find('.preview-box .description').html($(this).val());
         that.renderPreviewDescription($currentPreview);
         that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
         that.updatePreviewAlerts($currentPreview);
+
+        if (0 < fokusKeyword.length) {
+          that.checkFocusKeyword($currentPreview, fokusKeyword);
+        }
 
         if (that.editing) {
           that.checkPreviewEditPanelSaveState($currentPreview);
@@ -202,7 +207,7 @@
 
       if (percent >= 100) {
         progressbarStatusClass += 'danger';
-      } else if(percent >= 70) {
+      } else if (percent >= 70) {
         progressbarStatusClass += 'warning';
       } else {
         progressbarStatusClass += 'success';
@@ -221,7 +226,7 @@
       $previewContainer.find('button.save, button.abort').fadeOut(function () {
         $previewContainer.find('button.edit').fadeIn(function () {
           if (typeof callback === 'function')
-          callback();
+            callback();
         });
       });
     },
@@ -235,7 +240,9 @@
     savePreviewEditPanel: function ($previewContainer) {
       var that = this;
 
-      if (!this.editing) { return; }
+      if (!this.editing) {
+        return;
+      }
 
       $.ajax({
         type: "POST",
@@ -285,7 +292,9 @@
       this.clearPreviewTitle($previewContainer);
       this.clearUrlTitle($previewContainer);
 
-      if ('' === fokusKeyword.trim()) { return; }
+      if ('' === fokusKeyword.trim()) {
+        return;
+      }
 
       var title = $previewContainer.find('.preview-box .title').text();
       var descriptionEdit = $previewContainer.find('.edit-panel .description').text();
@@ -339,19 +348,16 @@
     updatePreviewAlerts: function ($previewContainer) {
       var titleLength = $previewContainer.find('.preview-box .title').text().length + $previewContainer.find('.preview-box .attachment').text().length;
       var description = $previewContainer.find('.preview-box .description').text();
-      var alertsCount = 0;
       var $alertsContainer = $previewContainer.find('.alerts-container');
 
       if (titleLength > this.googleTitleLength) {
         $alertsContainer.find('.title-length').show();
-        alertsCount++;
       } else {
         $alertsContainer.find('.title-length').hide();
       }
 
       if (description.length > this.googleDescriptionLength) {
         $alertsContainer.find('.description-length').show();
-        alertsCount++;
       } else {
         $alertsContainer.find('.description-length').hide();
       }
@@ -384,12 +390,13 @@
         }
       }
 
-      if (0 < $previewContainer.find('.alerts-container .alert-danger:not(:hidden)').length || 0 < alertsCount) {
+      if (0 < $previewContainer.find('.alerts-container .alert-danger').filter(function () { return $(this).css('display') !== 'none'; }).length) {
         $previewContainer.find('.buttons .alerts').prop('disabled', false);
         $previewContainer.find('.buttons .alerts')
           .removeClass('btn-success')
           .addClass('btn-danger');
       } else {
+        $previewContainer.find('.alerts-container').hide();
         $previewContainer.find('.buttons .alerts').prop('disabled', true);
         $previewContainer.find('.buttons .alerts')
           .removeClass('btn-danger')
