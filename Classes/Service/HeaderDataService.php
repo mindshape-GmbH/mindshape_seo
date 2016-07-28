@@ -142,8 +142,10 @@ class HeaderDataService
 
                 $this->currentPageMetaData['facebook']['image'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
             }
-        } elseif (null !== $this->domainConfiguration->getFacebookDefaultImage()) {
-            $this->currentPageMetaData['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage()->getOriginalResource()->getPublicUrl();
+        } elseif ($this->domainConfiguration instanceof Configuration) {
+            if (null !== $this->domainConfiguration->getFacebookDefaultImage()) {
+                $this->currentPageMetaData['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage()->getOriginalResource()->getPublicUrl();
+            }
         }
     }
 
@@ -152,7 +154,6 @@ class HeaderDataService
      */
     public function manipulateHeaderData()
     {
-        $this->attachTitleAttachment();
         $this->addMetaData();
         $this->addFacebookData();
 
@@ -161,6 +162,8 @@ class HeaderDataService
         }
 
         if ($this->domainConfiguration instanceof Configuration) {
+            $this->attachTitleAttachment();
+
             if ($this->domainConfiguration->getAddHreflang()) {
                 $this->addHreflang();
             }

@@ -16,7 +16,6 @@ $columns = array(
     ),
     'mindshapeseo_focus_keyword' => array(
         'exclude' => 0,
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.google_search_preview',
         'config' => array(
             'type' => 'user',
             'size' => 30,

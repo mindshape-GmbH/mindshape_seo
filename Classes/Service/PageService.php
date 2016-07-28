@@ -76,6 +76,11 @@ class PageService implements SingletonInterface
     protected $titleAttachmentSeperator = '|';
 
     /**
+     * @var bool
+     */
+    protected $hasFrontendController = true;
+
+    /**
      * @return PageService
      * @throws \Mindshape\MindshapeSeo\Service\Exception
      */
@@ -96,23 +101,27 @@ class PageService implements SingletonInterface
                 $GLOBALS['TT']->start();
             }
 
-            $GLOBALS['TSFE'] = $objectManager->get(
-                TypoScriptFrontendController::class,
-                $GLOBALS['TYPO3_CONF_VARS'],
-                GeneralUtility::_GET('id'),
-                GeneralUtility::_GET('type')
-            );
-
-            $GLOBALS['TSFE']->connectToDB();
-            $GLOBALS['TSFE']->initFEuser();
-            $GLOBALS['TSFE']->determineId();
-            $GLOBALS['TSFE']->initTemplate();
-            $GLOBALS['TSFE']->getConfigArray();
-
-            if (ExtensionManagementUtility::isLoaded('realurl')) {
-                $_SERVER['HTTP_HOST'] = BackendUtility::firstDomainRecord(
-                    BackendUtility::BEgetRootLine(GeneralUtility::_GET('id'))
+            try {
+                $GLOBALS['TSFE'] = $objectManager->get(
+                    TypoScriptFrontendController::class,
+                    $GLOBALS['TYPO3_CONF_VARS'],
+                    GeneralUtility::_GET('id'),
+                    GeneralUtility::_GET('type')
                 );
+
+                $GLOBALS['TSFE']->connectToDB();
+                $GLOBALS['TSFE']->initFEuser();
+                $GLOBALS['TSFE']->determineId();
+                $GLOBALS['TSFE']->initTemplate();
+                $GLOBALS['TSFE']->getConfigArray();
+
+                if (ExtensionManagementUtility::isLoaded('realurl')) {
+                    $_SERVER['HTTP_HOST'] = BackendUtility::firstDomainRecord(
+                        BackendUtility::BEgetRootLine(GeneralUtility::_GET('id'))
+                    );
+                }
+            } catch (\Exception $exception) {
+                $this->hasFrontendController = false;
             }
         } elseif ('FE' !== TYPO3_MODE) {
             throw new Exception('Illegal TYPO3_MODE');
@@ -124,6 +133,14 @@ class PageService implements SingletonInterface
 
         $this->uriBuilder = $objectManager->get(UriBuilder::class);
         $this->uriBuilder->injectConfigurationManager($configurationManager);
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFrontendController()
+    {
+        return $this->hasFrontendController;
     }
 
     /**
@@ -348,7 +365,7 @@ class PageService implements SingletonInterface
      * @param bool $useGoogleBreadcrumb
      * @return array
      */
-    public function getPageMetadataTree($pageUid, $depth = self::TREE_DEPTH_DEFAULT, $sysLanguageUid = 0, $titleAttachment = '', $customUrl = '', $useGoogleBreadcrumb)
+    public function getPageMetadataTree($pageUid, $depth = self::TREE_DEPTH_DEFAULT, $sysLanguageUid = 0, $titleAttachment = '', $customUrl = '', $useGoogleBreadcrumb = false)
     {
         $page = $this->getPage($pageUid);
 

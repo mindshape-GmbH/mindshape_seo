@@ -35,7 +35,9 @@
             <h3>
                 <a href="{url}" target="_blank">
                     <span class="title">{title}</span>
-                    <span class="attachment">{titleAttachmentSeperator}&nbsp;{titleAttachment}</span>
+                    <f:if condition="{titleAttachment}">
+                        <span class="attachment">{titleAttachmentSeperator}&nbsp;{titleAttachment}</span>
+                    </f:if>
                 </a>
             </h3>
             <div class="url">

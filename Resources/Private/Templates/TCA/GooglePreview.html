@@ -2,17 +2,37 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers">
 
-    <f:render partial="GoogleSearchPreview" section="Main" arguments="{
-        titleAttachment: metadata.titleAttachment,
-        titleAttachmentSeperator: metadata.titleAttachmentSeperator,
-        title: metadata.title,
-        url: metadata.url,
-        previewUrl: metadata.previewUrl,
-        description: metadata.meta.description
-        focusKeyword: metadata.meta.focusKeyword
-        pageUid: metadata.uid
-        editing: 0
-        focusKeywordFieldName: tcaName
-    }"/>
+    <f:if condition="{metadata}">
+        <f:then>
+            <label>
+                <f:translate key="tx_minshapeseo_label.google_search_preview"/>
+            </label>
+
+            <f:render partial="GoogleSearchPreview" section="Main" arguments="{
+                titleAttachment: metadata.titleAttachment,
+                titleAttachmentSeperator: metadata.titleAttachmentSeperator,
+                title: metadata.title,
+                url: metadata.url,
+                previewUrl: metadata.previewUrl,
+                description: metadata.meta.description
+                focusKeyword: metadata.meta.focusKeyword
+                pageUid: metadata.uid
+                editing: 0
+                focusKeywordFieldName: tcaName
+            }"/>
+        </f:then>
+        <f:else>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <label>
+                            <f:translate key="tx_minshapeseo_label.preview.focus_keyword"/>
+                        </label>
+                        <f:form.textfield name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+        </f:else>
+    </f:if>
 
 </html>

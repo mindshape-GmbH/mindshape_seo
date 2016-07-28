@@ -8,14 +8,12 @@
     <f:section name="Main">
 
         <h1>
-            <f:translate key="tx_minshapeseo_label.seo_settings_for"/>
             <f:if condition="{currentDomain} == '*'">
                 <f:then>
-                    <b>
-                        <f:translate key="tx_minshapeseo_label.default_settings"/>
-                    </b>
+                    <f:translate key="tx_minshapeseo_label.seo_settings"/>
                 </f:then>
                 <f:else>
+                    <f:translate key="tx_minshapeseo_label.seo_settings_for"/>
                     <b>{currentDomain}</b>
                 </f:else>
             </f:if>

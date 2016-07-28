@@ -299,11 +299,14 @@ class BackendController extends ActionController
      */
     public function previewAction($depth = null, $sysLanguageUid = null)
     {
+        $currentPage = $this->pageService->getCurrentPage();
+
         if (
             0 === $this->currentPageUid ||
+            (bool) $currentPage['hidden'] ||
             (
-                1 !== (int) $GLOBALS['TSFE']->page['doktype'] &&
-                4 !== (int) $GLOBALS['TSFE']->page['doktype']
+                1 !== (int) $currentPage['doktype'] &&
+                4 !== (int) $currentPage['doktype']
             )
         ) {
             $this->view->assign('noPageSelected', true);
