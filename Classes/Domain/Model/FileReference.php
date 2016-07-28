@@ -25,6 +25,8 @@ namespace Mindshape\MindshapeSeo\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Resource\ResourceInterface;
+
 /**
  * @package mindshape_seo
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
@@ -37,9 +39,9 @@ class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
     protected $originalFileIdentifier;
 
     /**
-     * @param \TYPO3\CMS\Core\Resource\FileReference $originalResource
+     * @param \TYPO3\CMS\Core\Resource\ResourceInterface $originalResource
      */
-    public function setOriginalResource(\TYPO3\CMS\Core\Resource\FileReference $originalResource)
+    public function setOriginalResource(ResourceInterface $originalResource)
     {
         $this->originalResource = $originalResource;
         $this->originalFileIdentifier = (int) $originalResource->getOriginalFile()->getUid();
