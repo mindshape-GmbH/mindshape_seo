@@ -260,8 +260,8 @@ class BackendController extends ActionController
             'currentDomain' => $domain,
             'configuration' => $configuration,
             'jsonldTypeOptions' => array(
-                Configuration::JSONLD_TYPE_ORGANIZATION => LocalizationUtility::translate('tx_minshapeseo_configuration.jsonld.type.organization', 'mindshape_seo'),
-                Configuration::JSONLD_TYPE_PERSON => LocalizationUtility::translate('tx_minshapeseo_configuration.jsonld.type.person', 'mindshape_seo'),
+                Configuration::JSONLD_TYPE_ORGANIZATION => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.organization', 'mindshape_seo'),
+                Configuration::JSONLD_TYPE_PERSON => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.person', 'mindshape_seo'),
             ),
         ));
     }
