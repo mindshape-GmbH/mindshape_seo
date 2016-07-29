@@ -141,6 +141,12 @@
             <trans-unit id="tx_minshapeseo_label.preview.alert.description_length">
                 <source>The page description is too long</source>
             </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.preview.alert.description_min_length">
+                <source>The page description is too short</source>
+            </trans-unit>
+            <trans-unit id="tx_minshapeseo_label.preview.alert.description_empty">
+                <source>The page description is empty</source>
+            </trans-unit>
             <trans-unit id="tx_minshapeseo_label.preview.alert.focus_keyword_missing_title">
                 <source>Focus keyword could not be found in the title</source>
             </trans-unit>

@@ -3,6 +3,7 @@
   MSH = {
     googleTitleLength: 50,
     googleDescriptionLength: 180,
+    googleDescriptionMinLength: 20,
     $previewContainers: {},
     $robotForms: {},
     editing: true,
@@ -19,7 +20,7 @@
         that.checkFocusKeyword($(this), $(this).find('.focus-keyword input').val());
         that.updatePreviewAlerts($(this));
 
-        if (this.editing) {
+        if (that.editing) {
           that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLength);
           that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLength);
         }
@@ -388,6 +389,19 @@
         $alertsContainer.find('.description-length').show();
       } else {
         $alertsContainer.find('.description-length').hide();
+      }
+
+      if (description.length === 0) {
+        $alertsContainer.find('.description-empty').show();
+        $alertsContainer.find('.description-min-length').hide();
+      } else {
+        $alertsContainer.find('.description-empty').hide();
+
+        if (description.length < this.googleDescriptionMinLength) {
+          $alertsContainer.find('.description-min-length').show();
+        } else {
+          $alertsContainer.find('.description-min-length').hide();
+        }
       }
 
       if (0 === $previewContainer.find('.focus-keyword input').val().trim().length) {
