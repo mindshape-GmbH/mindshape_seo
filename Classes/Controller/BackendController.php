@@ -244,7 +244,7 @@ class BackendController extends ActionController
     {
         $domains = $this->domainService->getAvailableDomains();
 
-        if (1 === count($domains)) {
+        if (0 < count($domains)) {
             $domain = $domains[0];
         }
 
