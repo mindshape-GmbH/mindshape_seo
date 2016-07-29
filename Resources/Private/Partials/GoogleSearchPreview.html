@@ -6,7 +6,6 @@
     <f:section name="Main">
 
         <div class="google-preview" data-editing="{f:if(condition: editing: then: 1, else: 0)}" data-original-title="{title}" data-original-description="{description}" data-original-focuskeyword="{focusKeyword}">
-            <f:form.hidden name="pageUid" value="{pageUid}"/>
             <div class="thumbnail">
                 <f:if condition="{editing}">
                     <f:then>
@@ -31,6 +30,7 @@
 
     <f:section name="PreviewAndFields">
 
+        <f:form.hidden name="pageUid" value="{pageUid}"/>
         <div class="preview-box">
             <h3>
                 <a href="{url}" target="_blank">
