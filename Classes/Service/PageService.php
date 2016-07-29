@@ -372,16 +372,16 @@ class PageService implements SingletonInterface
         /** @var PageTreeView $tree */
         $tree = GeneralUtility::makeInstance(PageTreeView::class);
         $tree->init();
-        $tree->table = 'pages p LEFT JOIN pages_language_overlay o ON p.uid = o.pid';
-        $tree->clause = ' AND p.deleted = 0 AND (p.doktype = 1 OR p.doktype = 4) AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
+        $tree->table = 'pages LEFT JOIN pages_language_overlay ON pages.uid = pages_language_overlay.pid';
+        $tree->clause = ' AND pages.deleted = 0 AND (pages.doktype = 1 OR pages.doktype = 4) AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
 
         if (0 < $sysLanguageUid) {
-            $tree->clause .= ' AND o.sys_language_uid = ' . $sysLanguageUid;
+            $tree->clause .= ' AND pages_language_overlay.sys_language_uid = ' . $sysLanguageUid;
         }
 
-        $tree->parentField = 'p.pid';
-        $tree->fieldArray = array('p.*');
-        $tree->orderByFields = 'p.sorting';
+        $tree->parentField = 'pages.pid';
+        $tree->fieldArray = array('pages.*');
+        $tree->orderByFields = 'pages.sorting';
 
         /** @var IconFactory $iconFactory */
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
