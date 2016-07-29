@@ -159,12 +159,20 @@ class BackendController extends ActionController
 
         $arguments = $this->request->getArguments();
 
+        if (array_key_exists('domain', $arguments)) {
+            $currentDomain = $arguments['domain'];
+        } else {
+            $currentDomain = $this->sessionService->hasKey('domain') ?
+                $this->sessionService->getKey('domain') :
+                Configuration::DEFAULT_DOMAIN;
+        }
+
         foreach ($domains as $domain) {
             $menu->addMenuItem(
                 $menu->makeMenuItem()
                     ->setTitle($domain)
                     ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => $domain), 'Backend'))
-                    ->setActive($arguments['domain'] === $domain)
+                    ->setActive($currentDomain === $domain)
             );
         }
 
@@ -240,17 +248,25 @@ class BackendController extends ActionController
      * @param string $domain
      * @return void
      */
-    public function settingsAction($domain = Configuration::DEFAULT_DOMAIN)
+    public function settingsAction($domain = null)
     {
+        if (null === $domain) {
+            $domain = $this->sessionService->hasKey('domain') ?
+                $this->sessionService->getKey('domain') :
+                Configuration::DEFAULT_DOMAIN;
+        } else {
+            $this->sessionService->setKey('domain', $domain);
+        }
+
         $domains = $this->domainService->getAvailableDomains();
 
-        if (0 < count($domains)) {
+        if (0 < count($domains) && $domain === Configuration::DEFAULT_DOMAIN) {
             $domain = $domains[0];
         }
 
         $configuration = $this->configurationRepository->findByDomain($domain);
 
-        if (null === $configuration) {
+        if (!$configuration instanceof Configuration) {
             $configuration = new Configuration();
             $configuration->setDomain($domain);
         }
