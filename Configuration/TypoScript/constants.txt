@@ -1,18 +1,20 @@
 plugin.tx_mindshape_seo {
     view {
-        # cat=module.tx_mindshape_seo/file; type=string; label=Path to template root (BE)
+        # cat=mindshape_seo/file; type=string; label=Path to template root (BE)
         templateRootPath = EXT:mindshape_seo/Resources/Private/Templates/
-        # cat=module.tx_mindshape_seo/file; type=string; label=Path to template partials (BE)
+        # cat=mindshape_seo/file; type=string; label=Path to template partials (BE)
         partialRootPath = EXT:mindshape_seo/Resources/Private/Partials/
-        # cat=module.tx_mindshape_seo/file; type=string; label=Path to template layouts (BE)
+        # cat=mindshape_seo/file; type=string; label=Path to template layouts (BE)
         layoutRootPath = EXT:mindshape_seo/Resources/Private/Layouts/
     }
 
     settings {
-        # cat=module.tx_mindshape_seo/settings; type=string; label=Seperator for title attachment
+        # cat=mindshape_seo/settings; type=string; label=Seperator for title attachment
         titleAttachmentSeperator = |
+        # cat=mindshape_seo/settings; type=boolean; label=Use a pagination in previews pagetree
+        pageTree.usePagination = 0
     }
 }
 
-# cat=module.tx_mindshape_seo/settings; type=string; label=Sitemap.xml page typeNum
+# cat=mindshape_seo/settings; type=string; label=Sitemap.xml page typeNum
 sitemap.typeNum = 10000

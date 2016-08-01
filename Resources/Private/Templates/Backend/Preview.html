@@ -12,7 +12,9 @@
                 <f:translate key="tx_minshapeseo_label.preview.no_page_selected"/>
             </f:then>
             <f:else>
-                <f:render section="Preview" arguments="{_all}"/>
+                <div class="mindshapeseo-preview">
+                    <f:render section="Preview" arguments="{_all}"/>
+                </div>
             </f:else>
         </f:if>
 
@@ -38,7 +40,22 @@
             </div>
         </div>
 
-        <table class="table mindshapeseo-preview">
+        <f:if condition="{settings.pageTree.usePagination}">
+            <f:then>
+                <f:widget.paginate objects="{pageTree}" as="paginatedPages" configuration="{insertAbove: 1, insertBelow: 0}">
+                    <f:render section="PageTreeTable" arguments="{pageTree: paginatedPages}"/>
+                </f:widget.paginate>
+            </f:then>
+            <f:else>
+                <f:render section="PageTreeTable" arguments="{pageTree: pageTree}"/>
+            </f:else>
+        </f:if>
+
+    </f:section>
+
+    <f:section name="PageTreeTable">
+
+        <table class="table">
             <thead>
                 <tr>
                     <th>

@@ -67,7 +67,7 @@
             </div>
         </f:if>
         <div class="row">
-            <div class="buttons col-sm-4">
+            <div class="buttons col-sm-5">
                 <button class="alerts btn btn-success" disabled="disabled">
                     <f:translate key="tx_minshapeseo_label.preview.button.seo_check"/>
                 </button>
@@ -85,7 +85,7 @@
                     </button>
                 </f:if>
             </div>
-            <div class="col-sm-8">
+            <div class="col-sm-7">
                 <div class="form-group focus-keyword">
                     <f:form.textfield name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" placeholder="{f:translate(key: 'tx_minshapeseo_label.preview.focus_keyword')}" class="form-control"/>
                 </div>

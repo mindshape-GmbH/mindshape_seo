@@ -3,10 +3,13 @@ plugin.tx_mindshape_seo {
         templateRootPaths.0 = {$plugin.tx_mindshape_seo.view.templateRootPath}
         partialRootPaths.0 = {$plugin.tx_mindshape_seo.view.partialRootPath}
         layoutRootPaths.0 = {$plugin.tx_mindshape_seo.view.layoutRootPath}
+
+        widget.TYPO3\CMS\Fluid\ViewHelpers\Widget\PaginateViewHelper.templateRootPath = {$plugin.tx_mindshape_seo.view.templateRootPath}
     }
 
     settings {
         titleAttachmentSeperator = {$plugin.tx_mindshape_seo.settings.titleAttachmentSeperator}
+        pageTree.usePagination = {$plugin.tx_mindshape_seo.settings.pageTree.usePagination}
     }
 }
 
