@@ -26,6 +26,7 @@ namespace Mindshape\MindshapeSeo\Service;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -34,11 +35,6 @@ use TYPO3\CMS\Core\SingletonInterface;
  */
 class DomainService implements SingletonInterface
 {
-    /**
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected $databaseConnection;
-
     /**
      * @var \Mindshape\MindshapeSeo\Service\PageService
      * @inject
@@ -52,22 +48,19 @@ class DomainService implements SingletonInterface
     protected $configurationRepository;
 
     /**
-     * @return DomainService
-     */
-    public function __construct()
-    {
-        $this->databaseConnection = $GLOBALS['TYPO3_DB'];
-    }
-
-    /**
      * @return array
      */
     public function getAvailableDomains()
     {
-        $result = $this->databaseConnection->exec_SELECTgetRows(
+        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
+        $databaseConnection = $GLOBALS['TYPO3_DB'];
+
+        $result = $databaseConnection->exec_SELECTgetRows(
             '*',
             'sys_domain',
-            'TRIM(redirectTo) = ""'
+            'TRIM(redirectTo) = "" AND deleted = 0 AND hidden = 0',
+            '',
+            'sorting'
         );
 
         $domains = array();
@@ -89,20 +82,12 @@ class DomainService implements SingletonInterface
     {
         $configuration = null;
 
-        foreach ($this->pageService->getRootline($pageUid) as $parentPage) {
-            $result = $this->databaseConnection->exec_SELECTgetSingleRow(
-                '*',
-                'sys_domain',
-                'TRIM(redirectTo) = "" AND pid = ' . $parentPage['uid']
-            );
+        $configuration = $this->configurationRepository->findByDomain(
+            BackendUtility::firstDomainRecord($this->pageService->getRootline($pageUid))
+        );
 
-            if (is_array($result)) {
-                $configuration = $this->configurationRepository->findByDomain($result['domainName']);
-
-                if ($configuration instanceof Configuration) {
-                    return $configuration;
-                }
-            }
+        if ($configuration instanceof Configuration) {
+            return $configuration;
         }
 
         return $this->configurationRepository->findByDomain(Configuration::DEFAULT_DOMAIN);
