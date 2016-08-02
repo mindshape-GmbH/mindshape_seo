@@ -1,6 +1,7 @@
 <html data-namespace-typo3-fluid="true" lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      xmlns:msh="http://typo3.org/ns/Mindshape/MindshapeSeo/ViewHelpers"
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers">
 
     <f:layout name="Backend"/>
@@ -42,9 +43,9 @@
 
         <f:if condition="{settings.pageTree.usePagination}">
             <f:then>
-                <f:widget.paginate objects="{pageTree}" as="paginatedPages" configuration="{insertAbove: 1, insertBelow: 0}">
+                <msh:widget.paginate objects="{pageTree}" as="paginatedPages">
                     <f:render section="PageTreeTable" arguments="{pageTree: paginatedPages}"/>
-                </f:widget.paginate>
+                </msh:widget.paginate>
             </f:then>
             <f:else>
                 <f:render section="PageTreeTable" arguments="{pageTree: pageTree}"/>
