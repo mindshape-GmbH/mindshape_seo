@@ -58,7 +58,7 @@ class DomainService implements SingletonInterface
         $result = $databaseConnection->exec_SELECTgetRows(
             '*',
             'sys_domain',
-            'TRIM(redirectTo) = "" AND deleted = 0 AND hidden = 0',
+            'TRIM(redirectTo) = "" AND hidden = 0',
             '',
             'sorting'
         );
