@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: Includes.txt
+.. include:: ../Includes.txt
 
 .. _links:
 
@@ -19,5 +19,5 @@ Links
 :Git Repository:
 	`GitHub <https://github.com/mindshape-GmbH/mindshape_seo>`_
 
-:Contact:
+:Kontakt:
 	`Daniel Dorndorf <mailto:dorndorf@mindshape.de>`_

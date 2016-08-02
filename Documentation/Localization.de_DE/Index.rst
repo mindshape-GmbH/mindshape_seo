@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. include:: Includes.txt
+.. include:: ../Includes.txt
 
 =======================
 mindshape SEO Extension
@@ -18,10 +18,10 @@ mindshape SEO Extension
 		|release|
 
 	:Language:
-		en
+		de
 
 	:Description:
-		SEO extension from mindshape GmbH with google preview and metadata validation
+		SEO Extension von mindshape GmbH mit Google Vorschau und validierung der Metadaten
 
 	:Keywords:
 		mindshape,seo,google,preview
@@ -36,11 +36,11 @@ mindshape SEO Extension
 		dorndorf@mindshape.de
 
 	:License:
-		This document is published under the Open Content License
-		available from http://www.opencontent.org/openpub/
+		Dieses Dokument wurde unter einer Open Content Lizenz veröffentlicht
+		verfügbar unter http://www.opencontent.org/opl.shtml
 
-	The content of this document is related to TYPO3,
-	a GNU/GPL CMS/Framework available from `www.typo3.org <http://www.typo3.org/>`_.
+	Der Inhalt dieses Dokuments steht in verbindung zu TYPO3,
+	einem GNU/GPL CMS/Framework `www.typo3.org <http://www.typo3.org/>`_.
 
 	**Table of Contents**
 
