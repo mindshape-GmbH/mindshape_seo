@@ -198,7 +198,7 @@ class BackendController extends ActionController
         $arguments = $this->request->getArguments();
 
         $defaultMenuItem = $menu->makeMenuItem()
-            ->setTitle(LocalizationUtility::translate('tx_minshapeseo_label.default_language', 'mindshape_seo'))
+            ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.default_language', 'mindshape_seo'))
             ->setHref($uriBuilder->reset()->uriFor('preview', array('sysLanguageUid' => 0), 'Backend'))
             ->setActive(!array_key_exists('sysLanguageUid', $arguments) || $arguments['sysLanguageUid'] === 0);
 
@@ -241,7 +241,7 @@ class BackendController extends ActionController
         $saveButton = $buttonBar->makeLinkButton()
             ->setClasses('mindshape-seo-savebutton')
             ->setHref('#')
-            ->setTitle(LocalizationUtility::translate('tx_minshapeseo_label.save', 'mindshape_seo'))
+            ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.save', 'mindshape_seo'))
             ->setIcon($iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL));
 
         $buttonBar->addButton($saveButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
@@ -374,7 +374,7 @@ class BackendController extends ActionController
             $this->view->assignMultiple(array(
                 'depth' => $depth,
                 'levelOptions' => array(
-                    PageService::TREE_DEPTH_INFINITY => LocalizationUtility::translate('tx_minshapeseo_label.preview.levels.infinity', 'mindshape_seo'),
+                    PageService::TREE_DEPTH_INFINITY => LocalizationUtility::translate('tx_mindshapeseo_label.preview.levels.infinity', 'mindshape_seo'),
                     1 => '1',
                     2 => '2',
                     3 => '3',

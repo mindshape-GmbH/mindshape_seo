@@ -3,179 +3,182 @@
     <file source-language="en" target-language="de" datatype="plaintext" original="messages" product-name="mindshape_seo">
         <header/>
         <body>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_focus_keyword">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword">
                 <target>Fokus Schlüsselwort</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_ogtitle">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogtitle">
                 <target>Titel</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_ogurl">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogurl">
                 <target>URL</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_ogimage">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogimage">
                 <target>Bild</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_ogdescription">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogdescription">
                 <target>Beschreibung</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_disable_title_attachment">
-                <target>Deaktiviere Titel Anhang</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_disable_title_attachment">
+                <target>Deaktiviere Titel-Ergänzung</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_priority">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_priority">
                 <target>Priorität</target>
             </trans-unit>
 
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency">
                 <target>Veränderungsrate</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.none">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.none">
                 <target>Keine Auswahl</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.always">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.always">
                 <target>Immer</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.hourly">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.hourly">
                 <target>Stündlich</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.daily">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.daily">
                 <target>Täglich</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.weekly">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.weekly">
                 <target>Wöchentlich</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.monthly">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.monthly">
                 <target>Monatlich</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.yearly">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.yearly">
                 <target>Jährlich</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.never">
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.never">
                 <target>Niemals</target>
             </trans-unit>
 
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_no_index">
-                <target>Nicht indexieren</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index">
+                <target>Nicht indexieren (noindex)</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_no_index_recursive">
-                <target>Unterseiten nicht indexieren</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_recursive">
+                <target>Nicht indexieren rekursiv auf Unterseiten anwenden</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow">
-                <target>Nicht verfolgen</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow">
+                <target>Nicht verfolgen (nofollow)</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive">
-                <target>Unterseiten nicht verfolgen</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive">
+                <target>Nicht verfolgen rekursiv auf Unterseiten anwenden</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap">
-                <target>Schließe diese Seite von der sitemap.xml aus</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap">
+                <target>Schließe diese Seite von der XML-Sitemap aus</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_exclude_suppages_from_sitemap">
-                <target>Schließe Unterseiten von der sitemap.xml aus</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_suppages_from_sitemap">
+                <target>Schließe Unterseiten von der XML-Sitemap aus</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_sub_sitemap">
-                <target>Erweiterte sitemap.xml ab dieser Seite</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_sub_sitemap">
+                <target>Erzeuge eine neue XML-Sitemap ab dieser Seite</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_domain_model_pages.mindshapeseo_canonical">
-                <target>Kanonische URL</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_canonical">
+                <target>Canonical URL</target>
             </trans-unit>
 
 
-            <trans-unit id="tx_minshapeseo_label.seo">
+            <trans-unit id="tx_mindshapeseo_label.seo">
                 <target>SEO</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.general">
+            <trans-unit id="tx_mindshapeseo_label.general">
                 <target>Allgemein</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.indexing">
+            <trans-unit id="tx_mindshapeseo_label.indexing">
                 <target>Indexierung</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.sitemap">
+            <trans-unit id="tx_mindshapeseo_label.sitemap">
                 <target>Sitemap.xml</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.facebook_metadata">
+            <trans-unit id="tx_mindshapeseo_label.facebook_metadata">
                 <target>Facebook Metadaten</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.metadata">
+            <trans-unit id="tx_mindshapeseo_label.metadata">
                 <target>Metadaten</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.google_search_preview">
+            <trans-unit id="tx_mindshapeseo_label.google_search_preview">
                 <target>Google Suche vorschau</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.save">
+            <trans-unit id="tx_mindshapeseo_label.save">
                 <target>Speichern</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.delete">
+                <target>Löschen</target>
             </trans-unit>
 
-            <trans-unit id="tx_minshapeseo_label.preview">
+            <trans-unit id="tx_mindshapeseo_label.preview">
                 <target>Vorschau</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.levels">
+            <trans-unit id="tx_mindshapeseo_label.preview.levels">
                 <target>Ebenen</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.levels.infinity">
+            <trans-unit id="tx_mindshapeseo_label.preview.levels.infinity">
                 <target>Unendlich</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.page">
+            <trans-unit id="tx_mindshapeseo_label.preview.page">
                 <target>Seite</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.button.seo_check">
+            <trans-unit id="tx_mindshapeseo_label.preview.button.seo_check">
                 <target>SEO Prüfung</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.button.edit">
+            <trans-unit id="tx_mindshapeseo_label.preview.button.edit">
                 <target>Bearbeiten</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.button.save">
+            <trans-unit id="tx_mindshapeseo_label.preview.button.save">
                 <target>Speichern</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.button.abort">
+            <trans-unit id="tx_mindshapeseo_label.preview.button.abort">
                 <target>Abbrechen</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.no_page_selected">
+            <trans-unit id="tx_mindshapeseo_label.preview.no_page_selected">
                 <target>Keine Seite ausgewählt</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.focus_keyword">
+            <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword">
                 <target>Fokus Schlüsselwort</target>
             </trans-unit>
 
-            <trans-unit id="tx_minshapeseo_label.preview.alert.title_length">
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.title_length">
                 <target>Der Seitentitel ist zu lang</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.alert.description_length">
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.description_length">
                 <target>Die Seitenbeschreibung ist zu lang</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.alert.description_min_length">
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.description_min_length">
                 <target>Die Seitenbeschreibung ist zu kurz</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.alert.description_empty">
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.description_empty">
                 <target>Die Seitenbeschreibung ist leer</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.alert.focus_keyword_missing_title">
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.focus_keyword_missing_title">
                 <target>Fokus Schlüsselwort wurde nicht im Titel gefunden</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.alert.focus_keyword_missing_description">
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.focus_keyword_missing_description">
                 <target>Fokus Schlüsselwort wurde nicht in der Beschreibung gefunden</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.alert.focus_keyword_missing_url">
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.focus_keyword_missing_url">
                 <target>Fokus Schlüsselwort wurde nicht in der URL gefunden</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.alert.focus_keyword_found_title">
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.focus_keyword_found_title">
                 <target>Fokus Schlüsselwort wurde im Titel gefunden</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.alert.focus_keyword_found_description">
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.focus_keyword_found_description">
                 <target>Fokus Schlüsselwort wurde in der Beschreibung gefunden</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.preview.alert.focus_keyword_found_url">
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.focus_keyword_found_url">
                 <target>Fokus Schlüsselwort wurde in der URL gefunden</target>
             </trans-unit>
 
-            <trans-unit id="tx_minshapeseo_label.default_language">
+            <trans-unit id="tx_mindshapeseo_label.default_language">
                 <target>Standard Sprache</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.seo_settings_for">
+            <trans-unit id="tx_mindshapeseo_label.seo_settings_for">
                 <target>SEO Einstellungen für</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.seo_settings">
+            <trans-unit id="tx_mindshapeseo_label.seo_settings">
                 <target>SEO Einstellungen</target>
             </trans-unit>
-            <trans-unit id="tx_minshapeseo_label.seo_preview_for_page">
+            <trans-unit id="tx_mindshapeseo_label.seo_preview_for_page">
                 <target>SEO Vorschau für die Seite</target>
             </trans-unit>
 
@@ -187,7 +190,7 @@
                 <target>Domain</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment">
-                <target>Titel Anhang</target>
+                <target>Titel-Ergänzung</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
                 <target>Facebook Standard Bild</target>
@@ -204,8 +207,8 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.analytics">
                 <target>Analyse</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics">
-                <target>Google Analytics</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_id">
+                <target>Google Analytics ID</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_idsite">
                 <target>Piwik Seiten ID</target>
@@ -214,7 +217,7 @@
                 <target>Piwik URL</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld">
-                <target>JSON-LD</target>
+                <target>Website Informationen als JSON-LD</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url">
                 <target>Eigene URL</target>

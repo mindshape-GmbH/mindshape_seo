@@ -24,7 +24,7 @@ $columns = array(
     ),
     'mindshapeseo_ogtitle' => array(
         'exclude' => 0,
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_ogtitle',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_ogtitle',
         'config' => array(
             'type' => 'input',
             'size' => 30,
@@ -33,7 +33,7 @@ $columns = array(
     ),
     'mindshapeseo_ogurl' => array(
         'exclude' => 1,
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_ogurl',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_ogurl',
         'config' => array(
             'type' => 'input',
             'size' => 30,
@@ -42,7 +42,7 @@ $columns = array(
     ),
     'mindshapeseo_ogimage' => array(
         'exclude' => 0,
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_ogimage',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_ogimage',
         'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
             'ogimage',
             array(
@@ -63,7 +63,7 @@ $columns = array(
     ),
     'mindshapeseo_ogdescription' => array(
         'exclude' => 1,
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_ogdescription',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_ogdescription',
         'config' => array(
             'type' => 'text',
             'cols' => 40,
@@ -72,14 +72,14 @@ $columns = array(
         ),
     ),
     'mindshapeseo_disable_title_attachment' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_disable_title_attachment',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_disable_title_attachment',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
         ),
     ),
     'mindshapeseo_priority' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_priority',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_priority',
         'exclude' => 1,
         'config' => array(
             'type' => 'input',
@@ -88,75 +88,75 @@ $columns = array(
         ),
     ),
     'mindshapeseo_change_frequency' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency',
         'exclude' => 1,
         'config' => array(
             'type' => 'select',
             'renderType' => 'selectSingle',
             'default' => null,
             'items' => array(
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.none', null),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.always', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_ALWAYS),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.hourly', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_HOULRY),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.daily', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_DAILY),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.weekly', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_WEEKLY),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.monthly', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_MONTHLY),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.yearly', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_YEARLY),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_change_frequency.never', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_NEVER),
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.none', null),
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.always', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_ALWAYS),
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.hourly', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_HOULRY),
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.daily', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_DAILY),
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.weekly', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_WEEKLY),
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.monthly', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_MONTHLY),
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.yearly', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_YEARLY),
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.never', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_NEVER),
             ),
         ),
     ),
     'mindshapeseo_no_index' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_no_index',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
         ),
     ),
     'mindshapeseo_no_index_recursive' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_no_index_recursive',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_recursive',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
         ),
     ),
     'mindshapeseo_no_follow' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
         ),
     ),
     'mindshapeseo_no_follow_recursive' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
         ),
     ),
     'mindshapeseo_exclude_from_sitemap' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
         ),
     ),
     'mindshapeseo_exclude_suppages_from_sitemap' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_exclude_suppages_from_sitemap',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_suppages_from_sitemap',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
         ),
     ),
     'mindshapeseo_sub_sitemap' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_sub_sitemap',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_sub_sitemap',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
         ),
     ),
     'mindshapeseo_canonical' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_domain_model_pages.mindshapeseo_canonical',
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_canonical',
         'exclude' => 1,
         'config' => array(
             'type' => 'group',
@@ -222,7 +222,7 @@ unset(
 // Facebook metadata tab
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
-    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.facebook_metadata,
+    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.facebook_metadata,
     mindshapeseo_ogtitle,
     mindshapeseo_ogurl,
     mindshapeseo_ogimage,
@@ -234,13 +234,13 @@ unset(
 // SEO tab
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
-    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.seo,
+    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.seo,
     --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:label.general;mindshape_seo_google_preview_pallette,
     --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:label.general;mindshape_seo_general_pallette,
     --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata;mindshape_seo_meta_pallette, 
     --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.editorial;mindshape_seo_editorial_pallette, 
-    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.indexing;mindshape_seo_indexing_pallette, 
-    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_minshapeseo_label.sitemap;mindshape_seo_sitemap_pallette',
+    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.indexing;mindshape_seo_indexing_pallette, 
+    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.sitemap;mindshape_seo_sitemap_pallette',
     '1,4',
     ''
 );

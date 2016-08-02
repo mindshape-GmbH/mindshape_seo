@@ -10,10 +10,10 @@
         <h1>
             <f:if condition="{currentDomain} == '*'">
                 <f:then>
-                    <f:translate key="tx_minshapeseo_label.seo_settings"/>
+                    <f:translate key="tx_mindshapeseo_label.seo_settings"/>
                 </f:then>
                 <f:else>
-                    <f:translate key="tx_minshapeseo_label.seo_settings_for"/>
+                    <f:translate key="tx_mindshapeseo_label.seo_settings_for"/>
                     <b>{currentDomain}</b>
                 </f:else>
             </f:if>
@@ -41,9 +41,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <button class="mindshape-seo-delete">
+                                <f:translate key="tx_mindshapeseo_label.delete"/>
+                            </button>
                         </f:if>
                     </msh:form.upload>
-                    <button class="mindshape-seo-delete">Delete</button>
                 </div>
                 <div class="form-group">
                     <label>
@@ -72,7 +74,7 @@
                 </h2>
                 <div class="form-group">
                     <label>
-                        <f:translate key="tx_mindshapeseo_domain_model_configuration.google_analytics"/>
+                        <f:translate key="tx_mindshapeseo_domain_model_configuration.google_analytics_id"/>
                     </label>
                     <f:form.textfield property="googleAnalytics" class="form-control"/>
                 </div>
@@ -128,9 +130,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <button class="mindshape-seo-delete">
+                                <f:translate key="tx_mindshapeseo_label.delete"/>
+                            </button>
                         </f:if>
                     </msh:form.upload>
-                    <button class="mindshape-seo-delete">Delete</button>
                 </div>
                 <fieldset class="form-section form-group">
                     <h3 class="form-section-headline">

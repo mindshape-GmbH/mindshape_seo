@@ -10,7 +10,7 @@
 
         <f:if condition="{noPageSelected}">
             <f:then>
-                <f:translate key="tx_minshapeseo_label.preview.no_page_selected"/>
+                <f:translate key="tx_mindshapeseo_label.preview.no_page_selected"/>
             </f:then>
             <f:else>
                 <div class="mindshapeseo-preview">
@@ -24,7 +24,7 @@
     <f:section name="Preview">
 
         <h1>
-            <f:translate key="tx_minshapeseo_label.seo_preview_for_page"/>
+            <f:translate key="tx_mindshapeseo_label.seo_preview_for_page"/>
             {currentPageMetaData.title}
         </h1>
 
@@ -33,7 +33,7 @@
                 <f:form id="depthselect-form" action="preview" controller="Backend">
                     <div class="form-group">
                         <label>
-                            <f:translate key="tx_minshapeseo_label.preview.levels"/>
+                            <f:translate key="tx_mindshapeseo_label.preview.levels"/>
                         </label>
                         <f:form.select id="depthselect" name="depth" options="{levelOptions}" value="{depth}" class="form-control"/>
                     </div>
@@ -60,13 +60,13 @@
             <thead>
                 <tr>
                     <th>
-                        <f:translate key="tx_minshapeseo_label.preview.page"/>
+                        <f:translate key="tx_mindshapeseo_label.preview.page"/>
                     </th>
                     <th>
-                        <f:translate key="tx_minshapeseo_label.preview"/>
+                        <f:translate key="tx_mindshapeseo_label.preview"/>
                     </th>
                     <th>
-                        <f:translate key="tx_minshapeseo_label.metadata"/>
+                        <f:translate key="tx_mindshapeseo_label.metadata"/>
                     </th>
                 </tr>
             </thead>
@@ -102,7 +102,7 @@
                                     <div class="checkbox noindex">
                                         <label>
                                             <f:form.checkbox name="noindex" value="1" checked="{page.metadata.meta.robots.noindex}"/>
-                                            <f:translate key="tx_minshapeseo_domain_model_pages.mindshapeseo_no_index"/>
+                                            <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index"/>
                                             <core:icon identifier="provider-fontawesome-error"/>
                                         </label>
                                         <span class="loader">
@@ -112,7 +112,7 @@
                                     <div class="checkbox nofollow">
                                         <label>
                                             <f:form.checkbox name="nofollow" value="1" checked="{page.metadata.meta.robots.nofollow}"/>
-                                            <f:translate key="tx_minshapeseo_domain_model_pages.mindshapeseo_no_follow"/>
+                                            <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow"/>
                                             <core:icon identifier="provider-fontawesome-error"/>
                                         </label>
                                         <span class="loader">

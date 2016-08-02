@@ -37,7 +37,7 @@ return array(
         ),
         'google_analytics' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.google_analytics',
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.google_analytics_id',
             'config' => array(
                 'type' => 'input',
                 'size' => 30,

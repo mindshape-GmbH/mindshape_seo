@@ -5,7 +5,7 @@
     <f:if condition="{metadata}">
         <f:then>
             <label>
-                <f:translate key="tx_minshapeseo_label.google_search_preview"/>
+                <f:translate key="tx_mindshapeseo_label.google_search_preview"/>
             </label>
 
             <f:render partial="GoogleSearchPreview" section="Main" arguments="{
@@ -26,7 +26,7 @@
                 <div class="col-sm-12 col-md-6">
                     <div class="form-group">
                         <label>
-                            <f:translate key="tx_minshapeseo_label.preview.focus_keyword"/>
+                            <f:translate key="tx_mindshapeseo_label.preview.focus_keyword"/>
                         </label>
                         <f:form.textfield name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" class="form-control"/>
                     </div>
