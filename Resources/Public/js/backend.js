@@ -120,11 +120,12 @@
         $currentPreview.find('.preview-box .description').html($(this).val());
         that.renderPreviewDescription($currentPreview);
         that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
-        that.updatePreviewAlerts($currentPreview);
 
         if (0 < fokusKeyword.length) {
           that.checkFocusKeyword($currentPreview, fokusKeyword);
         }
+
+        that.updatePreviewAlerts($currentPreview);
 
         if (that.editing) {
           that.checkPreviewEditPanelSaveState($currentPreview);
@@ -162,21 +163,23 @@
 
         $tcaForm.find('input[data-formengine-input-name="data[pages][' + currentPageUid + '][title]"]').on('keyup', function () {
           $currentPreview.find('.preview-box .title').html($(this).val());
-          that.updatePreviewAlerts($currentPreview);
 
           if (0 < fokusKeyword.length) {
             that.checkFocusKeyword($currentPreview, fokusKeyword);
           }
+
+          that.updatePreviewAlerts($currentPreview);
         });
 
         $tcaForm.find('textarea[name="data[pages][' + currentPageUid + '][description]"]').on('keyup', function () {
           $currentPreview.find('.preview-box .description').html($(this).val());
           that.renderPreviewDescription($currentPreview);
-          that.updatePreviewAlerts($currentPreview);
 
           if (0 < fokusKeyword.length) {
             that.checkFocusKeyword($currentPreview, fokusKeyword);
           }
+
+          that.updatePreviewAlerts($currentPreview);
         });
       }
     },
@@ -415,6 +418,7 @@
           $alertsContainer.find('.focus-keyword.found-title').hide();
         }
 
+        var test = parseInt($previewContainer.attr('data-keyword-description-matches'));
         if (0 < parseInt($previewContainer.attr('data-keyword-description-matches'))) {
           $alertsContainer.find('.focus-keyword.missing-description').hide();
           $alertsContainer.find('.focus-keyword.found-description').show();
