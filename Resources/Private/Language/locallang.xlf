@@ -213,8 +213,14 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.analytics">
                 <source>Analytics</source>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_id">
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics">
                 <source>Google Analytics</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_id">
+                <source>Google Analytics ID</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik">
+                <source>Piwik</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_idsite">
                 <source>Piwik Site ID</source>

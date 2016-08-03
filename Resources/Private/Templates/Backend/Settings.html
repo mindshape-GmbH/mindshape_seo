@@ -75,23 +75,39 @@
                 <h2 class="form-section-headline">
                     <f:translate key="tx_mindshapeseo_domain_model_configuration.analytics"/>
                 </h2>
-                <div class="form-group">
-                    <label>
-                        <f:translate key="tx_mindshapeseo_domain_model_configuration.google_analytics_id"/>
-                    </label>
-                    <f:form.textfield property="googleAnalytics" class="form-control"/>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <f:translate key="tx_mindshapeseo_domain_model_configuration.piwik_idsite"/>
-                    </label>
-                    <f:form.textfield property="piwikIdsite" class="form-control"/>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <f:translate key="tx_mindshapeseo_domain_model_configuration.piwik_url"/>
-                    </label>
-                    <f:form.textfield property="piwikUrl" class="form-control"/>
+                <div class="row analytics">
+                    <div class="col-md-6 col-sm-12">
+                        <fieldset class="form-section">
+                            <h3 class="form-section-headline">
+                                <f:translate key="tx_mindshapeseo_domain_model_configuration.google_analytics"/>
+                            </h3>
+                            <div class="form-group">
+                                <label>
+                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.google_analytics_id"/>
+                                </label>
+                                <f:form.textfield property="googleAnalytics" class="form-control"/>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <fieldset class="form-section piwik">
+                            <h3 class="form-section-headline">
+                                <f:translate key="tx_mindshapeseo_domain_model_configuration.piwik"/>
+                            </h3>
+                            <div class="form-group">
+                                <label>
+                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.piwik_idsite"/>
+                                </label>
+                                <f:form.textfield property="piwikIdsite" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label>
+                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.piwik_url"/>
+                                </label>
+                                <f:form.textfield property="piwikUrl" class="form-control"/>
+                            </div>
+                        </fieldset>
+                    </div>
                 </div>
             </fieldset>
             <fieldset class="form-section">
@@ -177,68 +193,73 @@
                         </a>
                     </h3>
                     <div id="sameAs" class="collapse">
-                        <div class="form-group">
-                            <label>
-                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook"/>
-                            </label>
-                            <f:form.textfield property="jsonldSameAsFacebook" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.twitter"/>
-                            </label>
-                            <f:form.textfield property="jsonldSameAsTwitter" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.googleplus"/>
-                            </label>
-                            <f:form.textfield property="jsonldSameAsGoogleplus" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram"/>
-                            </label>
-                            <f:form.textfield property="jsonldSameAsInstagram" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.youtube"/>
-                            </label>
-                            <f:form.textfield property="jsonldSameAsYoutube" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.linkedin"/>
-                            </label>
-                            <f:form.textfield property="jsonldSameAsLinkedin" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.myspace"/>
-                            </label>
-                            <f:form.textfield property="jsonldSameAsMyspace" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.printerest"/>
-                            </label>
-                            <f:form.textfield property="jsonldSameAsPrinterest" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.soundcloud"/>
-                            </label>
-                            <f:form.textfield property="jsonldSameAsSoundcloud" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr"/>
-                            </label>
-                            <f:form.textfield property="jsonldSameAsTumblr" class="form-control"/>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsFacebook" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsInstagram" class="form-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.youtube"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsYoutube" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.linkedin"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsLinkedin" class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.myspace"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsMyspace" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.printerest"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsPrinterest" class="form-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.soundcloud"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsSoundcloud" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsTumblr" class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </fieldset>
             </fieldset>
         </f:form>

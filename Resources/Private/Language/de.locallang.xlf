@@ -208,13 +208,19 @@
                 <target>Website Informationen als JSON-LD</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld_breadcrumb">
-                <target>Breadcrumb als JSON-LD hinzu</target>
+                <target>Breadcrumb als JSON-LD</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.analytics">
-                <target>Analyse</target>
+                <target>Analytics</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics">
+                <target>Google Analytics</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_id">
                 <target>Google Analytics ID</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik">
+                <target>Piwik</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_idsite">
                 <target>Piwik Seiten ID</target>
