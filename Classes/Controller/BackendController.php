@@ -355,17 +355,18 @@ class BackendController extends ActionController
             $configuration = $this->domainService->getPageDomainConfiguration();
 
             if ($configuration instanceof Configuration) {
-                $this->view->assign(
-                    'pageTree',
-                    $this->pageService->getPageMetadataTree(
+                $this->view->assignMultiple(array(
+                    'pageTree' => $this->pageService->getPageMetadataTree(
                         $this->currentPageUid,
                         $depth,
                         $sysLanguageUid,
-                        $configuration->getTitleAttachment(),
                         $configuration->getJsonldCustomUrl(),
                         $configuration->getAddJsonld()
-                    )
-                );
+                    ),
+                    'titleAttachment' => $configuration->getTitleAttachment(),
+                    'titleAttachmentSeperator' => $configuration->getTitleAttachmentSeperator(),
+                    'titleAttachmentPosition' => $configuration->getTitleAttachmentPosition(),
+                ));
             } else {
                 $this->view->assign(
                     'pageTree',

@@ -71,11 +71,6 @@ class PageService implements SingletonInterface
     protected static $pageTreeDepth = 0;
 
     /**
-     * @var string
-     */
-    protected $titleAttachmentSeperator = '|';
-
-    /**
      * @var bool
      */
     protected $hasFrontendController = true;
@@ -91,9 +86,6 @@ class PageService implements SingletonInterface
         /** @var ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
         $this->pageRepository = $objectManager->get(PageRepository::class);
-
-        $settings = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'mindshape_seo');
-        $this->titleAttachmentSeperator = trim($settings['titleAttachmentSeperator']);
 
         if ('BE' === TYPO3_MODE) {
             if (!is_object($GLOBALS['TT'])) {
@@ -190,12 +182,11 @@ class PageService implements SingletonInterface
     /**
      * @param int $pageUid
      * @param int $sysLanguageUid
-     * @param string $titleAttachment
      * @param string $customUrl
      * @param $useGoogleBreadcrumb
      * @return array
      */
-    public function getPageMetaData($pageUid, $sysLanguageUid = 0, $titleAttachment = '', $customUrl = '', $useGoogleBreadcrumb = false)
+    public function getPageMetaData($pageUid, $sysLanguageUid = 0, $customUrl = '', $useGoogleBreadcrumb = false)
     {
         $page = $this->getPage($pageUid, $sysLanguageUid);
 
@@ -228,9 +219,7 @@ class PageService implements SingletonInterface
 
         return array(
             'uid' => $page['uid'],
-            'title' => $page['title'],
-            'titleAttachment' => $titleAttachment,
-            'titleAttachmentSeperator' => $this->titleAttachmentSeperator,
+            'title' => empty($page['nav_title']) ? $page['title'] : $page['nav_title'],
             'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             'url' => $pageUrl,
             'previewUrl' => $previewUrl,
@@ -262,11 +251,10 @@ class PageService implements SingletonInterface
     /**
      * @param int $pageUid
      * @param int $sysLanguageUid
-     * @param string $titleAttachment
      * @param string $customUrl
      * @return array
      */
-    public function getSubpagesMetaData($pageUid, $sysLanguageUid = 0, $titleAttachment = '', $customUrl = '')
+    public function getSubpagesMetaData($pageUid, $sysLanguageUid = 0, $customUrl = '')
     {
         $metadata = array();
 
@@ -276,7 +264,7 @@ class PageService implements SingletonInterface
             }
 
             if ((int) $subPage['uid'] !== $pageUid) {
-                $metadata[] = $this->getPageMetaData($subPage['uid'], $sysLanguageUid, $titleAttachment, $customUrl);
+                $metadata[] = $this->getPageMetaData($subPage['uid'], $sysLanguageUid, $customUrl);
             }
         }
 
@@ -360,12 +348,11 @@ class PageService implements SingletonInterface
      * @param int $pageUid
      * @param int $depth
      * @param int $sysLanguageUid
-     * @param string $titleAttachment
      * @param string $customUrl
      * @param bool $useGoogleBreadcrumb
      * @return array
      */
-    public function getPageMetadataTree($pageUid, $depth = self::TREE_DEPTH_DEFAULT, $sysLanguageUid = 0, $titleAttachment = '', $customUrl = '', $useGoogleBreadcrumb = false)
+    public function getPageMetadataTree($pageUid, $depth = self::TREE_DEPTH_DEFAULT, $sysLanguageUid = 0, $customUrl = '', $useGoogleBreadcrumb = false)
     {
         $page = $this->getPage($pageUid);
 
@@ -418,7 +405,6 @@ class PageService implements SingletonInterface
             $tree->tree[$key]['metadata'] = $this->getPageMetaData(
                 $treeItem['row']['uid'],
                 $sysLanguageUid,
-                $titleAttachment,
                 $customUrl,
                 $useGoogleBreadcrumb
             );

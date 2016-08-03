@@ -34,9 +34,22 @@
         <div class="preview-box">
             <h3>
                 <a href="{url}" target="_blank">
-                    <span class="title">{title}</span>
                     <f:if condition="{titleAttachment}">
-                        <span class="attachment">{titleAttachmentSeperator}&nbsp;{titleAttachment}</span>
+                        <f:then>
+                            <f:if condition="{titleAttachmentPosition} == 'prefix'">
+                                <f:then>
+                                    <span class="attachment">{titleAttachment}&nbsp;{titleAttachmentSeperator}</span>
+                                    <span class="title">{title}</span>
+                                </f:then>
+                                <f:else>
+                                    <span class="title">{title}</span>
+                                    <span class="attachment">{titleAttachmentSeperator}&nbsp;{titleAttachment}</span>
+                                </f:else>
+                            </f:if>
+                        </f:then>
+                        <f:else>
+                            <span class="title">{title}</span>
+                        </f:else>
                     </f:if>
                 </a>
             </h3>

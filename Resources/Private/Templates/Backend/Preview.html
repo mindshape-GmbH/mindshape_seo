@@ -44,11 +44,11 @@
         <f:if condition="{settings.pageTree.usePagination}">
             <f:then>
                 <msh:widget.paginate objects="{pageTree}" as="paginatedPages">
-                    <f:render section="PageTreeTable" arguments="{pageTree: paginatedPages}"/>
+                    <f:render section="PageTreeTable" arguments="{pageTree: paginatedPages, titleAttachment: titleAttachment, titleAttachmentSeperator: titleAttachmentSeperator, titleAttachmentPosition: titleAttachmentPosition}"/>
                 </msh:widget.paginate>
             </f:then>
             <f:else>
-                <f:render section="PageTreeTable" arguments="{pageTree: pageTree}"/>
+                <f:render section="PageTreeTable" arguments="{pageTree: pageTree, titleAttachment: titleAttachment, titleAttachmentSeperator: titleAttachmentSeperator, titleAttachmentPosition: titleAttachmentPosition}"/>
             </f:else>
         </f:if>
 
@@ -83,8 +83,9 @@
                         <td width="50%">
                             <f:if condition="{page.row}">
                                 <f:render partial="GoogleSearchPreview" section="Main" arguments="{
-                                    titleAttachment: page.metadata.titleAttachment,
-                                    titleAttachmentSeperator: page.metadata.titleAttachmentSeperator,
+                                    titleAttachment: titleAttachment,
+                                    titleAttachmentSeperator: titleAttachmentSeperator,
+                                    titleAttachmentPosition: titleAttachmentPosition,
                                     title: page.metadata.title,
                                     url: page.metadata.url,
                                     previewUrl: page.metadata.previewUrl,
