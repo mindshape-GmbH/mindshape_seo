@@ -19,7 +19,7 @@
                 <source>Description</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_disable_title_attachment">
-                <source>Disable title attachment</source>
+                <source>Disable title attachment for this page</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_priority">
                 <source>Priority</source>

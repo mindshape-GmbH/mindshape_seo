@@ -185,14 +185,6 @@ unset($columns);
 $tables = array('pages', 'pages_language_overlay');
 
 foreach ($tables as $table) {
-    $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_general_pallette'] = array(
-        'showitem' => 'mindshapeseo_disable_title_attachment',
-    );
-
-    $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_google_preview_pallette'] = array(
-        'showitem' => 'mindshapeseo_google_preview',
-    );
-
     $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_sitemap_pallette'] = array(
         'showitem' => 'mindshapeseo_priority, --linebreak--,
                    mindshapeseo_change_frequency, --linebreak--,
@@ -209,7 +201,7 @@ foreach ($tables as $table) {
                    mindshapeseo_no_follow_recursive',
     );
     $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_meta_pallette']['showitem'] =
-        'mindshapeseo_focus_keyword,--linebreak--,' .
+        'mindshapeseo_focus_keyword,--linebreak--,mindshapeseo_disable_title_attachment,--linebreak--,' .
         $GLOBALS['TCA'][$table]['palettes']['metatags']['showitem'] . ',--linebreak--,mindshapeseo_canonical';
 
     unset($GLOBALS['TCA'][$table]['palettes']['metatags']);
