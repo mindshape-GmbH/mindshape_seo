@@ -197,13 +197,6 @@ class PageService implements SingletonInterface
             $customUrl = substr($customUrl, 0, -1);
         }
 
-        if (
-            '' !== $customUrl &&
-            false === $useGoogleBreadcrumb
-        ) {
-            $previewUrl = $customUrl . $this->getPageLink($pageUid, false, $sysLanguageUid);
-        }
-
         if ($useGoogleBreadcrumb) {
             $rootline = $this->getRootlineReverse($pageUid);
 
@@ -215,6 +208,8 @@ class PageService implements SingletonInterface
             }
 
             $previewUrl = $googleBreadcrumb;
+        } elseif (!empty($customUrl)) {
+            $previewUrl = $customUrl . $this->getPageLink($pageUid, false, $sysLanguageUid);
         }
 
         return array(

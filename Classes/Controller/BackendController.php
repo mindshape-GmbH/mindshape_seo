@@ -361,7 +361,7 @@ class BackendController extends ActionController
                         $depth,
                         $sysLanguageUid,
                         $configuration->getJsonldCustomUrl(),
-                        $configuration->getAddJsonld()
+                        $configuration->getAddJsonldBreadcrumb()
                     ),
                     'titleAttachment' => $configuration->getTitleAttachment(),
                     'titleAttachmentSeperator' => $configuration->getTitleAttachmentSeperator(),

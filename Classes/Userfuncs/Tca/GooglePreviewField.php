@@ -84,15 +84,22 @@ class GooglePreviewField
         $configuration = $this->domainService->getPageDomainConfiguration($params['row']['uid']);
 
         $metadata = null;
+        $titleAttachment = null;
+        $titleAttachmentSeperator = null;
+        $titleAttachmentPosition = null;
 
         if ($this->pageService->hasFrontendController()) {
             if ($configuration instanceof Configuration) {
                 $metadata = $this->pageService->getPageMetaData(
                     $params['row']['uid'],
                     0,
-                    $configuration->getTitleAttachment(),
                     $configuration->getJsonldCustomUrl(),
-                    $configuration->getAddJsonld());
+                    $configuration->getAddJsonldBreadcrumb()
+                );
+
+                $titleAttachment = $configuration->getTitleAttachment();
+                $titleAttachmentSeperator = $configuration->getTitleAttachmentSeperator();
+                $titleAttachmentPosition = $configuration->getTitleAttachmentPosition();
             } else {
                 $metadata = $this->pageService->getPageMetaData($params['row']['uid']);
             }
@@ -100,6 +107,9 @@ class GooglePreviewField
 
         return $this->standaloneTemplateRendererService->render('TCA', 'GooglePreview', array(
             'metadata' => $metadata,
+            'titleAttachment' => $titleAttachment,
+            'titleAttachmentSeperator' => $titleAttachmentSeperator,
+            'titleAttachmentPosition' => $titleAttachmentPosition,
             'tcaName' => $params['itemFormElName'],
             'focusKeyword' => $params['itemFormElValue'],
         ));
