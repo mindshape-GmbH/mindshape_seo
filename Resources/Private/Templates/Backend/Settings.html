@@ -22,12 +22,41 @@
         <f:form id="mindshape-seo-configuration" action="saveConfiguration" name="configuration" object="{configuration}" enctype="multipart/form-data">
             <f:form.hidden property="domain" value="{currentDomain}"/>
             <fieldset class="form-section">
-                <div class="form-group">
-                    <label>
+                <fieldset class="form-section">
+                    <h2 class="form-section-headline">
                         <f:translate key="tx_mindshapeseo_domain_model_configuration.title_attachment"/>
-                    </label>
-                    <f:form.textfield property="titleAttachment" class="form-control"/>
-                </div>
+                    </h2>
+                    <div class="row">
+                        <div class="col-md-1 col-sm-6">
+                            <div class="form-group">
+                                <label>
+                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.title_attachment_position"/>
+                                </label>
+                                <f:form.select property="titleAttachmentPosition" options="{titleAttachmentPositionOptions}" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-sm-6">
+                            <div class="form-group">
+                                <label>
+                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.title_attachment_seperator"/>
+                                </label>
+                                <f:form.textfield property="titleAttachmentSeperator" class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-md-10 col-sm-12">
+                            <div class="form-group">
+                                <label>
+                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.title_attachment"/>
+                                </label>
+                                <f:form.textfield property="titleAttachment" class="form-control"/>
+                                <span class="help-block">
+                            <f:translate key="tx_mindshapeseo_domain_model_configuration.title_attachment.help"/>
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+
                 <div class="form-group mindshape-seo-upload">
                     <label>
                         <f:translate key="tx_mindshapeseo_domain_model_configuration.facebook_default_image"/>
@@ -86,6 +115,12 @@
                                     <f:translate key="tx_mindshapeseo_domain_model_configuration.google_analytics_id"/>
                                 </label>
                                 <f:form.textfield property="googleAnalytics" class="form-control"/>
+                                <span class="help-block">
+                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.google_analytics.help.example"/>
+                                    <f:link.external uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.link')}" target="_blank">
+                                        <f:translate key="tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext"/>
+                                    </f:link.external>
+                                </span>
                             </div>
                         </fieldset>
                     </div>
@@ -119,6 +154,7 @@
                         <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url"/>
                     </label>
                     <f:form.textfield property="jsonldCustomUrl" class="form-control"/>
+                    <span class="help-block"><f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example"/></span>
                 </div>
                 <div class="form-group">
                     <label>

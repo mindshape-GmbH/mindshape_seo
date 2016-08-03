@@ -195,6 +195,21 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment">
                 <target>Titel-Ergänzung</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_position">
+                <target>Position</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_position.prefix">
+                <target>Präfix</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_position.suffix">
+                <target>Suffix</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_seperator">
+                <target>Trenner</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment.help">
+                <target>Kann der Website oder Firmenname sein und wir dem Titel-Tag hinzugefügt</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
                 <target>Facebook Standard Bild</target>
             </trans-unit>
@@ -216,6 +231,15 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics">
                 <target>Google Analytics</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.example">
+                <target>(Beipiel: 'UA-000000-01')</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext">
+                <target>weitere Informationen</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.link">
+                <target>https://support.google.com/analytics/answer/1032385?hl=de</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_id">
                 <target>Google Analytics ID</target>
             </trans-unit>
@@ -232,7 +256,10 @@
                 <target>Website Informationen (JSON-LD)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url">
-                <target>Angepasste URL (bspw. www.domain.de)</target>
+                <target>Angepasste URL</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
+                <source>(Beispiel: 'www.domain.de' anstatt 'http://domain.de')</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
                 <target>Typ</target>

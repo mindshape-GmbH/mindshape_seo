@@ -35,9 +35,13 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 class Configuration extends AbstractEntity
 {
     const DEFAULT_DOMAIN = '*';
+    const DEFAULT_TITLE_ATTACHMENT_SEPERATOR = '|';
 
     const JSONLD_TYPE_ORGANIZATION = 'organization';
     const JSONLD_TYPE_PERSON = 'person';
+
+    const TITLE_ATTACHMENT_POSITION_PREFIX = 'prefix';
+    const TITLE_ATTACHMENT_POSITION_SUFFIX = 'suffix';
 
     /**
      * domain
@@ -73,6 +77,20 @@ class Configuration extends AbstractEntity
      * @var string
      */
     protected $titleAttachment = '';
+
+    /**
+     * titleAttachmentSeperator
+     *
+     * @var string
+     */
+    protected $titleAttachmentSeperator = '';
+
+    /**
+     * titleAttachmentPosition
+     *
+     * @var string
+     */
+    protected $titleAttachmentPosition = '';
 
     /**
      * generateSitemap
@@ -345,6 +363,48 @@ class Configuration extends AbstractEntity
     public function setTitleAttachment($titleAttachment)
     {
         $this->titleAttachment = $titleAttachment;
+    }
+
+    /**
+     * Returns the titleAttachmentSeperator
+     *
+     * @return string $titleAttachmentSeperator
+     */
+    public function getTitleAttachmentSeperator()
+    {
+        return $this->titleAttachmentSeperator;
+    }
+
+    /**
+     * Sets the titleAttachmentSeperator
+     *
+     * @param string $titleAttachmentSeperator
+     * @return void
+     */
+    public function setTitleAttachmentSeperator($titleAttachmentSeperator)
+    {
+        $this->titleAttachmentSeperator = $titleAttachmentSeperator;
+    }
+
+    /**
+     * Returns the titleAttachmentPosition
+     *
+     * @return string $titleAttachmentPosition
+     */
+    public function getTitleAttachmentPosition()
+    {
+        return $this->titleAttachmentPosition;
+    }
+
+    /**
+     * Sets the titleAttachmentPosition
+     *
+     * @param string $titleAttachmentPosition
+     * @return void
+     */
+    public function setTitleAttachmentPosition($titleAttachmentPosition)
+    {
+        $this->titleAttachmentPosition = $titleAttachmentPosition;
     }
 
     /**

@@ -272,12 +272,18 @@ class BackendController extends ActionController
         if (!$configuration instanceof Configuration) {
             $configuration = new Configuration();
             $configuration->setDomain($domain);
+            $configuration->setTitleAttachmentSeperator(Configuration::DEFAULT_TITLE_ATTACHMENT_SEPERATOR);
+            $configuration->setTitleAttachmentPosition(Configuration::TITLE_ATTACHMENT_POSITION_PREFIX);
         }
 
         $this->view->assignMultiple(array(
             'domains' => $this->domainService->getAvailableDomains(),
             'currentDomain' => $domain,
             'configuration' => $configuration,
+            'titleAttachmentPositionOptions' => array(
+                Configuration::TITLE_ATTACHMENT_POSITION_PREFIX => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.title_attachment_position.prefix', 'mindshape_seo'),
+                Configuration::TITLE_ATTACHMENT_POSITION_SUFFIX => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.title_attachment_position.suffix', 'mindshape_seo'),
+            ),
             'jsonldTypeOptions' => array(
                 Configuration::JSONLD_TYPE_ORGANIZATION => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.organization', 'mindshape_seo'),
                 Configuration::JSONLD_TYPE_PERSON => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.person', 'mindshape_seo'),

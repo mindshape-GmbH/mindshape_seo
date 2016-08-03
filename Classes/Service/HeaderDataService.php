@@ -205,17 +205,19 @@ class HeaderDataService
     protected function attachTitleAttachment()
     {
         if (
-            !$this->currentPageMetaData['disableTitleAttachment'] &&
-            '' !== $this->domainConfiguration->getTitleAttachment()
+            $this->currentPageMetaData['disableTitleAttachment'] ||
+            empty($this->domainConfiguration->getTitleAttachment())
         ) {
-            $this->pageRenderer->setTitle(
-                $this->currentPageMetaData['title'] . ' ' . $this->titleAttachmentSeperator . ' ' . $this->domainConfiguration->getTitleAttachment()
-            );
+            $title = $this->currentPageMetaData['title'];
         } else {
-            $this->pageRenderer->setTitle(
-                $this->currentPageMetaData['title']
-            );
+            if ($this->domainConfiguration->getTitleAttachmentPosition() === Configuration::TITLE_ATTACHMENT_POSITION_PREFIX) {
+                $title = $this->domainConfiguration->getTitleAttachment() . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $this->currentPageMetaData['title'];
+            } else {
+                $title = $this->currentPageMetaData['title'] . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $this->domainConfiguration->getTitleAttachment();
+            }
         }
+
+        $this->pageRenderer->setTitle($title);
     }
 
     /**
