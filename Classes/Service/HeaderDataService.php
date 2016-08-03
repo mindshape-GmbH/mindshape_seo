@@ -451,7 +451,7 @@ class HeaderDataService
         );
 
         if (null !== $this->domainConfiguration->getJsonldLogo()) {
-            $jsonld['logo'] = $this->domainConfiguration
+            $jsonld['logo'] = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . $this->domainConfiguration
                 ->getJsonldLogo()
                 ->getOriginalResource()
                 ->getPublicUrl();
