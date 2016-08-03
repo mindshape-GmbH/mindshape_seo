@@ -179,68 +179,66 @@ $columns = array(
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $columns);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages_language_overlay', $columns);
 unset($columns);
 
-$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_general_pallette'] = array(
-    'showitem' => 'mindshapeseo_disable_title_attachment',
-);
+$tables = array('pages', 'pages_language_overlay');
 
-$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_google_preview_pallette'] = array(
-    'showitem' => 'mindshapeseo_google_preview',
-);
+foreach ($tables as $table) {
+    $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_general_pallette'] = array(
+        'showitem' => 'mindshapeseo_disable_title_attachment',
+    );
 
-$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_sitemap_pallette'] = array(
-    'showitem' => 'mindshapeseo_priority, --linebreak--,
+    $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_google_preview_pallette'] = array(
+        'showitem' => 'mindshapeseo_google_preview',
+    );
+
+    $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_sitemap_pallette'] = array(
+        'showitem' => 'mindshapeseo_priority, --linebreak--,
                    mindshapeseo_change_frequency, --linebreak--,
                    mindshapeseo_exclude_from_sitemap, --linebreak--,
                    mindshapeseo_exclude_suppages_from_sitemap, --linebreak--,
                    mindshapeseo_sub_sitemap',
-);
+    );
 
-$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_indexing_pallette'] = array(
-    'showitem' => 'mindshapeseo_no_index,
+    $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_indexing_pallette'] = array(
+        'showitem' => 'mindshapeseo_no_index,
                    mindshapeseo_no_index_recursive,
                    --linebreak--,
                    mindshapeseo_no_follow,
                    mindshapeseo_no_follow_recursive',
-);
+    );
+    $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_meta_pallette']['showitem'] =
+        'mindshapeseo_focus_keyword,--linebreak--,' .
+        $GLOBALS['TCA'][$table]['palettes']['metatags']['showitem'] . ',--linebreak--,mindshapeseo_canonical';
 
-$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_meta_pallette']['showitem'] =
-    'mindshapeseo_focus_keyword,--linebreak--,' .
-    $GLOBALS['TCA']['pages']['palettes']['metatags']['showitem'] . ',--linebreak--,' .
-    $GLOBALS['TCA']['pages']['palettes']['abstract']['showitem'] . ',--linebreak--,
-    mindshapeseo_canonical';
+    unset($GLOBALS['TCA'][$table]['palettes']['metatags']);
 
-$GLOBALS['TCA']['pages']['palettes']['mindshape_seo_editorial_pallette'] = $GLOBALS['TCA']['pages']['palettes']['editorial'];
+    // Facebook metadata tab
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+        $table,
+        '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.facebook_metadata,
+        mindshapeseo_ogtitle,
+        mindshapeseo_ogurl,
+        mindshapeseo_ogimage,
+        mindshapeseo_ogdescription',
+        '1,4',
+        ''
+    );
 
-unset(
-    $GLOBALS['TCA']['pages']['palettes']['abstract'],
-    $GLOBALS['TCA']['pages']['palettes']['metatags'],
-    $GLOBALS['TCA']['pages']['palettes']['editorial']
-);
+    // SEO tab
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+        $table,
+        '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.seo,
+        --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:label.general;mindshape_seo_google_preview_pallette,
+        --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:label.general;mindshape_seo_general_pallette,
+        --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata;mindshape_seo_meta_pallette, 
+        --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.editorial;mindshape_seo_editorial_pallette, 
+        --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.indexing;mindshape_seo_indexing_pallette, 
+        --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.sitemap;mindshape_seo_sitemap_pallette',
+        '1,4',
+        ''
+    );
+}
 
-// Facebook metadata tab
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-    'pages',
-    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.facebook_metadata,
-    mindshapeseo_ogtitle,
-    mindshapeseo_ogurl,
-    mindshapeseo_ogimage,
-    mindshapeseo_ogdescription',
-    '1,4',
-    ''
-);
-
-// SEO tab
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
-    'pages',
-    '--div--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.seo,
-    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:label.general;mindshape_seo_google_preview_pallette,
-    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:label.general;mindshape_seo_general_pallette,
-    --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata;mindshape_seo_meta_pallette, 
-    --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.editorial;mindshape_seo_editorial_pallette, 
-    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.indexing;mindshape_seo_indexing_pallette, 
-    --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.sitemap;mindshape_seo_sitemap_pallette',
-    '1,4',
-    ''
-);
+unset($tables);
