@@ -218,9 +218,9 @@ class PageService implements SingletonInterface
             'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             'url' => $pageUrl,
             'previewUrl' => $previewUrl,
-            'canonicalUrl' => 0 < (int) $page['mindshapeseo_canonical'] ?
+            'canonicalUrl' => !empty($page['mindshapeseo_canonical']) ?
                 $this->getPageLink(
-                    (int) $page['mindshapeseo_canonical'],
+                    $page['mindshapeseo_canonical'],
                     true,
                     $GLOBALS['TSFE']->sys_language_uid
                 ) :

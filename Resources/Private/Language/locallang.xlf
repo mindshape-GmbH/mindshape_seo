@@ -109,6 +109,9 @@
             <trans-unit id="tx_mindshapeseo_label.add_options">
                 <source>Add Metadata automaticly</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.link_wizard">
+                <source>Add a link</source>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <source>Preview</source>

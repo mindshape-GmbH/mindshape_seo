@@ -159,19 +159,21 @@ $columns = array(
         'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_canonical',
         'exclude' => 1,
         'config' => array(
-            'type' => 'group',
-            'internal_type' => 'db',
-            'allowed' => 'pages',
-            'default' => 0,
-            'size' => 1,
-            'maxitems' => 1,
-            'minitems' => 0,
+            'type' => 'input',
+            'size' => '30',
+            'softref' => 'typolink',
             'wizards' => array(
-                'suggest' => array(
-                    'type' => 'suggest',
-                    'default' => array(
-                        'additionalSearchFields' => 'nav_title, alias, url',
+                '_PADDING' => 2,
+                'link' => array(
+                    'type' => 'popup',
+                    'title' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.link_wizard',
+                    'module' => array(
+                        'name' => 'wizard_element_browser',
+                        'urlParameters' => array(
+                            'mode' => 'wizard',
+                        ),
                     ),
+                    'JSopenParams' => 'height=600,width=500,status=0,menubar=0,scrollbars=1',
                 ),
             ),
         ),
