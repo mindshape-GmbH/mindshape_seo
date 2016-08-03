@@ -13,14 +13,14 @@ return array(
 
         'delete' => 'deleted',
         'enablecolumns' => array(),
-        'searchFields' => 'domain,google_analytics,piwik_url,piwik_idsite,title_attachment,generate_sitemap,add_hreflang,add_jsonld,facebook_default_image,jsonld_custom_url,jsonld_type,jsonld_telephone,jsonld_fax,jsonld_email,jsonld_same_as,jsonld_logo,jsonld_address_locality,jsonld_address_postalcode,jsonld_address_street,',
+        'searchFields' => 'domain,google_analytics,piwik_url,piwik_idsite,title_attachment,add_hreflang,add_jsonld,add_jsonld_breadcrumb,facebook_default_image,jsonld_custom_url,jsonld_type,jsonld_telephone,jsonld_fax,jsonld_email,jsonld_same_as_facebook,jsonld_same_as_twitter,jsonld_same_as_googleplus,jsonld_same_as_instagram,jsonld_same_as_youtube,jsonld_same_as_linkedin,jsonld_same_as_myspace,jsonld_same_as_printerest,jsonld_same_as_soundcloud,jsonld_same_as_tumblr,jsonld_logo,jsonld_address_locality,jsonld_address_postalcode,jsonld_address_street,',
         'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/Icons/tx_mindshapeseo_domain_model_configuration.gif',
     ),
     'interface' => array(
-        'showRecordFieldList' => 'domain, google_analytics, piwik_url, piwik_idsite, title_attachment, generate_sitemap, add_hreflang, add_jsonld, facebook_default_image, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street',
+        'showRecordFieldList' => 'domain, google_analytics, piwik_url, piwik_idsite, title_attachment, add_hreflang, add_jsonld, add_jsonld_breadcrumb, facebook_default_image, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_myspace, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street',
     ),
     'types' => array(
-        '1' => array('showitem' => 'domain, google_analytics, piwik_url, piwik_idsite, title_attachment, generate_sitemap, add_hreflang, add_jsonld, facebook_default_image, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '),
+        '1' => array('showitem' => 'domain, google_analytics, piwik_url, piwik_idsite, title_attachment, add_hreflang, add_jsonld, add_jsonld_breadcrumb, facebook_default_image, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_myspace, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '),
     ),
     'palettes' => array(
         '1' => array('showitem' => ''),
@@ -71,14 +71,6 @@ return array(
                 'eval' => 'trim',
             ),
         ),
-        'generate_sitemap' => array(
-            'exclude' => 1,
-            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.generate_sitemap',
-            'config' => array(
-                'type' => 'check',
-                'default' => 0,
-            ),
-        ),
         'add_hreflang' => array(
             'exclude' => 1,
             'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.add_hreflang',
@@ -90,6 +82,14 @@ return array(
         'add_jsonld' => array(
             'exclude' => 1,
             'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.add_jsonld',
+            'config' => array(
+                'type' => 'check',
+                'default' => 0,
+            ),
+        ),
+        'add_jsonld_breadcrumb' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.add_jsonld_breadcrumb',
             'config' => array(
                 'type' => 'check',
                 'default' => 0,
@@ -172,13 +172,93 @@ return array(
                 'eval' => 'trim',
             ),
         ),
-        'jsonld_same_as' => array(
+        'jsonld_same_as_facebook' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as',
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook',
             'config' => array(
-                'type' => 'text',
-                'cols' => 40,
-                'rows' => 15,
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'jsonld_same_as_twitter' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.twitter',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'jsonld_same_as_googleplus' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.googleplus',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'jsonld_same_as_instagram' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'jsonld_same_as_youtube' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.youtube',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'jsonld_same_as_linkedin' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.linkedin',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'jsonld_same_as_myspace' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.myspace',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'jsonld_same_as_printerest' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.printerest',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'jsonld_same_as_soundcloud' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.soundcloud',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'jsonld_same_as_tumblr' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
                 'eval' => 'trim',
             ),
         ),

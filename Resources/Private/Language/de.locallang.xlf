@@ -106,6 +106,9 @@
             <trans-unit id="tx_mindshapeseo_label.delete">
                 <target>Löschen</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.add_options">
+                <target>Metadaten automatisch hinzufügen</target>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <target>Vorschau</target>
@@ -199,10 +202,13 @@
                 <target>Generiere eine Sitemap</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
-                <target>Füge hreflang hinzu</target>
+                <target>Hreflang Tag</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld">
-                <target>Füge JSON-LD hinzu</target>
+                <target>Website Informationen als JSON-LD</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld_breadcrumb">
+                <target>Breadcrumb als JSON-LD hinzu</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.analytics">
                 <target>Analyse</target>
@@ -217,10 +223,10 @@
                 <target>Piwik URL</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld">
-                <target>Website Informationen als JSON-LD</target>
+                <target>Website Informationen (JSON-LD)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url">
-                <target>Eigene URL</target>
+                <target>Angepasste URL (bspw. www.domain.de)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
                 <target>Typ</target>

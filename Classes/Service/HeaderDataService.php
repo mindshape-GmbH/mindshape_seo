@@ -157,7 +157,7 @@ class HeaderDataService
         $this->addMetaData();
         $this->addFacebookData();
 
-        if (0 < $this->currentPageMetaData['canonicalPageUid']) {
+        if (null !== $this->currentPageMetaData['canonicalUrl']) {
             $this->addCanonicalUrl();
         }
 
@@ -168,7 +168,10 @@ class HeaderDataService
                 $this->addHreflang();
             }
 
-            if ($this->domainConfiguration->getAddJsonld()) {
+            if (
+                $this->domainConfiguration->getAddJsonld() ||
+                $this->domainConfiguration->getAddJsonldBreadcrumb()
+            ) {
                 $this->addJsonLd();
             }
 
@@ -192,13 +195,7 @@ class HeaderDataService
     protected function addCanonicalUrl()
     {
         $this->pageRenderer->addHeaderData(
-            '<link rel="canonical" href="' .
-            $this->pageService->getPageLink(
-                $this->currentPageMetaData['canonicalPageUid'],
-                true,
-                $GLOBALS['TSFE']->sys_language_uid
-            ) .
-            '"/>'
+            '<link rel="canonical" href="' . $this->currentPageMetaData['canonicalUrl'] . '"/>'
         );
     }
 
@@ -397,12 +394,17 @@ class HeaderDataService
     {
         $jsonLdArray = array();
 
-        $jsonLdArray[] = $this->renderJsonWebsiteName();
-        $jsonLdArray[] = $this->renderJsonLdInformation();
-        $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
+        if ($this->domainConfiguration->getAddJsonld()) {
+            $jsonLdArray[] = $this->renderJsonWebsiteName();
+            $jsonLdArray[] = $this->renderJsonLdInformation();
+        }
 
-        if (0 < count($jsonLdbreadcrumb['itemListElement'])) {
-            $jsonLdArray[] = $jsonLdbreadcrumb;
+        if ($this->domainConfiguration->getAddJsonldBreadcrumb()) {
+            $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
+
+            if (0 < count($jsonLdbreadcrumb['itemListElement'])) {
+                $jsonLdArray[] = $jsonLdbreadcrumb;
+            }
         }
 
         if (0 < count($jsonLdArray)) {
@@ -451,6 +453,29 @@ class HeaderDataService
                 ->getJsonldLogo()
                 ->getOriginalResource()
                 ->getPublicUrl();
+        }
+
+        $socialMediaLinks = array(
+            'facebook' => $this->domainConfiguration->getJsonldSameAsFacebook(),
+            'twitter' => $this->domainConfiguration->getJsonldSameAsTwitter(),
+            'googleplus' => $this->domainConfiguration->getJsonldSameAsGoogleplus(),
+            'instagram' => $this->domainConfiguration->getJsonldSameAsInstagram(),
+            'youtube' => $this->domainConfiguration->getJsonldSameAsYoutube(),
+            'linkedin' => $this->domainConfiguration->getJsonldSameAsLinkedin(),
+            'myspace' => $this->domainConfiguration->getJsonldSameAsMyspace(),
+            'printerest' => $this->domainConfiguration->getJsonldSameAsPrinterest(),
+            'soundcloud' => $this->domainConfiguration->getJsonldSameAsSoundcloud(),
+            'tumblr' => $this->domainConfiguration->getJsonldSameAsTumblr(),
+        );
+
+        foreach ($socialMediaLinks as $socialMediaLink) {
+            if (!empty($socialMediaLink)) {
+                if (!is_array($jsonld['sameAs'])) {
+                    $jsonld['sameAs'] = array();
+                }
+
+                $jsonld['sameAs'][] = $socialMediaLink;
+            }
         }
 
         return $jsonld;

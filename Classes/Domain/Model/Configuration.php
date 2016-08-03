@@ -96,6 +96,13 @@ class Configuration extends AbstractEntity
     protected $addJsonld = false;
 
     /**
+     * addJsonldBreadcrumb
+     *
+     * @var bool
+     */
+    protected $addJsonldBreadcrumb = false;
+
+    /**
      * facebookDefaultImage
      *
      * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
@@ -138,11 +145,74 @@ class Configuration extends AbstractEntity
     protected $jsonldEmail = '';
 
     /**
-     * jsonldSameAs
+     * jsonldSameAsFacebook
      *
      * @var string
      */
-    protected $jsonldSameAs = '';
+    protected $jsonldSameAsFacebook = '';
+
+    /**
+     * jsonldSameAsTwitter
+     *
+     * @var string
+     */
+    protected $jsonldSameAsTwitter = '';
+
+    /**
+     * jsonldSameAsGoogleplus
+     *
+     * @var string
+     */
+    protected $jsonldSameAsGoogleplus = '';
+
+    /**
+     * jsonldSameAsInstagram
+     *
+     * @var string
+     */
+    protected $jsonldSameAsInstagram = '';
+
+    /**
+     * jsonldSameAsYoutube
+     *
+     * @var string
+     */
+    protected $jsonldSameAsYoutube = '';
+
+    /**
+     * jsonldSameAsLinkedin
+     *
+     * @var string
+     */
+    protected $jsonldSameAsLinkedin = '';
+
+    /**
+     * jsonldSameAsMyspace
+     *
+     * @var string
+     */
+    protected $jsonldSameAsMyspace = '';
+
+    /**
+     * jsonldSameAsPrinterest
+     *
+     * @var string
+     */
+    protected $jsonldSameAsPrinterest = '';
+
+    /**
+     * jsonldSameAsSoundcloud
+     *
+     * @var string
+     */
+    protected $jsonldSameAsSoundcloud = '';
+
+    /**
+     * jsonldSameAsTumblr
+     *
+     * @var string
+     */
+    protected $jsonldSameAsTumblr = '';
 
     /**
      * jsonldLogo
@@ -278,37 +348,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the generateSitemap
-     *
-     * @return bool $generateSitemap
-     */
-    public function getGenerateSitemap()
-    {
-        return $this->generateSitemap;
-    }
-
-    /**
-     * Sets the generateSitemap
-     *
-     * @param bool $generateSitemap
-     * @return void
-     */
-    public function setGenerateSitemap($generateSitemap)
-    {
-        $this->generateSitemap = $generateSitemap;
-    }
-
-    /**
-     * Returns the boolean state of generateSitemap
-     *
-     * @return bool
-     */
-    public function isGenerateSitemap()
-    {
-        return $this->generateSitemap;
-    }
-
-    /**
      * Returns the addHreflang
      *
      * @return bool $addHreflang
@@ -368,6 +407,37 @@ class Configuration extends AbstractEntity
     public function isAddJsonld()
     {
         return $this->addJsonld;
+    }
+
+    /**
+     * Returns the addJsonldBreadcrumb
+     *
+     * @return bool $addJsonldBreadcrumb
+     */
+    public function getAddJsonldBreadcrumb()
+    {
+        return $this->addJsonldBreadcrumb;
+    }
+
+    /**
+     * Sets the addJsonldBreadcrumb
+     *
+     * @param bool $addJsonldBreadcrumb
+     * @return void
+     */
+    public function setAddJsonldBreadcrumb($addJsonldBreadcrumb)
+    {
+        $this->addJsonldBreadcrumb = $addJsonldBreadcrumb;
+    }
+
+    /**
+     * Returns the boolean state of addJsonldBreadcrumb
+     *
+     * @return bool
+     */
+    public function isAddJsonldBreadcrumb()
+    {
+        return $this->addJsonldBreadcrumb;
     }
 
     /**
@@ -497,24 +567,213 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAs
+     * Returns the jsonldSameAsFacebook
      *
      * @return string $jsonldSameAs
      */
-    public function getJsonldSameAs()
+    public function getJsonldSameAsFacebook()
     {
-        return $this->jsonldSameAs;
+        return $this->jsonldSameAsFacebook;
     }
 
     /**
-     * Sets the jsonldSameAs
+     * Sets the jsonldSameAsFacebook
      *
-     * @param string $jsonldSameAs
+     * @param string $jsonldSameAsFacebook
      * @return void
      */
-    public function setJsonldSameAs($jsonldSameAs)
+    public function setJsonldSameAsFacebook($jsonldSameAsFacebook)
     {
-        $this->jsonldSameAs = $jsonldSameAs;
+        $this->jsonldSameAsFacebook = $jsonldSameAsFacebook;
+    }
+
+    /**
+     * Returns the jsonldSameAsTwitter
+     *
+     * @return string $jsonldSameAs
+     */
+    public function getJsonldSameAsTwitter()
+    {
+        return $this->jsonldSameAsTwitter;
+    }
+
+    /**
+     * Sets the jsonldSameAsTwitter
+     *
+     * @param string $jsonldSameAsTwitter
+     * @return void
+     */
+    public function setJsonldSameAsTwitter($jsonldSameAsTwitter)
+    {
+        $this->jsonldSameAsTwitter = $jsonldSameAsTwitter;
+    }
+
+    /**
+     * Returns the jsonldSameAsGoogleplus
+     *
+     * @return string $jsonldSameAs
+     */
+    public function getJsonldSameAsGoogleplus()
+    {
+        return $this->jsonldSameAsGoogleplus;
+    }
+
+    /**
+     * Sets the jsonldSameAsGoogleplus
+     *
+     * @param string $jsonldSameAsGoogleplus
+     * @return void
+     */
+    public function setJsonldSameAsGoogleplus($jsonldSameAsGoogleplus)
+    {
+        $this->jsonldSameAsGoogleplus = $jsonldSameAsGoogleplus;
+    }
+
+    /**
+     * Returns the jsonldSameAsInstagram
+     *
+     * @return string $jsonldSameAs
+     */
+    public function getJsonldSameAsInstagram()
+    {
+        return $this->jsonldSameAsInstagram;
+    }
+
+    /**
+     * Sets the jsonldSameAsInstagram
+     *
+     * @param string $jsonldSameAsInstagram
+     * @return void
+     */
+    public function setJsonldSameAsInstagram($jsonldSameAsInstagram)
+    {
+        $this->jsonldSameAsInstagram = $jsonldSameAsInstagram;
+    }
+
+    /**
+     * Returns the jsonldSameAsYoutube
+     *
+     * @return string $jsonldSameAs
+     */
+    public function getJsonldSameAsYoutube()
+    {
+        return $this->jsonldSameAsYoutube;
+    }
+
+    /**
+     * Sets the jsonldSameAsYoutube
+     *
+     * @param string $jsonldSameAsYoutube
+     * @return void
+     */
+    public function setJsonldSameAsYoutube($jsonldSameAsYoutube)
+    {
+        $this->jsonldSameAsYoutube = $jsonldSameAsYoutube;
+    }
+
+    /**
+     * Returns the jsonldSameAsLinkedin
+     *
+     * @return string $jsonldSameAs
+     */
+    public function getJsonldSameAsLinkedin()
+    {
+        return $this->jsonldSameAsLinkedin;
+    }
+
+    /**
+     * Sets the jsonldSameAsLinkedin
+     *
+     * @param string $jsonldSameAsLinkedin
+     * @return void
+     */
+    public function setJsonldSameAsLinkedin($jsonldSameAsLinkedin)
+    {
+        $this->jsonldSameAsLinkedin = $jsonldSameAsLinkedin;
+    }
+
+    /**
+     * Returns the jsonldSameAsMyspace
+     *
+     * @return string $jsonldSameAs
+     */
+    public function getJsonldSameAsMyspace()
+    {
+        return $this->jsonldSameAsMyspace;
+    }
+
+    /**
+     * Sets the jsonldSameAsMyspace
+     *
+     * @param string $jsonldSameAsMyspace
+     * @return void
+     */
+    public function setJsonldSameAsMyspace($jsonldSameAsMyspace)
+    {
+        $this->jsonldSameAsMyspace = $jsonldSameAsMyspace;
+    }
+
+    /**
+     * Returns the jsonldSameAsPrinterest
+     *
+     * @return string $jsonldSameAs
+     */
+    public function getJsonldSameAsPrinterest()
+    {
+        return $this->jsonldSameAsPrinterest;
+    }
+
+    /**
+     * Sets the jsonldSameAsPrinterest
+     *
+     * @param string $jsonldSameAsPrinterest
+     * @return void
+     */
+    public function setJsonldSameAsPrinterest($jsonldSameAsPrinterest)
+    {
+        $this->jsonldSameAsPrinterest = $jsonldSameAsPrinterest;
+    }
+
+    /**
+     * Returns the jsonldSameAsSoundcloud
+     *
+     * @return string $jsonldSameAs
+     */
+    public function getJsonldSameAsSoundcloud()
+    {
+        return $this->jsonldSameAsSoundcloud;
+    }
+
+    /**
+     * Sets the jsonldSameAsSoundcloud
+     *
+     * @param string $jsonldSameAsSoundcloud
+     * @return void
+     */
+    public function setJsonldSameAsSoundcloud($jsonldSameAsSoundcloud)
+    {
+        $this->jsonldSameAsSoundcloud = $jsonldSameAsSoundcloud;
+    }
+
+    /**
+     * Returns the jsonldSameAsTumblr
+     *
+     * @return string $jsonldSameAs
+     */
+    public function getJsonldSameAsTumblr()
+    {
+        return $this->jsonldSameAsTumblr;
+    }
+
+    /**
+     * Sets the jsonldSameAsTumblr
+     *
+     * @param string $jsonldSameAsTumblr
+     * @return void
+     */
+    public function setJsonldSameAsTumblr($jsonldSameAsTumblr)
+    {
+        $this->jsonldSameAsTumblr = $jsonldSameAsTumblr;
     }
 
     /**

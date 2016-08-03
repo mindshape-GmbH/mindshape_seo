@@ -106,6 +106,9 @@
             <trans-unit id="tx_mindshapeseo_label.delete">
                 <source>Delete</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.add_options">
+                <source>Add Metadata automaticly</source>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <source>Preview</source>
@@ -202,7 +205,10 @@
                 <source>Add Hreflang</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld">
-                <source>Add JSON-LD</source>
+                <source>Add website information as JSON-LD</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld_breadcrumb">
+                <source>Add breadcrumb as JSON-LD</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.analytics">
                 <source>Analytics</source>
@@ -217,10 +223,10 @@
                 <source>Piwik URL</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld">
-                <source>Website information as JSON-LD</source>
+                <source>Website information (JSON-LD)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url">
-                <source>Custom URL</source>
+                <source>Custom URL (example: www.domain.com)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
                 <source>Type</source>
@@ -252,11 +258,42 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.email">
                 <source>E-Mail</source>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
-                <source>Social Media Links</source>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.logo">
                 <source>Logo</source>
+            </trans-unit>
+
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
+                <source>Links zu sozialen Netzwerken (sameAs)</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook">
+                <source>Facebook</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.twitter">
+                <source>Twitter</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.googleplus">
+                <source>Google+</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram">
+                <source>Instagram</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.youtube">
+                <source>YouTube</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.linkedin">
+                <source>LinkedIn</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.myspace">
+                <source>Myspace</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.printerest">
+                <source>Pinterest</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.soundcloud">
+                <source>SoundCloud</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr">
+                <source>Tumblr</source>
             </trans-unit>
         </body>
     </file>
