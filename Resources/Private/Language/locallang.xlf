@@ -53,17 +53,35 @@
                 <source>Never</source>
             </trans-unit>
 
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_index">
+                <source>index</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index">
-                <source>No Index</source>
+                <source>noindex</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_inherited">
+                <source>noindex (inherited)</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_label">
+                <source>Do not index this page (noindex)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_recursive">
-                <source>No Index recursive</source>
+                <source>No Index on all subpages</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_follow">
+                <source>follow</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow">
-                <source>No Follow</source>
+                <source>nofollow</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_inherited">
+                <source>nofollow (inherited)</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_label">
+                <source>Do not follow this page (nofollow)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive">
-                <source>No Follow recursive</source>
+                <source>No Follow on all subpages</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap">
                 <source>Exclude page from XML-Sitemap</source>
@@ -112,6 +130,12 @@
             <trans-unit id="tx_mindshapeseo_label.link_wizard">
                 <source>Add a link</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.robots">
+                <source>Robots</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.inherited_from_page">
+                <source>Inherited from page (pid)</source>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <source>Preview</source>
@@ -142,6 +166,9 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword">
                 <source>Focus Keyword</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword.not_available">
+                <source>n/a</source>
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview.alert.title_length">
@@ -216,17 +243,14 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
                 <source>Facebook Default Image</source>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.generate_sitemap">
-                <source>Generate XML-Sitemap</source>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
-                <source>Add Hreflang</source>
+                <source>Hreflang Tag</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld">
-                <source>Add website information as JSON-LD</source>
+                <source>Website information as JSON-LD</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld_breadcrumb">
-                <source>Add breadcrumb as JSON-LD</source>
+                <source>Breadcrumb as JSON-LD</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.analytics">
                 <source>Analytics</source>
@@ -293,6 +317,9 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.email">
                 <source>E-Mail</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
+                <source>Links to social networks</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.logo">
                 <source>Logo</source>

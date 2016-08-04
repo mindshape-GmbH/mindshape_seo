@@ -97,31 +97,68 @@
                             </f:if>
                         </td>
                         <td width="25%">
-                            <form name="robots" class="robots-form">
-                                <f:form.hidden name="pageUid" value="{page.row.uid}"/>
-                                <div class="form-group">
-                                    <div class="checkbox noindex">
-                                        <label>
-                                            <f:form.checkbox name="noindex" value="1" checked="{page.metadata.meta.robots.noindex}"/>
-                                            <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index"/>
-                                            <core:icon identifier="provider-fontawesome-error"/>
-                                        </label>
-                                        <span class="loader">
-                                            <f:image src="{f:uri.resource(path: 'Icons/loading.svg', extensionName: 'mindshape_seo')}" title="Loading..."/>
-                                        </span>
-                                    </div>
-                                    <div class="checkbox nofollow">
-                                        <label>
-                                            <f:form.checkbox name="nofollow" value="1" checked="{page.metadata.meta.robots.nofollow}"/>
-                                            <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow"/>
-                                            <core:icon identifier="provider-fontawesome-error"/>
-                                        </label>
-                                        <span class="loader">
-                                            <f:image src="{f:uri.resource(path: 'Icons/loading.svg', extensionName: 'mindshape_seo')}" title="Loading..."/>
-                                        </span>
-                                    </div>
-                                </div>
-                            </form>
+                            <div class="focus-keyword">
+                                <label>
+                                    <f:translate key="tx_mindshapeseo_label.preview.focus_keyword"/>
+                                </label>
+                                <f:if condition="{page.metadata.meta.focusKeyword}">
+                                    <f:then>
+                                        {page.metadata.meta.focusKeyword}
+                                    </f:then>
+                                    <f:else>
+                                    <span class="focus-keyword-na">
+                                        <f:translate key="tx_mindshapeseo_label.preview.focus_keyword.not_available"/>
+                                    </span>
+                                    </f:else>
+                                </f:if>
+                            </div>
+                            <div class="robots">
+                                <label>
+                                    <f:translate key="tx_mindshapeseo_label.robots"/>:
+                                </label>
+                                <f:if condition="{page.metadata.meta.robots.noindexInherited}">
+                                    <f:then>
+                                        <dfn class="msh-tooltip" title="{f:translate(key: 'tx_mindshapeseo_label.inherited_from_page')}: {page.metadata.meta.robots.noindexInherited}">
+                                            <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_inherited"/>,
+                                        </dfn>
+                                    </f:then>
+                                    <f:else>
+                                        <f:if condition="{page.metadata.meta.robots.noindex}">
+                                            <f:then>
+                                                <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index"/>,
+                                            </f:then>
+                                            <f:else>
+                                                <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_index"/>,
+                                            </f:else>
+                                        </f:if>
+                                    </f:else>
+                                </f:if>
+                                <f:if condition="{page.metadata.meta.robots.noindexInherited}">
+                                    <f:then>
+                                        <dfn class="msh-tooltip" title="{f:translate(key: 'tx_mindshapeseo_label.inherited_from_page')}: {page.metadata.meta.robots.nofollowInherited}">
+                                            <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_inherited"/>,
+                                        </dfn>
+                                    </f:then>
+                                    <f:else>
+                                        <f:if condition="{page.metadata.meta.robots.noindex}">
+                                            <f:then>
+                                                <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow"/>
+                                            </f:then>
+                                            <f:else>
+                                                <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_follow"/>
+                                            </f:else>
+                                        </f:if>
+                                    </f:else>
+                                </f:if>
+                            </div>
+                            <div class="canonical">
+                                <f:if condition="{page.metadata.canonicalUrl}">
+                                    <label>
+                                        <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_canonical"/>:
+                                    </label>
+                                    {page.metadata.canonicalUrl}
+                                </f:if>
+                            </div>
                         </td>
                     </tr>
                 </f:for>

@@ -53,13 +53,31 @@
                 <target>Niemals</target>
             </trans-unit>
 
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_index">
+                <source>index</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index">
+                <target>noindex</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_inherited">
+                <target>noindex (vererbt)</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_label">
                 <target>Nicht indexieren (noindex)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_recursive">
                 <target>Nicht indexieren rekursiv auf Unterseiten anwenden</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_follow">
+                <target>follow</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow">
+                <target>nofollow</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_inherited">
+                <source>nofollow (vererbt)</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_label">
                 <target>Nicht verfolgen (nofollow)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive">
@@ -112,6 +130,12 @@
             <trans-unit id="tx_mindshapeseo_label.link_wizard">
                 <target>Link hinzufügen</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.robots">
+                <target>Robots</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.inherited_from_page">
+                <target>geerbt von Seite (pid)</target>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <target>Vorschau</target>
@@ -142,6 +166,9 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword">
                 <target>Fokus Schlüsselwort</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword.not_available">
+                <target>n/a</target>
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview.alert.title_length">
@@ -215,9 +242,6 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
                 <target>Facebook Standard Bild</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.generate_sitemap">
-                <target>Generiere eine Sitemap</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
                 <target>Hreflang Tag</target>
@@ -299,6 +323,40 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.logo">
                 <target>Logo</target>
+            </trans-unit>
+
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
+                <target>Links zu sozialen Netzwerken (sameAs)</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook">
+                <target>Facebook</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.twitter">
+                <target>Twitter</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.googleplus">
+                <target>Google+</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram">
+                <target>Instagram</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.youtube">
+                <target>YouTube</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.linkedin">
+                <target>LinkedIn</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.myspace">
+                <target>Myspace</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.printerest">
+                <target>Pinterest</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.soundcloud">
+                <target>SoundCloud</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr">
+                <target>Tumblr</target>
             </trans-unit>
         </body>
     </file>

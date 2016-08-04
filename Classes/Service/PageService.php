@@ -233,6 +233,8 @@ class PageService implements SingletonInterface
                 'robots' => array(
                     'noindex' => (bool) $page['mindshapeseo_no_index'],
                     'nofollow' => (bool) $page['mindshapeseo_no_follow'],
+                    'noindexInherited' => $this->pageInheritedProperty((int) $page['uid'], 'mindshapeseo_no_index_recursive'),
+                    'nofollowInherited' => $this->pageInheritedProperty((int) $page['uid'], 'mindshapeseo_no_follow_recursive'),
                 ),
             ),
             'facebook' => array(
@@ -408,5 +410,26 @@ class PageService implements SingletonInterface
         $tree->tree[0]['hasSub'] = 1 < count($tree->tree);
 
         return $tree->tree;
+    }
+
+    /**
+     * Checks if a recursive field was set above the page
+     * Returns the pid where property was set or false
+     *
+     * @param int $pageUid
+     * @param string $property
+     * @return int|bool
+     */
+    protected function pageInheritedProperty($pageUid, $property)
+    {
+        $inherited = false;
+        $inheritedPageUid = false;
+
+        foreach ($this->getRootlineReverse($pageUid) as $page) {
+            $inherited = (bool) $page[$property] && $pageUid !== (int) $page['uid'] ? !$inherited : $inherited;
+            $inheritedPageUid = $inherited ? (int) $page['uid'] : false;
+        }
+
+        return $inheritedPageUid;
     }
 }

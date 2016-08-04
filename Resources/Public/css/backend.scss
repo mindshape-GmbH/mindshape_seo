@@ -1,6 +1,8 @@
 $googleLinkBlue: #1A0DAB;
 $googleUrlGreen: #006621;
 $googleDescriptionGrey: #545454;
+$white: #fff;
+$darkgrey: #333;
 
 .mindshapeseo-preview {
   .pagetree-info {
@@ -89,16 +91,41 @@ $googleDescriptionGrey: #545454;
   .icon-provider-fontawesome-check i {color: green;}
   .icon-provider-fontawesome-error i {color: red;}
 
-  .loader {
-    display: none;
-    img {
-      height: 16px;
-      width: 16px;
-    }
-  }
-
   ul.pagination {
     margin: 1em 0 2em;
+  }
+
+  .msh-tooltip {
+    display: inline;
+    position: relative;
+    font-style: normal;
+
+    &:hover {
+      &:after {
+        background: $darkgrey;
+        background: rgba(0, 0, 0, .8);
+        border-radius: 5px;
+        bottom: 26px;
+        color: $white;
+        content: attr(title);
+        left: 20%;
+        padding: 5px 15px;
+        position: absolute;
+        width: 220px;
+        z-index: 98;
+      }
+
+      &:before {
+        border: solid;
+        border-color: $darkgrey transparent;
+        border-width: 6px 6px 0;
+        bottom: 20px;
+        content: '';
+        left: 50%;
+        position: absolute;
+        z-index: 99;
+      }
+    }
   }
 }
 

@@ -60,35 +60,6 @@ class AjaxHandler implements SingletonInterface
                             'title' => $data['title'],
                             'description' => $data['description'],
                             'mindshapeseo_focus_keyword' => $data['focusKeyword'],
-                        )
-                    );
-                } else {
-                    $ajaxRequestHandler->setError('Invalid Data');
-                }
-            }
-        }
-
-        return $ajaxRequestHandler->render();
-    }
-
-    /**
-     * @param array $params
-     * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler|null $ajaxRequestHandler
-     * @return \Psr\Http\Message\ResponseInterface
-     */
-    public function savePageRobots(array $params = array(), AjaxRequestHandler $ajaxRequestHandler = null)
-    {
-        /** @var ServerRequest $request */
-        $request = $params['request'];
-
-        if ($request instanceof ServerRequest) {
-            $data = $request->getParsedBody();
-
-            if (is_array($data)) {
-                if (0 < $data['pageUid']) {
-                    $this->savePageData(
-                        $data['pageUid'],
-                        array(
                             'mindshapeseo_no_index' => (bool) $data['noindex'] ? 1 : 0,
                             'mindshapeseo_no_follow' => (bool) $data['nofollow'] ? 1 : 0,
                         )
