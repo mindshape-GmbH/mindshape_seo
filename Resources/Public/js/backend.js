@@ -57,25 +57,24 @@
       this.$previewContainers.on('click', '.edit', function (e) {
         e.preventDefault();
 
-        that.openPreviewEditPanel($(this).parents('.google-preview'));
-      });
-
-      // Abort click on edit panel
-      this.$previewContainers.on('click', '.abort', function (e) {
-        e.preventDefault();
-
         var $currentPreview = $(this).parents('.google-preview');
-        var fokuskeyword = $currentPreview.find('.focus-keyword input').val();
+        var $currentEditPanel = $currentPreview.find('.edit-panel');
 
-        that.closePreviewEditPanel($currentPreview);
-        that.restorePreviewOriginalData($currentPreview);
-        that.checkPreviewEditPanelSaveState($currentPreview);
-        that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLength);
-        that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
-        that.updatePreviewAlerts($currentPreview);
+        if ($currentEditPanel.is(':hidden')) {
+          that.openPreviewEditPanel($currentPreview);
+        } else {
+          var fokuskeyword = $currentPreview.find('.focus-keyword input').val();
 
-        if (fokuskeyword.trim().length) {
-          that.checkFocusKeyword($currentPreview, fokuskeyword);
+          that.closePreviewEditPanel($currentPreview);
+          that.restorePreviewOriginalData($currentPreview);
+          that.checkPreviewEditPanelSaveState($currentPreview);
+          that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLength);
+          that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
+          that.updatePreviewAlerts($currentPreview);
+
+          if (fokuskeyword.trim().length) {
+            that.checkFocusKeyword($currentPreview, fokuskeyword);
+          }
         }
       });
 
@@ -97,6 +96,10 @@
         } else {
           $alertsContainer.slideUp();
         }
+      });
+
+      this.$previewContainers.on('click', 'input[type="checkbox"]', function () {
+        that.checkPreviewEditPanelSaveState($(this).parents('.google-preview'));
       });
 
       // Change preview title when editing title
@@ -189,6 +192,10 @@
       $previewContainer.find('.edit-panel .title').val($previewContainer.attr('data-original-title'));
       $previewContainer.find('.edit-panel .description').val($previewContainer.attr('data-original-description'));
       this.renderPreviewDescription($previewContainer);
+      $previewContainer.find('.edit-panel .noindex input[type="checkbox"]')
+        .prop('checked', 0 < parseInt($previewContainer.attr('data-original-noindex')));
+      $previewContainer.find('.edit-panel .nofollow input[type="checkbox"]')
+        .prop('checked', 0 < parseInt($previewContainer.attr('data-original-nofollow')));
     },
     renderPreviewDescription: function ($previewContainer) {
       var description = $previewContainer.find('.preview-box .description').text();
@@ -205,13 +212,17 @@
       var title = $previewContainer.find('.edit-panel .title').val();
       var description = $previewContainer.find('.edit-panel .description').val();
       var focusKeyword = $previewContainer.find('.focus-keyword input').val();
+      var noindex = $previewContainer.find('.noindex input[type="checkbox"]').is(':checked');
+      var nofollow = $previewContainer.find('.nofollow input[type="checkbox"]').is(':checked');
 
       if (
         0 < title.length &&
         (
           $previewContainer.attr('data-original-title') !== title.trim() ||
           $previewContainer.attr('data-original-description') !== description.trim() ||
-          $previewContainer.attr('data-original-focuskeyword') !== focusKeyword.trim()
+          $previewContainer.attr('data-original-focuskeyword') !== focusKeyword.trim() ||
+          0 < parseInt($previewContainer.attr('data-original-noindex')) !== noindex ||
+          0 < parseInt($previewContainer.attr('data-original-nofollow')) !== nofollow
         )
       ) {
         $previewContainer.find('button.save').prop('disabled', false);
@@ -254,21 +265,17 @@
         .removeClass('progress-bar-success')
         .addClass(progressbarStatusClass);
     },
-    closePreviewEditPanel: function ($previewContainer, callback) {
+    closePreviewEditPanel: function ($previewContainer) {
       $previewContainer.find('.edit-panel').slideUp();
-      $previewContainer.find('button.save, button.abort').fadeOut(function () {
-        $previewContainer.find('button.edit').fadeIn(function () {
-          if (typeof callback === 'function')
-            callback();
-        });
-      });
+      $previewContainer.find('button.save').show();
+      $previewContainer.find('button.edit .edit-text').show();
+      $previewContainer.find('button.edit .abort-text').hide();
     },
     openPreviewEditPanel: function ($previewContainer) {
-      $previewContainer.find('.icon-provider-fontawesome-check').hide();
       $previewContainer.find('.edit-panel').slideDown();
-      $previewContainer.find('button.edit').fadeOut(function () {
-        $previewContainer.find('button.save, button.abort').fadeIn();
-      });
+      $previewContainer.find('button.save').show();
+      $previewContainer.find('button.edit .edit-text').hide();
+      $previewContainer.find('button.edit .abort-text').show();
     },
     savePreviewEditPanel: function ($previewContainer) {
       var that = this;
@@ -277,6 +284,8 @@
         return;
       }
 
+      $previewContainer.find('.edit-panel .save').prop('disabled', true);
+
       $.ajax({
         type: "POST",
         url: TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::savePage'],
@@ -284,11 +293,16 @@
         success: function () {
           $previewContainer.attr('data-original-title', $previewContainer.find('.edit-panel .title').val().trim());
           $previewContainer.attr('data-original-description', $previewContainer.find('.edit-panel .description').val().trim());
+          $previewContainer.attr(
+            'data-original-noindex',
+            $previewContainer.find('.edit-panel .noindex input[type="checkbox"]').is(':checked') ? 1 : 0);
+          $previewContainer.attr(
+            'data-original-nofollow',
+            $previewContainer.find('.edit-panel .nofollow input[type="checkbox"]').is(':checked') ? 1 : 0
+          );
 
           that.checkPreviewEditPanelSaveState($previewContainer);
-          that.closePreviewEditPanel($previewContainer, function () {
-            $previewContainer.find('.icon-provider-fontawesome-check').show();
-          });
+          that.closePreviewEditPanel($previewContainer);
         },
         error: function () {
           $previewContainer.find('.icon-provider-fontawesome-error').show();

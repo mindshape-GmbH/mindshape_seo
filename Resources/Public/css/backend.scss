@@ -1,7 +1,9 @@
 $googleLinkBlue: #1A0DAB;
 $googleUrlGreen: #006621;
 $googleDescriptionGrey: #545454;
+$bootstrapBorderGray: #ddd;
 $white: #fff;
+$grey: #ededed;
 $darkgrey: #333;
 
 .mindshapeseo-preview {
@@ -85,11 +87,11 @@ $darkgrey: #333;
     }
   }
 
-  .icon-provider-fontawesome-check,
-  .icon-provider-fontawesome-error {display: none;}
+  .icon-provider-fontawesome-error {
+    display: none;
 
-  .icon-provider-fontawesome-check i {color: green;}
-  .icon-provider-fontawesome-error i {color: red;}
+    i {color: red;}
+  }
 
   ul.pagination {
     margin: 1em 0 2em;
@@ -132,13 +134,9 @@ $darkgrey: #333;
 .google-preview {
   .thumbnail {
     width: 620px;
-    margin: 0;
-    padding: 10px 10px;
-
-    hr {
-      background-color: rgba(#000, 0.12);
-      margin: 10px 0;
-    }
+    margin: 0 0 1.5em 0;
+    padding: .8em;
+    position: relative;
   }
 
   .preview-box {
@@ -210,16 +208,29 @@ $darkgrey: #333;
       resize: none;
       height: 65px;
     }
+
+    hr {
+      position: relative;
+      background-color: rgba(#000, 0.12);
+      margin: 10px 0;
+      left: -.8em;
+      width: calc(100% + 1.6em);
+    }
   }
 
-  .form-group.focus-keyword {margin-bottom: 0;}
-
   button {
-    &.save {
-      display: none;
-    }
-    &.abort {
-      display: none;
+    &.save {display: none;}
+    &.edit {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 1em;
+      font-size: .8em;
+      background-color: $bootstrapBorderGray;
+      border: solid 1px $bootstrapBorderGray;
+
+      &:hover {background-color: $grey}
+      .abort-text {display: none;}
     }
   }
 
