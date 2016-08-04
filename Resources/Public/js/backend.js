@@ -1,15 +1,21 @@
 (function ($, TYPO3, MSH) {
   MSH = MSH || {};
   MSH = {
-    googleTitleLength: 50,
-    googleDescriptionLength: 180,
-    googleDescriptionMinLength: 20,
+    googleTitleLengthPixel: 580,
+    googleDescriptionLengthPixel: 920,
+    googleDescriptionMinLengthPixel: 300,
+    googleDescriptionFontSize: '13px',
+    googleTitleFontSize: '18px',
+    googleFontFamily: 'arial,sans-serif',
+    googleEllipsis: ' ...',
     $previewContainers: {},
     $robotForms: {},
+    canvasRenderingContext: {},
     editing: true,
     init: function () {
       var that = this;
 
+      this.canvasRenderingContext = document.createElement('canvas').getContext('2d');
       this.$previewContainers = $('.google-preview');
       this.$robotForms = $('.robots-form');
 
@@ -21,8 +27,8 @@
         that.updatePreviewAlerts($(this));
 
         if (that.editing) {
-          that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLength);
-          that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLength);
+          that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLengthPixel);
+          that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLengthPixel);
         }
       });
 
@@ -68,8 +74,8 @@
           that.closePreviewEditPanel($currentPreview);
           that.restorePreviewOriginalData($currentPreview);
           that.checkPreviewEditPanelSaveState($currentPreview);
-          that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLength);
-          that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
+          that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLengthPixel);
+          that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLengthPixel);
           that.updatePreviewAlerts($currentPreview);
 
           if (fokuskeyword.trim().length) {
@@ -105,10 +111,15 @@
       // Change preview title when editing title
       this.$previewContainers.on('keyup', '.edit-panel .title', function () {
         var $currentPreview = $(this).parents('.google-preview');
+        var fokusKeyword = $currentPreview.find('.focus-keyword input').val().trim();
 
         $currentPreview.find('.preview-box .title').html($(this).val());
-        that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLength);
+        that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLengthPixel);
         that.updatePreviewAlerts($currentPreview);
+
+        if (0 < fokusKeyword.length) {
+          that.checkFocusKeyword($currentPreview, fokusKeyword);
+        }
 
         if (that.editing) {
           that.checkPreviewEditPanelSaveState($currentPreview);
@@ -122,7 +133,7 @@
 
         $currentPreview.find('.preview-box .description').html($(this).val());
         that.renderPreviewDescription($currentPreview);
-        that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLength);
+        that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLengthPixel);
 
         if (0 < fokusKeyword.length) {
           that.checkFocusKeyword($currentPreview, fokusKeyword);
@@ -198,12 +209,22 @@
         .prop('checked', 0 < parseInt($previewContainer.attr('data-original-nofollow')));
     },
     renderPreviewDescription: function ($previewContainer) {
-      var description = $previewContainer.find('.preview-box .description').text();
+      var description = $previewContainer.find('.preview-box .description').text().trim();
 
-      description = description.trim();
+      if (this.googleDescriptionLengthPixel < this.calcStringPixelLength(description, this.googleFontFamily, this.googleDescriptionFontSize)) {
+        var invalidLastChar = function (description) {
+          return description.slice(-1).match(/(\s|\.)/);
+        };
 
-      if (this.googleDescriptionLength < description.length) {
-        description = description.substring(0, this.googleDescriptionLength) + ' ...';
+        while (invalidLastChar(description)) {
+          description = description.slice(0, -1);
+        }
+
+        while (this.googleDescriptionLengthPixel < this.calcStringPixelLength(description, this.googleFontFamily, this.googleDescriptionFontSize)) {
+          description = description.slice(0, -1);
+        }
+
+        description += this.googleEllipsis;
       }
 
       $previewContainer.find('.preview-box .description').html(description);
@@ -236,10 +257,24 @@
       }
     },
     updatePreviewEditPanelProgressBar: function ($previewContainer, fieldName, maxLength) {
-      var fieldText = $previewContainer.find('.edit-panel .' + fieldName).val();
+      var fieldText = '';
+
+      if ('title' === fieldName) {
+        fieldText = $previewContainer.find('.preview-box h3')[0].innerText;
+        fieldText.replace(/\n/, ' ')
+      } else {
+        fieldText = $previewContainer.find('.edit-panel .description').val();
+      }
+
       var percent = 0;
-      var fieldLength = fieldText.trim().length;
       var progressbarStatusClass = 'progress-bar-';
+      var fieldLength = this.calcStringPixelLength(
+        fieldText.trim(),
+        this.googleFontFamily,
+        fieldName === 'description' ?
+          this.googleDescriptionFontSize :
+          this.googleTitleFontSize
+      );
 
       maxLength = parseInt(maxLength);
 
@@ -396,13 +431,13 @@
       var description = $previewContainer.find('.preview-box .description').text();
       var $alertsContainer = $previewContainer.find('.alerts-container');
 
-      if (titleLength > this.googleTitleLength) {
+      if (titleLength > this.googleTitleLengthPixel) {
         $alertsContainer.find('.title-length').show();
       } else {
         $alertsContainer.find('.title-length').hide();
       }
 
-      if (description.length > this.googleDescriptionLength) {
+      if (description.length > this.googleDescriptionLengthPixel) {
         $alertsContainer.find('.description-length').show();
       } else {
         $alertsContainer.find('.description-length').hide();
@@ -414,7 +449,7 @@
       } else {
         $alertsContainer.find('.description-empty').hide();
 
-        if (description.length < this.googleDescriptionMinLength) {
+        if (description.length < this.googleDescriptionMinLengthPixel) {
           $alertsContainer.find('.description-min-length').show();
         } else {
           $alertsContainer.find('.description-min-length').hide();
@@ -462,6 +497,11 @@
           .removeClass('btn-danger')
           .addClass('btn-success');
       }
+    },
+    calcStringPixelLength: function (text, fontFamily, fontSize) {
+      this.canvasRenderingContext.font = fontSize + ' ' + fontFamily;
+
+      return parseInt(this.canvasRenderingContext.measureText(text).width);
     }
   };
 
