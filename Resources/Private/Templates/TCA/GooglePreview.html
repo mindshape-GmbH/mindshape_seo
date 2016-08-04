@@ -24,18 +24,17 @@
                 focusKeywordFieldName: tcaName
             }"/>
         </f:then>
-        <f:else>
-            <div class="row">
-                <div class="col-sm-12 col-md-6">
-                    <div class="form-group">
-                        <label>
-                            <f:translate key="tx_mindshapeseo_label.preview.focus_keyword"/>
-                        </label>
-                        <f:form.textfield name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" class="form-control"/>
-                    </div>
-                </div>
-            </div>
-        </f:else>
     </f:if>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="form-group">
+                <label>
+                    <f:translate key="tx_mindshapeseo_label.preview.focus_keyword"/>
+                </label>
+                <f:form.textfield id="focusKeyword" name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" class="form-control"/>
+            </div>
+        </div>
+    </div>
 
 </html>
