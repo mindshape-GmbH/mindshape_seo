@@ -1,5 +1,6 @@
 <html data-namespace-typo3-fluid="true" lang="en"
       xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers">
 
     <f:if condition="{metadata}">
@@ -23,6 +24,21 @@
                 editing: 0
                 focusKeywordFieldName: tcaName
             }"/>
+
+            <div class="seo-check">
+                <div class="info-container">
+                    <label>
+                        <f:translate key="tx_mindshapeseo_label.preview.button.seo_check"/>
+                        (<span class="alerts"></span>/<span class="all"></span>)
+                        <a href="#" class="info">
+                            <core:icon identifier="provider-fontawesome-info"/>
+                        </a>
+                    </label>
+                    <div class="progress progress-seo-check">
+                        <div class="progress-bar progress-bar-danger" role="progressbar"></div>
+                    </div>
+                </div>
+            </div>
         </f:then>
     </f:if>
 
@@ -36,5 +52,7 @@
             </div>
         </div>
     </div>
+
+    <f:render partial="AlertModal"/>
 
 </html>

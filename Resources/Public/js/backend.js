@@ -22,13 +22,13 @@
       this.$previewContainers.each(function () {
         that.editing = 0 < parseInt($(this).attr('data-editing'));
 
+        that.renderPreviewDescription($(this));
+
         if (that.editing) {
           that.checkFocusKeyword($(this), $(this).find('.focus-keyword input').val());
         } else {
           that.checkFocusKeyword($(this), $('#focusKeyword').val());
         }
-
-        that.renderPreviewDescription($(this));
 
         if (that.editing) {
           $(this).parents('.page').find('.seo-check .all').html(that.numberOfSeoChecks);
@@ -37,7 +37,8 @@
           that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLengthPixel);
           that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLengthPixel);
         } else {
-          that.updatePreviewAlerts($(this), $('#focusKeyword'));
+          $('form').find('.seo-check .all').html(that.numberOfSeoChecks);
+          that.updatePreviewAlerts($(this), $('#focusKeyword'), $('textarea[name="data[pages][' + $(this).find('input[name="pageUid"]').val() + '][description]"]'));
         }
       });
 
@@ -179,7 +180,7 @@
             that.checkFocusKeyword($currentPreview, focusKeyword);
           }
 
-          that.updatePreviewAlerts($currentPreview, $(this));
+          that.updatePreviewAlerts($currentPreview, $('#focusKeyword'),$(this));
         });
       }
 
@@ -190,16 +191,24 @@
         if (that.editing) {
           $currentPreview = $(this).parents('.google-preview');
         } else {
-          $currentPreview = $tcaForm.find('.google-preview');
+          $currentPreview = $(document).find('.google-preview');
         }
 
         var focusKeyword = $(this).val().trim();
 
         that.checkFocusKeyword($currentPreview, focusKeyword);
-        that.updatePreviewAlerts($currentPreview);
+
+
 
         if (that.editing) {
+          that.updatePreviewAlerts($currentPreview);
           that.checkPreviewEditPanelSaveState($currentPreview);
+        } else {
+          that.updatePreviewAlerts(
+            $currentPreview,
+            $('#focusKeyword'),
+            $('textarea[name="data[pages][' + $currentPreview.find('input[name="pageUid"]').val() + '][description]"]')
+          );
         }
       });
 
@@ -233,7 +242,7 @@
         .prop('checked', 0 < parseInt($previewContainer.attr('data-original-nofollow')));
     },
     renderPreviewDescription: function ($previewContainer) {
-      var description = $previewContainer.find('.preview-box .description')[0].innerText;
+      var description = $previewContainer.find('.preview-box .description').text().trim();
 
       if (this.googleDescriptionLengthPixel < this.calcStringPixelLength(description, this.googleFontFamily, this.googleDescriptionFontSize)) {
         var invalidLastChar = function (description) {
@@ -432,7 +441,7 @@
       if ('undefined' !== typeof $descriptionInput) {
         description = $descriptionInput.val().trim();
       } else {
-        description = $previewContainer.find('.edit-panel .description').val().trim();
+        description = $.trim($previewContainer.find('.edit-panel .description').val());
       }
 
       var descriptionLengthPixel = this.calcStringPixelLength(description, this.googleFontFamily, this.googleDescriptionFontSize);
@@ -512,14 +521,20 @@
       $visibleElements.first().addClass('first-visible');
       $visibleElements.last().addClass('last-visible');
 
-      if (this.editing) {
-        $previewContainer.parents('.page').find('.progress-seo-check .progress-bar').css(
-          'width',
-          100 / this.numberOfSeoChecks * alertsCounter
-        );
+      var $seoCheckParent = {};
 
-        $previewContainer.parents('.page').find('.seo-check .alerts').html(alertsCounter);
+      if (this.editing) {
+        $seoCheckParent = $previewContainer.parents('.page');
+      } else {
+        $seoCheckParent = $('form');
       }
+
+      $seoCheckParent.find('.seo-check .progress-seo-check .progress-bar').css(
+        'width',
+        100 / this.numberOfSeoChecks * alertsCounter
+      );
+
+      $seoCheckParent.find('.seo-check .alerts').html(alertsCounter);
     },
     calcStringPixelLength: function (text, fontFamily, fontSize) {
       this.canvasRenderingContext.font = fontSize + ' ' + fontFamily;
