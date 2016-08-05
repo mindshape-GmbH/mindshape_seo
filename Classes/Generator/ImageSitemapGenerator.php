@@ -73,7 +73,7 @@ class ImageSitemapGenerator extends SitemapGenerator
         $urls = '';
 
         $pages = $this->pageService->getSubPagesFromPageUid(
-            $this->pageService->getRootline()[0]['uid']
+            $GLOBALS['TSFE']->page['uid']
         );
 
         foreach ($pages as $page) {
