@@ -15,6 +15,22 @@
             <f:else>
                 <div class="mindshapeseo-preview">
                     <f:render section="Preview" arguments="{_all}"/>
+
+                    <div id="msh-modal" class="modal fade" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <div class="modal-title">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4>
+                                            <f:translate key="tx_mindshapeseo_label.preview.button.seo_check"/>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div class="modal-body"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </f:else>
         </f:if>
@@ -80,7 +96,7 @@
                                 <span class="title">{page.row.title}</span>
                             </span>
                         </td>
-                        <td width="50%">
+                        <td width="50%" class="google-preview-column">
                             <f:if condition="{page.row}">
                                 <f:render partial="GoogleSearchPreview" section="Main" arguments="{
                                     titleAttachment: titleAttachment,
@@ -99,6 +115,20 @@
                             </f:if>
                         </td>
                         <td width="25%">
+                            <div class="seo-check">
+                                <div class="info-container">
+                                    <label>
+                                        <f:translate key="tx_mindshapeseo_label.preview.button.seo_check"/>
+                                        (<span class="alerts"></span>/<span class="all"></span>)
+                                        <a href="#" class="info">
+                                            <core:icon identifier="provider-fontawesome-info"/>
+                                        </a>
+                                    </label>
+                                    <div class="progress progress-seo-check">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar"></div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="focus-keyword">
                                 <label>
                                     <f:translate key="tx_mindshapeseo_label.preview.focus_keyword"/>

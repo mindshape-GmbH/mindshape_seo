@@ -49,9 +49,21 @@ if (TYPO3_MODE === 'BE') {
 $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
 
 $iconRegistry->registerIcon(
+    'provider-fontawesome-info',
+    \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+    [ 'name' => 'info-circle' ]
+);
+
+$iconRegistry->registerIcon(
     'provider-fontawesome-error',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'times' ]
+    [ 'name' => 'exclamation-triangle' ]
+);
+
+$iconRegistry->registerIcon(
+    'provider-fontawesome-success',
+    \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+    [ 'name' => 'check' ]
 );
 
 $iconRegistry->registerIcon(

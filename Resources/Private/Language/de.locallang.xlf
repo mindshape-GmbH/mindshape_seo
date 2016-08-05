@@ -183,6 +183,9 @@
             <trans-unit id="tx_mindshapeseo_label.preview.alert.description_empty">
                 <target>Die Seitenbeschreibung ist leer</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.alert.focus_keyword_missing">
+                <target>Fokus Schlüsselwort ist nicht gesetzt</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.alert.focus_keyword_missing_title">
                 <target>Fokus Schlüsselwort wurde nicht im Titel gefunden</target>
             </trans-unit>

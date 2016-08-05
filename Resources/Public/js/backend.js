@@ -1,6 +1,7 @@
 (function ($, TYPO3, MSH) {
   MSH = MSH || {};
   MSH = {
+    numberOfSeoChecks: 6,
     googleTitleLengthPixel: 580,
     googleDescriptionLengthPixel: 920,
     googleDescriptionMinLengthPixel: 300,
@@ -9,7 +10,6 @@
     googleFontFamily: 'arial,sans-serif',
     googleEllipsis: ' ...',
     $previewContainers: {},
-    $robotForms: {},
     canvasRenderingContext: {},
     editing: true,
     init: function () {
@@ -17,7 +17,6 @@
 
       this.canvasRenderingContext = document.createElement('canvas').getContext('2d');
       this.$previewContainers = $('.google-preview');
-      this.$robotForms = $('.robots-form');
 
       // Initial description rendering (kills whitespace etc.)
       this.$previewContainers.each(function () {
@@ -32,6 +31,8 @@
         that.renderPreviewDescription($(this));
 
         if (that.editing) {
+          $(this).parents('.page').find('.seo-check .all').html(that.numberOfSeoChecks);
+
           that.updatePreviewAlerts($(this));
           that.updatePreviewEditPanelProgressBar($(this), 'title', that.googleTitleLengthPixel);
           that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLengthPixel);
@@ -44,7 +45,6 @@
     },
     registerEvents: function () {
       var that = this;
-      var $focusKeywordContainer = this.$previewContainers;
 
       // Change selection of pagetree depth
       $('#depthselect').on('change', function () {
@@ -155,16 +155,6 @@
         }
       });
 
-      // Re-render description on change
-      this.$previewContainers.on('change', '.preview-box .description', function () {
-        that.renderPreviewDescription($(this).parents('.google-preview'));
-      });
-
-      // Save robots data on un-/check
-      this.$robotForms.on('change', 'input', function () {
-        that.saveRobotsData($(this).parents('.robots-form'), $(this));
-      });
-
       if (!this.editing) {
         var $tcaForm = $('form');
         var $currentPreview = $('.google-preview');
@@ -189,14 +179,12 @@
             that.checkFocusKeyword($currentPreview, focusKeyword);
           }
 
-          that.updatePreviewAlerts($currentPreview);
+          that.updatePreviewAlerts($currentPreview, $(this));
         });
-
-        $focusKeywordContainer = $tcaForm;
       }
 
       // Update focus keyword check
-      $focusKeywordContainer.on('keyup', '.focus-keyword input, #focusKeyword', function () {
+      $(document).on('keyup', '.focus-keyword input, #focusKeyword', function () {
         var $currentPreview = {};
 
         if (that.editing) {
@@ -214,6 +202,24 @@
           that.checkPreviewEditPanelSaveState($currentPreview);
         }
       });
+
+      $(document).on('click', '.info, .progress-seo-check', function (e) {
+        e.preventDefault();
+
+        var $parent = {};
+
+        if (that.editing) {
+          $parent = $(this).parents('.page');
+        } else {
+          //TODO: tca parent
+          $parent = $('form');
+        }
+
+        var $modal = $('#msh-modal');
+
+        $modal.find('.modal-body').html($parent.find('.google-preview .alerts-container').html());
+        $modal.modal();
+      });
     },
     restorePreviewOriginalData: function ($previewContainer) {
       $previewContainer.find('.preview-box .title').html($previewContainer.attr('data-original-title'));
@@ -227,7 +233,7 @@
         .prop('checked', 0 < parseInt($previewContainer.attr('data-original-nofollow')));
     },
     renderPreviewDescription: function ($previewContainer) {
-      var description = $previewContainer.find('.preview-box .description').text().trim();
+      var description = $previewContainer.find('.preview-box .description')[0].innerText;
 
       if (this.googleDescriptionLengthPixel < this.calcStringPixelLength(description, this.googleFontFamily, this.googleDescriptionFontSize)) {
         var invalidLastChar = function (description) {
@@ -362,31 +368,6 @@
         }
       });
     },
-    saveRobotsData: function ($robotsForm, $input) {
-      $.ajax({
-        type: "POST",
-        url: TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::savePageRobots'],
-        data: $robotsForm.serialize(),
-        success: function () {
-          var $loadingIcon = $input.parents('.checkbox').find('.loader');
-
-          $loadingIcon.css('display', 'inline');
-          $input.prop('disabled', true);
-
-          setTimeout(function () {
-            $loadingIcon.fadeOut(function () {
-              $input.prop('disabled', false);
-            });
-          }, 1000);
-        },
-        error: function () {
-          var $errorIcon = $input.parents('.checkbox').find('.icon-provider-fontawesome-error');
-
-          $errorIcon.css('display', 'inline-block');
-          $input.prop('disabled', true);
-        }
-      });
-    },
     checkFocusKeyword: function ($previewContainer, focusKeyword) {
       this.renderPreviewDescription($previewContainer);
       this.clearPreviewTitle($previewContainer);
@@ -444,34 +425,47 @@
         $previewContainer.find('.preview-box .url').text().trim()
       );
     },
-    updatePreviewAlerts: function ($previewContainer, $focusKeywordInput) {
-      var titleLength = $previewContainer.find('.preview-box .title').text().length + $previewContainer.find('.preview-box .attachment').text().length;
-      var description = $previewContainer.find('.preview-box .description').text();
+    updatePreviewAlerts: function ($previewContainer, $focusKeywordInput, $descriptionInput) {
+      var titleLengthPixel = this.calcStringPixelLength($previewContainer.find('.preview-box h3')[0].innerText, this.googleFontFamily, this.googleTitleFontSize);
+      var description = '';
+
+      if ('undefined' !== typeof $descriptionInput) {
+        description = $descriptionInput.val().trim();
+      } else {
+        description = $previewContainer.find('.edit-panel .description').val().trim();
+      }
+
+      var descriptionLengthPixel = this.calcStringPixelLength(description, this.googleFontFamily, this.googleDescriptionFontSize);
       var focusKeyword = $.trim('undefined' !== typeof $focusKeywordInput ?
         $focusKeywordInput.val() :
         $previewContainer.find('.focus-keyword input').val());
       var $alertsContainer = $previewContainer.find('.alerts-container');
+      var alertsCounter = 0;
 
-      if (titleLength > this.googleTitleLengthPixel) {
+      if (titleLengthPixel > this.googleTitleLengthPixel) {
         $alertsContainer.find('.title-length').show();
+        alertsCounter++;
       } else {
         $alertsContainer.find('.title-length').hide();
       }
 
-      if (description.length > this.googleDescriptionLengthPixel) {
+      if (descriptionLengthPixel > this.googleDescriptionLengthPixel) {
         $alertsContainer.find('.description-length').show();
+        alertsCounter++;
       } else {
         $alertsContainer.find('.description-length').hide();
       }
 
-      if (description.length === 0) {
+      if (descriptionLengthPixel === 0) {
         $alertsContainer.find('.description-empty').show();
         $alertsContainer.find('.description-min-length').hide();
+        alertsCounter++;
       } else {
         $alertsContainer.find('.description-empty').hide();
 
-        if (description.length < this.googleDescriptionMinLengthPixel) {
+        if (descriptionLengthPixel < this.googleDescriptionMinLengthPixel) {
           $alertsContainer.find('.description-min-length').show();
+          alertsCounter++;
         } else {
           $alertsContainer.find('.description-min-length').hide();
         }
@@ -479,13 +473,17 @@
 
       if (0 === focusKeyword.length) {
         $alertsContainer.find('.focus-keyword').hide();
+        $alertsContainer.find('.focus-keyword-missing').show();
+        alertsCounter++;
       } else {
+        $alertsContainer.find('.focus-keyword-missing').hide();
         if (0 < parseInt($previewContainer.attr('data-keyword-title-matches'))) {
           $alertsContainer.find('.focus-keyword.missing-title').hide();
           $alertsContainer.find('.focus-keyword.found-title').show();
         } else {
           $alertsContainer.find('.focus-keyword.missing-title').show();
           $alertsContainer.find('.focus-keyword.found-title').hide();
+          alertsCounter++;
         }
 
         if (0 < parseInt($previewContainer.attr('data-keyword-description-matches'))) {
@@ -494,6 +492,7 @@
         } else {
           $alertsContainer.find('.focus-keyword.missing-description').show();
           $alertsContainer.find('.focus-keyword.found-description').hide();
+          alertsCounter++;
         }
 
         if (0 < parseInt($previewContainer.attr('data-keyword-url-matches'))) {
@@ -502,20 +501,24 @@
         } else {
           $alertsContainer.find('.focus-keyword.missing-url').show();
           $alertsContainer.find('.focus-keyword.found-url').hide();
+          alertsCounter++;
         }
       }
 
-      if (0 < $previewContainer.find('.alerts-container .alert-danger').filter(function () { return $(this).css('display') !== 'none'; }).length) {
-        $previewContainer.find('.buttons .alerts').prop('disabled', false);
-        $previewContainer.find('.buttons .alerts')
-          .removeClass('btn-success')
-          .addClass('btn-danger');
-      } else {
-        $previewContainer.find('.alerts-container').hide();
-        $previewContainer.find('.buttons .alerts').prop('disabled', true);
-        $previewContainer.find('.buttons .alerts')
-          .removeClass('btn-danger')
-          .addClass('btn-success');
+      $alertsContainer.find('li').removeClass('first-visible').removeClass('last-visible');
+
+      var $visibleElements = $previewContainer.find('.alerts-container li').filter(function () { return $(this).css('display') !== 'none'; });
+
+      $visibleElements.first().addClass('first-visible');
+      $visibleElements.last().addClass('last-visible');
+
+      if (this.editing) {
+        $previewContainer.parents('.page').find('.progress-seo-check .progress-bar').css(
+          'width',
+          100 / this.numberOfSeoChecks * alertsCounter
+        );
+
+        $previewContainer.parents('.page').find('.seo-check .alerts').html(alertsCounter);
       }
     },
     calcStringPixelLength: function (text, fontFamily, fontSize) {

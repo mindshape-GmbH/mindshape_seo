@@ -114,41 +114,75 @@
             </div>
         </f:if>
 
-        <div class="row">
-            <div class="col-sm-12 alerts-container">
-                <div class="well well-sm">
-                    <div class="alert alert-danger title-length" role="alert">
-                        <f:translate key="tx_mindshapeseo_label.preview.alert.title_length"/>
-                    </div>
-                    <div class="alert alert-danger description-length" role="alert">
-                        <f:translate key="tx_mindshapeseo_label.preview.alert.description_length"/>
-                    </div>
-                    <div class="alert alert-danger description-min-length" role="alert">
-                        <f:translate key="tx_mindshapeseo_label.preview.alert.description_min_length"/>
-                    </div>
-                    <div class="alert alert-danger description-empty" role="alert">
-                        <f:translate key="tx_mindshapeseo_label.preview.alert.description_empty"/>
-                    </div>
-                    <div class="alert alert-danger focus-keyword missing-title" role="alert">
-                        <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_missing_title"/>
-                    </div>
-                    <div class="alert alert-danger focus-keyword missing-description" role="alert">
-                        <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_missing_description"/>
-                    </div>
-                    <div class="alert alert-danger focus-keyword missing-url" role="alert">
-                        <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_missing_url"/>
-                    </div>
-                    <div class="alert alert-success focus-keyword found-title" role="alert">
-                        <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_found_title"/>
-                    </div>
-                    <div class="alert alert-success focus-keyword found-description" role="alert">
-                        <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_found_description"/>
-                    </div>
-                    <div class="alert alert-success focus-keyword found-url" role="alert">
-                        <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_found_url"/>
-                    </div>
-                </div>
-            </div>
+        <div class="alerts-container">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-danger title-length">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-error"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.title_length"/>
+                </li>
+                <li class="list-group-item list-group-item-danger description-length">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-error"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.description_length"/>
+                </li>
+                <li class="list-group-item list-group-item-danger description-min-length">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-error"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.description_min_length"/>
+                </li>
+                <li class="list-group-item list-group-item-danger description-empty">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-error"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.description_empty"/>
+                </li>
+                <li class="list-group-item list-group-item-danger focus-keyword-missing">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-error"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_missing"/>
+                </li>
+                <li class="list-group-item list-group-item-danger focus-keyword missing-title">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-error"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_missing_title"/>
+                </li>
+                <li class="list-group-item list-group-item-danger focus-keyword missing-description">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-error"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_missing_description"/>
+                </li>
+                <li class="list-group-item list-group-item-danger focus-keyword missing-url">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-error"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_missing_url"/>
+                </li>
+                <li class="list-group-item list-group-item-success focus-keyword found-title">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-success"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_found_title"/>
+                </li>
+                <li class="list-group-item list-group-item-success focus-keyword found-description">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-success"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_found_description"/>
+                </li>
+                <li class="list-group-item list-group-item-success focus-keyword found-url">
+                    <span class="badge">
+                        <core:icon identifier="provider-fontawesome-success"/>
+                    </span>
+                    <f:translate key="tx_mindshapeseo_label.preview.alert.focus_keyword_found_url"/>
+                </li>
+            </ul>
         </div>
 
     </f:section>
