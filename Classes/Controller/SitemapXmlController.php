@@ -26,6 +26,7 @@ namespace Mindshape\MindshapeSeo\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Generator\ImageSitemapGenerator;
 use Mindshape\MindshapeSeo\Generator\SitemapGenerator;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -43,6 +44,11 @@ class SitemapXmlController implements SingletonInterface
     protected $sitemapGenerator;
 
     /**
+     * @var \Mindshape\MindshapeSeo\Generator\ImageSitemapGenerator
+     */
+    protected $imageSitemapGenerator;
+
+    /**
      * @return SitemapXmlController
      */
     public function __construct()
@@ -50,6 +56,7 @@ class SitemapXmlController implements SingletonInterface
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->sitemapGenerator = $objectManager->get(SitemapGenerator::class);
+        $this->imageSitemapGenerator = $objectManager->get(ImageSitemapGenerator::class);
     }
 
     /**
@@ -66,5 +73,15 @@ class SitemapXmlController implements SingletonInterface
         }
 
         return $this->sitemapGenerator->generateSitemapXml($pageUid);
+    }
+
+    /**
+     * @param string $content
+     * @param array $conf
+     * @return string
+     */
+    public function imageSitemapAction($content, $conf)
+    {
+        return $this->imageSitemapGenerator->generateImageSitemapXml();
     }
 }

@@ -16,5 +16,7 @@ plugin.tx_mindshape_seo {
     }
 }
 
-# cat=mindshape_seo/settings; type=string; label=Sitemap.xml page typeNum
+# cat=mindshape_seo/settings; type=string; label=sitemap.xml page typeNum
 sitemap.typeNum = 10000
+# cat=mindshape_seo/settings; type=string; label=sitemap-image.xml page typeNum
+imageSitemap.typeNum = 10001
