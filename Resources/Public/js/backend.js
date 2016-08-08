@@ -115,7 +115,10 @@
       });
 
       this.$previewContainers.on('click', 'input[type="checkbox"]', function () {
-        that.checkPreviewEditPanelSaveState($(this).parents('.google-preview'));
+        var $currentPreview = $(this).parents('.google-preview');
+
+        that.checkAndChangeIndexPreview($currentPreview);
+        that.checkPreviewEditPanelSaveState($currentPreview);
       });
 
       // Change preview title when editing title
@@ -360,15 +363,56 @@
       $previewContainer.find('button.edit .edit-text').hide();
       $previewContainer.find('button.edit .abort-text').show();
     },
+    checkAndChangeIndexPreview: function ($previewContainer, setOriginalData) {
+      var $noindexPreview = $('.robots .noindex');
+      var $nofollowPreview = $('.robots .nofollow');
+
+      if ($previewContainer.find('.edit-panel .noindex input[type="checkbox"]').is(':checked')) {
+        if (setOriginalData) {
+          $previewContainer.attr('data-original-noindex', 1);
+        }
+
+        if (this.editing) {
+          $noindexPreview.html('noindex');
+          $noindexPreview.addClass('danger');
+        }
+      } else {
+        if (setOriginalData) {
+          $previewContainer.attr('data-original-noindex', 0);
+        }
+
+        if (this.editing) {
+          $noindexPreview.html('index');
+          $noindexPreview.removeClass('danger');
+        }
+      }
+
+      if ($previewContainer.find('.edit-panel .nofollow input[type="checkbox"]').is(':checked')) {
+        if (setOriginalData) {
+          $previewContainer.attr('data-original-nofollow', 1);
+        }
+
+        if (this.editing) {
+          $nofollowPreview.html('nofollow');
+          $nofollowPreview.addClass('danger');
+        }
+      } else {
+        if (setOriginalData) {
+          $previewContainer.attr('data-original-nofollow', 0);
+        }
+
+        if (this.editing) {
+          $nofollowPreview.html('follow');
+          $nofollowPreview.removeClass('danger');
+        }
+      }
+    },
     savePreviewEditPanel: function ($previewContainer) {
       var that = this;
 
       if (!this.editing) {
         return;
       }
-
-      var $noindexPreview = $('.robots .noindex');
-      var $nofollowPreview = $('.robots .nofollow');
 
       $previewContainer.find('.edit-panel .save').prop('disabled', true);
 
@@ -381,37 +425,7 @@
           $previewContainer.attr('data-original-description', $previewContainer.find('.edit-panel .description').val().trim());
           $previewContainer.attr('data-original-focuskeyword', $previewContainer.find('.edit-panel .focus-keyword input').val().trim());
 
-          if ($previewContainer.find('.edit-panel .noindex input[type="checkbox"]').is(':checked')) {
-            $previewContainer.attr('data-original-noindex', 1);
-
-            if (that.editing) {
-              $noindexPreview.html('noindex');
-              $noindexPreview.addClass('danger');
-            }
-          } else {
-            $previewContainer.attr('data-original-noindex', 0);
-
-            if (that.editing) {
-              $noindexPreview.html('index');
-              $noindexPreview.removeClass('danger');
-            }
-          }
-
-          if ($previewContainer.find('.edit-panel .nofollow input[type="checkbox"]').is(':checked')) {
-            $previewContainer.attr('data-original-nofollow', 1);
-
-            if (that.editing) {
-              $nofollowPreview.html('nofollow');
-              $nofollowPreview.addClass('danger');
-            }
-          } else {
-            $previewContainer.attr('data-original-nofollow', 0);
-
-            if (that.editing) {
-              $nofollowPreview.html('follow');
-              $nofollowPreview.removeClass('danger');
-            }
-          }
+          that.checkAndChangeIndexPreview($previewContainer, true);
 
           that.checkPreviewEditPanelSaveState($previewContainer);
           that.closePreviewEditPanel($previewContainer);
