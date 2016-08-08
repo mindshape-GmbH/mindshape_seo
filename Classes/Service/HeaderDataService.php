@@ -487,7 +487,10 @@ class HeaderDataService
             }
         }
 
-        if (null !== $this->domainConfiguration->getJsonldLogo()) {
+        if (
+            null !== $this->domainConfiguration->getJsonldLogo() &&
+            Configuration::JSONLD_TYPE_PERSON !== $this->domainConfiguration->getJsonldType()
+        ) {
             $jsonld['logo'] = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . $this->domainConfiguration
                 ->getJsonldLogo()
                 ->getOriginalResource()

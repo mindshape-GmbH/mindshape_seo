@@ -149,6 +149,8 @@ $darkgrey: #333;
     height: 1em;
     margin-bottom: 1em;
   }
+
+  .robots {margin-bottom: .4em;}
 }
 
 .google-preview {
@@ -300,7 +302,9 @@ $darkgrey: #333;
     margin-top: 1em;
   }
   #jsonld {display: none;}
-  fieldset:last-child {
-    margin-bottom: 1em;
+
+  fieldset {
+    &:last-child {margin-bottom: 1em;}
+    &.logo {display: none;}
   }
 }

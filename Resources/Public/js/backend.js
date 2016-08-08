@@ -547,8 +547,24 @@
     MSH.init();
 
     var $addJsonld = $('#addJsonld');
-    var $jsonld =$('#jsonld');
-    var $sameas =$('.sameas');
+    var $jsonld = $('#jsonld');
+    var $sameas = $('.sameas');
+    var $jsonldTypeSelect = $('.type-select');
+    var $jsonldLogo = $('fieldset.logo');
+
+    if ('undefined' !== typeof $jsonldTypeSelect) {
+      if($jsonldTypeSelect.val() === 'organization') {
+        $jsonldLogo.show();
+      }
+
+      $jsonldTypeSelect.on('change', function () {
+        if($jsonldTypeSelect.val() === 'organization') {
+          $jsonldLogo.slideDown();
+        } else {
+          $jsonldLogo.slideUp();
+        }
+      });
+    }
 
     if ('undefined' !== typeof $addJsonld) {
       if($addJsonld.prop('checked')) {
