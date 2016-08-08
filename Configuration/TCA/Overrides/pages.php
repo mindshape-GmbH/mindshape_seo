@@ -107,31 +107,43 @@ $columns = array(
         ),
     ),
     'mindshapeseo_no_index' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index',
+        'label' => '',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
+            'items' => array(
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index', ''),
+            ),
         ),
     ),
     'mindshapeseo_no_index_recursive' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_recursive',
+        'label' => '',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
+            'items' => array(
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_recursive', ''),
+            ),
         ),
     ),
     'mindshapeseo_no_follow' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow',
+        'label' => '',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
+            'items' => array(
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow', ''),
+            ),
         ),
     ),
     'mindshapeseo_no_follow_recursive' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive',
+        'label' => '',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
+            'items' => array(
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive', ''),
+            ),
         ),
     ),
     'mindshapeseo_exclude_from_sitemap' => array(
@@ -197,10 +209,12 @@ foreach ($tables as $table) {
 
     $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_indexing_pallette'] = array(
         'showitem' => 'mindshapeseo_no_index,
-                   mindshapeseo_no_index_recursive,
-                   --linebreak--,
-                   mindshapeseo_no_follow,
-                   mindshapeseo_no_follow_recursive',
+                       --linebreak--,
+                       mindshapeseo_no_index_recursive,
+                       --linebreak--,
+                       mindshapeseo_no_follow,
+                       --linebreak--,
+                       mindshapeseo_no_follow_recursive',
     );
     $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_meta_pallette']['showitem'] =
         'mindshapeseo_focus_keyword,--linebreak--,mindshapeseo_disable_title_attachment,--linebreak--,' .
