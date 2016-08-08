@@ -285,14 +285,20 @@ class HeaderDataService
         }
 
         if (
-            $this->currentPageMetaData['meta']['robots']['noindex'] &&
+            (
+                $this->currentPageMetaData['meta']['robots']['noindex'] ||
+                $this->currentPageMetaData['meta']['robots']['noindexInherited']
+            ) &&
             !in_array('noindex', $robots, true)
         ) {
             $robots[] = 'noindex';
         }
 
         if (
-            $this->currentPageMetaData['meta']['robots']['nofollow'] &&
+            (
+                $this->currentPageMetaData['meta']['robots']['nofollow'] ||
+                $this->currentPageMetaData['meta']['robots']['nofollowInherited']
+            ) &&
             !in_array('nofollow', $robots, true)
         ) {
             $robots[] = 'nofollow';
