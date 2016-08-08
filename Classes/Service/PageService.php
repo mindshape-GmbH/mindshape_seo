@@ -203,7 +203,7 @@ class PageService implements SingletonInterface
             $googleBreadcrumb = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('HTTP_HOST');
 
             foreach ($rootline as $index => $parentPage) {
-                $googleBreadcrumb .= $index < count($rootline) ? ' > ' : '';
+                $googleBreadcrumb .= $index < count($rootline) ? ' › ' : '';
                 $googleBreadcrumb .= $parentPage['title'];
             }
 
