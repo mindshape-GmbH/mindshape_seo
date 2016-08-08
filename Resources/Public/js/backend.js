@@ -364,8 +364,8 @@
       $previewContainer.find('button.edit .abort-text').show();
     },
     checkAndChangeIndexPreview: function ($previewContainer, setOriginalData) {
-      var $noindexPreview = $('.robots .noindex');
-      var $nofollowPreview = $('.robots .nofollow');
+      var $noindexPreview = $previewContainer.parents('.page').find('.robots .noindex');
+      var $nofollowPreview = $previewContainer.parents('.page').find('.robots .nofollow');
 
       if ($previewContainer.find('.edit-panel .noindex input[type="checkbox"]').is(':checked')) {
         if (setOriginalData) {
