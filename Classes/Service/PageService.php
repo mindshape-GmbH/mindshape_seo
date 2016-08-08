@@ -48,7 +48,7 @@ use TYPO3\CMS\Frontend\Page\PageRepository;
 class PageService implements SingletonInterface
 {
     const TREE_DEPTH_INFINITY = -1;
-    const TREE_DEPTH_DEFAULT = 2;
+    const TREE_DEPTH_DEFAULT = 1;
 
     /**
      * @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder
@@ -389,7 +389,9 @@ class PageService implements SingletonInterface
             self::$pageTreeDepth = $depth;
         }
 
-        $tree->getTree($pageUid, $depth);
+        if (0 < $depth) {
+            $tree->getTree($pageUid, $depth);
+        }
 
         foreach ($tree->tree as $key => $treeItem) {
             if (
