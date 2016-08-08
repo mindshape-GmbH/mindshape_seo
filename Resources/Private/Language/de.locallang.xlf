@@ -136,6 +136,9 @@
             <trans-unit id="tx_mindshapeseo_label.inherited_from_page">
                 <target>geerbt von Seite (pid)</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.contactdata">
+                <target>Kontaktdaten</target>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <target>Vorschau</target>
@@ -247,13 +250,13 @@
                 <target>Facebook Standard Bild</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
-                <target>Hreflang Tag</target>
+                <target>hreflang-Tag für mehrsprachige Webseiten einfügen</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld">
                 <target>Website Informationen als JSON-LD</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld_breadcrumb">
-                <target>Breadcrumb als JSON-LD</target>
+                <target>Breadcrumb als JSON-LD einfügen</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.analytics">
                 <target>Analytics</target>
@@ -289,7 +292,7 @@
                 <target>Angepasste URL</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
-                <source>(Beispiel: 'www.domain.de' anstatt 'http://domain.de')</source>
+                <target>(Beispiel: 'www.domain.de' anstatt 'http://domain.de')</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
                 <target>Typ</target>
@@ -321,15 +324,12 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.email">
                 <target>E-Mail</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
-                <target>Links zu sozialen Netzwerken</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.logo">
                 <target>Logo</target>
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
-                <target>Links zu sozialen Netzwerken (sameAs)</target>
+                <target>Links zu sozialen Netzwerken als JSON-LD einfügen</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook">
                 <target>Facebook</target>

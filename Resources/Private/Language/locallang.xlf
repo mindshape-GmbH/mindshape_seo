@@ -136,6 +136,9 @@
             <trans-unit id="tx_mindshapeseo_label.inherited_from_page">
                 <source>Inherited from page (pid)</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.contactdata">
+                <source>Contactdata</source>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <source>Preview</source>
@@ -321,15 +324,12 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.email">
                 <source>E-Mail</source>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
-                <source>Links to social networks</source>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.logo">
                 <source>Logo</source>
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
-                <source>Links zu sozialen Netzwerken (sameAs)</source>
+                <source>Add social media links as JSON-LD</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook">
                 <source>Facebook</source>

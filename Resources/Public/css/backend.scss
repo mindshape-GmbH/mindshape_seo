@@ -295,4 +295,12 @@ $darkgrey: #333;
 #mindshape-seo-configuration {
   .mindshape-seo-delete {margin-bottom: 1em;}
   .row.analytics {padding-bottom: 1em;}
+  .sameas {
+    display: none;
+    margin-top: 1em;
+  }
+  #jsonld {display: none;}
+  fieldset:last-child {
+    margin-bottom: 1em;
+  }
 }

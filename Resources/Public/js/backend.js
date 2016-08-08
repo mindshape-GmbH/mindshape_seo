@@ -545,5 +545,26 @@
 
   $(document).ready(function () {
     MSH.init();
+
+    var $addJsonld = $('#addJsonld');
+    var $jsonld =$('#jsonld');
+    var $sameas =$('.sameas');
+
+    if ('undefined' !== typeof $addJsonld) {
+      if($addJsonld.prop('checked')) {
+        $jsonld.show();
+        $sameas.show();
+      }
+
+      $addJsonld.on('click', function () {
+        if($addJsonld.prop('checked')) {
+          $jsonld.slideDown();
+          $sameas.fadeIn()
+        } else {
+          $jsonld.slideUp();
+          $sameas.fadeOut();
+        }
+      });
+    }
   });
 })(TYPO3.jQuery || jQuery, TYPO3, MSH = null);
