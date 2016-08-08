@@ -12,7 +12,7 @@ plugin.tx_mindshape_seo {
         # cat=mindshape_seo/settings; type=string; label=Seperator for title attachment
         titleAttachmentSeperator = |
         # cat=mindshape_seo/settings; type=boolean; label=Use a pagination in previews pagetree
-        pageTree.usePagination = 0
+        pageTree.usePagination = 1
     }
 }
 
