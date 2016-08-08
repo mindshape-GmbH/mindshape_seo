@@ -46,14 +46,21 @@
                 <a href="{url}" target="_blank">
                     <f:if condition="{titleAttachment}">
                         <f:then>
-                            <f:if condition="{titleAttachmentPosition} == 'prefix'">
+                            <f:if condition="{disableTitleAttachment}">
                                 <f:then>
-                                    <span class="attachment">{titleAttachment}&nbsp;{titleAttachmentSeperator}</span>
                                     <span class="title">{title}</span>
                                 </f:then>
                                 <f:else>
-                                    <span class="title">{title}</span>
-                                    <span class="attachment">{titleAttachmentSeperator}&nbsp;{titleAttachment}</span>
+                                    <f:if condition="{titleAttachmentPosition} == 'prefix'">
+                                        <f:then>
+                                            <span class="attachment">{titleAttachment}&nbsp;{titleAttachmentSeperator}</span>
+                                            <span class="title">{title}</span>
+                                        </f:then>
+                                        <f:else>
+                                            <span class="title">{title}</span>
+                                            <span class="attachment">{titleAttachmentSeperator}&nbsp;{titleAttachment}</span>
+                                        </f:else>
+                                    </f:if>
                                 </f:else>
                             </f:if>
                         </f:then>
