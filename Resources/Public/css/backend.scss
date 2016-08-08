@@ -135,7 +135,7 @@ $darkgrey: #333;
     }
   }
 
-  .focus-keyword {
+  .focus-keyword-container {
     .focus-keyword-na {color: #999;}
   }
 
@@ -150,7 +150,17 @@ $darkgrey: #333;
     margin-bottom: 1em;
   }
 
-  .robots {margin-bottom: .4em;}
+  .robots {
+    margin-bottom: .4em;
+
+    .danger {color: $bootstrapDangerRed;}
+
+    .noindex:after {
+      color: #000;
+      content: ",";
+      margin-left: -.3em;
+    }
+  }
 }
 
 .google-preview {

@@ -6,6 +6,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword">
                 <target>Fokus Schlüsselwort</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword_akronym">
+                <target>FK</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogtitle">
                 <target>Titel</target>
             </trans-unit>
@@ -138,6 +141,9 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.contactdata">
                 <target>Kontaktdaten</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.canonical_url_is_set">
+                <target>Canonical vorhanden</target>
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">

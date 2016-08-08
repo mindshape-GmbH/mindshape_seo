@@ -6,6 +6,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword">
                 <source>Focus keyword</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword_akronym">
+                <source>FK</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogtitle">
                 <source>Title</source>
             </trans-unit>
@@ -138,6 +141,9 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.contactdata">
                 <source>Contactdata</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.canonical_url_is_set">
+                <source>A canonical url is set</source>
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">

@@ -114,25 +114,24 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="focus-keyword">
+                            <div class="focus-keyword-container">
                                 <label>
-                                    <f:translate key="tx_mindshapeseo_label.preview.focus_keyword"/>
+                                    <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword_akronym"/>:
                                 </label>
                                 <f:if condition="{page.metadata.meta.focusKeyword}">
                                     <f:then>
-                                        {page.metadata.meta.focusKeyword}
+                                        <span class="focus-keyword">
+                                            {page.metadata.meta.focusKeyword}
+                                        </span>
                                     </f:then>
                                     <f:else>
-                                    <span class="focus-keyword-na">
-                                        <f:translate key="tx_mindshapeseo_label.preview.focus_keyword.not_available"/>
-                                    </span>
+                                        <span class="focus-keyword focus-keyword-na">
+                                            <f:translate key="tx_mindshapeseo_label.preview.focus_keyword.not_available"/>
+                                        </span>
                                     </f:else>
                                 </f:if>
                             </div>
                             <div class="robots">
-                                <label>
-                                    <f:translate key="tx_mindshapeseo_label.robots"/>:
-                                </label>
                                 <f:if condition="{page.metadata.meta.robots.noindexInherited}">
                                     <f:then>
                                         <dfn class="msh-tooltip" title="{f:translate(key: 'tx_mindshapeseo_label.inherited_from_page')}: {page.metadata.meta.robots.noindexInherited}">
@@ -142,27 +141,35 @@
                                     <f:else>
                                         <f:if condition="{page.metadata.meta.robots.noindex}">
                                             <f:then>
-                                                <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index"/>,
+                                                <span class="noindex danger">
+                                                    <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index"/>
+                                                </span>
                                             </f:then>
                                             <f:else>
-                                                <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_index"/>,
+                                                <span class="noindex">
+                                                    <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_index"/>
+                                                </span>
                                             </f:else>
                                         </f:if>
                                     </f:else>
                                 </f:if>
-                                <f:if condition="{page.metadata.meta.robots.noindexInherited}">
+                                <f:if condition="{page.metadata.meta.robots.noFollowInherited}">
                                     <f:then>
                                         <dfn class="msh-tooltip" title="{f:translate(key: 'tx_mindshapeseo_label.inherited_from_page')}: {page.metadata.meta.robots.nofollowInherited}">
                                             <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_inherited"/>,
                                         </dfn>
                                     </f:then>
                                     <f:else>
-                                        <f:if condition="{page.metadata.meta.robots.noindex}">
+                                        <f:if condition="{page.metadata.meta.robots.nofollow}">
                                             <f:then>
-                                                <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow"/>
+                                                <span class="nofollow danger">
+                                                    <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow"/>
+                                                </span>
                                             </f:then>
                                             <f:else>
-                                                <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_follow"/>
+                                                <span class="nofollow">
+                                                    <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_follow"/>
+                                                </span>
                                             </f:else>
                                         </f:if>
                                     </f:else>
@@ -170,10 +177,9 @@
                             </div>
                             <div class="canonical">
                                 <f:if condition="{page.metadata.canonicalUrl}">
-                                    <label>
-                                        <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_canonical"/>:
-                                    </label>
-                                    {page.metadata.canonicalUrl}
+                                    <dfn class="msh-tooltip" title="{page.metadata.canonicalUrl}">
+                                        <f:translate key="tx_mindshapeseo_label.canonical_url_is_set"/>
+                                    </dfn>
                                 </f:if>
                             </div>
                         </td>
