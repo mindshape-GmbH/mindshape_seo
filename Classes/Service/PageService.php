@@ -428,8 +428,10 @@ class PageService implements SingletonInterface
         $inheritedPageUid = false;
 
         foreach ($this->getRootlineReverse($pageUid) as $page) {
-            $inherited = (bool) $page[$property] && $pageUid !== (int) $page['uid'] ? !$inherited : $inherited;
-            $inheritedPageUid = $inherited ? (int) $page['uid'] : false;
+            if ($pageUid !== (int) $page['uid']) {
+                $inherited = (bool) $page[$property] ? !$inherited : $inherited;
+                $inheritedPageUid = $inherited ? (int) $page['uid'] : false;
+            }
         }
 
         return $inheritedPageUid;
