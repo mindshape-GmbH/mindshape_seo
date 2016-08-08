@@ -382,6 +382,7 @@ class BackendController extends ActionController
                 'depth' => $depth,
                 'levelOptions' => array(
                     PageService::TREE_DEPTH_INFINITY => LocalizationUtility::translate('tx_mindshapeseo_label.preview.levels.infinity', 'mindshape_seo'),
+                    0 => '0',
                     1 => '1',
                     2 => '2',
                     3 => '3',
