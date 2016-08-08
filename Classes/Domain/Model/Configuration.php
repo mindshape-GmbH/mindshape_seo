@@ -142,6 +142,13 @@ class Configuration extends AbstractEntity
     protected $jsonldType = '';
 
     /**
+     * jsonldName
+     *
+     * @var string
+     */
+    protected $jsonldName = '';
+
+    /**
      * jsonldTelephone
      *
      * @var string
@@ -561,6 +568,27 @@ class Configuration extends AbstractEntity
     public function setJsonldType($jsonldType)
     {
         $this->jsonldType = $jsonldType;
+    }
+
+    /**
+     * Returns the jsonldName
+     *
+     * @return string $jsonldName
+     */
+    public function getJsonldName()
+    {
+        return $this->jsonldName;
+    }
+
+    /**
+     * Sets the jsonldName
+     *
+     * @param string $jsonldName
+     * @return void
+     */
+    public function setJsonldName($jsonldName)
+    {
+        $this->jsonldName = $jsonldName;
     }
 
     /**

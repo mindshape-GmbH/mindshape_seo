@@ -439,16 +439,47 @@ class HeaderDataService
             '@context' => 'http://schema.org',
             '@type' => $this->domainConfiguration->getJsonldType(),
             'url' => $this->currentDomainUrl,
-            'telephone' => $this->domainConfiguration->getJsonldTelephone(),
-            'faxNumber' => $this->domainConfiguration->getJsonldFax(),
-            'email' => $this->domainConfiguration->getJsonldEmail(),
-            'address' => array(
-                '@type' => 'PostalAddress',
-                'addressLocality' => $this->domainConfiguration->getJsonldAddressLocality(),
-                'postalcode' => $this->domainConfiguration->getJsonldAddressPostalcode(),
-                'streetAddress' => $this->domainConfiguration->getJsonldAddressStreet(),
-            ),
         );
+
+        if (false === empty($this->domainConfiguration->getJsonldName())) {
+            $jsonld['name'] = $this->domainConfiguration->getJsonldName();
+        }
+
+        if (false === empty($this->domainConfiguration->getJsonldTelephone())) {
+            $jsonld['telephone'] = $this->domainConfiguration->getJsonldTelephone();
+        }
+
+        if (false === empty($this->domainConfiguration->getJsonldFax())) {
+            $jsonld['faxNumber'] = $this->domainConfiguration->getJsonldFax();
+        }
+
+        if (false === empty($this->domainConfiguration->getJsonldEmail())) {
+            $jsonld['email'] = $this->domainConfiguration->getJsonldEmail();
+        }
+
+        if (
+            false === empty($this->domainConfiguration->getJsonldAddressLocality()) &&
+            false === empty($this->domainConfiguration->getJsonldAddressPostalcode()) &&
+            false === empty($this->domainConfiguration->getJsonldAddressStreet())
+        ) {
+            $jsonld['address'] = array(
+                '@type' => 'PostalAddress',
+            );
+
+            if (false === empty($this->domainConfiguration->getJsonldAddressLocality())) {
+                $jsonld['address']['addressLocality'] = $this->domainConfiguration->getJsonldAddressLocality();
+            }
+
+
+            if (false === empty($this->domainConfiguration->getJsonldAddressPostalcode())) {
+                $jsonld['address']['postalcode'] = $this->domainConfiguration->getJsonldAddressPostalcode();
+            }
+
+
+            if (false === empty($this->domainConfiguration->getJsonldAddressStreet())) {
+                $jsonld['address']['streetAddress'] = $this->domainConfiguration->getJsonldAddressStreet();
+            }
+        }
 
         if (null !== $this->domainConfiguration->getJsonldLogo()) {
             $jsonld['logo'] = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . $this->domainConfiguration

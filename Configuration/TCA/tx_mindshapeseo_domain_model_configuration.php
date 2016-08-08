@@ -163,6 +163,15 @@ return array(
                 ),
             ),
         ),
+        'jsonld_name' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.name',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
         'jsonld_telephone' => array(
             'exclude' => 1,
             'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.telephone',

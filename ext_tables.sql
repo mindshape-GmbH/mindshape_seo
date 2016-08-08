@@ -54,6 +54,7 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration (
   facebook_default_image     int(11) unsigned                NOT NULL DEFAULT '0',
   jsonld_custom_url          varchar(255) DEFAULT ''         NOT NULL,
   jsonld_type                varchar(255) DEFAULT ''         NOT NULL,
+  jsonld_name                varchar(255) DEFAULT ''         NOT NULL,
   jsonld_telephone           varchar(255) DEFAULT ''         NOT NULL,
   jsonld_fax                 varchar(255) DEFAULT ''         NOT NULL,
   jsonld_email               varchar(255) DEFAULT ''         NOT NULL,

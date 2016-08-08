@@ -303,6 +303,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type.person">
                 <source>Person</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.name">
+                <source>Name</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.address">
                 <source>Address</source>
             </trans-unit>
