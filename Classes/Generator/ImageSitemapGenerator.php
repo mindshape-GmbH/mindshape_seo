@@ -51,7 +51,7 @@ class ImageSitemapGenerator extends SitemapGenerator
      * @return string
      */
     public function generateImageSitemapXml() {
-        return $this->getStartTags() . $this->getUrls() . $this->getEndTags();
+        return $this->getStartTags() . $this->getImageUrls() . $this->getEndTags();
     }
 
     /**
@@ -68,7 +68,7 @@ class ImageSitemapGenerator extends SitemapGenerator
     /**
      * @return string
      */
-    protected function getUrls()
+    protected function getImageUrls()
     {
         $urls = '';
 
@@ -80,7 +80,7 @@ class ImageSitemapGenerator extends SitemapGenerator
             $pageImages = $this->getPageImages($page['uid']);
 
             if (0 < count($pageImages)) {
-                $urls .= $this->renderEntry(
+                $urls .= $this->renderPageImagesEntry(
                     $this->pageService->getPageLink($page['uid'], true),
                     $pageImages
                 );
@@ -123,7 +123,7 @@ class ImageSitemapGenerator extends SitemapGenerator
      * @param array $pageImages
      * @return string
      */
-    protected function renderEntry($pageUrl, array $pageImages)
+    protected function renderPageImagesEntry($pageUrl, array $pageImages)
     {
         $content = '<loc>' . $pageUrl . '</loc>';
 
