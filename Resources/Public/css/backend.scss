@@ -115,7 +115,7 @@ $darkgrey: #333;
         bottom: 26px;
         color: $white;
         content: attr(title);
-        left: 20%;
+        left: -80%;
         padding: 5px 15px;
         position: absolute;
         width: 220px;
@@ -128,7 +128,7 @@ $darkgrey: #333;
         border-width: 6px 6px 0;
         bottom: 20px;
         content: '';
-        left: 50%;
+        left: 20%;
         position: absolute;
         z-index: 99;
       }
@@ -160,6 +160,12 @@ $darkgrey: #333;
       content: ",";
       margin-left: -.3em;
     }
+  }
+
+  .canonical-icon {
+    width: 1.3em;
+    height: 1.3em;
+    margin-top: -.1em;
   }
 }
 
