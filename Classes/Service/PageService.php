@@ -87,15 +87,15 @@ class PageService implements SingletonInterface
         $configurationManager = $objectManager->get(ConfigurationManager::class);
         $this->pageRepository = $objectManager->get(PageRepository::class);
 
-        $currentPage = $this->pageRepository->getPage_noCheck(GeneralUtility::_GET('id'));
+        if ('BE' === TYPO3_MODE) {
+            $currentPage = $this->pageRepository->getPage_noCheck(GeneralUtility::_GET('id'));
 
-        if (
-            1 !== (int) $currentPage['doktype'] &&
-            4 !== (int) $currentPage['doktype']
-        ) {
-            $this->hasFrontendController = false;
-        } else {
-            if ('BE' === TYPO3_MODE) {
+            if (
+                1 !== (int) $currentPage['doktype'] &&
+                4 !== (int) $currentPage['doktype']
+            ) {
+                $this->hasFrontendController = false;
+            } else {
                 if (!is_object($GLOBALS['TT'])) {
                     $GLOBALS['TT'] = GeneralUtility::makeInstance(NullTimeTracker::class);
                     $GLOBALS['TT']->start();
@@ -123,17 +123,17 @@ class PageService implements SingletonInterface
                 } catch (\Exception $exception) {
                     $this->hasFrontendController = false;
                 }
-            } elseif ('FE' !== TYPO3_MODE) {
-                throw new Exception('Illegal TYPO3_MODE');
             }
-
-            $configurationManager->setContentObject(
-                $objectManager->get(ContentObjectRenderer::class)
-            );
-
-            $this->uriBuilder = $objectManager->get(UriBuilder::class);
-            $this->uriBuilder->injectConfigurationManager($configurationManager);
+        } elseif ('FE' !== TYPO3_MODE) {
+            throw new Exception('Illegal TYPO3_MODE');
         }
+
+        $configurationManager->setContentObject(
+            $objectManager->get(ContentObjectRenderer::class)
+        );
+
+        $this->uriBuilder = $objectManager->get(UriBuilder::class);
+        $this->uriBuilder->injectConfigurationManager($configurationManager);
     }
 
     /**
