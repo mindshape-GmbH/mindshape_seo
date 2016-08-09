@@ -69,7 +69,7 @@
                 <target>Nicht indexieren (noindex)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_recursive">
-                <target>Nicht indexieren rekursiv auf Unterseiten anwenden</target>
+                <target>noindex rekursiv auf Unterseiten anwenden</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_follow">
                 <target>follow</target>
@@ -84,7 +84,7 @@
                 <target>Nicht verfolgen (nofollow)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive">
-                <target>Nicht verfolgen rekursiv auf Unterseiten anwenden</target>
+                <target>nofollow rekursiv auf Unterseiten anwenden</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap">
                 <target>Schließe diese Seite von der XML-Sitemap aus</target>
@@ -144,6 +144,21 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.canonical_url_is_set">
                 <target>Canonical vorhanden</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.xml_sitemap">
+                <target>XML-Sitemap</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.htaccess">
+                <target>.htaccess</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.robots_txt">
+                <target>robots.txt</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.robots_txt_example">
+                <target>robots.txt Beispiel</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.help">
+                <target>Hilfe</target>
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
@@ -225,6 +240,12 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.seo_preview_for_page">
                 <target>SEO Vorschau für die Seite</target>
+            </trans-unit>
+
+
+
+            <trans-unit id="tx_mindshapeseo_text.sitemap_setup">
+                <target>Um die XML-Sitemap zu aktivieren müssen folgende Einträge zur htaccess und robots.txt Datei hinzugefügt werden.</target>
             </trans-unit>
 
 

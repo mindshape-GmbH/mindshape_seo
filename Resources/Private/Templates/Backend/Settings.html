@@ -163,6 +163,44 @@
                 </div>
                 <fieldset class="form-section sameas">
                     <h3 class="form-section-headline">
+                        <a href="#sitemapXml" role="button" data-toggle="collapse">
+                            <f:translate key="tx_mindshapeseo_label.xml_sitemap"/>
+                        </a>
+                    </h3>
+                    <div id="sitemapXml" class="collapse">
+                        <p>
+                            <f:translate key="tx_mindshapeseo_text.sitemap_setup"/>
+                        </p>
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <f:translate key="tx_mindshapeseo_label.htaccess"/>
+                                        </h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <pre>&lt;ifModule mod_rewrite.c&gt;<br/>&nbsp;&nbsp;# MindshapeSeo google sitemap<br/>&nbsp;&nbsp;RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]<br/>&nbsp;&nbsp;RewriteRule sitemap_(.*).xml$ /index.php?type=10000&pageuid=$1 [L,R=301]<br/><br/>&nbsp;&nbsp;# MindshapeSeo google image sitemap<br/>&nbsp;&nbsp;RewriteRule sitemap-image.xml$ /index.php?type=10001 [L,R=301]<br/>&lt;/ifModule&gt;</pre>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">
+                                            <f:translate key="tx_mindshapeseo_label.robots_txt"/>
+                                        </h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <pre>#Page Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10000<br/>#Image Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10001</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="form-section sameas">
+                    <h3 class="form-section-headline">
                         <a href="#sameAs" role="button" data-toggle="collapse">
                             <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as"/>
                         </a>
@@ -329,6 +367,25 @@
                         <f:form.textfield property="jsonldEmail" class="form-control"/>
                     </div>
                 </fieldset>
+            </fieldset>
+            <fieldset class="form-section">
+                <h2 class="form-section-headline">
+                    <a href="#help" role="button" data-toggle="collapse">
+                        <f:translate key="tx_mindshapeseo_label.help"/>
+                    </a>
+                </h2>
+                <div id="help" class="collapse">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <f:translate key="tx_mindshapeseo_label.robots_txt_example"/>
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            <pre>User-agent: *<br/>Allow: /<br/>Disallow: /typo3/&nbsp;&nbsp;&nbsp;&nbsp;# Nothing to see here<br/>Disallow: /*?id=*&nbsp;&nbsp;&nbsp;&nbsp;# Disallow non-realurl<br/>Disallow: *tx_news*&nbsp;&nbsp;# Disallow tx_news params<br/>Disallow: /*?eID=*&nbsp;&nbsp;&nbsp;# Disallow eID<br/><br/>#Page Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10000<br/>#Image Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10001</pre>
+                        </div>
+                    </div>
+                </div>
             </fieldset>
         </f:form>
 

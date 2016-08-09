@@ -69,7 +69,7 @@
                 <source>Do not index this page (noindex)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_recursive">
-                <source>No Index on all subpages</source>
+                <source>noindex on all subpages</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_follow">
                 <source>follow</source>
@@ -84,7 +84,7 @@
                 <source>Do not follow this page (nofollow)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive">
-                <source>No Follow on all subpages</source>
+                <source>nofollow on all subpages</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap">
                 <source>Exclude page from XML-Sitemap</source>
@@ -144,6 +144,21 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.canonical_url_is_set">
                 <source>A canonical url is set</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.xml_sitemap">
+                <source>XML-Sitemap</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.htaccess">
+                <source>.htaccess</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.robots_txt">
+                <source>robots.txt</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.robots_txt_example">
+                <source>robots.txt example</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.help">
+                <source>Help</source>
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
@@ -225,6 +240,12 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.seo_preview_for_page">
                 <source>SEO Preview for page</source>
+            </trans-unit>
+
+
+
+            <trans-unit id="tx_mindshapeseo_text.sitemap_setup">
+                <source>To activate the XML-Sitemap you just have to add entries to your htaccess and robots.txt file.</source>
             </trans-unit>
 
 
