@@ -278,13 +278,6 @@ class HeaderDataService
         $robots = array();
 
         if (
-            !$this->currentPageMetaData['meta']['robots']['noindex'] ||
-            !$this->currentPageMetaData['meta']['robots']['nofollow']
-        ) {
-            $robots = $this->getParentRobotsMetaData();
-        }
-
-        if (
             (
                 $this->currentPageMetaData['meta']['robots']['noindex'] ||
                 $this->currentPageMetaData['meta']['robots']['noindexInherited']
@@ -312,37 +305,6 @@ class HeaderDataService
         );
 
         $this->addMetaDataArray($metaData);
-    }
-
-    /**
-     * @return array
-     */
-    protected function getParentRobotsMetaData()
-    {
-        $robots = array();
-
-        $noindex = false;
-        $nofollow = false;
-
-        foreach ($this->pageService->getRootline() as $page) {
-            if (!$noindex && $page['mindshapeseo_no_index_recursive']) {
-                $noindex = true;
-
-                if ($page['mindshapeseo_no_index']) {
-                    $robots[] = 'noindex';
-                }
-            }
-
-            if (!$nofollow && $page['mindshapeseo_no_follow_recursive']) {
-                $nofollow = true;
-
-                if ($page['mindshapeseo_no_follow']) {
-                    $robots[] = 'nofollow';
-                }
-            }
-        }
-
-        return $robots;
     }
 
     /**
