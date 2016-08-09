@@ -103,9 +103,6 @@
             <trans-unit id="tx_mindshapeseo_label.seo">
                 <source>SEO</source>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.general">
-                <source>General</source>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.indexing">
                 <source>Indexing</source>
             </trans-unit>
@@ -133,9 +130,6 @@
             <trans-unit id="tx_mindshapeseo_label.link_wizard">
                 <source>Add a link</source>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.robots">
-                <source>Robots</source>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.inherited_from_page">
                 <source>Inherited from page (pid)</source>
             </trans-unit>
@@ -160,6 +154,9 @@
             <trans-unit id="tx_mindshapeseo_label.help">
                 <source>Help</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.example">
+                <source>example</source>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <source>Preview</source>
@@ -173,7 +170,7 @@
             <trans-unit id="tx_mindshapeseo_label.preview.page">
                 <source>Page</source>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.preview.button.seo_check">
+            <trans-unit id="tx_mindshapeseo_label.preview.seo_check">
                 <source>SEO check</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.button.edit">
@@ -187,9 +184,6 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.no_page_selected">
                 <source>No page selected</source>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword">
-                <source>Focus Keyword</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword.not_available">
                 <source>n/a</source>
@@ -243,7 +237,6 @@
             </trans-unit>
 
 
-
             <trans-unit id="tx_mindshapeseo_text.sitemap_setup">
                 <source>To activate the XML-Sitemap you just have to add entries to your htaccess and robots.txt file.</source>
             </trans-unit>
@@ -258,6 +251,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment">
                 <source>Title attachment</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment.help">
+                <source>Can be the websites oder companys name and will be added to the title tag</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_position">
                 <source>Position</source>
             </trans-unit>
@@ -270,14 +266,11 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_seperator">
                 <source>Seperator</source>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment.help">
-                <source>Can be the websites oder companys name and will be added to the title tag</source>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
                 <source>Facebook Default Image</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
-                <source>Hreflang Tag</source>
+                <source>hreflang-tag for multilingual websites</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld">
                 <source>Website information as JSON-LD</source>
@@ -290,9 +283,6 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics">
                 <source>Google Analytics</source>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.example">
-                <source>(example: 'UA-000000-01')</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext">
                 <source>more information</source>

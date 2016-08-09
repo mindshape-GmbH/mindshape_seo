@@ -103,9 +103,6 @@
             <trans-unit id="tx_mindshapeseo_label.seo">
                 <target>SEO</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.general">
-                <target>Allgemein</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.indexing">
                 <target>Indexierung</target>
             </trans-unit>
@@ -133,9 +130,6 @@
             <trans-unit id="tx_mindshapeseo_label.link_wizard">
                 <target>Link hinzufügen</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.robots">
-                <target>Robots</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.inherited_from_page">
                 <target>geerbt von Seite (pid)</target>
             </trans-unit>
@@ -160,6 +154,9 @@
             <trans-unit id="tx_mindshapeseo_label.help">
                 <target>Hilfe</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.example">
+                <target>Beispiel</target>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <target>Vorschau</target>
@@ -173,7 +170,7 @@
             <trans-unit id="tx_mindshapeseo_label.preview.page">
                 <target>Seite</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.preview.button.seo_check">
+            <trans-unit id="tx_mindshapeseo_label.preview.seo_check">
                 <target>SEO Prüfung</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.button.edit">
@@ -187,9 +184,6 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.no_page_selected">
                 <target>Keine Seite ausgewählt</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword">
-                <target>Fokus Schlüsselwort</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword.not_available">
                 <target>n/a</target>
@@ -243,7 +237,6 @@
             </trans-unit>
 
 
-
             <trans-unit id="tx_mindshapeseo_text.sitemap_setup">
                 <target>Um die XML-Sitemap zu aktivieren müssen folgende Einträge zur htaccess und robots.txt Datei hinzugefügt werden.</target>
             </trans-unit>
@@ -258,6 +251,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment">
                 <target>Titel-Ergänzung</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment.help">
+                <target>Kann der Website oder Firmenname sein und wir dem Titel-Tag hinzugefügt</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_position">
                 <target>Position</target>
             </trans-unit>
@@ -269,9 +265,6 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_seperator">
                 <target>Trenner</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment.help">
-                <target>Kann der Website oder Firmenname sein und wir dem Titel-Tag hinzugefügt</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
                 <target>Facebook Standard Bild</target>
@@ -290,9 +283,6 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics">
                 <target>Google Analytics</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.example">
-                <target>(Beipiel: 'UA-000000-01')</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext">
                 <target>weitere Informationen</target>
