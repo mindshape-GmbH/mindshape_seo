@@ -79,18 +79,20 @@
         if ($currentEditPanel.is(':hidden')) {
           that.openPreviewEditPanel($currentPreview);
         } else {
-          var focuskeyword = $currentPreview.find('.focus-keyword input').val();
-
           that.closePreviewEditPanel($currentPreview);
           that.restorePreviewOriginalData($currentPreview);
+
+          var focuskeyword = $currentPreview.find('.focus-keyword input').val();
+
           that.checkPreviewEditPanelSaveState($currentPreview);
           that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLengthPixel);
           that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLengthPixel);
-          that.updatePreviewAlerts($currentPreview);
 
           if (focuskeyword.trim().length) {
             that.checkFocusKeyword($currentPreview, focuskeyword);
           }
+
+          that.updatePreviewAlerts($currentPreview);
         }
       });
 
@@ -506,6 +508,7 @@
       var focusKeyword = $.trim('undefined' !== typeof $focusKeywordInput ?
         $focusKeywordInput.val() :
         $previewContainer.find('.focus-keyword input').val());
+
       var $alertsContainer = $previewContainer.find('.alerts-container');
       var alertsCounter = 0;
 
