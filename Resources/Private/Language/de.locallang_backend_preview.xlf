@@ -7,7 +7,7 @@
                 <target>SEO Vorschau</target>
             </trans-unit>
             <trans-unit id="mlang_labels_tabdescr">
-                <target>SEO Vorschau</target>
+                <target>SEO Vorschau der Seiten und Validierung der Metadaten</target>
             </trans-unit>
         </body>
     </file>
