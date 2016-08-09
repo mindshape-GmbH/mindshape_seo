@@ -87,44 +87,53 @@ class PageService implements SingletonInterface
         $configurationManager = $objectManager->get(ConfigurationManager::class);
         $this->pageRepository = $objectManager->get(PageRepository::class);
 
-        if ('BE' === TYPO3_MODE) {
-            if (!is_object($GLOBALS['TT'])) {
-                $GLOBALS['TT'] = GeneralUtility::makeInstance(NullTimeTracker::class);
-                $GLOBALS['TT']->start();
-            }
+        $currentPage = $this->pageRepository->getPage_noCheck(GeneralUtility::_GET('id'));
 
-            try {
-                $GLOBALS['TSFE'] = $objectManager->get(
-                    TypoScriptFrontendController::class,
-                    $GLOBALS['TYPO3_CONF_VARS'],
-                    GeneralUtility::_GET('id'),
-                    GeneralUtility::_GET('type')
-                );
-
-                $GLOBALS['TSFE']->connectToDB();
-                $GLOBALS['TSFE']->initFEuser();
-                $GLOBALS['TSFE']->determineId();
-                $GLOBALS['TSFE']->initTemplate();
-                $GLOBALS['TSFE']->getConfigArray();
-
-                if (ExtensionManagementUtility::isLoaded('realurl')) {
-                    $_SERVER['HTTP_HOST'] = BackendUtility::firstDomainRecord(
-                        BackendUtility::BEgetRootLine(GeneralUtility::_GET('id'))
-                    );
+        if (
+            1 !== (int) $currentPage['doktype'] &&
+            4 !== (int) $currentPage['doktype']
+        ) {
+            $this->hasFrontendController = false;
+        } else {
+            if ('BE' === TYPO3_MODE) {
+                if (!is_object($GLOBALS['TT'])) {
+                    $GLOBALS['TT'] = GeneralUtility::makeInstance(NullTimeTracker::class);
+                    $GLOBALS['TT']->start();
                 }
-            } catch (\Exception $exception) {
-                $this->hasFrontendController = false;
+
+                try {
+                    $GLOBALS['TSFE'] = $objectManager->get(
+                        TypoScriptFrontendController::class,
+                        $GLOBALS['TYPO3_CONF_VARS'],
+                        GeneralUtility::_GET('id'),
+                        GeneralUtility::_GET('type')
+                    );
+
+                    $GLOBALS['TSFE']->connectToDB();
+                    $GLOBALS['TSFE']->initFEuser();
+                    $GLOBALS['TSFE']->determineId();
+                    $GLOBALS['TSFE']->initTemplate();
+                    $GLOBALS['TSFE']->getConfigArray();
+
+                    if (ExtensionManagementUtility::isLoaded('realurl')) {
+                        $_SERVER['HTTP_HOST'] = BackendUtility::firstDomainRecord(
+                            BackendUtility::BEgetRootLine(GeneralUtility::_GET('id'))
+                        );
+                    }
+                } catch (\Exception $exception) {
+                    $this->hasFrontendController = false;
+                }
+            } elseif ('FE' !== TYPO3_MODE) {
+                throw new Exception('Illegal TYPO3_MODE');
             }
-        } elseif ('FE' !== TYPO3_MODE) {
-            throw new Exception('Illegal TYPO3_MODE');
+
+            $configurationManager->setContentObject(
+                $objectManager->get(ContentObjectRenderer::class)
+            );
+
+            $this->uriBuilder = $objectManager->get(UriBuilder::class);
+            $this->uriBuilder->injectConfigurationManager($configurationManager);
         }
-
-        $configurationManager->setContentObject(
-            $objectManager->get(ContentObjectRenderer::class)
-        );
-
-        $this->uriBuilder = $objectManager->get(UriBuilder::class);
-        $this->uriBuilder->injectConfigurationManager($configurationManager);
     }
 
     /**
