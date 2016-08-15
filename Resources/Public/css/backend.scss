@@ -320,7 +320,7 @@ $darkgrey: #333;
   #jsonld {display: none;}
 
   fieldset {
-    &:last-child {margin-bottom: 1em;}
+    margin-bottom: 1em;
     &.logo {display: none;}
   }
 }

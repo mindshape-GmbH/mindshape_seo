@@ -57,7 +57,7 @@
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_index">
-                <source>index</source>
+                <target>index</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index">
                 <target>noindex</target>
@@ -78,7 +78,7 @@
                 <target>nofollow</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_inherited">
-                <source>nofollow (vererbt)</source>
+                <target>nofollow (vererbt)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_label">
                 <target>Nicht verfolgen (nofollow)</target>

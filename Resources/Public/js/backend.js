@@ -216,7 +216,7 @@
 
 
         if (that.editing) {
-          var $focusKeywordMetadataPreview = $('.focus-keyword-container .focus-keyword');
+          var $focusKeywordMetadataPreview = $currentPreview.parents('.page').find('.focus-keyword-container .focus-keyword');
 
           if ('' === focusKeyword) {
             $focusKeywordMetadataPreview.html('n/a');
@@ -268,7 +268,9 @@
       $previewContainer.find('.edit-panel .focus-keyword input').val($previewContainer.attr('data-original-focuskeyword'));
 
       if (this.editing){
-        $('.focus-keyword-container .focus-keyword').html($previewContainer.attr('data-original-focuskeyword'));
+        $previewContainer.parents('.page')
+          .find('.focus-keyword-container .focus-keyword')
+          .html($previewContainer.attr('data-original-focuskeyword'));
       }
     },
     renderPreviewDescription: function ($previewContainer) {
