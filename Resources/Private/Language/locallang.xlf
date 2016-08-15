@@ -157,6 +157,9 @@
             <trans-unit id="tx_mindshapeseo_label.example">
                 <source>example</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.image_sitemap">
+                <source>image XML-Sitemap</source>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <source>Preview</source>
@@ -268,6 +271,12 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
                 <source>Facebook Default Image</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_height">
+                <source>Image minimum height (pixel)</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_width">
+                <source>Image minimum width (pixel)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
                 <source>hreflang-tag for multilingual websites</source>

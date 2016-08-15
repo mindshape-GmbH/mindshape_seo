@@ -17,10 +17,10 @@ return array(
         'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/Icons/tx_mindshapeseo_domain_model_configuration.gif',
     ),
     'interface' => array(
-        'showRecordFieldList' => 'domain, google_analytics, piwik_url, piwik_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_hreflang, add_jsonld, add_jsonld_breadcrumb, facebook_default_image, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_myspace, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street',
+        'showRecordFieldList' => 'domain, google_analytics, piwik_url, piwik_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_hreflang, add_jsonld, add_jsonld_breadcrumb, facebook_default_image, image_sitemap_min_height, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_myspace, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street',
     ),
     'types' => array(
-        '1' => array('showitem' => 'domain, google_analytics, piwik_url, piwik_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_hreflang, add_jsonld, add_jsonld_breadcrumb, facebook_default_image, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_myspace, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '),
+        '1' => array('showitem' => 'domain, google_analytics, piwik_url, piwik_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_hreflang, add_jsonld, add_jsonld_breadcrumb, facebook_default_image, image_sitemap_min_width, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_myspace, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '),
     ),
     'palettes' => array(
         '1' => array('showitem' => ''),
@@ -137,6 +137,24 @@ return array(
                     'maxitems' => 1,
                 ),
                 $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']
+            ),
+        ),
+        'image_sitemap_min_height' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.image_sitemap_min_height',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'image_sitemap_min_width' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.image_sitemap_min_width',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
             ),
         ),
         'jsonld_custom_url' => array(

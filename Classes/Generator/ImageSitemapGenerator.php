@@ -25,10 +25,10 @@ namespace Mindshape\MindshapeSeo\Generator;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Mindshape\MindshapeSeo\Service\PageService;
+use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Resource\FileReference;
-use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -46,6 +46,25 @@ class ImageSitemapGenerator extends SitemapGenerator
      * @inject
      */
     protected $resourceFactory;
+
+    /**
+     * @var \Mindshape\MindshapeSeo\Domain\Model\Configuration
+     */
+    protected $configuration;
+
+    /**
+     * @return ImageSitemapGenerator
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        /** @var ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        /** @var ConfigurationRepository $configurationRepository */
+        $configurationRepository = $objectManager->get(ConfigurationRepository::class);
+        $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
+        $this->configuration = $configurationRepository->findByDomain($currentDomain, true);
+    }
 
     /**
      * @return string
@@ -112,7 +131,24 @@ class ImageSitemapGenerator extends SitemapGenerator
         );
 
         foreach ($rows as $row) {
-            $images[] = $this->resourceFactory->getFileReferenceObject($row['uid'], $row);
+            $image = $this->resourceFactory->getFileReferenceObject($row['uid'], $row);
+
+            if (
+                !$this->configuration instanceof Configuration &&
+                0 === $this->configuration->getImageSitemapMinHeight() &&
+                0 === $this->configuration->getImageSitemapMinWidth()
+            ) {
+                $images[] = $image;
+            } else {
+                $imageSize = getimagesize($image->getPublicUrl());
+
+                if (
+                    $imageSize[1] >= $this->configuration->getImageSitemapMinHeight() &&
+                    $imageSize[0] >= $this->configuration->getImageSitemapMinWidth()
+                ) {
+                    $images[] = $image;
+                }
+            }
         }
 
         return $images;

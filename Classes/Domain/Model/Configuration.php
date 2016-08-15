@@ -128,6 +128,20 @@ class Configuration extends AbstractEntity
     protected $facebookDefaultImage;
 
     /**
+     * imageSitemapMinHeight
+     *
+     * @var int
+     */
+    protected $imageSitemapMinHeight = 0;
+
+    /**
+     * imageSitemapMinWidth
+     *
+     * @var int
+     */
+    protected $imageSitemapMinWidth = 0;
+
+    /**
      * jsonldCustomUrl
      *
      * @var string
@@ -526,6 +540,48 @@ class Configuration extends AbstractEntity
     public function setFacebookDefaultImage(FileReference $facebookDefaultImage = null)
     {
         $this->facebookDefaultImage = $facebookDefaultImage;
+    }
+
+    /**
+     * Returns the imageSitemapMinHeight
+     *
+     * @return string $imageSitemapMinHeight
+     */
+    public function getImageSitemapMinHeight()
+    {
+        return $this->imageSitemapMinHeight;
+    }
+
+    /**
+     * Sets the imageSitemapMinHeight
+     *
+     * @param string $imageSitemapMinHeight
+     * @return void
+     */
+    public function setImageSitemapMinHeight($imageSitemapMinHeight)
+    {
+        $this->imageSitemapMinHeight = $imageSitemapMinHeight;
+    }
+
+    /**
+     * Returns the imageSitemapMinWidth
+     *
+     * @return string $imageSitemapMinWidth
+     */
+    public function getImageSitemapMinWidth()
+    {
+        return $this->imageSitemapMinWidth;
+    }
+
+    /**
+     * Sets the imageSitemapMinWidth
+     *
+     * @param string $imageSitemapMinWidth
+     * @return void
+     */
+    public function setImageSitemapMinWidth($imageSitemapMinWidth)
+    {
+        $this->imageSitemapMinWidth = $imageSitemapMinWidth;
     }
 
     /**

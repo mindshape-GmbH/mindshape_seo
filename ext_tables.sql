@@ -52,6 +52,8 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration (
   add_jsonld                 tinyint(1) unsigned DEFAULT '1' NOT NULL,
   add_jsonld_breadcrumb      tinyint(1) unsigned DEFAULT '1' NOT NULL,
   facebook_default_image     int(11) unsigned                NOT NULL DEFAULT '0',
+  image_sitemap_min_height   int(11) unsigned                NOT NULL DEFAULT '50',
+  image_sitemap_min_width    int(11) unsigned                NOT NULL DEFAULT '50',
   jsonld_custom_url          varchar(255) DEFAULT ''         NOT NULL,
   jsonld_type                varchar(255) DEFAULT ''         NOT NULL,
   jsonld_name                varchar(255) DEFAULT ''         NOT NULL,

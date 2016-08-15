@@ -161,119 +161,64 @@
                         </fieldset>
                     </div>
                 </div>
-                <fieldset class="form-section sameas">
-                    <h3 class="form-section-headline">
-                        <a href="#sitemapXml" role="button" data-toggle="collapse">
-                            <f:translate key="tx_mindshapeseo_label.xml_sitemap"/>
-                        </a>
-                    </h3>
-                    <div id="sitemapXml" class="collapse">
-                        <p>
-                            <f:translate key="tx_mindshapeseo_text.sitemap_setup"/>
-                        </p>
-                        <div class="row">
-                            <div class="col-md-6 col-sm-12">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">
-                                            <f:translate key="tx_mindshapeseo_label.htaccess"/>
-                                        </h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <pre>&lt;ifModule mod_rewrite.c&gt;<br/>&nbsp;&nbsp;# MindshapeSeo google sitemap<br/>&nbsp;&nbsp;RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]<br/>&nbsp;&nbsp;RewriteRule sitemap_(.*).xml$ /index.php?type=10000&pageuid=$1 [L,R=301]<br/><br/>&nbsp;&nbsp;# MindshapeSeo google image sitemap<br/>&nbsp;&nbsp;RewriteRule sitemap-image.xml$ /index.php?type=10001 [L,R=301]<br/>&lt;/ifModule&gt;</pre>
-                                    </div>
-                                </div>
+            </fieldset>
+            <fieldset class="form-section">
+                <h2 class="form-section-headline">
+                    <a href="#sitemapXml" data-toggle="collapse">
+                        <f:translate key="tx_mindshapeseo_label.xml_sitemap"/>
+                    </a>
+                </h2>
+                <div id="sitemapXml" class="row collapse">
+                    <div class="col-md-4">
+                        <fieldset class="form-section">
+                            <h3 class="form-section-headline">
+                                <f:translate key="tx_mindshapeseo_label.image_sitemap"/>
+                            </h3>
+                            <div class="form-group">
+                                <label>
+                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_height"/>
+                                </label>
+                                <f:form.textfield property="ImageSitemapMinHeight" class="form-control"/>
                             </div>
-                            <div class="col-md-6 col-sm-12">
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <h3 class="panel-title">
-                                            <f:translate key="tx_mindshapeseo_label.robots_txt"/>
-                                        </h3>
-                                    </div>
-                                    <div class="panel-body">
-                                        <pre>#Page Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10000<br/>#Image Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10001</pre>
-                                    </div>
-                                </div>
+                            <div class="form-group">
+                                <label>
+                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_height"/>
+                                </label>
+                                <f:form.textfield property="ImageSitemapMinWidth" class="form-control"/>
                             </div>
-                        </div>
+                        </fieldset>
                     </div>
-                </fieldset>
-                <fieldset class="form-section sameas">
-                    <h3 class="form-section-headline">
-                        <a href="#sameAs" role="button" data-toggle="collapse">
-                            <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as"/>
-                        </a>
-                    </h3>
-                    <div id="sameAs" class="collapse">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="form-group">
-                                            <label>
-                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook"/>
-                                            </label>
-                                            <f:form.textfield property="jsonldSameAsFacebook" class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>
-                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram"/>
-                                            </label>
-                                            <f:form.textfield property="jsonldSameAsInstagram" class="form-control"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="form-group">
-                                            <label>
-                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.youtube"/>
-                                            </label>
-                                            <f:form.textfield property="jsonldSameAsYoutube" class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>
-                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.linkedin"/>
-                                            </label>
-                                            <f:form.textfield property="jsonldSameAsLinkedin" class="form-control"/>
-                                        </div>
-                                    </div>
+                    <div class="col-md-8">
+                        <fieldset class="form-section">
+                            <h3 class="form-section-headline">
+                                <f:translate key="tx_mindshapeseo_label.help"/>
+                            </h3>
+                            <p>
+                                <f:translate key="tx_mindshapeseo_text.sitemap_setup"/>
+                            </p>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        <f:translate key="tx_mindshapeseo_label.htaccess"/>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <pre>&lt;ifModule mod_rewrite.c&gt;<br/>&nbsp;&nbsp;# MindshapeSeo google sitemap<br/>&nbsp;&nbsp;RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]<br/>&nbsp;&nbsp;RewriteRule sitemap_(.*).xml$ /index.php?type=10000&pageuid=$1 [L,R=301]<br/><br/>&nbsp;&nbsp;# MindshapeSeo google image sitemap<br/>&nbsp;&nbsp;RewriteRule sitemap-image.xml$ /index.php?type=10001 [L,R=301]<br/>&lt;/ifModule&gt;</pre>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="form-group">
-                                            <label>
-                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.myspace"/>
-                                            </label>
-                                            <f:form.textfield property="jsonldSameAsMyspace" class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>
-                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.printerest"/>
-                                            </label>
-                                            <f:form.textfield property="jsonldSameAsPrinterest" class="form-control"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-sm-12">
-                                        <div class="form-group">
-                                            <label>
-                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.soundcloud"/>
-                                            </label>
-                                            <f:form.textfield property="jsonldSameAsSoundcloud" class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>
-                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr"/>
-                                            </label>
-                                            <f:form.textfield property="jsonldSameAsTumblr" class="form-control"/>
-                                        </div>
-                                    </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">
+                                        <f:translate key="tx_mindshapeseo_label.robots_txt"/>
+                                    </h3>
+                                </div>
+                                <div class="panel-body">
+                                    <pre>#Page Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10000<br/>#Image Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10001</pre>
                                 </div>
                             </div>
-                        </div>
+                        </fieldset>
                     </div>
-                </fieldset>
+                </div>
             </fieldset>
             <fieldset id="jsonld" class="form-section">
                 <h2 class="form-section-headline">
@@ -365,6 +310,81 @@
                             <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.email"/>
                         </label>
                         <f:form.textfield property="jsonldEmail" class="form-control"/>
+                    </div>
+                </fieldset>
+                <fieldset class="form-section sameas">
+                    <h3 class="form-section-headline">
+                        <a href="#sameAs" role="button" data-toggle="collapse">
+                            <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as"/>
+                        </a>
+                    </h3>
+                    <div id="sameAs" class="collapse">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsFacebook" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsInstagram" class="form-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.youtube"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsYoutube" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.linkedin"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsLinkedin" class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.myspace"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsMyspace" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.printerest"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsPrinterest" class="form-control"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.soundcloud"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsSoundcloud" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr"/>
+                                            </label>
+                                            <f:form.textfield property="jsonldSameAsTumblr" class="form-control"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </fieldset>
             </fieldset>
