@@ -27,7 +27,7 @@
                     <f:translate key="tx_mindshapeseo_domain_model_configuration.title_attachment"/>
                 </h2>
                 <div class="row">
-                    <div class="col-md-1 col-sm-6">
+                    <div class="col-sm-1">
                         <div class="form-group">
                             <label>
                                 <f:translate key="tx_mindshapeseo_domain_model_configuration.title_attachment_position"/>
@@ -35,7 +35,9 @@
                             <f:form.select property="titleAttachmentPosition" options="{titleAttachmentPositionOptions}" class="form-control"/>
                         </div>
                     </div>
-                    <div class="col-md-1 col-sm-6">
+                </div>
+                <div class="row">
+                    <div class="col-sm-1">
                         <div class="form-group">
                             <label>
                                 <f:translate key="tx_mindshapeseo_domain_model_configuration.title_attachment_seperator"/>
@@ -43,7 +45,9 @@
                             <f:form.textfield property="titleAttachmentSeperator" class="form-control"/>
                         </div>
                     </div>
-                    <div class="col-md-10 col-sm-12">
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
                         <div class="form-group">
                             <label>
                                 <f:translate key="tx_mindshapeseo_domain_model_configuration.title_attachment"/>
@@ -127,7 +131,7 @@
                                 <label>
                                     <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url"/>
                                 </label>
-                                <f:form.textfield property="jsonldCustomUrl" class="form-control"/>
+                                <f:form.textfield property="jsonldCustomUrl" placeholder="{domainUrl}" class="form-control"/>
                                 <span class="help-block">
                                     <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example"/>
                                 </span>
@@ -308,13 +312,9 @@
             </fieldset>
             <fieldset class="form-section">
                 <h2 class="form-section-headline">
-                    <a href="#analytics" role="button" class="collapsed" data-toggle="collapse">
-                        <core:icon identifier="provider-fontawesome-angle-up"/>
-                        <core:icon identifier="provider-fontawesome-angle-down"/>
-                        <f:translate key="tx_mindshapeseo_domain_model_configuration.analytics"/>
-                    </a>
+                    <f:translate key="tx_mindshapeseo_domain_model_configuration.analytics"/>
                 </h2>
-                <div id="analytics" class="row collapse">
+                <div id="analytics" class="row">
                     <div class="col-md-6 col-sm-12">
                         <fieldset class="form-section">
                             <h3 class="form-section-headline">
@@ -357,13 +357,9 @@
             </fieldset>
             <fieldset class="form-section">
                 <h2 class="form-section-headline">
-                    <a href="#sitemapXml" class="collapsed" role="button" data-toggle="collapse">
-                        <core:icon identifier="provider-fontawesome-angle-up"/>
-                        <core:icon identifier="provider-fontawesome-angle-down"/>
-                        <f:translate key="tx_mindshapeseo_label.xml_sitemap"/>
-                    </a>
+                    <f:translate key="tx_mindshapeseo_label.xml_sitemap"/>
                 </h2>
-                <div id="sitemapXml" class="row collapse">
+                <div id="sitemapXml" class="row">
                     <div class="col-md-4">
                         <fieldset class="form-section">
                             <h3 class="form-section-headline">
@@ -399,16 +395,6 @@
                                 </div>
                                 <div class="panel-body">
                                     <pre>&lt;ifModule mod_rewrite.c&gt;<br/>&nbsp;&nbsp;# MindshapeSeo google sitemap<br/>&nbsp;&nbsp;RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]<br/>&nbsp;&nbsp;RewriteRule sitemap_(.*).xml$ /index.php?type=10000&pageuid=$1 [L,R=301]<br/><br/>&nbsp;&nbsp;# MindshapeSeo google image sitemap<br/>&nbsp;&nbsp;RewriteRule sitemap-image.xml$ /index.php?type=10001 [L,R=301]<br/>&lt;/ifModule&gt;</pre>
-                                </div>
-                            </div>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">
-                                        <f:translate key="tx_mindshapeseo_label.robots_txt"/>
-                                    </h3>
-                                </div>
-                                <div class="panel-body">
-                                    <pre>#Page Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10000<br/>#Image Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10001</pre>
                                 </div>
                             </div>
                         </fieldset>

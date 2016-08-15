@@ -273,7 +273,7 @@
                 <target>Facebook Standard Bild</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_height">
-                <target>Minimale Größe für Bilder (Pixel)</target>
+                <target>Minimale Höhe für Bilder (Pixel)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_width">
                 <target>Minimale Breite für Bilder (Pixel)</target>
