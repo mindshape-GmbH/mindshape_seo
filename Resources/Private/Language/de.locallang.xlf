@@ -243,6 +243,9 @@
             <trans-unit id="tx_mindshapeseo_text.sitemap_setup">
                 <target>Um die XML-Sitemap zu aktivieren müssen folgende Einträge zur htaccess und robots.txt Datei hinzugefügt werden.</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_text.robots_txt_example">
+                <target>Dieses Beispiel zeigt eine simple robots.txt für TYPO3, welche zusätzlich die Seiten &amp; Bilder XML-Sitemap beinhaltet.</target>
+            </trans-unit>
 
 
             <trans-unit id="tx_mindshapeseo_domain_model_configuration">
