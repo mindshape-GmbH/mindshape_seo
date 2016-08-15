@@ -621,7 +621,6 @@
 
     var $addJsonld = $('#addJsonld');
     var $jsonld = $('#jsonld');
-    var $sameas = $('.sameas');
     var $jsonldTypeSelect = $('.type-select');
     var $jsonldLogo = $('fieldset.logo');
 
@@ -642,16 +641,13 @@
     if ('undefined' !== typeof $addJsonld) {
       if($addJsonld.prop('checked')) {
         $jsonld.show();
-        $sameas.show();
       }
 
       $addJsonld.on('click', function () {
         if($addJsonld.prop('checked')) {
           $jsonld.slideDown();
-          $sameas.fadeIn()
         } else {
           $jsonld.slideUp();
-          $sameas.fadeOut();
         }
       });
     }

@@ -315,7 +315,7 @@
                 <target>Website Informationen (JSON-LD)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url">
-                <target>Angepasste URL</target>
+                <target>Google Search URL</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
                 <target>(Beispiel: 'www.domain.de' anstatt 'http://domain.de')</target>
@@ -358,7 +358,7 @@
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
-                <target>Links zu sozialen Netzwerken als JSON-LD einfügen</target>
+                <target>Links zu sozialen Netzwerken</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook">
                 <target>Facebook</target>

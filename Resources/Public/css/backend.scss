@@ -312,13 +312,18 @@ $darkgrey: #333;
 
 #mindshape-seo-configuration {
   .mindshape-seo-delete {margin-bottom: 1em;}
-  .row.analytics {padding-bottom: 1em;}
-  .sameas {
-    display: none;
-    margin-top: 1em;
-  }
   #jsonld {display: none;}
-
+  .thumbnail {padding: 1em;}
+  .form-section-headline {
+    .icon-provider-fontawesome-angle-up,
+    .icon-provider-fontawesome-angle-down {vertical-align: middle;}
+    .icon-provider-fontawesome-angle-up {display: inline-block;}
+    .icon-provider-fontawesome-angle-down {display: none;}
+    .collapsed {
+      .icon-provider-fontawesome-angle-down {display: inline-block;}
+      .icon-provider-fontawesome-angle-up {display: none;}
+    }
+  }
   fieldset {
     margin-bottom: 1em;
     &.logo {display: none;}

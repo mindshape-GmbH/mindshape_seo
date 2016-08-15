@@ -315,7 +315,7 @@
                 <source>Website information (JSON-LD)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url">
-                <source>Custom URL</source>
+                <source>Google Search URL</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
                 <source>(example: 'www.domain.com' instead of 'http://domain.com')</source>
@@ -358,7 +358,7 @@
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as">
-                <source>Add social media links as JSON-LD</source>
+                <source>Add social media links</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook">
                 <source>Facebook</source>

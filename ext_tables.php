@@ -78,6 +78,18 @@ $iconRegistry->registerIcon(
     [ 'name' => 'caret-down' ]
 );
 
+$iconRegistry->registerIcon(
+    'provider-fontawesome-angle-up',
+    \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+    [ 'name' => 'angle-up' ]
+);
+
+$iconRegistry->registerIcon(
+    'provider-fontawesome-angle-down',
+    \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+    [ 'name' => 'angle-down' ]
+);
+
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptConstants(
     '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mindshape_seo/Configuration/TypoScript/constants.txt">'
 );
