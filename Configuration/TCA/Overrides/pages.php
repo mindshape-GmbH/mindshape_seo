@@ -147,24 +147,33 @@ $columns = array(
         ),
     ),
     'mindshapeseo_exclude_from_sitemap' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap',
+        'label' => '',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
+            'items' => array(
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap', ''),
+            ),
         ),
     ),
     'mindshapeseo_exclude_suppages_from_sitemap' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_suppages_from_sitemap',
+        'label' => '',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
+            'items' => array(
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_suppages_from_sitemap', ''),
+            ),
         ),
     ),
     'mindshapeseo_sub_sitemap' => array(
-        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_sub_sitemap',
+        'label' => '',
         'exclude' => 1,
         'config' => array(
             'type' => 'check',
+            'items' => array(
+                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_sub_sitemap', ''),
+            ),
         ),
     ),
     'mindshapeseo_canonical' => array(
