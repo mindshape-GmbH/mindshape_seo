@@ -96,7 +96,7 @@ class ImageSitemapGenerator extends SitemapGenerator
         );
 
         foreach ($pages as $page) {
-            $pageImages = $this->getPageImages($page['uid']);
+            $pageImages = $this->getPageImageUrls($page['uid']);
 
             if (0 < count($pageImages)) {
                 $urls .= $this->renderPageImagesEntry(
@@ -113,12 +113,12 @@ class ImageSitemapGenerator extends SitemapGenerator
      * @param int $pageUid
      * @return array
      */
-    protected function getPageImages($pageUid)
+    protected function getPageImageUrls($pageUid)
     {
         /** @var DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
-        $images = array();
+        $imageUrls = array();
 
         $rows = $databaseConnection->exec_SELECTgetRows(
             'sys_file_reference.*',
@@ -131,27 +131,27 @@ class ImageSitemapGenerator extends SitemapGenerator
         );
 
         foreach ($rows as $row) {
-            $image = $this->resourceFactory->getFileReferenceObject($row['uid'], $row);
+            $imageUrl = $this->resourceFactory->getFileReferenceObject($row['uid'], $row)->getPublicUrl();
 
             if (
                 !$this->configuration instanceof Configuration &&
                 0 === $this->configuration->getImageSitemapMinHeight() &&
                 0 === $this->configuration->getImageSitemapMinWidth()
             ) {
-                $images[] = $image;
+                $imageUrls[] = $imageUrl;
             } else {
-                $imageSize = getimagesize($image->getPublicUrl());
+                $imageSize = getimagesize($imageUrl);
 
                 if (
                     $imageSize[1] >= $this->configuration->getImageSitemapMinHeight() &&
                     $imageSize[0] >= $this->configuration->getImageSitemapMinWidth()
                 ) {
-                    $images[] = $image;
+                    $imageUrls[] = $imageUrl;
                 }
             }
         }
 
-        return $images;
+        return array_unique($imageUrls);
     }
 
     /**
@@ -163,11 +163,10 @@ class ImageSitemapGenerator extends SitemapGenerator
     {
         $content = '<loc>' . $pageUrl . '</loc>';
 
-        /** @var FileReference $pageImage */
-        foreach ($pageImages as $pageImage) {
+        foreach ($pageImages as $pageImageUrl) {
             $content .= '<' . self::TAG_IMAGE . '>' .
                             '<' . self::TAG_IMAGE_LOC . '>' .
-                                GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $pageImage->getOriginalFile()->getPublicUrl() .
+                                GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $pageImageUrl .
                             '</' . self::TAG_IMAGE_LOC . '>' .
                         '</'. self::TAG_IMAGE . '>';
         }
