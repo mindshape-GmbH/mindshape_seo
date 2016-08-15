@@ -38,7 +38,7 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class StandaloneTemplateRendererService implements SingletonInterface
 {
-    const TEMPLATES_DEFAULT_FOLDER = 'TempalteRenderer';
+    const TEMPLATES_DEFAULT_FOLDER = 'TemplateRenderer';
 
     /**
      * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
@@ -58,11 +58,11 @@ class StandaloneTemplateRendererService implements SingletonInterface
     {
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var ConfigurationManager $configurationManageger */
-        $configurationManageger = $objectManager->get(ConfigurationManager::class);
+        /** @var ConfigurationManager $configurationManager */
+        $configurationManager = $objectManager->get(ConfigurationManager::class);
 
         $config = GeneralUtility::removeDotsFromTS(
-            $configurationManageger->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
+            $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
         );
 
         $this->settings = $config['plugin']['tx_mindshape_seo'];
