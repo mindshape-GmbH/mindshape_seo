@@ -88,7 +88,13 @@ class PageService implements SingletonInterface
         $this->pageRepository = $objectManager->get(PageRepository::class);
 
         if ('BE' === TYPO3_MODE) {
-            $currentPage = $this->pageRepository->getPage_noCheck(GeneralUtility::_GET('id'));
+            $currentPageUid = GeneralUtility::_GET('id');
+
+            if (null === $currentPageUid) {
+                $currentPageUid = key(GeneralUtility::_GET('edit')['pages']);
+            }
+
+            $currentPage = $this->pageRepository->getPage_noCheck($currentPageUid);
 
             if (
                 1 !== (int) $currentPage['doktype'] &&
@@ -209,7 +215,7 @@ class PageService implements SingletonInterface
         if ($useGoogleBreadcrumb) {
             $rootline = $this->getRootlineReverse($pageUid);
 
-            $googleBreadcrumb = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('HTTP_HOST');
+            $googleBreadcrumb = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
 
             foreach ($rootline as $index => $parentPage) {
                 $googleBreadcrumb .= $index < count($rootline) ? ' › ' : '';

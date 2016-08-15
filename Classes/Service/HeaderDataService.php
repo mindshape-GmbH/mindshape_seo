@@ -387,7 +387,7 @@ class HeaderDataService
             '@type' => 'WebSite',
             'url' => '' !== $this->domainConfiguration->getJsonldCustomUrl() ?
                 $this->domainConfiguration->getJsonldCustomUrl() :
-                GeneralUtility::getIndpEnv('HTTP_HOST'),
+                GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST'),
         );
     }
 

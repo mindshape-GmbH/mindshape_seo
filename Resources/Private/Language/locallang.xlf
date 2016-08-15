@@ -318,7 +318,7 @@
                 <source>Website information (JSON-LD)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url">
-                <source>Google Search URL</source>
+                <source>Previewed URL (searchresult)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
                 <source>(example: 'www.domain.com' instead of 'http://domain.com')</source>
