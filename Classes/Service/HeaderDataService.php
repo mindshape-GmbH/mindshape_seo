@@ -168,11 +168,12 @@ class HeaderDataService
                 $this->addHreflang();
             }
 
-            if (
-                $this->domainConfiguration->getAddJsonld() ||
-                $this->domainConfiguration->getAddJsonldBreadcrumb()
-            ) {
+            if ($this->domainConfiguration->getAddJsonld()) {
                 $this->addJsonLd();
+            }
+
+            if ($this->domainConfiguration->getAddJsonldBreadcrumb()) {
+                $this->addJsonLdBreadcrumb();
             }
 
             if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
@@ -369,14 +370,6 @@ class HeaderDataService
             $jsonLdArray[] = $this->renderJsonLdInformation();
         }
 
-        if ($this->domainConfiguration->getAddJsonldBreadcrumb()) {
-            $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
-
-            if (0 < count($jsonLdbreadcrumb['itemListElement'])) {
-                $jsonLdArray[] = $jsonLdbreadcrumb;
-            }
-        }
-
         if (0 < count($jsonLdArray)) {
             $this->pageRenderer->addHeaderData(
                 '<script type="application/ld+json" data-ignore="1">' . json_encode($jsonLdArray) . '</script>'
@@ -483,6 +476,20 @@ class HeaderDataService
         }
 
         return $jsonld;
+    }
+
+    /**
+     * @return void
+     */
+    protected function addJsonLdBreadcrumb()
+    {
+        $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
+
+        if (0 < count($jsonLdbreadcrumb['itemListElement'])) {
+            $this->pageRenderer->addFooterData(
+                '<script type="application/ld+json" data-ignore="1">' . json_encode($jsonLdbreadcrumb) . '</script>'
+            );
+        }
     }
 
     /**
