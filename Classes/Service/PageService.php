@@ -90,7 +90,10 @@ class PageService implements SingletonInterface
         if ('BE' === TYPO3_MODE) {
             $currentPageUid = GeneralUtility::_GET('id');
 
-            if (null === $currentPageUid) {
+            if (
+                null === $currentPageUid &&
+                null !== GeneralUtility::_GET('edit')['pages']
+            ) {
                 $currentPageUid = key(GeneralUtility::_GET('edit')['pages']);
             }
 

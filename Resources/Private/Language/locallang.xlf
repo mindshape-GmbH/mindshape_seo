@@ -241,10 +241,13 @@
 
 
             <trans-unit id="tx_mindshapeseo_text.sitemap_setup">
-                <source>To activate the XML-Sitemap you just have to add entries to your htaccess and robots.txt file.</source>
+                <source>To activate the XML-Sitemap you just have to add entries to your htaccess</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_text.robots_txt_example">
                 <source>This example shows a simple robots.txt for TYPO3, including the page &amp; image XML-Sitemap.</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_text.htaccess_txt_example">
+                <source>The htaccess rules have to be placed after the "RewriteEngine On" (line: ~263) to make a correct redirect.</source>
             </trans-unit>
 
 

@@ -33,6 +33,22 @@ sitemap {
     10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapXmlController->sitemapAction
 }
 
+sitemapIndex = PAGE
+sitemapIndex {
+    typeNum = {$sitemapIndex.typeNum}
+    config {
+        disableAllHeaderCode = 1
+        xhtml_cleaning = 0
+        admPanel = 0
+        debug = 0
+        no_cache = 1
+        additionalHeaders = Content-type:application/xml
+    }
+
+    10 = USER_INT
+    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapXmlController->sitemapIndexAction
+}
+
 imageSitemap = PAGE
 imageSitemap {
     typeNum = {$imageSitemap.typeNum}

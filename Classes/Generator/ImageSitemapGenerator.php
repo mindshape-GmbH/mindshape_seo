@@ -70,7 +70,7 @@ class ImageSitemapGenerator extends SitemapGenerator
      * @return string
      */
     public function generateImageSitemapXml() {
-        return $this->getStartTags() . $this->getImageUrls() . $this->getEndTags();
+        return $this->getUrlsStartTag() . $this->getImageUrls() . $this->getUrlsEndTag();
     }
 
     /**
@@ -78,7 +78,7 @@ class ImageSitemapGenerator extends SitemapGenerator
      *
      * @return string
      */
-    protected function getStartTags()
+    protected function getUrlsStartTag()
     {
         return '<?xml version="1.0" encoding="UTF-8"?>' .
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" image:schemaLocation="http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">';

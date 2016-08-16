@@ -80,6 +80,18 @@ class SitemapXmlController implements SingletonInterface
      * @param array $conf
      * @return string
      */
+    public function sitemapIndexAction($content, $conf)
+    {
+        return $this->sitemapGenerator->generateSitemapIndexXml(
+            $pageUid = $GLOBALS['TSFE']->rootLine[0]['uid']
+        );
+    }
+
+    /**
+     * @param string $content
+     * @param array $conf
+     * @return string
+     */
     public function imageSitemapAction($content, $conf)
     {
         return $this->imageSitemapGenerator->generateImageSitemapXml();

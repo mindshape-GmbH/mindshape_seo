@@ -14,17 +14,21 @@ Konfigurationsreferenz
 
 .htaccess
 ---------
-Kopiere den unten angegeben code einfach ans ende deiner .htaccess Datei.
+| Füge folgende Einträge zu deiner .htaccess Datei hinzu.
+| Die Einträge müssen direkt nach "RewriteEngine On" (Zeile: ~263) eingesetzt werden.
+|
 ::
 
-	<ifModule mod_rewrite.c>
-	  # MindshapeSeo google sitemap
-	  RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]
-	  RewriteRule sitemap_(.*).xml$ /index.php?type=10000&pageuid=$1 [L,R=301]
+	...
+	RewriteEngine On
 
-	  # MindshapeSeo google image sitemap
-	  RewriteRule sitemap-image.xml$ /index.php?type=10001 [L,R=301]
-	</ifModule>
+	# MindshapeSeo google sitemap
+	RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]
+	RewriteRule sitemap_(.*).xml$ /index.php?type=10000&pageuid=$1 [L,R=301]
+
+	# MindshapeSeo google image sitemap
+	RewriteRule sitemap-image.xml$ /index.php?type=10001 [L,R=301]
+	...
 
 robots.txt
 ----------
@@ -35,6 +39,7 @@ robots.txt
 
 	Sitemap: http://yourdomain.url/index.php?type=10000
 	Sitemap: http://yourdomain.url/index.php?type=10001
+	Sitemap: http://yourdomain.url/index.php?type=10002
 
 .. toctree::
 

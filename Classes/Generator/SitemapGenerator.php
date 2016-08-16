@@ -68,12 +68,21 @@ class SitemapGenerator implements SingletonInterface
     }
 
     /**
-     * @param int $page
+     * @param int $pageUid
      * @return string
      */
-    public function generateSitemapXml($page)
+    public function generateSitemapXml($pageUid)
     {
-        return $this->getStartTags() . $this->getUrls($page) . $this->getEndTags();
+        return $this->getUrlsStartTag() . $this->getUrls($pageUid) . $this->getUrlsEndTag();
+    }
+
+    /**
+     * @param int $pageUid
+     * @return string
+     */
+    public function generateSitemapIndexXml($pageUid)
+    {
+        return $this->getSitemapIndexStartTag() . $this->getSitemaps($pageUid) . $this->getSitemapIndexEndTag();
     }
 
     /**
@@ -81,7 +90,7 @@ class SitemapGenerator implements SingletonInterface
      *
      * @return string
      */
-    protected function getEndTags()
+    protected function getUrlsEndTag()
     {
         return '</urlset>';
     }
@@ -91,10 +100,27 @@ class SitemapGenerator implements SingletonInterface
      *
      * @return string
      */
-    protected function getStartTags()
+    protected function getUrlsStartTag()
     {
         return '<?xml version="1.0" encoding="UTF-8"?>' .
         '<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSitemapIndexEndTag()
+    {
+        return '</sitemapindex>';
+    }
+
+    /**
+     * @return string
+     */
+    protected function getSitemapIndexStartTag()
+    {
+        return '<?xml version="1.0" encoding="UTF-8"?>' .
+        '<sitemapindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
     }
 
     /**
@@ -155,13 +181,10 @@ class SitemapGenerator implements SingletonInterface
                 $isSubSitemap &&
                 false === $isSitemapPage
             ) {
-                $tag = self::TAG_SITEMAP;
-                $url = $this->pageService->getPageLink($GLOBALS['TSFE']->rootLine[0]['uid'], true) . 'sitemap_' . $page['uid'] . '.xml';
-            } else {
-                $tag = self::TAG_URL;
-                $url = $this->pageService->getPageLink($page['uid'], true);
+                continue;
             }
 
+            $url = $this->pageService->getPageLink($page['uid'], true);
             $lastmod = new \DateTime();
             $lastmod->setTimestamp($page['SYS_LASTCHANGED']);
 
@@ -178,10 +201,46 @@ class SitemapGenerator implements SingletonInterface
                 $priority = $parentsProperties['priority'];
             }
 
-            $urls .= $this->renderEntry($tag, $url, $lastmod, $changeFrequency, $priority);
+            $urls .= $this->renderEntry(self::TAG_URL, $url, $lastmod, $changeFrequency, $priority);
         }
 
         return $urls;
+    }
+
+    /**
+     * @param int $pageUid
+     * @return string
+     */
+    protected function getSitemaps($pageUid)
+    {
+        $sitemaps = '';
+
+        $pages = $this->pageService->getSubPagesFromPageUid($pageUid);
+
+        foreach ($pages as $page) {
+            $isExcludeSubpagesFromSitemap = (bool) $page['mindshapeseo_exclude_suppages_from_sitemap'];
+            $isSubSitemap = (bool) $page['mindshapeseo_sub_sitemap'];
+            $isNoIndex = (bool) $page['mindshapeseo_no_index'];
+            $isNoIndexRecurive = (bool) $page['mindshapeseo_no_index_recursive'];
+
+            if (
+                false === $isNoIndex &&
+                false === $isNoIndexRecurive &&
+                false === $isExcludeSubpagesFromSitemap &&
+                $isSubSitemap
+            ) {
+                $lastmod = new \DateTime();
+                $lastmod->setTimestamp($page['SYS_LASTCHANGED']);
+
+                $sitemaps .= $this->renderEntry(
+                    self::TAG_SITEMAP,
+                    $this->pageService->getPageLink($GLOBALS['TSFE']->rootLine[0]['uid'], true) . 'sitemap_' . $page['uid'] . '.xml',
+                    $lastmod
+                );
+            }
+        }
+
+        return $sitemaps;
     }
 
     /**
