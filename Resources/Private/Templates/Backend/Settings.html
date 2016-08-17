@@ -379,29 +379,6 @@
                             </div>
                         </fieldset>
                     </div>
-                    <div class="col-md-8">
-                        <fieldset class="form-section">
-                            <h3 class="form-section-headline">
-                                <f:translate key="tx_mindshapeseo_label.help"/>
-                            </h3>
-                            <p>
-                                <f:translate key="tx_mindshapeseo_text.sitemap_setup"/>
-                            </p>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">
-                                        <f:translate key="tx_mindshapeseo_label.htaccess"/>
-                                    </h3>
-                                </div>
-                                <div class="panel-body">
-                                    <p>
-                                        <f:translate key="tx_mindshapeseo_text.htaccess_txt_example"/>
-                                    </p>
-                                    <pre># MindshapeSeo google sitemap<br/>RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]<br/>RewriteRule sitemap_(.*).xml$ /index.php?type=10000&pageuid=$1 [L,R=301]<br/><br/># MindshapeSeo google sitemap index<br/>RewriteRule sitemap-image.xml$ /index.php?type=10001 [L,R=301]<br/><br/># MindshapeSeo google image sitemap<br/>RewriteRule sitemap-image.xml$ /index.php?type=10002 [L,R=301]</pre>
-                                </div>
-                            </div>
-                        </fieldset>
-                    </div>
                 </div>
             </fieldset>
             <fieldset class="form-section">
@@ -423,7 +400,7 @@
                             <p>
                                 <f:translate key="tx_mindshapeseo_text.robots_txt_example"/>
                             </p>
-                            <pre>User-agent: *<br/>Allow: /<br/>Disallow: /typo3/&nbsp;&nbsp;&nbsp;&nbsp;# Nothing to see here<br/>Disallow: /*?id=*&nbsp;&nbsp;&nbsp;&nbsp;# Disallow non-realurl<br/>Disallow: *tx_news*&nbsp;&nbsp;# Disallow tx_news params<br/>Disallow: /*?eID=*&nbsp;&nbsp;&nbsp;# Disallow eID<br/><br/>#Page Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10000<br/>#Sitemap Index<br/>Sitemap: http://typo3.dev/index.php?type=10001<br/>#Image Sitemap<br/>Sitemap: http://typo3.dev/index.php?type=10002</pre>
+                            <pre>User-agent: *<br/>Allow: /<br/>Disallow: /typo3/&nbsp;&nbsp;&nbsp;&nbsp;# Nothing to see here<br/>Disallow: /*?id=*&nbsp;&nbsp;&nbsp;&nbsp;# Disallow non-realurl<br/>Disallow: *tx_news*&nbsp;&nbsp;# Disallow tx_news params<br/>Disallow: /*?eID=*&nbsp;&nbsp;&nbsp;# Disallow eID<br/><br/>#Page Sitemap<br/>Sitemap: http://yourdomain.url/sitemap.xml<br/>#Sitemap Index<br/>Sitemap: http://yourdomain.url/sitemap-index.xml<br/>#Image Sitemap<br/>Sitemap: http://yourdomain.url/sitemap-image.xml</pre>
                         </div>
                     </div>
                 </div>

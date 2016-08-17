@@ -64,26 +64,10 @@ class SitemapXmlController implements SingletonInterface
      * @param array $conf
      * @return string
      */
-    public function sitemapAction($content, $conf)
+    public function sitemapAction($content, array $conf)
     {
-        if (1 < (int) GeneralUtility::_GET('pageuid')) {
-            $pageUid = (int) GeneralUtility::_GET('pageuid');
-        } else {
-            $pageUid = $GLOBALS['TSFE']->rootLine[0]['uid'];
-        }
-
-        return $this->sitemapGenerator->generateSitemapXml($pageUid);
-    }
-
-    /**
-     * @param string $content
-     * @param array $conf
-     * @return string
-     */
-    public function sitemapIndexAction($content, $conf)
-    {
-        return $this->sitemapGenerator->generateSitemapIndexXml(
-            $pageUid = $GLOBALS['TSFE']->rootLine[0]['uid']
+        return $this->sitemapGenerator->generateSitemapXml(
+            GeneralUtility::_GET('id')
         );
     }
 
@@ -92,7 +76,19 @@ class SitemapXmlController implements SingletonInterface
      * @param array $conf
      * @return string
      */
-    public function imageSitemapAction($content, $conf)
+    public function sitemapIndexAction($content, array $conf)
+    {
+        return $this->sitemapGenerator->generateSitemapIndexXml(
+            GeneralUtility::_GET('id')
+        );
+    }
+
+    /**
+     * @param string $content
+     * @param array $conf
+     * @return string
+     */
+    public function imageSitemapAction($content, array $conf)
     {
         return $this->imageSitemapGenerator->generateImageSitemapXml();
     }

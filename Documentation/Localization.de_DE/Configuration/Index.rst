@@ -10,26 +10,8 @@
 Konfigurationsreferenz
 ======================
 | Alle primären Einstellungen können im "SEO Einstellungen" Modul vorgenommen werden.
-| Um die Seiten und Bilder Sitemap zu verwenden ist es nötig einen Redirect in deiner htaccess und Einträge in die robots.txt hinzuzufügen.
-
-.htaccess
----------
-| Füge folgende Einträge zu deiner .htaccess Datei hinzu.
-| Die Einträge müssen direkt nach "RewriteEngine On" (Zeile: ~263) eingesetzt werden.
+| Um die Seiten und Bilder Sitemap zu verwenden ist es nötig Einträge in die robots.txt hinzuzufügen.
 |
-::
-
-	...
-	RewriteEngine On
-
-	# MindshapeSeo google sitemap
-	RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]
-	RewriteRule sitemap_(.*).xml$ /index.php?type=10000&pageuid=$1 [L,R=301]
-
-	# MindshapeSeo google image sitemap
-	RewriteRule sitemap-image.xml$ /index.php?type=10001 [L,R=301]
-	...
-
 robots.txt
 ----------
 | Füge folgende Einträge zu deiner robots.txt Datei hinzu.
@@ -37,9 +19,9 @@ robots.txt
 |
 ::
 
-	Sitemap: http://yourdomain.url/index.php?type=10000
-	Sitemap: http://yourdomain.url/index.php?type=10001
-	Sitemap: http://yourdomain.url/index.php?type=10002
+	Sitemap: http://yourdomain.url/sitemap.xml
+	Sitemap: http://yourdomain.url/sitemap-index.xml
+	Sitemap: http://yourdomain.url/sitemap-image.xml
 
 .. toctree::
 

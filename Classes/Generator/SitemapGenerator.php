@@ -131,6 +131,8 @@ class SitemapGenerator implements SingletonInterface
     {
         $urls = '';
 
+        $pageUid = (int) $pageUid;
+
         $pages = $this->pageService->getSubPagesFromPageUid($pageUid);
 
         $excludePids = array();
@@ -232,9 +234,12 @@ class SitemapGenerator implements SingletonInterface
                 $lastmod = new \DateTime();
                 $lastmod->setTimestamp($page['SYS_LASTCHANGED']);
 
+                $pageUrl = $this->pageService->getPageLink($page['uid'], true);
+                $pageUrl = preg_replace('#(\.html)$#i', '/', $pageUrl);
+
                 $sitemaps .= $this->renderEntry(
                     self::TAG_SITEMAP,
-                    $this->pageService->getPageLink($GLOBALS['TSFE']->rootLine[0]['uid'], true) . 'sitemap_' . $page['uid'] . '.xml',
+                    $pageUrl . 'sitemap.xml',
                     $lastmod
                 );
             }

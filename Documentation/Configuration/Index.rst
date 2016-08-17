@@ -10,28 +10,8 @@
 Configuration Reference
 =======================
 | The main configuration can be done in the SEO settings module.
-| To use the page and image sitemap you have to setup a redirect in your htaccess and entries in your robots.txt.
-
-.htaccess
----------
-| Add the following entries to your .htaccess file.
-| The entries have to be placed right after the "RewriteEngine On" (line: ~263).
+| To use the page and image sitemap you have to setup a redirect in your robots.txt.
 |
-::
-
-
-	...
-	RewriteEngine On
-
-	# MindshapeSeo google sitemap
-	RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]
-	RewriteRule sitemap_(.*).xml$ /index.php?type=10000&pageuid=$1 [L,R=301]
-
-	# MindshapeSeo google image sitemap
-	RewriteRule sitemap-image.xml$ /index.php?type=10001 [L,R=301]
-	...
-
-
 robots.txt
 ----------
 | Add the following entries to your robots.txt file.
@@ -39,9 +19,9 @@ robots.txt
 |
 ::
 
-	Sitemap: http://yourdomain.url/index.php?type=10000
-	Sitemap: http://yourdomain.url/index.php?type=10001
-	Sitemap: http://yourdomain.url/index.php?type=10002
+	Sitemap: http://yourdomain.url/sitemap.xml
+	Sitemap: http://yourdomain.url/sitemap-index.xml
+	Sitemap: http://yourdomain.url/sitemap-image.xml
 
 .. toctree::
 
