@@ -15,6 +15,10 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php'][
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(\Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter::class);
 
 if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('realurl')) {
+    if (!array_key_exists('realurl', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF'])) {
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['realurl'] = array();
+    }
+
     if (!array_key_exists('_DEFAULT', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['realurl'])) {
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['realurl']['_DEFAULT'] = array();
     }
