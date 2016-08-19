@@ -46,7 +46,7 @@ class RenderPreProcessHook
             /** @var ObjectManager $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             /** @var HeaderDataService $headerDataService */
-            $headerDataService = $objectManager->get(HeaderDataService::class, $pageRenderer);
+            $headerDataService = $objectManager->get(HeaderDataService::class, $pageRenderer, $params);
             $headerDataService->manipulateHeaderData();
         }
     }

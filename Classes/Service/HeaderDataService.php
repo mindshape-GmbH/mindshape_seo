@@ -71,6 +71,11 @@ class HeaderDataService
     /**
      * @var array
      */
+    protected $params = array();
+
+    /**
+     * @var array
+     */
     protected $currentPageMetaData;
 
     /**
@@ -90,11 +95,13 @@ class HeaderDataService
 
     /**
      * @param PageRenderer $pageRenderer
+     * @param array $params
      * @return HeaderDataService
      */
-    public function __construct(PageRenderer $pageRenderer)
+    public function __construct(PageRenderer $pageRenderer, array &$params)
     {
         $this->pageRenderer = $pageRenderer;
+        $this->params = $params;
 
         /** @var ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -205,16 +212,36 @@ class HeaderDataService
      */
     protected function attachTitleAttachment()
     {
-        if (
-            $this->currentPageMetaData['disableTitleAttachment'] ||
-            empty($this->domainConfiguration->getTitleAttachment())
-        ) {
+        $headerDataWithTitle = preg_grep('#<title>(.*)</title>#i', $this->params['headerData']);
+
+        $title = reset($headerDataWithTitle);
+
+        if (false === $title) {
             $title = $this->currentPageMetaData['title'];
         } else {
+            $title = preg_replace_callback(
+                '#(.*<title>)(.*)(<\/title>.*)#i',
+                function($match) { return $match[2]; },
+                $title
+            );
+
+            $key = reset(array_keys($headerDataWithTitle));
+
+            $this->params['headerData'][$key] = preg_replace(
+                '#(<title>)(.*)(<\/title>)#i',
+                '',
+                $this->params['headerData'][$key]
+            );
+        }
+
+        if (
+            !$this->currentPageMetaData['disableTitleAttachment'] &&
+            !empty($this->domainConfiguration->getTitleAttachment())
+        ) {
             if ($this->domainConfiguration->getTitleAttachmentPosition() === Configuration::TITLE_ATTACHMENT_POSITION_PREFIX) {
-                $title = $this->domainConfiguration->getTitleAttachment() . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $this->currentPageMetaData['title'];
+                $title = $this->domainConfiguration->getTitleAttachment() . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $title;
             } else {
-                $title = $this->currentPageMetaData['title'] . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $this->domainConfiguration->getTitleAttachment();
+                $title = $title . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $this->domainConfiguration->getTitleAttachment();
             }
         }
 
@@ -271,7 +298,7 @@ class HeaderDataService
             $metaData['og:image'] = $this->currentPageMetaData['facebook']['image'];
         }
 
-        $this->addMetaDataArray($metaData);
+        $this->addMetaDataArray($metaData, 'property');
     }
 
     protected function addMetaData()
@@ -310,27 +337,29 @@ class HeaderDataService
 
     /**
      * @param array $metaData
+     * @param string $nameAttribute
      * @return void
      */
-    protected function addMetaDataArray(array $metaData)
+    protected function addMetaDataArray(array $metaData, $nameAttribute = 'name')
     {
-        foreach ($metaData as $property => $content) {
+        foreach ($metaData as $name => $content) {
             if (!empty($content)) {
-                $this->pageRenderer->addHeaderData(
-                    $this->renderMetaTag($property, $content)
+                $this->pageRenderer->addMetaTag(
+                    $this->renderMetaTag($name, $content, $nameAttribute)
                 );
             }
         }
     }
 
     /**
-     * @param string $property
+     * @param string $name
      * @param string $content
+     * @param string $nameAttribute
      * @return string
      */
-    protected function renderMetaTag($property, $content)
+    protected function renderMetaTag($name, $content, $nameAttribute = 'name')
     {
-        return '<meta property="' . $property . '" content="' . $content . '"/>';
+        return '<meta ' . $nameAttribute . '="' . $name . '" content="' . $content . '">';
     }
 
     /**
