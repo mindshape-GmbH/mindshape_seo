@@ -121,8 +121,31 @@ class BackendController extends ActionController
 
             $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
             $pageRenderer->loadJquery();
-            $pageRenderer->addCssFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.css');
-            $pageRenderer->addJsFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.js');
+
+            if (GeneralUtility::getApplicationContext()->isProduction()) {
+                $pageRenderer->addCssFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.css');
+                $pageRenderer->addJsFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.js');
+            } else {
+                $pageRenderer->addCssFile(
+                    ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.css',
+                    'stylesheet',
+                    'all',
+                    '',
+                    false,
+                    false,
+                    '',
+                    true
+                );
+                $pageRenderer->addJsFile(
+                    ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.js',
+                    'text/javascript',
+                    false,
+                    false,
+                    '',
+                    true
+                );
+            }
+
             $pageRenderer->setBackPath('../typo3/');
         }
 
