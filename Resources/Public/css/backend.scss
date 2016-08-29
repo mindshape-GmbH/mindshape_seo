@@ -143,6 +143,18 @@ $darkgrey: #333;
 
   .seo-check {
     .progress {cursor: pointer;}
+
+    .fa-exclamation-circle{
+      color: #c83c3c;
+      font-size: 16px;
+      line-height: .9;
+    }
+
+    .fa-check-circle{
+      color: #79a548;
+      font-size: 16px;
+      line-height: .9;
+    }
   }
 
   .progress {
@@ -329,20 +341,5 @@ $darkgrey: #333;
   fieldset {
     margin-bottom: 1em;
     &.logo {display: none;}
-  }
-}
-
-.seo-check{
-
-  .fa-exclamation-circle{
-    font-size: 16px;
-    color: #c83c3c;
-    line-height: 0.9;
-  }
-
-  .fa-check-circle{
-    font-size: 16px;
-    color: #79a548;
-    line-height: 0.9;
   }
 }
