@@ -58,12 +58,6 @@ $iconRegistry->registerIcon(
 );
 
 $iconRegistry->registerIcon(
-    'provider-fontawesome-success',
-    \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'check-circle' ]
-);
-
-$iconRegistry->registerIcon(
     'provider-fontawesome-warning',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
     [ 'name' => 'exclamation-circle' ]
@@ -78,7 +72,7 @@ $iconRegistry->registerIcon(
 $iconRegistry->registerIcon(
     'provider-fontawesome-success',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'check' ]
+    [ 'name' => 'check-circle' ]
 );
 
 $iconRegistry->registerIcon(

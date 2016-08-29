@@ -602,12 +602,15 @@
         $seoCheckParent = $('form');
       }
 
-      $seoCheckParent.find('.seo-check .progress-seo-check .progress-bar').css(
-        'width',
-        100 / this.numberOfSeoChecks * alertsCounter
-      );
-
       $seoCheckParent.find('.seo-check .alerts').html(alertsCounter);
+
+      if (alertsCounter > 0) {
+        $seoCheckParent.find('.seo-check .no-error').hide();
+        $seoCheckParent.find('.seo-check .error').show();
+      } else {
+        $seoCheckParent.find('.seo-check .no-error').show();
+        $seoCheckParent.find('.seo-check .error').hide();
+      }
     },
     calcStringPixelLength: function (text, fontFamily, fontSize) {
       this.canvasRenderingContext.font = fontSize + ' ' + fontFamily;

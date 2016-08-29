@@ -145,15 +145,22 @@ $darkgrey: #333;
     .progress {cursor: pointer;}
 
     .fa-exclamation-circle{
-      color: #c83c3c;
+      color: $bootstrapDangerRed;
       font-size: 16px;
       line-height: .9;
     }
 
     .fa-check-circle{
-      color: #79a548;
+      color: $bootstrapSuccessGreen;
       font-size: 16px;
       line-height: .9;
+    }
+
+    .error {display: none;}
+
+    .btn {
+      display: inline-block;
+      margin: 5px 0 10px;
     }
   }
 
