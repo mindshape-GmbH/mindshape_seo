@@ -72,11 +72,11 @@ class GooglePreviewField
         $pageRenderer->loadJquery();
 
         if (GeneralUtility::getApplicationContext()->isProduction()) {
-            $pageRenderer->addCssFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.css');
-            $pageRenderer->addJsFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.js');
+            $pageRenderer->addCssFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.min.css');
+            $pageRenderer->addJsFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.min.js');
         } else {
             $pageRenderer->addCssFile(
-                ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.css',
+                ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.min.css',
                 'stylesheet',
                 'all',
                 '',
@@ -86,7 +86,7 @@ class GooglePreviewField
                 true
             );
             $pageRenderer->addJsFile(
-                ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.js',
+                ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.min.js',
                 'text/javascript',
                 false,
                 false,
