@@ -461,7 +461,7 @@
       var title = $previewContainer.find('.preview-box .title').text();
       var description = $previewContainer.find('.preview-box .description').text();
       var url = $previewContainer.find('.preview-box .url').text();
-      var regex = new RegExp('(^|\\.|\\s)(' + focusKeyword.trim() + ')(\\s|\\.|$)', 'igm');
+      var regex = new RegExp('(^|\\.|\\,|\\?|\\!|\\#|\\+|\\s)(' + focusKeyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&').trim() + ')(\\s|\\.|\\,|\\?|\\!|\\#|\\+|$)', 'igm');
       var titleMatches = title.match(regex);
       var descriptionMatches = description.match(regex);
       var urlMatches = url.match(regex);
