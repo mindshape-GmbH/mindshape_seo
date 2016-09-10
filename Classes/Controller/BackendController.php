@@ -301,7 +301,9 @@ class BackendController extends ActionController
 
         $this->view->assignMultiple(array(
             'domains' => $this->domainService->getAvailableDomains(),
-            'currentDomain' => $domain,
+            'currentDomain' => $domain === Configuration::DEFAULT_DOMAIN ?
+                GeneralUtility::getIndpEnv('HTTP_HOST') :
+                $domain,
             'configuration' => $configuration,
             'titleAttachmentPositionOptions' => array(
                 Configuration::TITLE_ATTACHMENT_POSITION_SUFFIX => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.title_attachment_position.suffix', 'mindshape_seo'),
@@ -313,7 +315,8 @@ class BackendController extends ActionController
             ),
             'domainUrl' => Configuration::DEFAULT_DOMAIN === $domain ?
                 GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') :
-                $_SERVER['REQUEST_SCHEME'] . '://' . $domain
+                $_SERVER['REQUEST_SCHEME'] . '://' . $domain,
+            'robotsTxtNotExists' => !file_exists(PATH_site . '/robots.txt')
         ));
     }
 

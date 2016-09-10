@@ -176,6 +176,12 @@
             <trans-unit id="tx_mindshapeseo_label.preview.seo_check">
                 <source>SEO check</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.seo_check.hint">
+                <source>Hints</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.seo_check.ok">
+                <source>Good</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.button.edit">
                 <source>Edit</source>
             </trans-unit>
@@ -232,16 +238,16 @@
             <trans-unit id="tx_mindshapeseo_label.seo_settings_for">
                 <source>SEO Settings for</source>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.seo_settings">
-                <source>SEO Settings</source>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.seo_preview_for_page">
-                <source>SEO Preview for page</source>
+                <source>SEO Preview</source>
             </trans-unit>
 
 
             <trans-unit id="tx_mindshapeseo_text.robots_txt_example">
                 <source>This example shows a simple robots.txt for TYPO3, including the page &amp; image XML-Sitemap.</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_text.robots_txt_exists">
+                <source>Hint: there is no robots.txt on your website!</source>
             </trans-unit>
 
 
@@ -318,7 +324,7 @@
                 <source>Previewed URL (searchresult)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
-                <source>(example: 'www.domain.com' instead of 'http://domain.com')</source>
+                <source>(example: 'www.%s' instead of 'http://%s')</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
                 <source>Type</source>

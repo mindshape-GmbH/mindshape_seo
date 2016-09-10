@@ -176,6 +176,12 @@
             <trans-unit id="tx_mindshapeseo_label.preview.seo_check">
                 <target>SEO Prüfung</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.seo_check.hint">
+                <target>Hinweise</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.seo_check.ok">
+                <target>In Ordnung</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.button.edit">
                 <target>Bearbeiten</target>
             </trans-unit>
@@ -232,16 +238,16 @@
             <trans-unit id="tx_mindshapeseo_label.seo_settings_for">
                 <target>SEO Einstellungen für</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.seo_settings">
-                <target>SEO Einstellungen</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.seo_preview_for_page">
-                <target>SEO Vorschau für die Seite</target>
+                <target>SEO Vorschau</target>
             </trans-unit>
 
 
             <trans-unit id="tx_mindshapeseo_text.robots_txt_example">
-                <target>Dieses Beispiel zeigt eine simple robots.txt für TYPO3, welche zusätzlich die Seiten &amp; Bilder XML-Sitemap beinhaltet.</target>
+                <target>Dieses Beispiel zeigt eine simple robots.txt für TYPO3, welche zusätzlich die Seiten &amp; Bilder XML-Sitemap beinhaltet. Diese Datei kannst Du auf der Root-Ebene unter "robots.txt" abspeichern.</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_text.robots_txt_exists">
+                <target>Hinweis: es wurde keine robots.txt auf Ihrer Website gefunden!</target>
             </trans-unit>
 
 
@@ -255,7 +261,7 @@
                 <target>Titel-Ergänzung</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment.help">
-                <target>Kann der Website oder Firmenname sein und wir dem Titel-Tag hinzugefügt</target>
+                <target>Kann der Website oder Firmenname sein und wir dem Titel-Tag hinzugefügt (bei Suffix wird hinten angefügt, bei Präfix wird vorne angefügt).</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_position">
                 <target>Position</target>
@@ -270,7 +276,7 @@
                 <target>Trenner</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
-                <target>Facebook Standard Bild</target>
+                <target>Facebook Standard Bild (empfohlene Größe mind. 200x200px)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_height">
                 <target>Minimale Höhe für Bilder (Pixel)</target>
@@ -282,7 +288,7 @@
                 <target>hreflang-Tag für mehrsprachige Webseiten einfügen</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld">
-                <target>Website Informationen als JSON-LD</target>
+                <target>Website Informationen (JSON-LD)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld_breadcrumb">
                 <target>Breadcrumb als JSON-LD einfügen</target>
@@ -315,10 +321,10 @@
                 <target>Website Informationen (JSON-LD)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url">
-                <target>Angezeigte URL (Suchergebniss)</target>
+                <target>Angezeigte URL (Suchergebnis)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
-                <target>(Beispiel: 'www.domain.de' anstatt 'http://domain.de')</target>
+                <target>(Beispiel: 'www.%s' anstatt 'http://%s')</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
                 <target>Typ</target>

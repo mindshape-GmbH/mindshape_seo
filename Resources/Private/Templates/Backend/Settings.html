@@ -9,15 +9,8 @@
     <f:section name="Main">
 
         <h1>
-            <f:if condition="{currentDomain} == '*'">
-                <f:then>
-                    <f:translate key="tx_mindshapeseo_label.seo_settings"/>
-                </f:then>
-                <f:else>
-                    <f:translate key="tx_mindshapeseo_label.seo_settings_for"/>
-                    <b>{currentDomain}</b>
-                </f:else>
-            </f:if>
+            <f:translate key="tx_mindshapeseo_label.seo_settings_for"/>
+            <b>{currentDomain}</b>
         </h1>
 
         <f:form id="mindshape-seo-configuration" action="saveConfiguration" name="configuration" object="{configuration}" enctype="multipart/form-data">
@@ -133,7 +126,7 @@
                                 </label>
                                 <f:form.textfield property="jsonldCustomUrl" placeholder="{domainUrl}" class="form-control"/>
                                 <span class="help-block">
-                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example"/>
+                                    <f:translate key="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example" arguments="{0: currentDomain, 1: currentDomain}"/>
                                 </span>
                             </div>
                             <div class="row">
@@ -400,7 +393,12 @@
                             <p>
                                 <f:translate key="tx_mindshapeseo_text.robots_txt_example"/>
                             </p>
-                            <pre>User-agent: *<br/>Allow: /<br/>Disallow: /typo3/&nbsp;&nbsp;&nbsp;&nbsp;# Nothing to see here<br/>Disallow: /*?id=*&nbsp;&nbsp;&nbsp;&nbsp;# Disallow non-realurl<br/>Disallow: *tx_news*&nbsp;&nbsp;# Disallow tx_news params<br/>Disallow: /*?eID=*&nbsp;&nbsp;&nbsp;# Disallow eID<br/><br/>#Page Sitemap<br/>Sitemap: http://yourdomain.url/sitemap.xml<br/>#Sitemap Index<br/>Sitemap: http://yourdomain.url/sitemap-index.xml<br/>#Image Sitemap<br/>Sitemap: http://yourdomain.url/sitemap-image.xml</pre>
+                            <f:if condition="{robotsTxtNotExists}">
+                                <p class="alert alert-warning">
+                                    <f:translate key="tx_mindshapeseo_text.robots_txt_exists"/>
+                                </p>
+                            </f:if>
+                            <pre>User-agent: *<br/>Allow: /<br/>Disallow: /typo3/&nbsp;&nbsp;&nbsp;&nbsp;# Nothing to see here<br/>Disallow: /*?id=*&nbsp;&nbsp;&nbsp;&nbsp;# Disallow non-realurl<br/>Disallow: *tx_news*&nbsp;&nbsp;# Disallow tx_news params<br/>Disallow: /*?eID=*&nbsp;&nbsp;&nbsp;# Disallow eID<br/><br/>#Page Sitemap<br/>Sitemap: {domainUrl}/sitemap.xml<br/>#Sitemap Index<br/>Sitemap: {domainUrl}/sitemap-index.xml<br/>#Image Sitemap<br/>Sitemap: {domainUrl}/sitemap-image.xml</pre>
                         </div>
                     </div>
                 </div>
