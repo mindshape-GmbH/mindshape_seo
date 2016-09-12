@@ -93,13 +93,6 @@ class Configuration extends AbstractEntity
     protected $titleAttachmentPosition = '';
 
     /**
-     * generateSitemap
-     *
-     * @var bool
-     */
-    protected $generateSitemap = false;
-
-    /**
      * addHreflang
      *
      * @var bool
