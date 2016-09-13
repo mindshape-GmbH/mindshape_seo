@@ -297,6 +297,8 @@ class BackendController extends ActionController
             $configuration->setDomain($domain);
             $configuration->setTitleAttachmentSeperator(Configuration::DEFAULT_TITLE_ATTACHMENT_SEPERATOR);
             $configuration->setTitleAttachmentPosition(Configuration::TITLE_ATTACHMENT_POSITION_SUFFIX);
+        } elseif (0 === count($domains)) {
+            $configuration->setDomain(Configuration::DEFAULT_DOMAIN);
         }
 
         $this->view->assignMultiple(array(
