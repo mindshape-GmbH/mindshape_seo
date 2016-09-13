@@ -251,6 +251,11 @@
             </trans-unit>
 
 
+            <trans-unit id="tx_mindshapeseo_validation.facebook_default_image_too_small">
+                <target>Das hochgeladene Facebook Standard Bild ist zu klein</target>
+            </trans-unit>
+
+
             <trans-unit id="tx_mindshapeseo_domain_model_configuration">
                 <target>Konfiguration</target>
             </trans-unit>

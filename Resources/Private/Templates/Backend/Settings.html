@@ -13,6 +13,14 @@
             <b>{currentDomain}</b>
         </h1>
 
+        <f:form.validationResults>
+            <f:for each="{validationResults.flattenedErrors}" as="errors" key="propertyPath">
+                <f:for each="{errors}" as="error">
+                    <div class="alert alert-danger">{error}</div>
+                </f:for>
+            </f:for>
+        </f:form.validationResults>
+
         <f:form id="mindshape-seo-configuration" action="saveConfiguration" name="configuration" object="{configuration}" enctype="multipart/form-data">
             <f:form.hidden property="domain" value="{currentDomain}"/>
             <fieldset class="form-section">

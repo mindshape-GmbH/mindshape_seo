@@ -330,6 +330,7 @@ class BackendController extends ActionController
 
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
+     * @validate $configuration \Mindshape\MindshapeSeo\Validation\Validator\ConfigurationValidator
      * @return void
      */
     public function saveConfigurationAction(Configuration $configuration)

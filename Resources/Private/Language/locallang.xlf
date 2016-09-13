@@ -251,6 +251,11 @@
             </trans-unit>
 
 
+            <trans-unit id="tx_mindshapeseo_validation.facebook_default_image_too_small">
+                <source>The uploaded facebook default image is too small</source>
+            </trans-unit>
+
+
             <trans-unit id="tx_mindshapeseo_domain_model_configuration">
                 <source>Configuration</source>
             </trans-unit>
@@ -276,7 +281,7 @@
                 <source>Seperator</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
-                <source>Facebook Default Image</source>
+                <source>Facebook Default Image (suggested min. size 200x200px)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_height">
                 <source>Image minimum height (pixel)</source>
