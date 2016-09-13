@@ -1,34 +1,36 @@
-$googleLinkBlue: #1A0DAB;
-$googleUrlGreen: #006621;
-$googleDescriptionGrey: #545454;
-$bootstrapBorderGray: #ddd;
-$bootstrapLinkBlue: #337ab7;
-$bootstrapSuccessGreen: #5cb85c;
-$bootstrapSuccessGreenHover: #449d44;
-$bootstrapDangerRed: #d9534f;
-$bootstrapDangerRedHover: #c9302c;
+$google-link-blue: #1a0dab;
+$google-url-green: #006621;
+$google-description-grey: #545454;
+$bootstrap-border-gray: #ddd;
+$bootstrap-link-blue: #337ab7;
+$bootstrap-success-green: #5cb85c;
+$bootstrap-success-green-hover: #449d44;
+$bootstrap-danger-red: #d9534f;
+$bootstrap-danger-red-hover: #c9302c;
 $white: #fff;
+$whitegrey: #bdbcbc;
 $grey: #ededed;
 $darkgrey: #333;
+$lightgrey: #666;
 
 .mindshapeseo-preview {
   .pagetree-info {
-    position: relative;
     overflow: hidden;
     padding-bottom: 0;
+    position: relative;
 
     .depth-markup {
-      position: absolute;
-      top: 0;
       bottom: 0;
       height: 100%;
+      position: absolute;
+      top: 0;
 
       .treeline-icon {
-        width: 17px;
         height: 100%;
+        margin: 0;
         padding: 0;
         top: 0;
-        margin: 0;
+        width: 17px;
       }
 
       .icon {
@@ -39,8 +41,8 @@ $darkgrey: #333;
       }
 
       .title {
-        position: relative;
         display: inline-block;
+        position: relative;
         top: 50%;
         transform: translateY(-50%);
       }
@@ -64,13 +66,13 @@ $darkgrey: #333;
         position: relative;
 
         &:before {
-          content: "";
-          width: 1px;
+          border-left: 1px dotted $lightgrey;
+          bottom: 0;
+          content: '';
+          left: 50%;
           position: absolute;
           top: calc(50% + 8px);
-          bottom: 0;
-          left: 50%;
-          border-left: 1px dotted #666666;
+          width: 1px;
         }
       }
     }
@@ -81,13 +83,13 @@ $darkgrey: #333;
       height: 100%;
 
       &:before {
-        content: "";
-        width: 1px;
+        border-left: 1px dotted $lightgrey;
+        bottom: 0;
+        content: '';
+        left: 8px;
         position: absolute;
         top: 50%;
-        bottom: 0;
-        left: 8px;
-        border-left: 1px dotted #666666;
+        width: 1px;
       }
     }
   }
@@ -104,13 +106,12 @@ $darkgrey: #333;
 
   .msh-tooltip {
     display: inline;
-    position: relative;
     font-style: normal;
+    position: relative;
 
     &:hover {
       &:after {
-        background: $darkgrey;
-        background: rgba(0, 0, 0, .8);
+        background: rgba($darkgrey, .8);
         border-radius: 5px;
         bottom: 26px;
         color: $white;
@@ -145,13 +146,13 @@ $darkgrey: #333;
     .progress {cursor: pointer;}
 
     .fa-exclamation-circle{
-      color: $bootstrapDangerRed;
+      color: $bootstrap-danger-red;
       font-size: 16px;
       line-height: .9;
     }
 
     .fa-check-circle{
-      color: $bootstrapSuccessGreen;
+      color: $bootstrap-success-green;
       font-size: 16px;
       line-height: .9;
     }
@@ -172,28 +173,22 @@ $darkgrey: #333;
   .robots {
     margin-bottom: .4em;
 
-    .danger {color: $bootstrapDangerRed;}
-
-    .noindex:after {
-      color: #000;
-      content: ",";
-      margin-left: -.3em;
-    }
+    .danger {color: $bootstrap-danger-red;}
   }
 
   .canonical-icon {
-    width: 1.3em;
     height: 1.3em;
     margin-top: -.1em;
+    width: 1.3em;
   }
 }
 
 .google-preview {
   .thumbnail {
-    width: 620px;
-    margin: 0 0 1.5em 0;
+    margin: 0 0 1.5em;
     padding: .8em;
     position: relative;
+    width: 620px;
   }
 
   .preview-box {
@@ -202,20 +197,19 @@ $darkgrey: #333;
     width: 600px;
 
     h3 {
+      display: block;
       font-size: 18px;
+      font-weight: normal;
       line-height: 1.2;
       margin: 0;
-      display: block;
       overflow: hidden;
-      width: 580px;
-      color: #1e0fbe;
-      font-weight: normal;
-      white-space: nowrap;
       text-decoration: none;
       text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 580px;
 
       a {
-        color: $googleLinkBlue;
+        color: $google-link-blue;
       }
     }
 
@@ -231,16 +225,16 @@ $darkgrey: #333;
       line-height: 16px;
 
       cite {
-        color: $googleUrlGreen;
+        color: $google-url-green;
         font-style: normal;
       }
     }
 
     .description {
-      height: 34px;
+      color: $google-description-grey;
       font-size: 13px;
+      height: 34px;
       overflow-y: hidden;
-      color: $googleDescriptionGrey;
 
       &:empty {display: none;}
     }
@@ -254,23 +248,23 @@ $darkgrey: #333;
     display: none;
 
     .progress {
-      margin: 10px 0;
       height: 10px;
+      margin: 10px 0;
     }
 
     .title-container,
     .description-container {margin-bottom: 10px;}
 
     textarea.description {
-      resize: none;
       height: 65px;
+      resize: none;
     }
 
     hr {
-      position: relative;
-      background-color: rgba(#000, 0.12);
-      margin: 10px 0;
+      background-color: rgba(#000, .12);
       left: -.8em;
+      margin: 10px 0;
+      position: relative;
       width: calc(100% + 1.6em);
     }
   }
@@ -278,16 +272,16 @@ $darkgrey: #333;
   button {
     &.save {display: none;}
     &.edit {
-      position: absolute;
-      border: solid 1px $bootstrapBorderGray;
-      margin-top: 1em;
-      font-size: .8em;
+      background-color: $bootstrap-border-gray;
+      border: solid 1px $bootstrap-border-gray;
       border-bottom-left-radius: .5em;
       border-bottom-right-radius: .5em;
-
+      font-size: .8em;
       left: 50%;
+
+      margin-top: 1em;
+      position: absolute;
       transform: translateX(-50%);
-      background-color: $bootstrapBorderGray;
 
       &:hover {background-color: $grey}
       .abort-text {display: none;}
@@ -302,8 +296,8 @@ $darkgrey: #333;
     margin-bottom: 0;
 
     li.list-group-item {
+      border-color: $whitegrey;
       list-style: none;
-      border-color: #bdbcbc;
 
       &.first-visible {
         border-top-left-radius: 4px;

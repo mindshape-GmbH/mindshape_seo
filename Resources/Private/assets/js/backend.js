@@ -82,6 +82,7 @@
         } else {
           that.closePreviewEditPanel($currentPreview);
           that.restorePreviewOriginalData($currentPreview);
+          that.checkAndChangeIndexPreview($currentPreview);
 
           var focuskeyword = $currentPreview.find('.focus-keyword input').val();
 
@@ -387,7 +388,7 @@
         }
 
         if (this.editing) {
-          $noindexPreview.html('noindex');
+          $noindexPreview.html('noindex,');
           $noindexPreview.addClass('danger');
         }
       } else {
@@ -396,7 +397,7 @@
         }
 
         if (this.editing) {
-          $noindexPreview.html('index');
+          $noindexPreview.html('index,');
           $noindexPreview.removeClass('danger');
         }
       }
