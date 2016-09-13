@@ -3,7 +3,7 @@
       xmlns:f="http://typo3.org/ns/fluid/ViewHelpers">
 
     <f:if condition="{pagination.pages -> f:count()} > 1">
-        <ul class="pagination pagination-lg">
+        <ul class="pagination">
             <f:if condition="{pagination.previousPage}">
                 <li class="previous">
                     <f:if condition="{pagination.previousPage} > 1">
