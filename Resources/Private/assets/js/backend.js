@@ -139,7 +139,7 @@
         var $currentPreview = $(this).parents('.google-preview');
         var focusKeyword = $currentPreview.find('.focus-keyword input').val().trim();
 
-        $currentPreview.find('.preview-box .title').html($(this).val());
+        $currentPreview.find('.preview-box .title').html(this.escapeHtml($(this).val()));
         that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLengthPixel);
         that.updatePreviewAlerts($currentPreview);
 
@@ -157,7 +157,7 @@
         var $currentPreview = $(this).parents('.google-preview');
         var focusKeyword = $currentPreview.find('.focus-keyword input').val().trim();
 
-        $currentPreview.find('.preview-box .description').html($(this).val());
+        $currentPreview.find('.preview-box .description').html(that.escapeHtml($(this).val()));
         that.renderPreviewDescription($currentPreview);
         that.updatePreviewEditPanelProgressBar($currentPreview, 'description', that.googleDescriptionLengthPixel);
 
@@ -275,7 +275,7 @@
       }
     },
     renderPreviewDescription: function ($previewContainer) {
-      var description = $previewContainer.find('.preview-box .description').text().trim();
+      var description = this.escapeHtml($previewContainer.find('.preview-box .description').text().trim());
 
       if (this.googleDescriptionLengthPixel < this.calcStringPixelLength(description, this.googleFontFamily, this.googleDescriptionFontSize)) {
         var invalidLastChar = function (description) {
@@ -467,10 +467,10 @@
         return;
       }
 
-      var title = $previewContainer.find('.preview-box .title').text();
-      var description = $previewContainer.find('.preview-box .description').text();
-      var url = $previewContainer.find('.preview-box .url').text();
-      var regex = new RegExp('(^|\\.|\\,|\\?|\\!|\\#|\\+|\\s)(' + focusKeyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&').trim() + ')(\\s|\\.|\\,|\\?|\\!|\\#|\\+|$)', 'igm');
+      var title = this.escapeHtml($previewContainer.find('.preview-box .title').text());
+      var description = this.escapeHtml($previewContainer.find('.preview-box .description').text());
+      var url = this.escapeHtml($previewContainer.find('.preview-box .url').text());
+      var regex = new RegExp('(^|\\.|\\,|\\?|\\!|\\#|\\+|\\s)(' + this.escapeHtml(focusKeyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&').trim()) + ')(\\s|\\.|\\,|\\?|\\!|\\#|\\+|$)', 'igm');
       var titleMatches = title.match(regex);
       var descriptionMatches = description.match(regex);
       var urlMatches = url.match(regex);
@@ -625,6 +625,14 @@
       this.canvasRenderingContext.font = fontSize + ' ' + fontFamily;
 
       return parseInt(this.canvasRenderingContext.measureText(text).width);
+    },
+    escapeHtml: function (text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
   };
 
