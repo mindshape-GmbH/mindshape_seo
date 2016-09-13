@@ -235,6 +235,7 @@ $lightgrey: #666;
       font-size: 13px;
       height: 34px;
       overflow-y: hidden;
+      word-wrap: break-word;
 
       &:empty {display: none;}
     }

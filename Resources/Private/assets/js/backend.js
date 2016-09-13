@@ -282,11 +282,19 @@
           return description.slice(-1).match(/(\s|\.)/);
         };
 
-        while (invalidLastChar(description)) {
-          description = description.slice(0, -1);
+        while (this.googleDescriptionLengthPixel < this.calcStringPixelLength(description, this.googleFontFamily, this.googleDescriptionFontSize)) {
+          description = description.split(' ');
+
+          if (description.length > 1) {
+            description.pop();
+            description = description.join(' ');
+          } else {
+            description = description.join(' ');
+            description = description.slice(0, -1);
+          }
         }
 
-        while (this.googleDescriptionLengthPixel < this.calcStringPixelLength(description, this.googleFontFamily, this.googleDescriptionFontSize)) {
+        while (invalidLastChar(description)) {
           description = description.slice(0, -1);
         }
 
