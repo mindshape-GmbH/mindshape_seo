@@ -265,6 +265,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment">
                 <target>Titel-Ergänzung</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment.subhead">
+                <target>Soll der TYPO3-generierte Title-Tag mit einer Ergänzung versehen werden?</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment.help">
                 <target>Kann der Website oder Firmenname sein und wir dem Titel-Tag hinzugefügt (bei Suffix wird hinten angefügt, bei Präfix wird vorne angefügt).</target>
             </trans-unit>

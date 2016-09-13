@@ -265,6 +265,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment">
                 <source>Title attachment</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment.subhead">
+                <source>Should the TYPO3-generated title-tag have an attachment?</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment.help">
                 <source>Can be the websites oder companys name and will be added to the title tag</source>
             </trans-unit>
