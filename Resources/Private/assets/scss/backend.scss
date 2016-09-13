@@ -291,6 +291,15 @@ $lightgrey: #666;
   .alerts-container {display: none;}
 }
 
+form {
+  .seo-check {
+    margin-bottom: 1.5em;
+
+    .fa-exclamation-circle{color: $bootstrap-danger-red;}
+    .fa-check-circle{color: $bootstrap-success-green;}
+  }
+}
+
 #msh-modal {
   .list-group {
     margin-bottom: 0;

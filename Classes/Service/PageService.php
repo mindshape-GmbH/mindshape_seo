@@ -227,7 +227,8 @@ class PageService implements SingletonInterface
 
             $previewUrl = $googleBreadcrumb;
         } elseif (!empty($customUrl)) {
-            $previewUrl = $customUrl . '/' . $this->getPageLink($pageUid, false, $sysLanguageUid);
+            $pageUrlRelative = $this->getPageLink($pageUid, false, $sysLanguageUid);
+            $previewUrl = '/' === $pageUrlRelative ? $customUrl : $customUrl . '/' . $pageUrlRelative;
         }
 
         return array(

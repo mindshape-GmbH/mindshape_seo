@@ -27,18 +27,15 @@
             }"/>
 
             <div class="seo-check">
-                <div class="info-container">
-                    <label>
-                        <f:translate key="tx_mindshapeseo_label.preview.seo_check"/>
-                        (<span class="alerts"></span>/<span class="all"></span>)
-                        <a href="#" class="info">
-                            <core:icon identifier="provider-fontawesome-info"/>
-                        </a>
-                    </label>
-                    <div class="progress progress-seo-check">
-                        <div class="progress-bar progress-bar-danger" role="progressbar"></div>
-                    </div>
-                </div>
+                <a href="#" class="btn btn-default info error">
+                    <core:icon identifier="provider-fontawesome-warning"/>
+                    <span class="alerts"></span>
+                    <f:translate key="tx_mindshapeseo_label.preview.seo_check.hint"/>
+                </a>
+                <a href="#" class="btn btn-default info no-error">
+                    <core:icon identifier="provider-fontawesome-success"/>
+                    <f:translate key="tx_mindshapeseo_label.preview.seo_check.ok"/>
+                </a>
             </div>
         </f:then>
     </f:if>
