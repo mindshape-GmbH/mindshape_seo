@@ -317,21 +317,6 @@ class PageService implements SingletonInterface
 
     /**
      * @param int $pageUid
-     * @return array|bool
-     */
-    public function getRootPage($pageUid)
-    {
-        $rootline = $this->pageRepository->getRootLine($pageUid);
-
-        if (array_key_exists(1, $rootline)) {
-            return $this->pageRepository->getPage($rootline[1]['uid']);
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @param int $pageUid
      * @return array
      */
     public function getSubPageUidsFromPageUid($pageUid)

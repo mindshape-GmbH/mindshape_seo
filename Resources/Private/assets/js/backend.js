@@ -139,7 +139,7 @@
         var $currentPreview = $(this).parents('.google-preview');
         var focusKeyword = $currentPreview.find('.focus-keyword input').val().trim();
 
-        $currentPreview.find('.preview-box .title').html(this.escapeHtml($(this).val()));
+        $currentPreview.find('.preview-box .title').html(that.escapeHtml($(this).val()));
         that.updatePreviewEditPanelProgressBar($currentPreview, 'title', that.googleTitleLengthPixel);
         that.updatePreviewAlerts($currentPreview);
 
@@ -470,7 +470,7 @@
       var title = this.escapeHtml($previewContainer.find('.preview-box .title').text());
       var description = this.escapeHtml($previewContainer.find('.preview-box .description').text());
       var url = this.escapeHtml($previewContainer.find('.preview-box .url').text());
-      var regex = new RegExp('(^|\\.|\\,|\\?|\\!|\\#|\\+|\\s)(' + this.escapeHtml(focusKeyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&').trim()) + ')(\\s|\\.|\\,|\\?|\\!|\\#|\\+|$)', 'igm');
+      var regex = new RegExp('(^|\\.|\\,|\\?|\\!|\\/|\\#|\\+|\\s)(' + this.escapeHtml(focusKeyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/ig, '\\$&').trim()) + ')(\\s|\\.|\\,|\\?|\\!|\\/|\\#|\\+|$)', 'igm');
       var titleMatches = title.match(regex);
       var descriptionMatches = description.match(regex);
       var urlMatches = url.match(regex);
