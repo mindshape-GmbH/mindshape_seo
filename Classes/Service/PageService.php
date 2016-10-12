@@ -216,7 +216,7 @@ class PageService implements SingletonInterface
         }
 
         if ($useGoogleBreadcrumb) {
-            $rootline = $this->getRootlineReverse($pageUid);
+            $rootline = $this->getRootlineReverse($pageUid, true, false);
 
             $googleBreadcrumb = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
 
@@ -308,11 +308,21 @@ class PageService implements SingletonInterface
      * @param int $pageUid
      * @return array
      */
-    public function getRootlineReverse($pageUid = null)
+    public function getRootlineReverse($pageUid = null, $withCurrentPage = false, $withRootPage = true)
     {
         $rootline = $this->getRootline($pageUid);
-        array_pop($rootline);
-        return array_reverse($rootline);
+
+        if (false === $withRootPage) {
+            array_pop($rootline);
+        }
+
+        $rootline = array_reverse($rootline);
+
+        if (false === $withCurrentPage) {
+            array_pop($rootline);
+        }
+
+        return $rootline;
     }
 
     /**

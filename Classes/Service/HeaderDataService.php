@@ -532,7 +532,7 @@ class HeaderDataService
             'itemListElement' => array(),
         );
 
-        foreach ($this->pageService->getRootlineReverse() as $index => $page) {
+        foreach ($this->pageService->getRootlineReverse(null, true) as $index => $page) {
             if (
                 1 !== (int) $page['doktype'] &&
                 4 !== (int) $page['doktype']
