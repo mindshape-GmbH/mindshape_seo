@@ -93,7 +93,7 @@ $columns = array(
         'config' => array(
             'type' => 'select',
             'renderType' => 'selectSingle',
-            'default' => null,
+            'default' => '',
             'items' => array(
                 array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.none', null),
                 array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.always', \Mindshape\MindshapeSeo\Generator\SitemapGenerator::CHANGE_FREQUENCY_ALWAYS),
