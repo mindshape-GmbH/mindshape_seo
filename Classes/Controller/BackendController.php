@@ -431,7 +431,7 @@ class BackendController extends ActionController
     }
 
     /**
-     * @param $argumentName
+     * @param string $argumentName
      * @return void
      */
     protected function setTypeConverterConfigurationForImageUpload($argumentName)

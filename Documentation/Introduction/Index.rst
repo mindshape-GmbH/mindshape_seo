@@ -31,11 +31,11 @@ Screenshots
 -----------
 
 .. figure:: ../Images/screen_preview.png
-	:alt: Preview module
+    :alt: Preview module
 
-	The preview module offers an overview of alle subpages, with google preview SEO check and inline editing
+    The preview module offers an overview of alle subpages, with google preview SEO check and inline editing
 
 .. figure:: ../Images/screen_settings.png
-	:alt: Settings module
+    :alt: Settings module
 
-	The settings module lets you configure your global SEO settings for each domain
+    The settings module lets you configure your global SEO settings for each domain

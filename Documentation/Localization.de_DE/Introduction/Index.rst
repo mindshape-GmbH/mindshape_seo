@@ -30,12 +30,12 @@ Vorzüge von mindshape_seo
 Screenshots
 -----------
 
-.. figure:: ../Images/screen_preview.png
-	:alt: Vorschaumodul
+.. figure:: ../Images/screen_preview_de.png
+    :alt: Vorschaumodul
 
-	Das Vorschaumodul bietet eine übersicht aller Unterseiten mit einer Google Vorschau und SEO check, sowie eine direkte Bearbeitungsmöglichkeit
+    Das Vorschaumodul bietet eine übersicht aller Unterseiten mit einer Google Vorschau und SEO check, sowie eine direkte Bearbeitungsmöglichkeit
 
-.. figure:: ../Images/screen_settings.png
-	:alt: Settings module
+.. figure:: ../Images/screen_settings_de.png
+    :alt: Settings module
 
-	Das Einstellungsmodul lässt Sie alle globeln Konfigurationen für Ihre Domains vornehmen
+    Das Einstellungsmodul lässt Sie alle globeln Konfigurationen für Ihre Domains vornehmen

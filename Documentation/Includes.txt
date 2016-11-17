@@ -10,11 +10,14 @@
 .. DEFINE SOME TEXT ROLES
 .. --------------------------------------------------
 
-.. role::   typoscript(code)
+.. role:: aspect (emphasis)
+.. role:: html(code)
+.. role:: js(code)
+.. role:: php(code)
+.. role:: typoscript(code)
 
-.. role::   ts(typoscript)
-   :class:  typoscript
+.. role:: ts(typoscript)
+   :class: typoscript
 
-.. role::   php(code)
-
+.. default-role:: code
 .. highlight:: php

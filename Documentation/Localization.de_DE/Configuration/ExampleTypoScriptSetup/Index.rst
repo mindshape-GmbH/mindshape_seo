@@ -12,11 +12,11 @@ Das folgende Beispiel beinhaltet alle Einstellungsmöglichkeiten der Extension:
 
 ::
 
-	plugin.tx_mindshape_seo {
-	  settings {
-		titleAttachmentSeperator = |
-		pageTree.usePagination = 0
-	  }
-	}
+    plugin.tx_mindshape_seo {
+      settings {
+        titleAttachmentSeperator = |
+        pageTree.usePagination = 0
+      }
+    }
 
-	sitemap.typeNum = 10000
+    sitemap.typeNum = 10000

@@ -16,20 +16,6 @@ plugin.tx\mindshape_seo.settings:
 .. container:: table-row
 
    Constant
-         titleAttachmentSeperator
-   
-   Data Type
-         string
-   
-   Description
-         The default seperator for the pages title attachment
-   
-   Default
-         \|
-
-.. container:: table-row
-
-   Constant
          pageTree.usePagination
 
    Data Type

@@ -15,29 +15,15 @@ Alle Konstanten zugehörig zu plugin.tx_mindshape_seo.settings:
 .. container:: table-row
 
    Constant
-		 titleAttachmentSeperator
-   
-   Data Type
-		 string
-   
-   Description
-		 Standard Trenner für den Seitentitelanhang
-   
-   Default
-		 \|
-
-.. container:: table-row
-
-   Constant
-		 pageTree.usePagination
+         pageTree.usePagination
 
    Data Type
-		 boolean
+         boolean
 
    Description
-		 Verwende eine Paginierung im Seitenbaum des Vorschaumoduls
+         Verwende eine Paginierung im Seitenbaum des Vorschaumoduls
 
    Default
-		 0
+         0
 
 .. ###### END~OF~TABLE ######
