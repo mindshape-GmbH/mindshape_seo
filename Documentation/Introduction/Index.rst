@@ -17,13 +17,15 @@ your websites SEO to the best.
 Advantage of mindshape_seo
 --------------------------
 
-+ SEO Configurations for each domain
++ SEO configurations for each domain
 
 + New fields for pages
 
 + Sitemap.xml generator (incl. sub sitemap option on each page)
 
-+ Google previews for pages
++ Google SERP preview for pages
+
++ Facebook Metadata
 
 + Metadata validation
 

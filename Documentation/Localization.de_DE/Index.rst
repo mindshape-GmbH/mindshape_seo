@@ -45,12 +45,13 @@ mindshape SEO Extension
     Der Inhalt dieses Dokuments steht in verbindung zu TYPO3,
     einem GNU/GPL CMS/Framework `www.typo3.org <http://www.typo3.org/>`_.
 
-    **Table of Contents**
+    **Inhaltsverzeichnis**
 
 .. toctree::
-
-    :maxdepth: 5
+    :maxdepth: 2
     :titlesonly:
+    :glob:
+
     Introduction/Index
     SeoGuide/Index
     Administrator/Index

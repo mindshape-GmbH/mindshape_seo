@@ -25,6 +25,8 @@ Vorzüge von mindshape_seo
 
 + Google Vorschau für Seiten
 
++ Facebook Metadaten
+
 + Metadaten Validierung
 
 Screenshots
@@ -36,6 +38,6 @@ Screenshots
     Das Vorschaumodul bietet eine übersicht aller Unterseiten mit einer Google Vorschau und SEO check, sowie eine direkte Bearbeitungsmöglichkeit
 
 .. figure:: ../Images/screen_settings_de.png
-    :alt: Settings module
+    :alt: Einstellungsmodul
 
     Das Einstellungsmodul lässt Sie alle globeln Konfigurationen für Ihre Domains vornehmen

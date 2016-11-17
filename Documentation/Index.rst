@@ -48,9 +48,10 @@ mindshape SEO Extension
     **Table of Contents**
 
 .. toctree::
-
-    :maxdepth: 5
+    :maxdepth: 2
     :titlesonly:
+    :glob:
+
     Introduction/Index
     SeoGuide/Index
     Administrator/Index

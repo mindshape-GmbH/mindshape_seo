@@ -5,10 +5,10 @@
 
 .. include:: ../../Includes.txt
 
-.. _configuration:
+.. _changelog:
 
 Versionshistorie
-================
+----------------
 
 v1.0.0
   Erstveröffentlichung

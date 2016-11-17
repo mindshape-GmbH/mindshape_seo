@@ -25,8 +25,7 @@ Extension Settings
 ------------------
 
 .. toctree::
-
-    :maxdepth: 5
+    :maxdepth: 1
     :titlesonly:
     :glob:
 

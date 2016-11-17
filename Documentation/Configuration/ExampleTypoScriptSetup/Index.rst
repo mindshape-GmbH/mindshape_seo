@@ -18,6 +18,6 @@ The following example shows all usable settings for the extension:
       }
     }
 
-    sitemap.typeNum = 10000
-    sitemapIndex.typeNum = 10001
-    imageSitemap.typeNum = 10002
+    sitemap.typeNum = 19371
+    sitemapIndex.typeNum = 19372
+    imageSitemap.typeNum = 19373
