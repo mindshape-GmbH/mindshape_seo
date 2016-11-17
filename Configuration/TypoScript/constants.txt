@@ -8,17 +8,17 @@ plugin.tx_mindshape_seo {
         layoutRootPath = EXT:mindshape_seo/Resources/Private/Layouts/
     }
 
+    # customsubcategory=settings=Settings
     settings {
-        # cat=mindshape_seo/settings; type=string; label=Seperator for title attachment
-        titleAttachmentSeperator = |
         # cat=mindshape_seo/settings; type=boolean; label=Use a pagination in previews pagetree
         pageTree.usePagination = 1
     }
 }
 
-# cat=mindshape_seo/settings; type=string; label=sitemap.xml page typeNum
-sitemap.typeNum = 10000
-# cat=mindshape_seo/settings; type=string; label=sitemap index page typeNum
-sitemapIndex.typeNum = 10001
-# cat=mindshape_seo/settings; type=string; label=sitemap-image.xml page typeNum
-imageSitemap.typeNum = 10002
+# customsubcategory=sitemapsettings=Sitemap Settings
+# cat=mindshape_seo/sitemapsettings; type=string; label=sitemap.xml page typeNum
+sitemap.typeNum = 19371
+# cat=mindshape_seo/sitemapsettings; type=string; label=sitemap index page typeNum
+sitemapIndex.typeNum = 19372
+# cat=mindshape_seo/sitemapsettings; type=string; label=sitemap-image.xml page typeNum
+imageSitemap.typeNum = 19373

@@ -6,7 +6,6 @@ plugin.tx_mindshape_seo {
     }
 
     settings {
-        titleAttachmentSeperator = {$plugin.tx_mindshape_seo.settings.titleAttachmentSeperator}
         pageTree.usePagination = {$plugin.tx_mindshape_seo.settings.pageTree.usePagination}
     }
 }

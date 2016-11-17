@@ -35,17 +35,17 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('realurl')) {
         array(
             'sitemap.xml' => array(
                 'keyValues' => array(
-                    'type' => 10000,
+                    'type' => 19371,
                 ),
             ),
             'sitemap-index.xml' => array(
                 'keyValues' => array(
-                    'type' => 10001,
+                    'type' => 19372,
                 ),
             ),
             'sitemap-image.xml' => array(
                 'keyValues' => array(
-                    'type' => 10002,
+                    'type' => 19373,
                 ),
             ),
         ),
