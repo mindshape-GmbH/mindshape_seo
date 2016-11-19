@@ -159,9 +159,10 @@ class PageService implements SingletonInterface
      * @param int $pageId
      * @param bool $absolute
      * @param int $sysLanguageUid
+     * @param bool $linkAccessRestrictedPages
      * @return string
      */
-    public function getPageLink($pageId, $absolute = false, $sysLanguageUid = 0)
+    public function getPageLink($pageId, $absolute = false, $sysLanguageUid = 0, $linkAccessRestrictedPages = true)
     {
         return $this->uriBuilder
             ->reset()
@@ -170,6 +171,7 @@ class PageService implements SingletonInterface
             ->setArguments(
                 0 < $sysLanguageUid ? array('L' => $sysLanguageUid) : array()
             )
+            ->setLinkAccessRestrictedPages($linkAccessRestrictedPages)
             ->buildFrontendUri();
     }
 

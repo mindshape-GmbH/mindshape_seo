@@ -29,7 +29,7 @@ sitemap {
     }
 
     10 = USER_INT
-    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapXmlController->sitemapAction
+    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapController->sitemapAction
 }
 
 sitemapIndex = PAGE
@@ -45,7 +45,7 @@ sitemapIndex {
     }
 
     10 = USER_INT
-    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapXmlController->sitemapIndexAction
+    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapController->sitemapIndexAction
 }
 
 imageSitemap = PAGE
@@ -61,5 +61,5 @@ imageSitemap {
     }
 
     10 = USER_INT
-    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapXmlController->imageSitemapAction
+    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapController->imageSitemapAction
 }

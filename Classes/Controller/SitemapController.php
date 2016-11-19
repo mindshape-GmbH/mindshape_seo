@@ -36,7 +36,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  * @package mindshape_seo
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class SitemapXmlController implements SingletonInterface
+class SitemapController implements SingletonInterface
 {
     /**
      * @var \Mindshape\MindshapeSeo\Generator\SitemapGenerator
@@ -49,7 +49,7 @@ class SitemapXmlController implements SingletonInterface
     protected $imageSitemapGenerator;
 
     /**
-     * @return SitemapXmlController
+     * @return \Mindshape\MindshapeSeo\Controller\SitemapController
      */
     public function __construct()
     {
@@ -66,7 +66,7 @@ class SitemapXmlController implements SingletonInterface
      */
     public function sitemapAction($content, array $conf)
     {
-        return $this->sitemapGenerator->generateSitemapXml(
+        return $this->sitemapGenerator->generateSitemap(
             GeneralUtility::_GET('id')
         );
     }

@@ -25,6 +25,8 @@ namespace Mindshape\MindshapeSeo\Generator;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Domain\Model\SitemapIndexNode;
+use Mindshape\MindshapeSeo\Domain\Model\SitemapNode;
 use Mindshape\MindshapeSeo\Service\PageService;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -41,14 +43,6 @@ class SitemapGenerator implements SingletonInterface
     const TAG_URL = 'url';
     const TAG_SITEMAP = 'sitemap';
 
-    const CHANGE_FREQUENCY_ALWAYS = 'always';
-    const CHANGE_FREQUENCY_HOULRY = 'hourly';
-    const CHANGE_FREQUENCY_DAILY = 'daily';
-    const CHANGE_FREQUENCY_WEEKLY = 'weekly';
-    const CHANGE_FREQUENCY_MONTHLY = 'monthly';
-    const CHANGE_FREQUENCY_YEARLY = 'yearly';
-    const CHANGE_FREQUENCY_NEVER = 'never';
-
     /**
      * @var \TYPO3\CMS\Frontend\Page\PageRepository
      * @inject
@@ -60,6 +54,14 @@ class SitemapGenerator implements SingletonInterface
      */
     protected $pageService;
 
+    /**
+     * @var array
+     */
+    protected $nodes = array();
+
+    /**
+     * @return \Mindshape\MindshapeSeo\Generator\SitemapGenerator
+     */
     public function __construct()
     {
         /** @var ObjectManager $objectManager */
@@ -71,9 +73,21 @@ class SitemapGenerator implements SingletonInterface
      * @param int $pageUid
      * @return string
      */
-    public function generateSitemapXml($pageUid)
+    public function generateSitemap($pageUid)
     {
-        return $this->getUrlsStartTag() . $this->getUrls($pageUid) . $this->getUrlsEndTag();
+        $this->getNodes($pageUid);
+
+        $sitemap = $this->getUrlsStartTag() . $this->getRenderedUrls() . $this->getUrlsEndTag();
+
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_postRendering'])) {
+            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_postRendering'] as $userFunc) {
+                $params = array('sitemap' => &$sitemap);
+
+                GeneralUtility::callUserFunction($userFunc, $params, $this);
+            }
+        }
+
+        return $sitemap;
     }
 
     /**
@@ -82,7 +96,19 @@ class SitemapGenerator implements SingletonInterface
      */
     public function generateSitemapIndexXml($pageUid)
     {
-        return $this->getSitemapIndexStartTag() . $this->getSitemaps($pageUid) . $this->getSitemapIndexEndTag();
+        $this->getSitemaps($pageUid);
+
+        $sitemapIndex = $this->getSitemapIndexStartTag() . $this->getRenderedSitemapNodes() . $this->getSitemapIndexEndTag();
+
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapIndex_postRendering'])) {
+            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapIndex_postRendering'] as $userFunc) {
+                $params = array('sitemap' => &$sitemapIndex);
+
+                GeneralUtility::callUserFunction($userFunc, $params, $this);
+            }
+        }
+
+        return $sitemapIndex;
     }
 
     /**
@@ -127,10 +153,8 @@ class SitemapGenerator implements SingletonInterface
      * @param int $pageUid
      * @return string
      */
-    protected function getUrls($pageUid)
+    protected function getNodes($pageUid)
     {
-        $urls = '';
-
         $pageUid = (int) $pageUid;
 
         $pages = $this->pageService->getSubPagesFromPageUid($pageUid);
@@ -186,9 +210,14 @@ class SitemapGenerator implements SingletonInterface
                 continue;
             }
 
-            $url = $this->pageService->getPageLink($page['uid'], true);
-            $lastmod = new \DateTime();
-            $lastmod->setTimestamp($page['SYS_LASTCHANGED']);
+            $node = new SitemapNode();
+
+            $node->setUrl($this->pageService->getPageLink($page['uid'], true));
+
+            $lastModification = new \DateTime();
+            $lastModification->setTimestamp($page['SYS_LASTCHANGED']);
+
+            $node->setLastModification($lastModification);
 
             $changeFrequency = $page['mindshapeseo_change_frequency'];
             $priority = (double) $page['mindshapeseo_priority'];
@@ -203,7 +232,39 @@ class SitemapGenerator implements SingletonInterface
                 $priority = $parentsProperties['priority'];
             }
 
-            $urls .= $this->renderEntry(self::TAG_URL, $url, $lastmod, $changeFrequency, $priority);
+            $node->setChangeFrequency($changeFrequency);
+            $node->setPriority($priority);
+
+            $this->nodes[] = $node;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRenderedUrls()
+    {
+        $urls = '';
+
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_preRendering'])) {
+            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_preRendering'] as $userFunc) {
+                $params = array('nodes' => &$this->nodes);
+
+                GeneralUtility::callUserFunction($userFunc, $params, $this);
+            }
+        }
+
+        /** @var \Mindshape\MindshapeSeo\Domain\Model\SitemapNode $node */
+        foreach ($this->nodes as $node) {
+            if ($node instanceof SitemapNode) {
+                $urls .= $this->renderEntry(
+                    self::TAG_URL,
+                    $node->getUrl(),
+                    $node->getLastModification(),
+                    $node->getChangeFrequency(),
+                    $node->getPriority()
+                );
+            }
         }
 
         return $urls;
@@ -231,21 +292,56 @@ class SitemapGenerator implements SingletonInterface
                 false === $isExcludeSubpagesFromSitemap &&
                 $isSubSitemap
             ) {
-                $lastmod = new \DateTime();
-                $lastmod->setTimestamp($page['SYS_LASTCHANGED']);
+                $indexNode = new SitemapIndexNode();
+
+                $lastModification = new \DateTime();
+                $lastModification->setTimestamp($page['SYS_LASTCHANGED']);
+
+                $indexNode->setLastModification($lastModification);
 
                 $pageUrl = $this->pageService->getPageLink($page['uid'], true);
                 $pageUrl = preg_replace('#(\.html)$#i', '/', $pageUrl);
 
+                $indexNode->setUrl($pageUrl);
+
                 $sitemaps .= $this->renderEntry(
                     self::TAG_SITEMAP,
                     $pageUrl . 'sitemap.xml',
-                    $lastmod
+                    $lastModification
                 );
             }
         }
 
         return $sitemaps;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRenderedSitemapNodes()
+    {
+        $sitemapNodes = '';
+
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapIndex_preRendering'])) {
+            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapIndex_preRendering'] as $userFunc) {
+                $params = array('nodes' => &$this->nodes);
+
+                GeneralUtility::callUserFunction($userFunc, $params, $this);
+            }
+        }
+
+        /** @var \Mindshape\MindshapeSeo\Domain\Model\SitemapIndexNode $node */
+        foreach ($this->nodes as $node) {
+            if ($node instanceof SitemapIndexNode) {
+                $sitemapNodes .= $this->renderEntry(
+                    self::TAG_SITEMAP,
+                    $node->getUrl(),
+                    $node->getLastModification()
+                );
+            }
+        }
+
+        return $sitemapNodes;
     }
 
     /**
