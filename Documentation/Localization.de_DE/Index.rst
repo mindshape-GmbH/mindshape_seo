@@ -56,5 +56,6 @@ mindshape SEO Extension
     SeoGuide/Index
     Administrator/Index
     Configuration/Index
+    Developer/Index
     ChangeLog/Index
     Links
