@@ -26,6 +26,7 @@ namespace Mindshape\MindshapeSeo\Generator;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use Mindshape\MindshapeSeo\Domain\Model\SitemapImageNode;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Resource\FileReference;
@@ -70,7 +71,19 @@ class ImageSitemapGenerator extends SitemapGenerator
      * @return string
      */
     public function generateImageSitemapXml() {
-        return $this->getUrlsStartTag() . $this->getImageUrls() . $this->getUrlsEndTag();
+        $this->getImageUrls();
+
+        $imageSitemap = $this->getUrlsStartTag() . $this->getRenderedImageUrls() . $this->getUrlsEndTag();
+
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapImage_postRendering'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapImage_postRendering'] as $userFunc) {
+                $params = array('sitemap' => &$imageSitemap);
+
+                GeneralUtility::callUserFunction($userFunc, $params, $this);
+            }
+        }
+
+        return $imageSitemap;
     }
 
     /**
@@ -85,28 +98,35 @@ class ImageSitemapGenerator extends SitemapGenerator
     }
 
     /**
-     * @return string
+     * @return void
      */
     protected function getImageUrls()
     {
-        $urls = '';
-
         $pages = $this->pageService->getSubPagesFromPageUid(
             $GLOBALS['TSFE']->page['uid']
         );
 
         foreach ($pages as $page) {
-            $pageImages = $this->getPageImageUrls($page['uid']);
+            $parentsProperties = $this->getParentProperties();
 
-            if (0 < count($pageImages)) {
-                $urls .= $this->renderPageImagesEntry(
-                    $this->pageService->getPageLink($page['uid'], true),
-                    $pageImages
-                );
+            if (
+                0 !== (int) $parentsProperties['fe_group'] ||
+                0 !== (int) $page['fe_group']
+            ) {
+                continue;
+            }
+
+            $sitemapImageNode = new SitemapImageNode();
+
+            $imagePaths = $this->getPageImageUrls($page['uid']);
+
+            if (false === empty($imagePaths)) {
+                $sitemapImageNode->setPageUrl($this->pageService->getPageLink($page['uid'], true));
+                $sitemapImageNode->setImages($imagePaths);
+
+                $this->nodes[] = $sitemapImageNode;
             }
         }
-
-        return $urls;
     }
 
     /**
@@ -125,6 +145,7 @@ class ImageSitemapGenerator extends SitemapGenerator
             'sys_file_reference, tt_content, pages',
             'sys_file_reference.tablenames = "tt_content" ' .
             'AND (sys_file_reference.fieldname = "image" ' .
+            'OR sys_file_reference.fieldname = "assets" ' .
             'OR sys_file_reference.fieldname = "media")' .
             'AND sys_file_reference.uid_foreign = tt_content.uid ' .
             'AND tt_content.pid = pages.uid AND pages.uid = ' . $pageUid
@@ -152,6 +173,34 @@ class ImageSitemapGenerator extends SitemapGenerator
         }
 
         return array_unique($imageUrls);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getRenderedImageUrls()
+    {
+        $urls = '';
+
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapImage_preRendering'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapImage_preRendering'] as $userFunc) {
+                $params = array('nodes' => &$this->nodes);
+
+                GeneralUtility::callUserFunction($userFunc, $params, $this);
+            }
+        }
+
+        /** @var \Mindshape\MindshapeSeo\Domain\Model\SitemapImageNode $node */
+        foreach ($this->nodes as $node) {
+            if ($node instanceof SitemapImageNode) {
+                $urls .= $this->renderPageImagesEntry(
+                    $node->getPageUrl(),
+                    $node->getImages()
+                );
+            }
+        }
+
+        return $urls;
     }
 
     /**
