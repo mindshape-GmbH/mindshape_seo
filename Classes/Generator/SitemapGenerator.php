@@ -80,7 +80,7 @@ class SitemapGenerator implements SingletonInterface
         $sitemap = $this->getUrlsStartTag() . $this->getRenderedUrls() . $this->getUrlsEndTag();
 
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_postRendering'])) {
-            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_postRendering'] as $userFunc) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_postRendering'] as $userFunc) {
                 $params = array('sitemap' => &$sitemap);
 
                 GeneralUtility::callUserFunction($userFunc, $params, $this);
@@ -101,7 +101,7 @@ class SitemapGenerator implements SingletonInterface
         $sitemapIndex = $this->getSitemapIndexStartTag() . $this->getRenderedSitemapNodes() . $this->getSitemapIndexEndTag();
 
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapIndex_postRendering'])) {
-            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapIndex_postRendering'] as $userFunc) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapIndex_postRendering'] as $userFunc) {
                 $params = array('sitemap' => &$sitemapIndex);
 
                 GeneralUtility::callUserFunction($userFunc, $params, $this);
@@ -188,24 +188,28 @@ class SitemapGenerator implements SingletonInterface
                 );
             }
 
+            $parentsProperties = $this->getParentProperties();
+
             if (
                 $isNoIndex ||
                 $isExcludeFromSitemap ||
                 false === $isPage ||
-                ($isSubSitemap && $isExcludeSubpagesFromSitemap) ||
+                0 !== (int) $parentsProperties['fe_group'] ||
+                0 !== (int) $page['fe_group'] ||
+                true === in_array($page['uid'], $excludePids, false) ||
+                (
+                    $isSubSitemap &&
+                    $isExcludeSubpagesFromSitemap
+                ) ||
                 (
                     $isSitemapPage &&
                     $isSubSitemap &&
                     $isExcludeSubpagesFromSitemap
                 ) ||
-                true === in_array($page['uid'], $excludePids, false)
-            ) {
-                continue;
-            }
-
-            if (
-                $isSubSitemap &&
-                false === $isSitemapPage
+                (
+                    $isSubSitemap &&
+                    false === $isSitemapPage
+                )
             ) {
                 continue;
             }
@@ -221,8 +225,6 @@ class SitemapGenerator implements SingletonInterface
 
             $changeFrequency = $page['mindshapeseo_change_frequency'];
             $priority = (double) $page['mindshapeseo_priority'];
-
-            $parentsProperties = $this->getParentProperties();
 
             if (empty($changeFrequency)) {
                 $changeFrequency = $parentsProperties['changeFrequenzy'];
@@ -247,7 +249,7 @@ class SitemapGenerator implements SingletonInterface
         $urls = '';
 
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_preRendering'])) {
-            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_preRendering'] as $userFunc) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_preRendering'] as $userFunc) {
                 $params = array('nodes' => &$this->nodes);
 
                 GeneralUtility::callUserFunction($userFunc, $params, $this);
@@ -323,7 +325,7 @@ class SitemapGenerator implements SingletonInterface
         $sitemapNodes = '';
 
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapIndex_preRendering'])) {
-            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapIndex_preRendering'] as $userFunc) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemapIndex_preRendering'] as $userFunc) {
                 $params = array('nodes' => &$this->nodes);
 
                 GeneralUtility::callUserFunction($userFunc, $params, $this);
@@ -352,6 +354,7 @@ class SitemapGenerator implements SingletonInterface
         $properties = array(
             'changeFrequenzy' => '',
             'priority' => self::DEFAULT_PRIORITY,
+            'fe_group' => 0,
         );
 
         foreach ($this->pageService->getRootline() as $page) {
@@ -360,6 +363,13 @@ class SitemapGenerator implements SingletonInterface
                 empty($properties['changeFrequenzy'])
             ) {
                 $properties['changeFrequenzy'] = $page['mindshapeseo_change_frequency'];
+            }
+
+            if (
+                !empty($page['fe_group']) &&
+                empty($properties['fe_group'])
+            ) {
+                $properties['fe_group'] = (int) $page['fe_group'];
             }
 
             if (
@@ -376,11 +386,11 @@ class SitemapGenerator implements SingletonInterface
     /**
      * Renders a single entry as a normal sitemap entry.
      *
-     * @param string    $tag
-     * @param string    $url
+     * @param string $tag
+     * @param string $url
      * @param \DateTime $lastModification
-     * @param string    $changeFrequency
-     * @param double    $priority
+     * @param string $changeFrequency
+     * @param double $priority
      * @return string
      */
     protected function renderEntry($tag = self::TAG_URL, $url, \DateTime $lastModification, $changeFrequency = '', $priority = self::DEFAULT_PRIORITY)
