@@ -7,6 +7,7 @@ plugin.tx_mindshape_seo {
 
     settings {
         pageTree.usePagination = {$plugin.tx_mindshape_seo.settings.pageTree.usePagination}
+        sitemap.newsDetailPage = {$plugin.tx_mindshape_seo.settings.sitemap.newsDetailPage}
     }
 }
 

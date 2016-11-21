@@ -38,8 +38,6 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  */
 class SitemapGenerator implements SingletonInterface
 {
-    const DEFAULT_PRIORITY = 0.5;
-
     const TAG_URL = 'url';
     const TAG_SITEMAP = 'sitemap';
 
@@ -347,7 +345,7 @@ class SitemapGenerator implements SingletonInterface
     {
         $properties = array(
             'changeFrequenzy' => '',
-            'priority' => self::DEFAULT_PRIORITY,
+            'priority' => SitemapNode::DEFAULT_PRIORITY,
             'fe_group' => 0,
         );
 
@@ -367,8 +365,8 @@ class SitemapGenerator implements SingletonInterface
             }
 
             if (
-                self::DEFAULT_PRIORITY !== (double) $page['mindshapeseo_priority'] &&
-                self::DEFAULT_PRIORITY === $properties['priority']
+                SitemapNode::DEFAULT_PRIORITY !== (double) $page['mindshapeseo_priority'] &&
+                SitemapNode::DEFAULT_PRIORITY === $properties['priority']
             ) {
                 $properties['priority'] = (double) $page['mindshapeseo_priority'];
             }
@@ -387,7 +385,7 @@ class SitemapGenerator implements SingletonInterface
      * @param double $priority
      * @return string
      */
-    protected function renderEntry($tag = self::TAG_URL, $url, \DateTime $lastModification, $changeFrequency = '', $priority = self::DEFAULT_PRIORITY)
+    protected function renderEntry($tag = self::TAG_URL, $url, \DateTime $lastModification, $changeFrequency = '', $priority = SitemapNode::DEFAULT_PRIORITY)
     {
         $content = '<loc>' . $url . '</loc>';
 

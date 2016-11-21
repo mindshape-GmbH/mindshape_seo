@@ -41,6 +41,9 @@ class SitemapNode extends AbstractValueObject
     const CHANGE_FREQUENCY_YEARLY = 'yearly';
     const CHANGE_FREQUENCY_NEVER = 'never';
 
+    const DEFAULT_PRIORITY = 0.5;
+    const DEFAULT_CHANGE_FREQUENCY = self::CHANGE_FREQUENCY_WEEKLY;
+
     /**
      * @var string
      */
