@@ -274,7 +274,7 @@ class SitemapGenerator implements SingletonInterface
 
     /**
      * @param int $pageUid
-     * @return string
+     * @return void
      */
     protected function getSitemaps($pageUid)
     {
@@ -306,15 +306,9 @@ class SitemapGenerator implements SingletonInterface
 
                 $indexNode->setUrl($pageUrl);
 
-                $sitemaps .= $this->renderEntry(
-                    self::TAG_SITEMAP,
-                    $pageUrl . 'sitemap.xml',
-                    $lastModification
-                );
+                $this->nodes[] = $indexNode;
             }
         }
-
-        return $sitemaps;
     }
 
     /**
