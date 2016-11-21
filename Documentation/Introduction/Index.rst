@@ -41,3 +41,13 @@ Screenshots
     :alt: Settings module
 
     The settings module lets you configure your global SEO settings for each domain
+
+.. figure:: ../Images/screen_page_settings_facebook.png
+    :alt: Page module (Facebook Metadata Tab)
+
+    The page module has been extendet with additional fields to add facebook meta tags
+
+.. figure:: ../Images/screen_page_settings_seo.png
+    :alt: Page module (SEO Tab)
+
+    The page module has been extendet with additional fields and functions to optimize a single page for search engines

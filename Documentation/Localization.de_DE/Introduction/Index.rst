@@ -41,3 +41,13 @@ Screenshots
     :alt: Einstellungsmodul
 
     Das Einstellungsmodul lässt Sie alle globeln Konfigurationen für Ihre Domains vornehmen
+
+.. figure:: ../Images/screen_page_settings_facebook_de.png
+    :alt: Seitenmodul (Facebook Metadaten Reiter)
+
+    Das Seitenmodul wurde um zusätzliche Felder erweitert, um Metadaten für Facebook zu pflegen
+
+.. figure:: ../Images/screen_page_settings_seo_de.png
+    :alt: Page module (SEO Tab)
+
+    Das Seitenmodul wurde um zusätzliche Felder & Funktionen erweitert um einzelne Seiten für suchmaschinen zu optimieren
