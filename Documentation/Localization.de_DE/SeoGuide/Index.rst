@@ -60,7 +60,7 @@ verlinkten URLs. Soll der Crawler den Links jedoch weiter folgen, die Seite aber
 nicht indexieren, dann wird ein Meta-Tag noindex/follow verwendet. Die Auszeichnung
 hierfür sieht folgendermaßen aus::
 
-    <meta name=“robots“ content=“noindex,follow“ />
+    <meta name="robots" content="noindex,follow" />
 
 Weitere Informationen finden Sie hier: https://support.google.com/webmasters/answer/96569?hl=de
 
