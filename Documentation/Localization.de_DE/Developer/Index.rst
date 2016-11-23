@@ -21,6 +21,8 @@ Verfügbare Hooks
 Sitemap Hooks
 ^^^^^^^^^^^^^
 
+Ein Beispiel für einen Sitemap Hook findest du hier: `"Classes/Hook/NewsSitemapHook.php" <https://github.com/mindshape-GmbH/mindshape_seo/blob/master/Classes/Hook/NewsSitemapHook.php>`_
+
 **Vor-rendering der Sitemap**
 ::
     $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['sitemap_preRendering']
