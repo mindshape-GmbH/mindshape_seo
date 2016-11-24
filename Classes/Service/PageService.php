@@ -290,6 +290,16 @@ class PageService implements SingletonInterface
     }
 
     /**
+     * @return array
+     */
+    public function getRootpage()
+    {
+        $rootline = $this->getRootline();
+
+        return $rootline[0];
+    }
+
+    /**
      * @param int $pageUid
      * @return array
      */
@@ -297,7 +307,13 @@ class PageService implements SingletonInterface
     {
         $pages = array();
 
-        $pageUid = null === $pageUid ? GeneralUtility::_GET('id') : $pageUid;
+        if (null === $pageUid) {
+            if (0 < (int) $GLOBALS['TSFE']->id) {
+                $pageUid = (int) $GLOBALS['TSFE']->id;
+            } elseif (0 < (int) GeneralUtility::_GET('id')) {
+                $pageUid = (int) GeneralUtility::_GET('id');
+            }
+        }
 
         foreach ($this->pageRepository->getRootLine($pageUid) as $page) {
             $pages[] = $this->getPage($page['uid']);
@@ -308,6 +324,8 @@ class PageService implements SingletonInterface
 
     /**
      * @param int $pageUid
+     * @param bool $withCurrentPage
+     * @param bool $withRootPage
      * @return array
      */
     public function getRootlineReverse($pageUid = null, $withCurrentPage = false, $withRootPage = true)

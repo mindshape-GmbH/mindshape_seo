@@ -150,6 +150,7 @@ class HeaderDataService
      */
     public function manipulateHeaderData()
     {
+        $this->addBaseUrl();
         $this->addMetaData();
         $this->addFacebookData();
 
@@ -184,6 +185,19 @@ class HeaderDataService
                 $this->addPiwik();
             }
         }
+    }
+
+    /**
+     * @return void
+     */
+    protected function addBaseUrl()
+    {
+        $currentSysLanguageUid = $GLOBALS['TSFE']->sys_language_uid;
+        $rootpage = $this->pageService->getRootpage();
+
+        $this->pageRenderer->addHeaderData(
+            '<base href="' . $this->pageService->getPageLink($rootpage['uid'], true, $currentSysLanguageUid) . '">'
+        );
     }
 
     /**
