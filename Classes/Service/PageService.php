@@ -76,7 +76,7 @@ class PageService implements SingletonInterface
     protected $hasFrontendController = true;
 
     /**
-     * @return PageService
+     * @return \Mindshape\MindshapeSeo\Service\PageService
      * @throws \Mindshape\MindshapeSeo\Service\Exception
      */
     public function __construct()

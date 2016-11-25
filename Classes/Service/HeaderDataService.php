@@ -90,7 +90,7 @@ class HeaderDataService
     /**
      * @param PageRenderer $pageRenderer
      * @param array $params
-     * @return HeaderDataService
+     * @return \Mindshape\MindshapeSeo\Service\HeaderDataService
      */
     public function __construct(PageRenderer $pageRenderer, array &$params)
     {
@@ -224,7 +224,9 @@ class HeaderDataService
         } else {
             $title = preg_replace_callback(
                 '#(.*<title>)(.*)(<\/title>.*)#i',
-                function($match) { return $match[2]; },
+                function ($match) {
+                    return $match[2];
+                },
                 $title
             );
 
@@ -479,9 +481,9 @@ class HeaderDataService
             Configuration::JSONLD_TYPE_PERSON !== $this->domainConfiguration->getJsonldType()
         ) {
             $jsonld['logo'] = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . $this->domainConfiguration
-                ->getJsonldLogo()
-                ->getOriginalResource()
-                ->getPublicUrl();
+                    ->getJsonldLogo()
+                    ->getOriginalResource()
+                    ->getPublicUrl();
         }
 
         $socialMediaLinks = array(

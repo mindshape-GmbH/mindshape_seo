@@ -52,7 +52,7 @@ class StandaloneTemplateRendererService implements SingletonInterface
     protected $settings;
 
     /**
-     * @return StandaloneTemplateRendererService
+     * @return \Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService
      */
     public function __construct()
     {

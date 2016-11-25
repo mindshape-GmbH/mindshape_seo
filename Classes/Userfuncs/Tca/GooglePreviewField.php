@@ -57,7 +57,7 @@ class GooglePreviewField
     protected $standaloneTemplateRendererService;
 
     /**
-     * @return GooglePreviewField
+     * @return \Mindshape\MindshapeSeo\Userfuncs\Tca\GooglePreviewField
      */
     public function __construct()
     {

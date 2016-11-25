@@ -54,7 +54,7 @@ class ImageSitemapGenerator extends SitemapGenerator
     protected $configuration;
 
     /**
-     * @return ImageSitemapGenerator
+     * @return \Mindshape\MindshapeSeo\Generator\ImageSitemapGenerator
      */
     public function __construct()
     {
@@ -70,7 +70,8 @@ class ImageSitemapGenerator extends SitemapGenerator
     /**
      * @return string
      */
-    public function generateImageSitemapXml() {
+    public function generateImageSitemapXml()
+    {
         $this->getImageUrls();
 
         $imageSitemap = $this->getUrlsStartTag() . $this->getRenderedImageUrls() . $this->getUrlsEndTag();
@@ -214,10 +215,10 @@ class ImageSitemapGenerator extends SitemapGenerator
 
         foreach ($pageImages as $pageImageUrl) {
             $content .= '<' . self::TAG_IMAGE . '>' .
-                            '<' . self::TAG_IMAGE_LOC . '>' .
-                                GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $pageImageUrl .
-                            '</' . self::TAG_IMAGE_LOC . '>' .
-                        '</'. self::TAG_IMAGE . '>';
+                '<' . self::TAG_IMAGE_LOC . '>' .
+                GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $pageImageUrl .
+                '</' . self::TAG_IMAGE_LOC . '>' .
+                '</' . self::TAG_IMAGE . '>';
         }
 
         return '<' . self::TAG_URL . '>' . $content . '</' . self::TAG_URL . '>';

@@ -196,7 +196,7 @@
             that.checkFocusKeyword($currentPreview, focusKeyword);
           }
 
-          that.updatePreviewAlerts($currentPreview, $('#focusKeyword'),$(this));
+          that.updatePreviewAlerts($currentPreview, $('#focusKeyword'), $(this));
         });
       }
 
@@ -213,8 +213,6 @@
         var focusKeyword = $(this).val().trim();
 
         that.checkFocusKeyword($currentPreview, focusKeyword);
-
-
 
         if (that.editing) {
           var $focusKeywordMetadataPreview = $currentPreview.parents('.page').find('.focus-keyword-container .focus-keyword');
@@ -268,7 +266,7 @@
         .prop('checked', 0 < parseInt($previewContainer.attr('data-original-nofollow')));
       $previewContainer.find('.edit-panel .focus-keyword input').val($previewContainer.attr('data-original-focuskeyword'));
 
-      if (this.editing){
+      if (this.editing) {
         $previewContainer.parents('.page')
           .find('.focus-keyword-container .focus-keyword')
           .html($previewContainer.attr('data-original-focuskeyword'));
@@ -598,7 +596,9 @@
 
       $alertsContainer.find('li').removeClass('first-visible').removeClass('last-visible');
 
-      var $visibleElements = $previewContainer.find('.alerts-container li').filter(function () { return $(this).css('display') !== 'none'; });
+      var $visibleElements = $previewContainer.find('.alerts-container li').filter(function () {
+        return $(this).css('display') !== 'none';
+      });
 
       $visibleElements.first().addClass('first-visible');
       $visibleElements.last().addClass('last-visible');
@@ -645,12 +645,12 @@
     var $jsonldLogo = $('fieldset.logo');
 
     if ('undefined' !== typeof $jsonldTypeSelect) {
-      if($jsonldTypeSelect.val() === 'organization') {
+      if ($jsonldTypeSelect.val() === 'organization') {
         $jsonldLogo.show();
       }
 
       $jsonldTypeSelect.on('change', function () {
-        if($jsonldTypeSelect.val() === 'organization') {
+        if ($jsonldTypeSelect.val() === 'organization') {
           $jsonldLogo.slideDown();
         } else {
           $jsonldLogo.slideUp();
@@ -659,12 +659,12 @@
     }
 
     if ('undefined' !== typeof $addJsonld) {
-      if($addJsonld.prop('checked')) {
+      if ($addJsonld.prop('checked')) {
         $jsonld.show();
       }
 
       $addJsonld.on('click', function () {
-        if($addJsonld.prop('checked')) {
+        if ($addJsonld.prop('checked')) {
           $jsonld.slideDown();
         } else {
           $jsonld.slideUp();

@@ -37,7 +37,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class RenderPreProcessHook
 {
     /**
-     * @param array        $params
+     * @param array $params
      * @param PageRenderer $pageRenderer
      */
     public function main(array &$params, PageRenderer $pageRenderer)

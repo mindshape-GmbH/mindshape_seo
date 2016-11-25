@@ -51,7 +51,8 @@ class TypoLinkHook
      * @param \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $contentObjectRenderer
      * @return void
      */
-    public function postProcessEncodedUrl(array &$parameters, ContentObjectRenderer $contentObjectRenderer) {
+    public function postProcessEncodedUrl(array &$parameters, ContentObjectRenderer $contentObjectRenderer)
+    {
         $currentSysLanguageUid = (int) $GLOBALS['TSFE']->sys_language_uid;
 
         if (array_key_exists('additionalParams', $parameters['conf'])) {

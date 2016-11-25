@@ -41,7 +41,7 @@ class SessionService implements SingletonInterface
     protected $userAuthentication;
 
     /**
-     * @return SessionService
+     * @return \Mindshape\MindshapeSeo\Service\SessionService
      */
     public function __construct()
     {

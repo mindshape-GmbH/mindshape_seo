@@ -48,22 +48,24 @@ class PageTreeView extends \TYPO3\CMS\Backend\Tree\View\PageTreeView
         $title = $this->showDefaultTitleAttribute ? htmlspecialchars('UID: ' . $row['uid']) : $this->getTitleAttrib($row);
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $icon = '<span title="' . $title . '">' . $iconFactory->getIconForRecord('pages', $row, Icon::SIZE_SMALL)->render() . '</span>';
+
         return $this->wrapIcon($icon, $row);
     }
 
     /**
      * @param int $uid
      * @return int
-     * @access private
      */
     public function getCount($uid)
     {
         if (is_array($this->data)) {
             $res = $this->getDataInit($uid);
+
             return $this->getDataCount($res);
         } else {
             $db = $this->getDatabaseConnection();
             $where = $this->parentField . '=' . $db->fullQuoteStr($uid, $this->table) . BackendUtility::deleteClause($this->table) . BackendUtility::versioningPlaceholderClause($this->table) . $this->clause;
+
             return $db->exec_SELECTcountRows('pages.uid', $this->table, $where);
         }
     }

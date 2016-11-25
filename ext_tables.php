@@ -37,12 +37,12 @@ if (TYPO3_MODE === 'BE') {
         )
     );
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler (
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
         'MindshapeSeoAjaxHandler::savePage',
         Mindshape\MindshapeSeo\Handler\AjaxHandler::class . '->savePage'
     );
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler (
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
         'MindshapeSeoAjaxHandler::savePageRobots',
         Mindshape\MindshapeSeo\Handler\AjaxHandler::class . '->savePageRobots'
     );
@@ -54,47 +54,47 @@ $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\
 $iconRegistry->registerIcon(
     'provider-fontawesome-info',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'info-circle' ]
+    ['name' => 'info-circle']
 );
 
 $iconRegistry->registerIcon(
     'provider-fontawesome-warning',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'exclamation-circle' ]
+    ['name' => 'exclamation-circle']
 );
 
 $iconRegistry->registerIcon(
     'provider-fontawesome-error',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'exclamation-triangle' ]
+    ['name' => 'exclamation-triangle']
 );
 
 $iconRegistry->registerIcon(
     'provider-fontawesome-success',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'check-circle' ]
+    ['name' => 'check-circle']
 );
 
 $iconRegistry->registerIcon(
     'provider-fontawesome-caret-up',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'caret-up' ]
+    ['name' => 'caret-up']
 );
 
 $iconRegistry->registerIcon(
     'provider-fontawesome-caret-down',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'caret-down' ]
+    ['name' => 'caret-down']
 );
 
 $iconRegistry->registerIcon(
     'provider-fontawesome-angle-up',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'angle-up' ]
+    ['name' => 'angle-up']
 );
 
 $iconRegistry->registerIcon(
     'provider-fontawesome-angle-down',
     \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-    [ 'name' => 'angle-down' ]
+    ['name' => 'angle-down']
 );

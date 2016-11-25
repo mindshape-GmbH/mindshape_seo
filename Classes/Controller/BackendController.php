@@ -318,7 +318,7 @@ class BackendController extends ActionController
             'domainUrl' => Configuration::DEFAULT_DOMAIN === $domain ?
                 GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') :
                 $_SERVER['REQUEST_SCHEME'] . '://' . $domain,
-            'robotsTxtNotExists' => !file_exists(PATH_site . '/robots.txt')
+            'robotsTxtNotExists' => !file_exists(PATH_site . '/robots.txt'),
         ));
     }
 
