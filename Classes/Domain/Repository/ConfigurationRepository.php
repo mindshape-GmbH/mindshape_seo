@@ -128,7 +128,7 @@ class ConfigurationRepository extends Repository
             }
         }
 
-        if (null === $configuration->getFacebookDefaultImage()) {
+        if (null === $configuration->getJsonldLogo()) {
             $fileReference = $databaseConnection->exec_SELECTgetSingleRow(
                 '*',
                 'sys_file_reference',
