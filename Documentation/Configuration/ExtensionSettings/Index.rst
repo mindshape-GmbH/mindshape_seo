@@ -9,7 +9,7 @@ Reference
 ^^^^^^^^^
 
 All constants have to be added to
-plugin.tx\mindshape_seo.settings:
+plugin.tx_mindshape_seo.settings:
 
 .. ### BEGIN~OF~TABLE ###
 
