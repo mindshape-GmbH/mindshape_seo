@@ -71,9 +71,9 @@ class PageService implements SingletonInterface
     protected static $pageTreeDepth = 0;
 
     /**
-     * @var bool
+     * @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
      */
-    protected $hasFrontendController = true;
+    protected $typoScriptFrontendController;
 
     /**
      * @return \Mindshape\MindshapeSeo\Service\PageService
@@ -103,26 +103,34 @@ class PageService implements SingletonInterface
                 1 !== (int) $currentPage['doktype'] &&
                 4 !== (int) $currentPage['doktype']
             ) {
-                $this->hasFrontendController = false;
+                $this->typoScriptFrontendController = null;
             } else {
                 if (!is_object($GLOBALS['TT'])) {
-                    $GLOBALS['TT'] = GeneralUtility::makeInstance(NullTimeTracker::class);
-                    $GLOBALS['TT']->start();
+                    /** @var \TYPO3\CMS\Core\TimeTracker\NullTimeTracker $nullTimeTracker */
+                    $nullTimeTracker = GeneralUtility::makeInstance(NullTimeTracker::class);
+                    $GLOBALS['TT'] = $nullTimeTracker;
+                    $nullTimeTracker->start();
                 }
 
                 try {
-                    $GLOBALS['TSFE'] = $objectManager->get(
+                    $this->typoScriptFrontendController = $objectManager->get(
                         TypoScriptFrontendController::class,
                         $GLOBALS['TYPO3_CONF_VARS'],
                         GeneralUtility::_GET('id'),
                         GeneralUtility::_GET('type')
                     );
 
-                    $GLOBALS['TSFE']->connectToDB();
-                    $GLOBALS['TSFE']->initFEuser();
-                    $GLOBALS['TSFE']->determineId();
-                    $GLOBALS['TSFE']->initTemplate();
-                    $GLOBALS['TSFE']->getConfigArray();
+                    $GLOBALS['TSFE'] = $this->typoScriptFrontendController;
+
+                    if (!$this->typoScriptFrontendController->sys_page instanceof PageRepository) {
+                        $this->typoScriptFrontendController->sys_page = GeneralUtility::makeInstance(PageRepository::class);
+                    }
+
+                    $this->typoScriptFrontendController->connectToDB();
+                    $this->typoScriptFrontendController->initFEuser();
+                    $this->typoScriptFrontendController->determineId();
+                    $this->typoScriptFrontendController->initTemplate();
+                    $this->typoScriptFrontendController->getConfigArray();
 
                     if (ExtensionManagementUtility::isLoaded('realurl')) {
                         $_SERVER['HTTP_HOST'] = BackendUtility::firstDomainRecord(
@@ -130,7 +138,7 @@ class PageService implements SingletonInterface
                         );
                     }
                 } catch (\Exception $exception) {
-                    $this->hasFrontendController = false;
+                    $this->typoScriptFrontendController = null;
                 }
             }
         } elseif ('FE' !== TYPO3_MODE) {
@@ -150,7 +158,7 @@ class PageService implements SingletonInterface
      */
     public function hasFrontendController()
     {
-        return $this->hasFrontendController;
+        return $this->typoScriptFrontendController instanceof TypoScriptFrontendController;
     }
 
     /**
@@ -196,7 +204,7 @@ class PageService implements SingletonInterface
      */
     public function getCurrentPage()
     {
-        return $this->getPage($GLOBALS['TSFE']->id);
+        return $this->getPage($this->typoScriptFrontendController->id);
     }
 
     /**
@@ -243,7 +251,7 @@ class PageService implements SingletonInterface
                 $this->getPageLink(
                     $page['mindshapeseo_canonical'],
                     true,
-                    $GLOBALS['TSFE']->sys_language_uid
+                    $this->typoScriptFrontendController->sys_language_uid
                 ) :
                 null,
             'meta' => array(
@@ -308,8 +316,8 @@ class PageService implements SingletonInterface
         $pages = array();
 
         if (null === $pageUid) {
-            if (0 < (int) $GLOBALS['TSFE']->id) {
-                $pageUid = (int) $GLOBALS['TSFE']->id;
+            if (0 < (int) $this->typoScriptFrontendController->id) {
+                $pageUid = (int) $this->typoScriptFrontendController->id;
             } elseif (0 < (int) GeneralUtility::_GET('id')) {
                 $pageUid = (int) GeneralUtility::_GET('id');
             }
