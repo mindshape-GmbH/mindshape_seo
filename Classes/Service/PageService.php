@@ -141,7 +141,9 @@ class PageService implements SingletonInterface
                     $this->typoScriptFrontendController = null;
                 }
             }
-        } elseif ('FE' !== TYPO3_MODE) {
+        } elseif ('FE' === TYPO3_MODE) {
+            $this->typoScriptFrontendController = $GLOBALS['TSFE'];
+        } else {
             throw new Exception('Illegal TYPO3_MODE');
         }
 
