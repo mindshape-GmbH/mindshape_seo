@@ -46,7 +46,7 @@ class SitemapIndexNode extends AbstractValueObject
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl()
     {
         return $this->url . 'sitemap.xml';
     }
@@ -55,7 +55,7 @@ class SitemapIndexNode extends AbstractValueObject
      * @param string $url
      * @return void
      */
-    public function setUrl(string $url)
+    public function setUrl($url)
     {
         $this->url = $url;
     }
@@ -63,7 +63,7 @@ class SitemapIndexNode extends AbstractValueObject
     /**
      * @return \DateTime
      */
-    public function getLastModification(): \DateTime
+    public function getLastModification()
     {
         return $this->lastModification;
     }

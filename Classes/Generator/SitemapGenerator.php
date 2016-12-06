@@ -149,7 +149,7 @@ class SitemapGenerator implements SingletonInterface
 
     /**
      * @param int $pageUid
-     * @return string
+     * @return void
      */
     protected function getNodes($pageUid)
     {
@@ -276,8 +276,6 @@ class SitemapGenerator implements SingletonInterface
      */
     protected function getSitemaps($pageUid)
     {
-        $sitemaps = '';
-
         $pages = $this->pageService->getSubPagesFromPageUid($pageUid);
 
         foreach ($pages as $page) {
@@ -387,7 +385,9 @@ class SitemapGenerator implements SingletonInterface
      */
     protected function renderEntry($tag = self::TAG_URL, $url, \DateTime $lastModification, $changeFrequency = '', $priority = SitemapNode::DEFAULT_PRIORITY)
     {
-        $content = '<loc>' . $url . '</loc>';
+        $parsedUrl = $this->parseUrl($url);
+
+        $content = '<loc>' . $parsedUrl . '</loc>';
 
         if ($lastModification) {
             $content .= '<lastmod>' . $lastModification->format('c') . '</lastmod>';
@@ -402,5 +402,28 @@ class SitemapGenerator implements SingletonInterface
         }
 
         return '<' . $tag . '>' . $content . '</' . $tag . '>';
+    }
+
+    /**
+     * @param $url
+     * @return string
+     */
+    protected function parseUrl($url)
+    {
+        $url = parse_url($url);
+
+        $parsedUrl = '';
+
+        if (empty($url['scheme']) || empty($url['host'])) {
+            $parsedUrl .= GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
+        } else {
+            $parsedUrl .= empty($url['scheme']) ? '' : $url['scheme'] . '://';
+            $parsedUrl .= empty($url['host']) ? '' : $url['host'];
+        }
+
+        $parsedUrl .= empty($url['path']) ? '' : $url['path'];
+        $parsedUrl .= empty($url['query']) ? '' : '?' . urlencode($url['query']);
+
+        return $parsedUrl;
     }
 }

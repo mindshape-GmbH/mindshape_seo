@@ -67,7 +67,7 @@ class SitemapNode extends AbstractValueObject
     /**
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl()
     {
         return $this->url;
     }
@@ -76,7 +76,7 @@ class SitemapNode extends AbstractValueObject
      * @param string $url
      * @return void
      */
-    public function setUrl(string $url)
+    public function setUrl($url)
     {
         $this->url = $url;
     }
@@ -84,7 +84,7 @@ class SitemapNode extends AbstractValueObject
     /**
      * @return \DateTime
      */
-    public function getLastModification(): \DateTime
+    public function getLastModification()
     {
         return $this->lastModification;
     }
@@ -101,7 +101,7 @@ class SitemapNode extends AbstractValueObject
     /**
      * @return string
      */
-    public function getChangeFrequency(): string
+    public function getChangeFrequency()
     {
         return $this->changeFrequency;
     }
@@ -110,7 +110,7 @@ class SitemapNode extends AbstractValueObject
      * @param string $changeFrequency
      * @return void
      */
-    public function setChangeFrequency(string $changeFrequency)
+    public function setChangeFrequency($changeFrequency)
     {
         $this->changeFrequency = $changeFrequency;
     }
@@ -118,7 +118,7 @@ class SitemapNode extends AbstractValueObject
     /**
      * @return float
      */
-    public function getPriority(): float
+    public function getPriority()
     {
         return $this->priority;
     }
@@ -127,7 +127,7 @@ class SitemapNode extends AbstractValueObject
      * @param float $priority
      * @return void
      */
-    public function setPriority(float $priority)
+    public function setPriority($priority)
     {
         $this->priority = $priority;
     }
