@@ -31,6 +31,7 @@ use Mindshape\MindshapeSeo\Generator\SitemapGenerator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 
 /**
  * @package mindshape_seo
@@ -58,6 +59,12 @@ class NewsSitemapHook extends SitemapHook
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->newsRepository = $objectManager->get(NewsRepository::class);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings $querySettings */
+        $querySettings = $objectManager->get(Typo3QuerySettings::class);
+        $querySettings->setRespectStoragePage(false);
+
+        $this->newsRepository->setDefaultQuerySettings($querySettings);
 
         /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
@@ -93,8 +100,12 @@ class NewsSitemapHook extends SitemapHook
                         'Pi1'
                     );
 
-                $lastModification = new \DateTime();
-                $lastModification->setTimestamp($newsItem->getTstamp());
+                if ($newsItem->getTstamp() instanceof \DateTime) {
+                    $lastModification = $newsItem->getTstamp();
+                } else {
+                    $lastModification = new \DateTime();
+                    $lastModification->setTimestamp($newsItem->getTstamp());
+                }
 
                 $sitemapNode->setUrl($newsUrl);
                 $sitemapNode->setPriority(SitemapNode::DEFAULT_PRIORITY);
