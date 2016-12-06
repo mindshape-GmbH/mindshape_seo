@@ -35,6 +35,7 @@ use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
+use TYPO3\CMS\Lang\LanguageService as CoreLangugeService;
 
 /**
  * @package mindshape_seo
@@ -260,12 +261,23 @@ class HeaderDataService
     {
         /** @var DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
+        /** @var \TYPO3\CMS\Lang\LanguageService $test */
+        $languageService = $GLOBALS['LANG'];
 
         $result = $databaseConnection->exec_SELECTgetRows(
             '*',
             'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.sys_language_uid',
             'o.pid = ' . $this->currentPageMetaData['uid']
         );
+
+        if ($languageService instanceof CoreLangugeService) {
+            $this->pageRenderer->addHeaderData(
+                $this->renderHreflang(
+                    $this->pageService->getPageLink($this->currentPageMetaData['uid'], true),
+                    $languageService->lang
+                )
+            );
+        }
 
         foreach ($result as $language) {
             $this->pageRenderer->addHeaderData(

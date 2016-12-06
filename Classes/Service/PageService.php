@@ -178,9 +178,7 @@ class PageService implements SingletonInterface
             ->reset()
             ->setTargetPageUid($pageId)
             ->setCreateAbsoluteUri($absolute)
-            ->setArguments(
-                0 < $sysLanguageUid ? array('L' => $sysLanguageUid) : array()
-            )
+            ->setArguments(array('L' => $sysLanguageUid))
             ->setLinkAccessRestrictedPages($linkAccessRestrictedPages)
             ->buildFrontendUri();
     }
