@@ -56,7 +56,7 @@ abstract class SitemapHook
      * @param \Mindshape\MindshapeSeo\Generator\SitemapGenerator $sitemapGenerator
      * @return void
      */
-    public function sitemapPreRendering(&$params, SitemapGenerator $sitemapGenerator)
+    public function sitemapPreRendering(array &$params, SitemapGenerator $sitemapGenerator)
     {
     }
 
@@ -65,7 +65,7 @@ abstract class SitemapHook
      * @param \Mindshape\MindshapeSeo\Generator\SitemapGenerator $sitemapGenerator
      * @return void
      */
-    public function sitemapPostRendering(&$params, SitemapGenerator $sitemapGenerator)
+    public function sitemapPostRendering(array &$params, SitemapGenerator $sitemapGenerator)
     {
     }
 }
