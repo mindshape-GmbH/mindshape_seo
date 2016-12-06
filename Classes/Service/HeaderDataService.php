@@ -195,8 +195,8 @@ class HeaderDataService
         $currentSysLanguageUid = $GLOBALS['TSFE']->sys_language_uid;
         $rootpage = $this->pageService->getRootpage();
 
-        $this->pageRenderer->addHeaderData(
-            '<base href="' . $this->pageService->getPageLink($rootpage['uid'], true, $currentSysLanguageUid) . '">'
+        $this->pageRenderer->setBaseUrl(
+            $this->pageService->getPageLink($rootpage['uid'], true, $currentSysLanguageUid)
         );
     }
 
