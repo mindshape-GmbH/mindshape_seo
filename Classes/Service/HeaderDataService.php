@@ -174,16 +174,18 @@ class HeaderDataService
                 $this->addJsonLdBreadcrumb();
             }
 
-            if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
-                $this->addGoogleAnalytics();
-            }
+            if (GeneralUtility::getApplicationContext()->isProduction()) {
+                if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
+                    $this->addGoogleAnalytics();
+                }
 
-            if (
-                '' === $this->domainConfiguration->getGoogleAnalytics() &&
-                '' !== $this->domainConfiguration->getPiwikUrl() &&
-                '' !== $this->domainConfiguration->getPiwikIdsite()
-            ) {
-                $this->addPiwik();
+                if (
+                    '' === $this->domainConfiguration->getGoogleAnalytics() &&
+                    '' !== $this->domainConfiguration->getPiwikUrl() &&
+                    '' !== $this->domainConfiguration->getPiwikIdsite()
+                ) {
+                    $this->addPiwik();
+                }
             }
         }
     }
