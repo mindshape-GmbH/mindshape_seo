@@ -194,10 +194,13 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
             throw new TypeConverterException('Uploading files with PHP file extensions is not allowed!', 1399312430);
         }
 
+        $uploadInfo['name'] = $this->sanitizeFilename($uploadInfo['name']);
+
         $allowedFileExtensions = $configuration->getConfigurationValue(UploadedFileReferenceConverter::class, self::CONFIGURATION_ALLOWED_FILE_EXTENSIONS);
 
         if ($allowedFileExtensions !== null) {
             $filePathInfo = PathUtility::pathinfo($uploadInfo['name']);
+
             if (!GeneralUtility::inList($allowedFileExtensions, strtolower($filePathInfo['extension']))) {
                 throw new TypeConverterException('File extension is not allowed!', 1399312430);
             }
@@ -218,6 +221,15 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
         $fileReferenceModel = $this->createFileReferenceFromFalFileObject($uploadedFile, $resourcePointer);
 
         return $fileReferenceModel;
+    }
+
+    /**
+     * @param $filename
+     * @return string
+     */
+    protected function sanitizeFilename($filename)
+    {
+        return strtolower(preg_replace('/[^0-9a-zA-Z\.]+/', '', trim($filename)));
     }
 
     /**
