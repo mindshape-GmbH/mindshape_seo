@@ -3,54 +3,50 @@
       xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
       xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
 
-    <f:if condition="{metadata}">
-        <f:then>
-            <label>
-                <f:translate key="tx_mindshapeseo_label.google_search_preview"/>
-            </label>
+  <f:if condition="{metadata}">
+    <f:then>
+      <label>{f:translate(key: 'tx_mindshapeseo_label.google_search_preview')}</label>
 
-            <f:render partial="GoogleSearchPreview" section="Main" arguments="{
-                titleAttachment: titleAttachment,
-                titleAttachmentSeperator: titleAttachmentSeperator,
-                titleAttachmentPosition: titleAttachmentPosition,
-                disableTitleAttachment: metadata.disableTitleAttachment
-                title: metadata.title,
-                url: metadata.url,
-                previewUrl: metadata.previewUrl,
-                description: metadata.meta.description
-                focusKeyword: metadata.meta.focusKeyword
-                noindex: metadata.meta.robots.noindex
-                nofollow: metadata.meta.robots.nofollow
-                pageUid: metadata.uid
-                editing: 0
-                focusKeywordFieldName: tcaName
-            }"/>
+      <f:render partial="GoogleSearchPreview" section="Main" arguments="{
+        titleAttachment: titleAttachment,
+        titleAttachmentSeperator: titleAttachmentSeperator,
+        titleAttachmentPosition: titleAttachmentPosition,
+        disableTitleAttachment: metadata.disableTitleAttachment
+        title: metadata.title,
+        url: metadata.url,
+        previewUrl: metadata.previewUrl,
+        description: metadata.meta.description
+        focusKeyword: metadata.meta.focusKeyword
+        noindex: metadata.meta.robots.noindex
+        nofollow: metadata.meta.robots.nofollow
+        pageUid: metadata.uid
+        editing: 0
+        focusKeywordFieldName: tcaName
+      }"/>
 
-            <div class="seo-check">
-                <a href="#" class="btn btn-default info error">
-                    <core:icon identifier="provider-fontawesome-warning"/>
-                    <span class="alerts"></span>
-                    <f:translate key="tx_mindshapeseo_label.preview.seo_check.hint"/>
-                </a>
-                <a href="#" class="btn btn-default info no-error">
-                    <core:icon identifier="provider-fontawesome-success"/>
-                    <f:translate key="tx_mindshapeseo_label.preview.seo_check.ok"/>
-                </a>
-            </div>
-        </f:then>
-    </f:if>
+      <div class="seo-check">
+        <a href="#" class="btn btn-default info error">
+          <core:icon identifier="provider-fontawesome-warning"/>
+          <span class="alerts"></span>
+          {f:translate(key: 'tx_mindshapeseo_label.preview.seo_check.hint')}
+        </a>
+        <a href="#" class="btn btn-default info no-error">
+          <core:icon identifier="provider-fontawesome-success"/>
+          {f:translate(key: 'tx_mindshapeseo_label.preview.seo_check.ok')}
+        </a>
+      </div>
+    </f:then>
+  </f:if>
 
-    <div class="row">
-        <div class="col-sm-12 col-md-6">
-            <div class="form-group">
-                <label>
-                    <f:translate key="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword"/>
-                </label>
-                <f:form.textfield id="focusKeyword" name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" class="form-control"/>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-6">
+      <div class="form-group">
+        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword')}</label>
+        <f:form.textfield id="focusKeyword" name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" class="form-control"/>
+      </div>
     </div>
+  </div>
 
-    <f:render partial="AlertModal"/>
+  <f:render partial="AlertModal"/>
 
 </html>
