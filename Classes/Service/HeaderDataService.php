@@ -267,7 +267,7 @@ class HeaderDataService
         $languageService = $GLOBALS['LANG'];
 
         $result = $databaseConnection->exec_SELECTgetRows(
-            '*',
+            'l.*',
             'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.sys_language_uid',
             'o.pid = ' . $this->currentPageMetaData['uid']
         );
