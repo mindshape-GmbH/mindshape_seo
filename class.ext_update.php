@@ -25,7 +25,10 @@ namespace Mindshape\MindshapeSeo;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Service\UpdateService;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package mindshape_seo
@@ -34,16 +37,18 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 class ext_update
 {
     /**
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+     * @var \Mindshape\MindshapeSeo\Service\UpdateService
      */
-    protected $databaseConnection;
+    protected $updateService;
 
     /**
      * @return \Mindshape\MindshapeSeo\ext_update
      */
     public function __construct()
     {
-        $this->databaseConnection = $GLOBALS['TYPO3_DB'];
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->updateService = $objectManager->get(UpdateService::class);
     }
 
     /**
@@ -51,21 +56,15 @@ class ext_update
      */
     public function main()
     {
-        $messages = '';
+        $updateNotices = '';
 
-        /** @var \mysqli_result $checkSortingColumn */
-        $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM tx_mindshapeseo_domain_model_configuration LIKE "jsonld_same_as_xing"');
+        if ($this->updateService->isUpdateNecessary()) {
+            $this->updateService->makeUpdates();
 
-        if (0 === $check->num_rows) {
-            $this->databaseConnection->sql_query('
-				ALTER TABLE tx_mindshapeseo_domain_model_configuration
-				ADD jsonld_same_as_xing varchar(255) DEFAULT \'\' NOT NULL
-			');
-
-            $messages .= '<p>The missing JSON-LD SameAs Xing column was added</p>' . PHP_EOL;
+            $updateNotices = $this->updateService->getUpdateNotices();
         }
 
-        return $messages;
+        return $updateNotices;
     }
 
     /**
@@ -73,10 +72,6 @@ class ext_update
      */
     public function access()
     {
-        $currentVersion = ExtensionManagementUtility::getExtensionVersion('mindshape_seo');
-
-        $access = version_compare($currentVersion, '1.0.4', '>=');
-
-        return $access;
+        return $this->updateService->isUpdateNecessary();
     }
 }
