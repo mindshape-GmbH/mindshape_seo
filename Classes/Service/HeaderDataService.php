@@ -225,13 +225,9 @@ class HeaderDataService
         if (false === $title) {
             $title = $this->currentPageMetaData['title'];
         } else {
-            $title = preg_replace_callback(
-                '#(.*<title>)(.*)(<\/title>.*)#i',
-                function ($match) {
-                    return $match[2];
-                },
-                $title
-            );
+            preg_match('#<title>(.*)<\/title>#im', $title, $titleMatches);
+
+            $title = $titleMatches[1];
 
             $key = reset(array_keys($headerDataWithTitle));
 
