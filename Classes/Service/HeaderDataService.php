@@ -174,7 +174,7 @@ class HeaderDataService
                 $this->addJsonLdBreadcrumb();
             }
 
-            if (GeneralUtility::getApplicationContext()->isProduction()) {
+            if ($this->domainConfiguration->getAddAnalytics()) {
                 if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
                     $this->addGoogleAnalytics();
                 }

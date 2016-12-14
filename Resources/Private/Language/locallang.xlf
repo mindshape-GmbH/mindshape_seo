@@ -295,6 +295,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_width">
                 <source>Image minimum width (pixel)</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_analytics">
+                <source>Add analytics script to website</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
                 <source>hreflang-tag for multilingual websites</source>
             </trans-unit>

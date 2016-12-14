@@ -245,7 +245,17 @@
       </fieldset>
       <fieldset class="form-section">
         <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.analytics')}</h2>
-        <div id="analytics" class="row">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="checkbox">
+              <label>
+                <f:form.checkbox property="addAnalytics" value="1"/>
+                {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_analytics')}
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-md-6 col-sm-12">
             <fieldset class="form-section">
               <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics')}</h3>

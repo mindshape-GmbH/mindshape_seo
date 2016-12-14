@@ -295,6 +295,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_width">
                 <target>Minimale Breite für Bilder (Pixel)</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_analytics">
+                <target>Einfügen des Analytics Scripts auf die Website</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
                 <target>hreflang-Tag für mehrsprachige Webseiten einfügen</target>
             </trans-unit>

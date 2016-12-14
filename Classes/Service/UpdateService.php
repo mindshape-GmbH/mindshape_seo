@@ -104,6 +104,7 @@ class UpdateService implements SingletonInterface
     protected function checkUpdatesNecessarity()
     {
         $this->checkXingColumn();
+        $this->checkAddAnalyticsColumn();
     }
 
     /**
@@ -127,6 +128,30 @@ class UpdateService implements SingletonInterface
         $this->databaseConnection->sql_query('
             ALTER TABLE tx_mindshapeseo_domain_model_configuration
             ADD jsonld_same_as_xing varchar(255) DEFAULT \'\' NOT NULL
+        ');
+    }
+
+    /**
+     * @return void
+     */
+    protected function checkAddAnalyticsColumn()
+    {
+        /** @var \mysqli_result $checkSortingColumn */
+        $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM tx_mindshapeseo_domain_model_configuration LIKE "add_analytics"');
+
+        if(0 === $check->num_rows) {
+            $this->updateChecks['updateAddAnalyticsColumn'] = 'The missing "add analytics" column was added';
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function updateAddAnalyticsColumn()
+    {
+        $this->databaseConnection->sql_query('
+            ALTER TABLE tx_mindshapeseo_domain_model_configuration
+            ADD add_analytics tinyint(1) unsigned DEFAULT \'0\' NOT NULL
         ');
     }
 }

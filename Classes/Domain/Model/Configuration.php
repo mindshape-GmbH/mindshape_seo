@@ -81,6 +81,11 @@ class Configuration extends AbstractEntity
     /**
      * @var bool
      */
+    protected $addAnalytics = false;
+
+    /**
+     * @var bool
+     */
     protected $addHreflang = false;
 
     /**
@@ -325,6 +330,31 @@ class Configuration extends AbstractEntity
     public function setTitleAttachmentPosition($titleAttachmentPosition)
     {
         $this->titleAttachmentPosition = $titleAttachmentPosition;
+    }
+
+    /**
+     * @return bool $addAnalytics
+     */
+    public function getAddAnalytics()
+    {
+        return $this->addAnalytics;
+    }
+
+    /**
+     * @param bool $addAnalytics
+     * @return void
+     */
+    public function setAddAnalytics($addAnalytics)
+    {
+        $this->addAnalytics = $addAnalytics;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAddAnalytics()
+    {
+        return $this->addAnalytics;
     }
 
     /**

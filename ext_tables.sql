@@ -47,6 +47,7 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration (
   title_attachment           varchar(255) DEFAULT ''         NOT NULL,
   title_attachment_seperator varchar(255) DEFAULT ''         NOT NULL,
   title_attachment_position  varchar(255) DEFAULT ''         NOT NULL,
+  add_analytics              tinyint(1) unsigned DEFAULT '0' NOT NULL,
   add_hreflang               tinyint(1) unsigned DEFAULT '0' NOT NULL,
   add_jsonld                 tinyint(1) unsigned DEFAULT '0' NOT NULL,
   add_jsonld_breadcrumb      tinyint(1) unsigned DEFAULT '0' NOT NULL,
