@@ -201,6 +201,8 @@ $columns = array(
     ),
 );
 
+$GLOBALS['TCA']['pages']['columns']['description']['label'] = 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.page_description';
+
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $columns);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages_language_overlay', $columns);
 unset($columns);

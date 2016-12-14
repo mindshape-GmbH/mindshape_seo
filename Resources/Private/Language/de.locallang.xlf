@@ -160,6 +160,9 @@
             <trans-unit id="tx_mindshapeseo_label.image_sitemap">
                 <target>Bilder XML-Sitemap</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.page_description">
+                <target>Beschreibung (Description)</target>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <target>Vorschau</target>
