@@ -171,7 +171,7 @@ class Configuration extends AbstractEntity
     /**
      * @var string
      */
-    protected $jsonldSameAsMyspace = '';
+    protected $jsonldSameAsXing = '';
 
     /**
      * @var string
@@ -187,11 +187,6 @@ class Configuration extends AbstractEntity
      * @var string
      */
     protected $jsonldSameAsTumblr = '';
-
-    /**
-     * @var string
-     */
-    protected $jsonldSameAsXing = '';
 
     /**
      * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
@@ -663,20 +658,20 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string $jsonldSameAs
+     * @return string
      */
-    public function getJsonldSameAsMyspace()
+    public function getJsonldSameAsXing()
     {
-        return $this->jsonldSameAsMyspace;
+        return $this->jsonldSameAsXing;
     }
 
     /**
-     * @param string $jsonldSameAsMyspace
+     * @param string $jsonldSameAsXing
      * @return void
      */
-    public function setJsonldSameAsMyspace($jsonldSameAsMyspace)
+    public function setJsonldSameAsXing($jsonldSameAsXing)
     {
-        $this->jsonldSameAsMyspace = $jsonldSameAsMyspace;
+        $this->jsonldSameAsXing = $jsonldSameAsXing;
     }
 
     /**
@@ -728,22 +723,6 @@ class Configuration extends AbstractEntity
     public function setJsonldSameAsTumblr($jsonldSameAsTumblr)
     {
         $this->jsonldSameAsTumblr = $jsonldSameAsTumblr;
-    }
-
-    /**
-     * @return string
-     */
-    public function getJsonldSameAsXing()
-    {
-        return $this->jsonldSameAsXing;
-    }
-
-    /**
-     * @return void
-     */
-    public function setJsonldSameAsXing($jsonldSameAsXing)
-    {
-        $this->jsonldSameAsXing = $jsonldSameAsXing;
     }
 
     /**

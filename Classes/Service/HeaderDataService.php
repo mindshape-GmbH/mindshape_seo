@@ -510,7 +510,7 @@ class HeaderDataService
             'instagram' => $this->domainConfiguration->getJsonldSameAsInstagram(),
             'youtube' => $this->domainConfiguration->getJsonldSameAsYoutube(),
             'linkedin' => $this->domainConfiguration->getJsonldSameAsLinkedin(),
-            'myspace' => $this->domainConfiguration->getJsonldSameAsMyspace(),
+            'xing' => $this->domainConfiguration->getJsonldSameAsXing(),
             'printerest' => $this->domainConfiguration->getJsonldSameAsPrinterest(),
             'soundcloud' => $this->domainConfiguration->getJsonldSameAsSoundcloud(),
             'tumblr' => $this->domainConfiguration->getJsonldSameAsTumblr(),
