@@ -25,7 +25,7 @@ namespace Mindshape\MindshapeSeo\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference as ExtbaseFileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
@@ -530,7 +530,7 @@ class Configuration extends AbstractEntity
      * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $facebookDefaultImage
      * @return void
      */
-    public function setFacebookDefaultImage(FileReference $facebookDefaultImage = null)
+    public function setFacebookDefaultImage(ExtbaseFileReference $facebookDefaultImage = null)
     {
         $this->facebookDefaultImage = $facebookDefaultImage;
     }
@@ -929,7 +929,7 @@ class Configuration extends AbstractEntity
      * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $jsonldLogo
      * @return void
      */
-    public function setJsonldLogo(FileReference $jsonldLogo = null)
+    public function setJsonldLogo(ExtbaseFileReference $jsonldLogo = null)
     {
         $this->jsonldLogo = $jsonldLogo;
     }
