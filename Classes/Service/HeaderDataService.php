@@ -272,6 +272,13 @@ class HeaderDataService
             'o.pid = ' . $this->currentPageMetaData['uid']
         );
 
+        $this->pageRenderer->addHeaderData(
+            $this->renderHreflang(
+                $this->pageService->getPageLink($this->currentPageMetaData['uid'], true),
+                'x-default'
+            )
+        );
+
         if ($languageService instanceof CoreLangugeService) {
             $this->pageRenderer->addHeaderData(
                 $this->renderHreflang(
