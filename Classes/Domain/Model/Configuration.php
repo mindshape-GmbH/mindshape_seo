@@ -44,239 +44,176 @@ class Configuration extends AbstractEntity
     const TITLE_ATTACHMENT_POSITION_SUFFIX = 'suffix';
 
     /**
-     * domain
-     *
      * @var string
      */
     protected $domain = '';
 
     /**
-     * googleAnalytics
-     *
      * @var string
      */
     protected $googleAnalytics = '';
 
     /**
-     * piwikUrl
-     *
      * @var string
      */
     protected $piwikUrl = '';
 
     /**
-     * piwikIdsite
-     *
      * @var string
      */
     protected $piwikIdsite = '';
 
     /**
-     * titleAttachment
-     *
      * @var string
      */
     protected $titleAttachment = '';
 
     /**
-     * titleAttachmentSeperator
-     *
      * @var string
      */
     protected $titleAttachmentSeperator = '';
 
     /**
-     * titleAttachmentPosition
-     *
      * @var string
      */
     protected $titleAttachmentPosition = '';
 
     /**
-     * addHreflang
-     *
      * @var bool
      */
     protected $addHreflang = false;
 
     /**
-     * addJsonld
-     *
      * @var bool
      */
     protected $addJsonld = false;
 
     /**
-     * addJsonldBreadcrumb
-     *
      * @var bool
      */
     protected $addJsonldBreadcrumb = false;
 
     /**
-     * facebookDefaultImage
-     *
      * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
      */
     protected $facebookDefaultImage;
 
     /**
-     * imageSitemapMinHeight
-     *
      * @var int
      */
     protected $imageSitemapMinHeight = 0;
 
     /**
-     * imageSitemapMinWidth
-     *
      * @var int
      */
     protected $imageSitemapMinWidth = 0;
 
     /**
-     * jsonldCustomUrl
-     *
      * @var string
      */
     protected $jsonldCustomUrl = '';
 
     /**
-     * jsonldType
-     *
      * @var string
      */
     protected $jsonldType = '';
 
     /**
-     * jsonldName
-     *
      * @var string
      */
     protected $jsonldName = '';
 
     /**
-     * jsonldTelephone
-     *
      * @var string
      */
     protected $jsonldTelephone = '';
 
     /**
-     * jsonldFax
-     *
      * @var string
      */
     protected $jsonldFax = '';
 
     /**
-     * jsonldEmail
-     *
      * @var string
      */
     protected $jsonldEmail = '';
 
     /**
-     * jsonldSameAsFacebook
-     *
      * @var string
      */
     protected $jsonldSameAsFacebook = '';
 
     /**
-     * jsonldSameAsTwitter
-     *
      * @var string
      */
     protected $jsonldSameAsTwitter = '';
 
     /**
-     * jsonldSameAsGoogleplus
-     *
      * @var string
      */
     protected $jsonldSameAsGoogleplus = '';
 
     /**
-     * jsonldSameAsInstagram
-     *
      * @var string
      */
     protected $jsonldSameAsInstagram = '';
 
     /**
-     * jsonldSameAsYoutube
-     *
      * @var string
      */
     protected $jsonldSameAsYoutube = '';
 
     /**
-     * jsonldSameAsLinkedin
-     *
      * @var string
      */
     protected $jsonldSameAsLinkedin = '';
 
     /**
-     * jsonldSameAsMyspace
-     *
      * @var string
      */
     protected $jsonldSameAsMyspace = '';
 
     /**
-     * jsonldSameAsPrinterest
-     *
      * @var string
      */
     protected $jsonldSameAsPrinterest = '';
 
     /**
-     * jsonldSameAsSoundcloud
-     *
      * @var string
      */
     protected $jsonldSameAsSoundcloud = '';
 
     /**
-     * jsonldSameAsTumblr
-     *
      * @var string
      */
     protected $jsonldSameAsTumblr = '';
 
     /**
-     * jsonldLogo
-     *
+     * @var string
+     */
+    protected $jsonldSameAsXing = '';
+
+    /**
      * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
      */
     protected $jsonldLogo;
 
     /**
-     * jsonldAddressLocality
-     *
      * @var string
      */
     protected $jsonldAddressLocality = '';
 
     /**
-     * jsonldAddressPostalcode
-     *
      * @var string
      */
     protected $jsonldAddressPostalcode = '';
 
     /**
-     * jsonldAddressStreet
-     *
      * @var string
      */
     protected $jsonldAddressStreet = '';
 
     /**
-     * Returns the domain
-     *
      * @return string $domain
      */
     public function getDomain()
@@ -285,8 +222,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the domain
-     *
      * @param string $domain
      * @return void
      */
@@ -296,8 +231,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the googleAnalytics
-     *
      * @return string $googleAnalytics
      */
     public function getGoogleAnalytics()
@@ -306,8 +239,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the googleAnalytics
-     *
      * @param string $googleAnalytics
      * @return void
      */
@@ -317,8 +248,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the piwikUrl
-     *
      * @return string $piwikUrl
      */
     public function getPiwikUrl()
@@ -327,8 +256,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the piwikUrl
-     *
      * @param string $piwikUrl
      * @return void
      */
@@ -338,8 +265,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the piwikIdsite
-     *
      * @return string $piwikIdsite
      */
     public function getPiwikIdsite()
@@ -348,8 +273,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the piwikIdsite
-     *
      * @param string $piwikIdsite
      * @return void
      */
@@ -359,8 +282,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the titleAttachment
-     *
      * @return string $titleAttachment
      */
     public function getTitleAttachment()
@@ -369,8 +290,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the titleAttachment
-     *
      * @param string $titleAttachment
      * @return void
      */
@@ -380,8 +299,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the titleAttachmentSeperator
-     *
      * @return string $titleAttachmentSeperator
      */
     public function getTitleAttachmentSeperator()
@@ -390,8 +307,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the titleAttachmentSeperator
-     *
      * @param string $titleAttachmentSeperator
      * @return void
      */
@@ -401,8 +316,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the titleAttachmentPosition
-     *
      * @return string $titleAttachmentPosition
      */
     public function getTitleAttachmentPosition()
@@ -411,8 +324,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the titleAttachmentPosition
-     *
      * @param string $titleAttachmentPosition
      * @return void
      */
@@ -422,8 +333,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the addHreflang
-     *
      * @return bool $addHreflang
      */
     public function getAddHreflang()
@@ -432,8 +341,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the addHreflang
-     *
      * @param bool $addHreflang
      * @return void
      */
@@ -443,8 +350,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the boolean state of addHreflang
-     *
      * @return bool
      */
     public function isAddHreflang()
@@ -453,8 +358,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the addJsonld
-     *
      * @return bool $addJsonld
      */
     public function getAddJsonld()
@@ -463,8 +366,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the addJsonld
-     *
      * @param bool $addJsonld
      * @return void
      */
@@ -474,8 +375,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the boolean state of addJsonld
-     *
      * @return bool
      */
     public function isAddJsonld()
@@ -484,8 +383,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the addJsonldBreadcrumb
-     *
      * @return bool $addJsonldBreadcrumb
      */
     public function getAddJsonldBreadcrumb()
@@ -494,8 +391,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the addJsonldBreadcrumb
-     *
      * @param bool $addJsonldBreadcrumb
      * @return void
      */
@@ -505,8 +400,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the boolean state of addJsonldBreadcrumb
-     *
      * @return bool
      */
     public function isAddJsonldBreadcrumb()
@@ -515,8 +408,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the facebookDefaultImage
-     *
      * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference $facebookDefaultImage
      */
     public function getFacebookDefaultImage()
@@ -525,8 +416,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the facebookDefaultImage
-     *
      * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $facebookDefaultImage
      * @return void
      */
@@ -536,8 +425,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the imageSitemapMinHeight
-     *
      * @return string $imageSitemapMinHeight
      */
     public function getImageSitemapMinHeight()
@@ -546,8 +433,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the imageSitemapMinHeight
-     *
      * @param string $imageSitemapMinHeight
      * @return void
      */
@@ -557,8 +442,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the imageSitemapMinWidth
-     *
      * @return string $imageSitemapMinWidth
      */
     public function getImageSitemapMinWidth()
@@ -567,8 +450,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the imageSitemapMinWidth
-     *
      * @param string $imageSitemapMinWidth
      * @return void
      */
@@ -578,8 +459,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldCustomUrl
-     *
      * @return string $jsonldCustomUrl
      */
     public function getJsonldCustomUrl()
@@ -588,8 +467,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldCustomUrl
-     *
      * @param string $jsonldCustomUrl
      * @return void
      */
@@ -599,8 +476,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldType
-     *
      * @return string $jsonldType
      */
     public function getJsonldType()
@@ -609,8 +484,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldType
-     *
      * @param string $jsonldType
      * @return void
      */
@@ -620,8 +493,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldName
-     *
      * @return string $jsonldName
      */
     public function getJsonldName()
@@ -630,8 +501,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldName
-     *
      * @param string $jsonldName
      * @return void
      */
@@ -641,8 +510,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldTelephone
-     *
      * @return string $jsonldTelephone
      */
     public function getJsonldTelephone()
@@ -651,8 +518,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldTelephone
-     *
      * @param string $jsonldTelephone
      * @return void
      */
@@ -662,8 +527,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldFax
-     *
      * @return string $jsonldFax
      */
     public function getJsonldFax()
@@ -672,8 +535,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldFax
-     *
      * @param string $jsonldFax
      * @return void
      */
@@ -683,8 +544,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldEmail
-     *
      * @return string $jsonldEmail
      */
     public function getJsonldEmail()
@@ -693,8 +552,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldEmail
-     *
      * @param string $jsonldEmail
      * @return void
      */
@@ -704,8 +561,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAsFacebook
-     *
      * @return string $jsonldSameAs
      */
     public function getJsonldSameAsFacebook()
@@ -714,8 +569,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldSameAsFacebook
-     *
      * @param string $jsonldSameAsFacebook
      * @return void
      */
@@ -725,8 +578,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAsTwitter
-     *
      * @return string $jsonldSameAs
      */
     public function getJsonldSameAsTwitter()
@@ -735,8 +586,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldSameAsTwitter
-     *
      * @param string $jsonldSameAsTwitter
      * @return void
      */
@@ -746,8 +595,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAsGoogleplus
-     *
      * @return string $jsonldSameAs
      */
     public function getJsonldSameAsGoogleplus()
@@ -756,8 +603,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldSameAsGoogleplus
-     *
      * @param string $jsonldSameAsGoogleplus
      * @return void
      */
@@ -767,8 +612,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAsInstagram
-     *
      * @return string $jsonldSameAs
      */
     public function getJsonldSameAsInstagram()
@@ -777,8 +620,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldSameAsInstagram
-     *
      * @param string $jsonldSameAsInstagram
      * @return void
      */
@@ -788,8 +629,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAsYoutube
-     *
      * @return string $jsonldSameAs
      */
     public function getJsonldSameAsYoutube()
@@ -798,8 +637,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldSameAsYoutube
-     *
      * @param string $jsonldSameAsYoutube
      * @return void
      */
@@ -809,8 +646,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAsLinkedin
-     *
      * @return string $jsonldSameAs
      */
     public function getJsonldSameAsLinkedin()
@@ -819,8 +654,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldSameAsLinkedin
-     *
      * @param string $jsonldSameAsLinkedin
      * @return void
      */
@@ -830,8 +663,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAsMyspace
-     *
      * @return string $jsonldSameAs
      */
     public function getJsonldSameAsMyspace()
@@ -840,8 +671,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldSameAsMyspace
-     *
      * @param string $jsonldSameAsMyspace
      * @return void
      */
@@ -851,8 +680,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAsPrinterest
-     *
      * @return string $jsonldSameAs
      */
     public function getJsonldSameAsPrinterest()
@@ -861,8 +688,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldSameAsPrinterest
-     *
      * @param string $jsonldSameAsPrinterest
      * @return void
      */
@@ -872,8 +697,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAsSoundcloud
-     *
      * @return string $jsonldSameAs
      */
     public function getJsonldSameAsSoundcloud()
@@ -882,8 +705,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldSameAsSoundcloud
-     *
      * @param string $jsonldSameAsSoundcloud
      * @return void
      */
@@ -893,8 +714,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldSameAsTumblr
-     *
      * @return string $jsonldSameAs
      */
     public function getJsonldSameAsTumblr()
@@ -903,8 +722,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldSameAsTumblr
-     *
      * @param string $jsonldSameAsTumblr
      * @return void
      */
@@ -914,8 +731,22 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldLogo
-     *
+     * @return string
+     */
+    public function getJsonldSameAsXing()
+    {
+        return $this->jsonldSameAsXing;
+    }
+
+    /**
+     * @return void
+     */
+    public function setJsonldSameAsXing($jsonldSameAsXing)
+    {
+        $this->jsonldSameAsXing = $jsonldSameAsXing;
+    }
+
+    /**
      * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference $jsonldLogo
      */
     public function getJsonldLogo()
@@ -924,8 +755,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldLogo
-     *
      * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $jsonldLogo
      * @return void
      */
@@ -935,8 +764,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldAddressLocality
-     *
      * @return string $jsonldAddressLocality
      */
     public function getJsonldAddressLocality()
@@ -945,8 +772,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldAddressLocality
-     *
      * @param string $jsonldAddressLocality
      * @return void
      */
@@ -956,8 +781,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldAddressPostalcode
-     *
      * @return string $jsonldAddressPostalcode
      */
     public function getJsonldAddressPostalcode()
@@ -966,8 +789,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldAddressPostalcode
-     *
      * @param string $jsonldAddressPostalcode
      * @return void
      */
@@ -977,8 +798,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Returns the jsonldAddressStreet
-     *
      * @return string $jsonldAddressStreet
      */
     public function getJsonldAddressStreet()
@@ -987,8 +806,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * Sets the jsonldAddressStreet
-     *
      * @param string $jsonldAddressStreet
      * @return void
      */

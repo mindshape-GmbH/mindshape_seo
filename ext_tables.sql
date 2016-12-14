@@ -65,7 +65,7 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration (
   jsonld_same_as_instagram   varchar(255) DEFAULT ''         NOT NULL,
   jsonld_same_as_youtube     varchar(255) DEFAULT ''         NOT NULL,
   jsonld_same_as_linkedin    varchar(255) DEFAULT ''         NOT NULL,
-  jsonld_same_as_myspace     varchar(255) DEFAULT ''         NOT NULL,
+  jsonld_same_as_xing        varchar(255) DEFAULT ''         NOT NULL,
   jsonld_same_as_printerest  varchar(255) DEFAULT ''         NOT NULL,
   jsonld_same_as_soundcloud  varchar(255) DEFAULT ''         NOT NULL,
   jsonld_same_as_tumblr      varchar(255) DEFAULT ''         NOT NULL,

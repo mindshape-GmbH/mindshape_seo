@@ -392,8 +392,8 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.linkedin">
                 <target>LinkedIn</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.myspace">
-                <target>Myspace</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.xing">
+                <target>Xing</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.printerest">
                 <target>Pinterest</target>
