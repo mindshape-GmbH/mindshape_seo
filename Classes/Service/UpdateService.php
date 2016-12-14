@@ -116,7 +116,7 @@ class UpdateService implements SingletonInterface
         $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM tx_mindshapeseo_domain_model_configuration LIKE "jsonld_same_as_xing"');
 
         if(0 === $check->num_rows) {
-            $this->updateChecks['updateXingColumn'] = 'The missing JSON-LD SameAs Xing column was added';
+            $this->updateChecks['updateXingColumn'] = 'The missing "JSON-LD SameAs Xing" column was added';
         }
     }
 

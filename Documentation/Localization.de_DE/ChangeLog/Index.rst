@@ -10,5 +10,35 @@
 Versionshistorie
 ----------------
 
+v1.0.7
+  - Umbau vom Updatescript zu einem Service
+  - Hinzufügen einer Option zum steuern der Ausgabe von Analytics Scripts im Frontend
+
+v1.0.6
+  - Fehlerbehebung in der Titel Ersetzung
+
+v1.0.5
+  - Behebe illegitimen Klassennamen im Namespace vom Configuration Model
+  - Ersetzen von MySpace mit Xing für Social Media in json-ld
+  - Einfügen von hreflang x-default
+
+v1.0.4
+  - Fehlerbehebung im Hreflang beim Suchen von Sprachen
+  - Templates aktualisiert und aufgeräumt
+
+v1.0.3
+  - Verwendung des korrekten BaseUrl renderings
+  - StoragePids im News Sitemap Hook werden nicht mehr respektiert
+  - Hinzufügen eines data-ignore Attributs zu den Analytics Script Tags
+  - Hinzufügen der fehlende Standard Sprache zu Hreflang
+
+v1.0.2
+  - Einfügen einer säuberung des Dateinamens für Bilder Upload
+  - Verwendung strikter Argumente für die vererbte Sitemap Hook Klasse
+  - Benutzung des Standard Titels, Beschreibung usw. für die Facebook Metadaten, wenn keine angegeben wurden
+
+v1.0.1
+  - Beheben des fehlenden Frontend Controller im Page Service
+
 v1.0.0
-  Erstveröffentlichung
+  - Erstveröffentlichung
