@@ -2,10 +2,13 @@
 conf.py:
   copyright: 2016
   project: mindshape SEO
-  version: 1.0.8
-  release: 1.0.8
+  version: 1.0
   latex_documents:
   - - Index
+      - mindshape_seo.tex
+      - mindshape SEO Extension
+      - Daniel Dorndorf
+      - manual
   html_theme_options:
     github_repository: mindshape-GmbH/mindshape_seo
     github_branch: master

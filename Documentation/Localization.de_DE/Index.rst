@@ -15,7 +15,7 @@ mindshape SEO Extension
         mindshape_seo
 
     :Version:
-        |release|
+        |version|
 
     :Language:
         de
