@@ -229,7 +229,7 @@ foreach ($tables as $table) {
     );
     $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_meta_pallette']['showitem'] =
         'mindshapeseo_focus_keyword,--linebreak--,mindshapeseo_disable_title_attachment,--linebreak--,' .
-        $GLOBALS['TCA'][$table]['palettes']['metatags']['showitem'] . ',--linebreak--,mindshapeseo_canonical';
+        'description,--linebreak--,mindshapeseo_canonical';
 
     unset($GLOBALS['TCA'][$table]['palettes']['metatags']);
 

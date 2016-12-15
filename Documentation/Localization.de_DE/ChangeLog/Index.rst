@@ -10,6 +10,9 @@
 Versionshistorie
 ----------------
 
+v1.0.8
+  - Beheben des deutschen labels für die Beschreibung (Description) in den Seiteneigenschaften
+
 v1.0.7
   - Umbau vom Updatescript zu einem Service
   - Hinzufügen einer Option zum steuern der Ausgabe von Analytics Scripts im Frontend

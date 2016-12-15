@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v1.0.8
+  - Fixed german label for description in page properties
+
 v1.0.7
   - Refactored the update script to a service
   - Added an option to be able to manually control the adding of analytics scripts in frontend
