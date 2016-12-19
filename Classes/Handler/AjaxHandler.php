@@ -55,7 +55,8 @@ class AjaxHandler implements SingletonInterface
                     !empty($data['title'])
                 ) {
                     $this->savePageData(
-                        $data['pageUid'],
+                        (int) $data['pageUid'],
+                        (int) $data['sysLanguageUid'],
                         array(
                             'title' => $data['title'],
                             'description' => $data['description'],
@@ -74,16 +75,29 @@ class AjaxHandler implements SingletonInterface
     }
 
     /**
-     * @param $pageUid
+     * @param int $pageUid
+     * @param int $sysLanguageUid
      * @param array $data
      */
-    protected function savePageData($pageUid, array $data)
+    protected function savePageData($pageUid, $sysLanguageUid = 0, array $data)
     {
         /** @var DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
+        if (0 < $sysLanguageUid) {
+            $pageOverlay = $databaseConnection->exec_SELECTgetSingleRow(
+                'p.*',
+                'pages_language_overlay p',
+                'pid = ' . $pageUid . ' AND sys_language_uid = ' . $sysLanguageUid
+            );
+
+            $pageUid = (int) $pageOverlay['uid'];
+        }
+
         $databaseConnection->exec_UPDATEquery(
-            'pages',
+            0 < $sysLanguageUid
+                ? 'pages_language_overlay'
+                : 'pages',
             'uid = ' . $pageUid,
             $data
         );

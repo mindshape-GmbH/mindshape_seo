@@ -89,12 +89,26 @@ class PageService implements SingletonInterface
 
         if ('BE' === TYPO3_MODE) {
             $currentPageUid = GeneralUtility::_GET('id');
+            $currentSysLanguageUid = 0;
 
             if (
                 null === $currentPageUid &&
                 null !== GeneralUtility::_GET('edit')['pages']
             ) {
                 $currentPageUid = key(GeneralUtility::_GET('edit')['pages']);
+            }
+
+            if (
+                null === $currentPageUid &&
+                null !== GeneralUtility::_GET('edit')['pages_language_overlay']
+            ) {
+                $pageOverlay = BackendUtility::getRecord(
+                    'pages_language_overlay',
+                    key(GeneralUtility::_GET('edit')['pages_language_overlay'])
+                );
+
+                $currentPageUid = $pageOverlay['pid'];
+                $currentSysLanguageUid = $pageOverlay['sys_language_uid'];
             }
 
             $currentPage = $this->pageRepository->getPage_noCheck($currentPageUid);
@@ -132,6 +146,8 @@ class PageService implements SingletonInterface
                     $this->typoScriptFrontendController->initTemplate();
                     $this->typoScriptFrontendController->getConfigArray();
 
+                    $this->typoScriptFrontendController->sys_language_uid = $currentSysLanguageUid;
+
                     if (ExtensionManagementUtility::isLoaded('realurl')) {
                         $_SERVER['HTTP_HOST'] = BackendUtility::firstDomainRecord(
                             BackendUtility::BEgetRootLine(GeneralUtility::_GET('id'))
@@ -161,6 +177,14 @@ class PageService implements SingletonInterface
     public function hasFrontendController()
     {
         return $this->typoScriptFrontendController instanceof TypoScriptFrontendController;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCurrentSysLanguageUid()
+    {
+        return $this->typoScriptFrontendController->sys_language_uid;
     }
 
     /**
@@ -226,7 +250,7 @@ class PageService implements SingletonInterface
         }
 
         if ($useGoogleBreadcrumb) {
-            $rootline = $this->getRootlineReverse($pageUid, true, false);
+            $rootline = $this->getRootlineReverse($pageUid, true, false, $sysLanguageUid);
 
             $googleBreadcrumb = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
 
@@ -244,7 +268,7 @@ class PageService implements SingletonInterface
         $pageTitle = empty($page['nav_title']) ? $page['title'] : $page['nav_title'];
 
         return array(
-            'uid' => $page['uid'],
+            'uid' => $pageUid,
             'title' => $pageTitle,
             'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             'url' => $pageUrl,
@@ -264,8 +288,14 @@ class PageService implements SingletonInterface
                 'robots' => array(
                     'noindex' => (bool) $page['mindshapeseo_no_index'],
                     'nofollow' => (bool) $page['mindshapeseo_no_follow'],
-                    'noindexInherited' => $this->pageInheritedProperty((int) $page['uid'], 'mindshapeseo_no_index_recursive'),
-                    'nofollowInherited' => $this->pageInheritedProperty((int) $page['uid'], 'mindshapeseo_no_follow_recursive'),
+                    'noindexInherited' => $this->pageInheritedProperty(
+                        (int) $page['uid'],
+                        'mindshapeseo_no_index_recursive'
+                    ),
+                    'nofollowInherited' => $this->pageInheritedProperty(
+                        (int) $page['uid'],
+                        'mindshapeseo_no_follow_recursive'
+                    ),
                 ),
             ),
             'facebook' => array(
@@ -311,9 +341,10 @@ class PageService implements SingletonInterface
 
     /**
      * @param int $pageUid
+     * @param int $sysLanguageUid
      * @return array
      */
-    public function getRootline($pageUid = null)
+    public function getRootline($pageUid = null, $sysLanguageUid = 0)
     {
         $pages = array();
 
@@ -326,7 +357,7 @@ class PageService implements SingletonInterface
         }
 
         foreach ($this->pageRepository->getRootLine($pageUid) as $page) {
-            $pages[] = $this->getPage($page['uid']);
+            $pages[] = $this->getPage($page['uid'], $sysLanguageUid);
         }
 
         return $pages;
@@ -336,11 +367,12 @@ class PageService implements SingletonInterface
      * @param int $pageUid
      * @param bool $withCurrentPage
      * @param bool $withRootPage
+     * @param int $sysLanguageUid
      * @return array
      */
-    public function getRootlineReverse($pageUid = null, $withCurrentPage = false, $withRootPage = true)
+    public function getRootlineReverse($pageUid = null, $withCurrentPage = false, $withRootPage = true, $sysLanguageUid = 0)
     {
-        $rootline = $this->getRootline($pageUid);
+        $rootline = $this->getRootline($pageUid, $sysLanguageUid);
 
         if (false === $withRootPage) {
             array_pop($rootline);

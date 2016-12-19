@@ -103,7 +103,13 @@ class GooglePreviewField
      */
     public function render(array $params, UserElement $userElement)
     {
-        $configuration = $this->domainService->getPageDomainConfiguration($params['row']['uid']);
+        if ('pages_language_overlay' === $params['table']) {
+            $pageUid = $params['row']['pid'];
+        } else {
+            $pageUid = $params['row']['uid'];
+        }
+
+        $configuration = $this->domainService->getPageDomainConfiguration($pageUid);
 
         $metadata = null;
         $titleAttachment = null;
@@ -113,8 +119,8 @@ class GooglePreviewField
         if ($this->pageService->hasFrontendController()) {
             if ($configuration instanceof Configuration) {
                 $metadata = $this->pageService->getPageMetaData(
-                    $params['row']['uid'],
-                    0,
+                    $pageUid,
+                    $this->pageService->getCurrentSysLanguageUid(),
                     $configuration->getJsonldCustomUrl(),
                     $configuration->getAddJsonldBreadcrumb()
                 );
@@ -123,7 +129,7 @@ class GooglePreviewField
                 $titleAttachmentSeperator = $configuration->getTitleAttachmentSeperator();
                 $titleAttachmentPosition = $configuration->getTitleAttachmentPosition();
             } else {
-                $metadata = $this->pageService->getPageMetaData($params['row']['uid']);
+                $metadata = $this->pageService->getPageMetaData($pageUid, $this->pageService->getCurrentSysLanguageUid());
             }
         }
 

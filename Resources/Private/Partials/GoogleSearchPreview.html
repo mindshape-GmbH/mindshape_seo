@@ -41,6 +41,9 @@
   <f:section name="PreviewAndFields">
 
     <f:form.hidden name="pageUid" value="{pageUid}"/>
+    <f:if condition="{sysLanguageUid}">
+      <f:form.hidden name="sysLanguageUid" value="{sysLanguageUid}"/>
+    </f:if>
     <div class="preview-box">
       <h3>
         <a href="{url}" target="_blank">

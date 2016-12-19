@@ -106,7 +106,10 @@ class HeaderDataService
 
         $page = $this->pageService->getCurrentPage();
 
-        $this->currentPageMetaData = $this->pageService->getPageMetaData($page['uid']);
+        $this->currentPageMetaData = $this->pageService->getPageMetaData(
+            $page['uid'],
+            $this->pageService->getCurrentSysLanguageUid()
+        );
 
         $this->currentSitename = $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
 
@@ -116,7 +119,8 @@ class HeaderDataService
 
         $this->currentDomainUrl = $this->pageService->getPageLink(
             $GLOBALS['TSFE']->rootLine[0]['uid'],
-            true
+            true,
+            $this->pageService->getCurrentSysLanguageUid()
         );
 
         if (0 < (int) $page['mindshapeseo_ogimage']) {
@@ -566,7 +570,11 @@ class HeaderDataService
                 '@type' => 'ListItem',
                 'position' => $index + 1,
                 'item' => array(
-                    '@id' => $this->pageService->getPageLink($page['uid'], true),
+                    '@id' => $this->pageService->getPageLink(
+                        $page['uid'],
+                        true,
+                        $this->pageService->getCurrentSysLanguageUid()
+                    ),
                     'name' => $page['title'],
                 ),
             );

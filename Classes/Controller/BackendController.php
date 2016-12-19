@@ -220,27 +220,27 @@ class BackendController extends ActionController
 
         $arguments = $this->request->getArguments();
 
+        if (array_key_exists('sysLanguageUid', $arguments)) {
+            $sysLanguageUid = (int) $arguments['sysLanguageUid'];
+        } else {
+            $sysLanguageUid = $this->sessionService->hasKey('sysLanguageUid')
+                ? $this->sessionService->getKey('sysLanguageUid')
+                : 0;
+        }
+
         $defaultMenuItem = $menu->makeMenuItem()
             ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.default_language', 'mindshape_seo'))
             ->setHref($uriBuilder->reset()->uriFor('preview', array('sysLanguageUid' => 0), 'Backend'))
-            ->setActive(!array_key_exists('sysLanguageUid', $arguments) || $arguments['sysLanguageUid'] === 0);
+            ->setActive(0 === $sysLanguageUid);
 
         $menu->addMenuItem($defaultMenuItem);
-
-        if (array_key_exists('sysLanguageUid', $arguments)) {
-            $sysLanguageUid = $arguments['sysLanguageUid'];
-        } else {
-            $sysLanguageUid = $this->sessionService->hasKey('sysLanguageUid') ?
-                $this->sessionService->getKey('sysLanguageUid') :
-                0;
-        }
 
         foreach ($languages as $language) {
             $menu->addMenuItem(
                 $menu->makeMenuItem()
                     ->setTitle($language['title'])
                     ->setHref($uriBuilder->reset()->uriFor('preview', array('sysLanguageUid' => $language['uid']), 'Backend'))
-                    ->setActive($sysLanguageUid === $language['uid'])
+                    ->setActive($sysLanguageUid === (int) $language['uid'])
             );
         }
 
@@ -411,6 +411,7 @@ class BackendController extends ActionController
             }
 
             $this->view->assignMultiple(array(
+                'sysLanguageUid' => $sysLanguageUid,
                 'depth' => $depth,
                 'levelOptions' => array(
                     PageService::TREE_DEPTH_INFINITY => LocalizationUtility::translate('tx_mindshapeseo_label.preview.levels.infinity', 'mindshape_seo'),

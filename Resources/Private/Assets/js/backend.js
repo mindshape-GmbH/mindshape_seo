@@ -38,7 +38,7 @@
           that.updatePreviewEditPanelProgressBar($(this), 'description', that.googleDescriptionLengthPixel);
         } else {
           $('form').find('.seo-check .all').html(that.numberOfSeoChecks);
-          that.updatePreviewAlerts($(this), $('#focusKeyword'), $('textarea[name="data[pages][' + $(this).find('input[name="pageUid"]').val() + '][description]"]'));
+          that.updatePreviewAlerts($(this), $('#focusKeyword'), $('textarea[name="data[pages][' + $(this).find('input[name="pageUid"]').val() + '][description]"], textarea[name="data[pages_language_overlay][' + $(this).find('input[name="pageUid"]').val() + '][description]"]'));
         }
       });
 
@@ -178,7 +178,7 @@
         var currentPageUid = $currentPreview.find('input[name="pageUid"]').val();
         var focusKeyword = $('#focusKeyword').val().trim();
 
-        $tcaForm.find('input[data-formengine-input-name="data[pages][' + currentPageUid + '][title]"]').on('keyup', function () {
+        $tcaForm.find('input[data-formengine-input-name="data[pages][' + currentPageUid + '][title]"], input[data-formengine-input-name="data[pages_language_overlay][' + currentPageUid + '][title]"]').on('keyup', function () {
           $currentPreview.find('.preview-box .title').html($(this).val());
 
           if (0 < focusKeyword.length) {
@@ -188,7 +188,7 @@
           that.updatePreviewAlerts($currentPreview);
         });
 
-        $tcaForm.find('textarea[name="data[pages][' + currentPageUid + '][description]"]').on('keyup', function () {
+        $tcaForm.find('textarea[name="data[pages][' + currentPageUid + '][description]"], textarea[name="data[pages_language_overlay][' + currentPageUid + '][description]"]').on('keyup', function () {
           $currentPreview.find('.preview-box .description').html($(this).val());
           that.renderPreviewDescription($currentPreview);
 
@@ -231,7 +231,7 @@
           that.updatePreviewAlerts(
             $currentPreview,
             $('#focusKeyword'),
-            $('textarea[name="data[pages][' + $currentPreview.find('input[name="pageUid"]').val() + '][description]"]')
+            $('textarea[name="data[pages][' + $currentPreview.find('input[name="pageUid"]').val() + '][description]"], textarea[name="data[pages_language_overlay][' + $currentPreview.find('input[name="pageUid"]').val() + '][description]"]')
           );
         }
       });
@@ -244,7 +244,6 @@
         if (that.editing) {
           $parent = $(this).parents('.page');
         } else {
-          //TODO: tca parent
           $parent = $('form');
         }
 
@@ -518,7 +517,7 @@
       var description = '';
 
       if ('undefined' !== typeof $descriptionInput) {
-        description = $descriptionInput.val().trim();
+        description = $descriptionInput.val();
       } else {
         description = $.trim($previewContainer.find('.edit-panel .description').val());
       }
