@@ -48,7 +48,7 @@ class SitemapImageNode extends AbstractValueObject
     /**
      * @return string
      */
-    public function getPageUrl(): string
+    public function getPageUrl()
     {
         return $this->pageUrl;
     }
@@ -57,7 +57,7 @@ class SitemapImageNode extends AbstractValueObject
      * @param string $pageUrl
      * @return void
      */
-    public function setPageUrl(string $pageUrl)
+    public function setPageUrl($pageUrl)
     {
         $this->pageUrl = $pageUrl;
     }
@@ -65,7 +65,7 @@ class SitemapImageNode extends AbstractValueObject
     /**
      * @return array
      */
-    public function getImages(): array
+    public function getImages()
     {
         return $this->images;
     }

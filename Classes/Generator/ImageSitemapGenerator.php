@@ -95,7 +95,7 @@ class ImageSitemapGenerator extends SitemapGenerator
     protected function getUrlsStartTag()
     {
         return '<?xml version="1.0" encoding="UTF-8"?>' .
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" image:schemaLocation="http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">';
+               '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" image:schemaLocation="http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">';
     }
 
     /**
@@ -122,7 +122,14 @@ class ImageSitemapGenerator extends SitemapGenerator
             $imagePaths = $this->getPageImageUrls($page['uid']);
 
             if (false === empty($imagePaths)) {
-                $sitemapImageNode->setPageUrl($this->pageService->getPageLink($page['uid'], true));
+                $sitemapImageNode->setPageUrl(
+                    $this->pageService->getPageLink(
+                        $page['uid'],
+                        true,
+                        $GLOBALS['TSFE']->sys_language_uid
+                    )
+                );
+
                 $sitemapImageNode->setImages($imagePaths);
 
                 $this->nodes[] = $sitemapImageNode;

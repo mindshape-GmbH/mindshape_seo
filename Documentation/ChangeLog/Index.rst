@@ -10,8 +10,12 @@
 ChangeLog
 ---------
 
+v1.0.9
+  - Fixed multilingual sitemaps
+
 v1.0.8
   - Fixed german label for description in page properties
+  - Fixed translating issues
 
 v1.0.7
   - Refactored the update script to a service
