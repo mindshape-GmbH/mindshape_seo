@@ -200,7 +200,17 @@ class HeaderDataService
     protected function addBaseUrl()
     {
         $currentSysLanguageUid = $GLOBALS['TSFE']->sys_language_uid;
-        $rootpage = $this->pageService->getRootpage();
+        $rootline = $this->pageService->getRootline();
+
+        $rootpage = array_pop($rootline);
+
+        $rootpages = array_filter($rootline, function($page) {
+            return (bool) $page['is_siteroot'];
+        });
+
+        if (0 < count($rootpages)) {
+            $rootpage = $rootpages[1];
+        }
 
         $this->pageRenderer->setBaseUrl(
             $this->pageService->getPageLink($rootpage['uid'], true, $currentSysLanguageUid)
