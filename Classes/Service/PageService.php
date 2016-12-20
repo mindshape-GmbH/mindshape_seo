@@ -334,7 +334,7 @@ class PageService implements SingletonInterface
      */
     public function getRootpage()
     {
-        $rootline = $this->getRootline();
+        $rootline = $this->getRootlineReverse();
 
         return $rootline[0];
     }
