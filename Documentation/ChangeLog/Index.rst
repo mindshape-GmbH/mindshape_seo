@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v1.0.10
+  - Fixed wrong base href path
+
 v1.0.9
   - Fixed multilingual sitemaps
 

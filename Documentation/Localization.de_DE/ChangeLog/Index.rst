@@ -10,6 +10,9 @@
 Versionshistorie
 ----------------
 
+v1.0.10
+  - Fehlerbehebung beim setzen der BaseUrl
+
 v1.0.9
   - Fehlerbehebung bei multilingualen Sitemaps
 
