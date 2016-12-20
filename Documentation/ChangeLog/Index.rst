@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v1.0.11
+  - Fixed wrong rootpage in base href on nested siteroots
+
 v1.0.10
   - Fixed wrong base href path
 
