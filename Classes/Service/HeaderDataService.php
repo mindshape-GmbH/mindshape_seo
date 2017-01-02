@@ -155,6 +155,7 @@ class HeaderDataService
      */
     public function manipulateHeaderData()
     {
+        $this->addTitle();
         $this->addBaseUrl();
         $this->addMetaData();
         $this->addFacebookData();
@@ -164,8 +165,6 @@ class HeaderDataService
         }
 
         if ($this->domainConfiguration instanceof Configuration) {
-            $this->attachTitleAttachment();
-
             if ($this->domainConfiguration->getAddHreflang()) {
                 $this->addHreflang();
             }
@@ -230,7 +229,7 @@ class HeaderDataService
     /**
      * @return void
      */
-    protected function attachTitleAttachment()
+    protected function addTitle()
     {
         $headerDataWithTitle = preg_grep('#<title>(.*)</title>#i', $this->params['headerData']);
 
@@ -253,6 +252,7 @@ class HeaderDataService
         }
 
         if (
+            $this->domainConfiguration instanceof Configuration &&
             !$this->currentPageMetaData['disableTitleAttachment'] &&
             !empty($this->domainConfiguration->getTitleAttachment())
         ) {
