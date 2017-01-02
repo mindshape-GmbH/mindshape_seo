@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v1.0.12
+  - Always add title tag
+
 v1.0.11
   - Fixed wrong rootpage in base href on nested siteroots
 

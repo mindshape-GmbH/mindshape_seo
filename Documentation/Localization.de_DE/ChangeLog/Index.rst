@@ -10,6 +10,9 @@
 Versionshistorie
 ----------------
 
+v1.0.12
+  - Füge immer den Title Tag ein
+
 v1.0.11
   - Beheben der falschen Rootpage in der BaseUrl bei verschachtelten Siteroots
 
