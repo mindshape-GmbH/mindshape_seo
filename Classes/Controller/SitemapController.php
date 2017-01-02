@@ -28,6 +28,7 @@ namespace Mindshape\MindshapeSeo\Controller;
 
 use Mindshape\MindshapeSeo\Generator\ImageSitemapGenerator;
 use Mindshape\MindshapeSeo\Generator\SitemapGenerator;
+use Mindshape\MindshapeSeo\Service\PageService;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -49,6 +50,11 @@ class SitemapController implements SingletonInterface
     protected $imageSitemapGenerator;
 
     /**
+     * @var int
+     */
+    protected $currentPageUid;
+
+    /**
      * @return \Mindshape\MindshapeSeo\Controller\SitemapController
      */
     public function __construct()
@@ -57,6 +63,12 @@ class SitemapController implements SingletonInterface
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->sitemapGenerator = $objectManager->get(SitemapGenerator::class);
         $this->imageSitemapGenerator = $objectManager->get(ImageSitemapGenerator::class);
+
+        /** @var \Mindshape\MindshapeSeo\Service\PageService $pageService */
+        $pageService = $objectManager->get(PageService::class);
+        $currentPage = $pageService->getCurrentPage();
+
+        $this->currentPageUid = (int) $currentPage['uid'];
     }
 
     /**
@@ -66,9 +78,7 @@ class SitemapController implements SingletonInterface
      */
     public function sitemapAction($content, array $conf)
     {
-        return $this->sitemapGenerator->generateSitemap(
-            GeneralUtility::_GET('id')
-        );
+        return $this->sitemapGenerator->generateSitemap($this->currentPageUid);
     }
 
     /**
@@ -78,9 +88,7 @@ class SitemapController implements SingletonInterface
      */
     public function sitemapIndexAction($content, array $conf)
     {
-        return $this->sitemapGenerator->generateSitemapIndexXml(
-            GeneralUtility::_GET('id')
-        );
+        return $this->sitemapGenerator->generateSitemapIndexXml($this->currentPageUid);
     }
 
     /**

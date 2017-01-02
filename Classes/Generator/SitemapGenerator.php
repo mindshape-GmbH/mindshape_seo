@@ -153,8 +153,6 @@ class SitemapGenerator implements SingletonInterface
      */
     protected function getNodes($pageUid)
     {
-        $pageUid = (int) $pageUid;
-
         $pages = $this->pageService->getSubPagesFromPageUid($pageUid);
 
         $excludePids = array();
