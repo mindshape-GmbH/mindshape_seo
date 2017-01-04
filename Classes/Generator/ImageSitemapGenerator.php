@@ -162,13 +162,12 @@ class ImageSitemapGenerator extends SitemapGenerator
         foreach ($rows as $row) {
             $imageUrl = $this->resourceFactory->getFileReferenceObject($row['uid'], $row)->getPublicUrl();
 
-            if (
-                !$this->configuration instanceof Configuration &&
+            if (!$this->configuration instanceof Configuration) {
+                $imageUrls[] = $imageUrl;
+            } elseif (
                 0 === $this->configuration->getImageSitemapMinHeight() &&
                 0 === $this->configuration->getImageSitemapMinWidth()
             ) {
-                $imageUrls[] = $imageUrl;
-            } else {
                 $imageSize = getimagesize($imageUrl);
 
                 if (
