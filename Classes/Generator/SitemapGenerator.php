@@ -164,6 +164,7 @@ class SitemapGenerator implements SingletonInterface
             $isNoIndex = (bool) $page['mindshapeseo_no_index'];
             $isNoIndexRecurive = (bool) $page['mindshapeseo_no_index_recursive'];
             $isPage = 1 === (int) $page['doktype'];
+            $isHidden = (bool) $page['hidden'];
             $isSitemapPage = $pageUid === (int) $page['uid'];
 
             if (
@@ -188,6 +189,7 @@ class SitemapGenerator implements SingletonInterface
 
             if (
                 $isNoIndex ||
+                $isHidden ||
                 $isExcludeFromSitemap ||
                 false === $isPage ||
                 0 !== (int) $parentsProperties['fe_group'] ||
