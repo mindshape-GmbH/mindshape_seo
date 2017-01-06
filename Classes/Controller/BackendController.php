@@ -315,9 +315,7 @@ class BackendController extends ActionController
                 Configuration::JSONLD_TYPE_ORGANIZATION => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.organization', 'mindshape_seo'),
                 Configuration::JSONLD_TYPE_PERSON => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.person', 'mindshape_seo'),
             ),
-            'domainUrl' => Configuration::DEFAULT_DOMAIN === $domain ?
-                GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') :
-                $_SERVER['REQUEST_SCHEME'] . '://' . $domain,
+            'domainUrl' => (GeneralUtility::getIndpEnv('TYPO3_SSL') ? 'https' : 'http') . '://' . $domain,
             'robotsTxtNotExists' => !file_exists(PATH_site . '/robots.txt'),
         ));
     }
