@@ -10,6 +10,13 @@
 ChangeLog
 ---------
 
+v1.0.13
+  - Sitemap fix for multidomain sites
+  - Remove hidden pages from sitemap
+  - Fix unsafe condition in image sitemap generator
+  - Fix url schema in settings module
+  - Apply variable protocol schema to analytics url
+
 v1.0.12
   - Always add title tag
 

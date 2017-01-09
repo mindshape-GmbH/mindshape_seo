@@ -10,6 +10,13 @@
 Versionshistorie
 ----------------
 
+v1.0.13
+  - Beheben von Sitemap Problemen bei Multidomain Websites
+  - Entferne versteckte Seiten aus der Sitemap
+  - Behebe eine unsichere Bedingung im Bilder Sitemap Generator
+  - Behebe die Schema URL im Einstellungsmodul
+  - Verwende ein variables Protokoll Schema für die Analytics URL
+
 v1.0.12
   - Füge immer den Title Tag ein
 
