@@ -112,7 +112,8 @@ class ImageSitemapGenerator extends SitemapGenerator
 
             if (
                 0 !== (int) $parentsProperties['fe_group'] ||
-                0 !== (int) $page['fe_group']
+                0 !== (int) $page['fe_group'] ||
+                true === (bool) $page['hidden']
             ) {
                 continue;
             }
