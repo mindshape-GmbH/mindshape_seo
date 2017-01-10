@@ -10,6 +10,10 @@
 ChangeLog
 ---------
 
+v1.0.14
+  - Exclude hidden pages in image sitemap generator
+  - Decode image url
+
 v1.0.13
   - Sitemap fix for multidomain sites
   - Remove hidden pages from sitemap

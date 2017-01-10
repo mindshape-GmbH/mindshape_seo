@@ -10,6 +10,10 @@
 Versionshistorie
 ----------------
 
+v1.0.14
+  - Ignoriere versteckte Seiten in der Bilder Sitemap
+  - Dekodiere die Bilder URL
+
 v1.0.13
   - Beheben von Sitemap Problemen bei Multidomain Websites
   - Entferne versteckte Seiten aus der Sitemap
