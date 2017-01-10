@@ -161,7 +161,7 @@ class ImageSitemapGenerator extends SitemapGenerator
         );
 
         foreach ($rows as $row) {
-            $imageUrl = $this->resourceFactory->getFileReferenceObject($row['uid'], $row)->getPublicUrl();
+            $imageUrl = urldecode($this->resourceFactory->getFileReferenceObject($row['uid'], $row)->getPublicUrl());
 
             if (!$this->configuration instanceof Configuration) {
                 $imageUrls[] = $imageUrl;
