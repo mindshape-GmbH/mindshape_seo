@@ -10,6 +10,9 @@
 Versionshistorie
 ----------------
 
+v1.0.15
+  - Verwende nicht den alternativen Titel für die Vorschau und den Titel Tag
+
 v1.0.14
   - Ignoriere versteckte Seiten in der Bilder Sitemap
   - Dekodiere die Bilder URL

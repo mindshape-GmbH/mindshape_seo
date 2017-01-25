@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v1.0.15
+  - Don't use alternative title for preview and titel tag
+
 v1.0.14
   - Exclude hidden pages in image sitemap generator
   - Decode image url
