@@ -313,14 +313,26 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics">
                 <source>Google Analytics</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager">
+                <source>Google Tagmanager</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext">
                 <source>more information</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.link">
                 <source>https://support.google.com/analytics/answer/1032385?hl=en</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.linktext">
+                <source>more information</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.link">
+                <source>https://support.google.com/analytics/answer/6164470?hl=en</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_id">
                 <source>Google Analytics ID</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager_id">
+                <source>Google Tagmanager ID</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik">
                 <source>Piwik</source>
