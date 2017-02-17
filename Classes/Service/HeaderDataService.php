@@ -182,6 +182,10 @@ class HeaderDataService
                     $this->addGoogleAnalytics();
                 }
 
+                if ('' !== $this->domainConfiguration->getGoogleTagmanager()) {
+                    $this->addGoogleTagmanager();
+                }
+
                 if (
                     '' === $this->domainConfiguration->getGoogleAnalytics() &&
                     '' !== $this->domainConfiguration->getPiwikUrl() &&
@@ -406,6 +410,24 @@ class HeaderDataService
         $this->pageRenderer->addHeaderData(
             $this->standaloneTemplateRendererService->render('Analytics', 'Google', array(
                 'analyticsId' => $this->domainConfiguration->getGoogleAnalytics(),
+            ))
+        );
+    }
+
+    /**
+     * @return void
+     */
+    protected function addGoogleTagmanager()
+    {
+        $this->pageRenderer->addHeaderData(
+            $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerHead', array(
+                'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
+            ))
+        );
+
+        $this->pageRenderer->addFooterData(
+            $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerBody', array(
+                'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
             ))
         );
     }

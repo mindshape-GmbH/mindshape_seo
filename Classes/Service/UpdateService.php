@@ -105,6 +105,7 @@ class UpdateService implements SingletonInterface
     {
         $this->checkXingColumn();
         $this->checkAddAnalyticsColumn();
+        $this->checkTagmanagerColumn();
     }
 
     /**
@@ -152,6 +153,30 @@ class UpdateService implements SingletonInterface
         $this->databaseConnection->sql_query('
             ALTER TABLE tx_mindshapeseo_domain_model_configuration
             ADD add_analytics tinyint(1) unsigned DEFAULT \'0\' NOT NULL
+        ');
+    }
+
+    /**
+     * @return void
+     */
+    protected function checkTagmanagerColumn()
+    {
+        /** @var \mysqli_result $checkSortingColumn */
+        $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM tx_mindshapeseo_domain_model_configuration LIKE "google_tagmanager"');
+
+        if(0 === $check->num_rows) {
+            $this->updateChecks['updateTagmanagerColumn'] = 'The missing "google_tagmanager" column was added';
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function updateTagmanagerColumn()
+    {
+        $this->databaseConnection->sql_query('
+            ALTER TABLE tx_mindshapeseo_domain_model_configuration
+            ADD google_tagmanager varchar(255) DEFAULT \'\' NOT NULL
         ');
     }
 }

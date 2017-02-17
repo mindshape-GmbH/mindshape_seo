@@ -42,6 +42,7 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration (
 
   domain                     varchar(255) DEFAULT ''         NOT NULL,
   google_analytics           varchar(255) DEFAULT ''         NOT NULL,
+  google_tagmanager          varchar(255) DEFAULT ''         NOT NULL,
   piwik_url                  varchar(255) DEFAULT ''         NOT NULL,
   piwik_idsite               varchar(255) DEFAULT ''         NOT NULL,
   title_attachment           varchar(255) DEFAULT ''         NOT NULL,

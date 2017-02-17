@@ -56,6 +56,11 @@ class Configuration extends AbstractEntity
     /**
      * @var string
      */
+    protected $googleTagmanager = '';
+
+    /**
+     * @var string
+     */
     protected $piwikUrl = '';
 
     /**
@@ -245,6 +250,23 @@ class Configuration extends AbstractEntity
     public function setGoogleAnalytics($googleAnalytics)
     {
         $this->googleAnalytics = $googleAnalytics;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGoogleTagmanager()
+    {
+        return $this->googleTagmanager;
+    }
+
+    /**
+     * @param string $googleTagmanager
+     * @return void
+     */
+    public function setGoogleTagmanager($googleTagmanager)
+    {
+        $this->googleTagmanager = $googleTagmanager;
     }
 
     /**
