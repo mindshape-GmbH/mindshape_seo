@@ -38,7 +38,7 @@ class AjaxHandler implements SingletonInterface
 {
     /**
      * @param array $params
-     * @param AjaxRequestHandler $ajaxRequestHandler
+     * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler $ajaxRequestHandler
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function savePage(array $params = array(), AjaxRequestHandler $ajaxRequestHandler = null)

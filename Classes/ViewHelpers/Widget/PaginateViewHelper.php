@@ -26,8 +26,6 @@ namespace Mindshape\MindshapeSeo\ViewHelpers\Widget;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\ViewHelpers\Widget\Controller\PaginateController;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
 
 /**
@@ -50,7 +48,7 @@ class PaginateViewHelper extends AbstractWidgetViewHelper
     }
 
     /**
-     * @param QueryResultInterface|ObjectStorage|array $objects
+     * @param \TYPO3\CMS\Extbase\Persistence\ObjectMonitoringInterface|\TYPO3\CMS\Extbase\Persistence\ObjectStorage|array $objects
      * @param string $as
      * @param array $configuration
      * @return string

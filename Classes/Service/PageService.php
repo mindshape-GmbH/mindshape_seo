@@ -427,7 +427,7 @@ class PageService implements SingletonInterface
     {
         $page = $this->getPage($pageUid);
 
-        /** @var PageTreeView $tree */
+        /** @var \Mindshape\MindshapeSeo\Backend\Tree\View\PageTreeView $tree */
         $tree = GeneralUtility::makeInstance(PageTreeView::class);
         $tree->init();
         $tree->table = 'pages LEFT JOIN pages_language_overlay ON pages.uid = pages_language_overlay.pid';
@@ -441,7 +441,7 @@ class PageService implements SingletonInterface
         $tree->fieldArray = array('pages.*');
         $tree->orderByFields = 'pages.sorting';
 
-        /** @var IconFactory $iconFactory */
+        /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
         $html = $iconFactory->getIconForRecord(
