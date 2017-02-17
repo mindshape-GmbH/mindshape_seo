@@ -6,7 +6,6 @@ A SEO TYPO3 extension from mindshape GmbH.
 Links:
 - [TER](https://typo3.org/extensions/repository/view/mindshape_seo)
 - [Bug Tracker](https://github.com/mindshape-GmbH/mindshape_seo/issues)
-- [Contact](mailto:dorndorf@mindshape.de)
 
 Features:
 ---------
