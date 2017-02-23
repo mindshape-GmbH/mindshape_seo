@@ -34,19 +34,23 @@ use DmitryDulepov\Realurl\Configuration\AutomaticConfigurator;
 class RealurlHook
 {
     const CONFIGURATION_SITEMAPS = array(
-        'sitemap.xml' => array(
-            'keyValues' => array(
-                'type' => 19371,
-            ),
-        ),
-        'sitemap-index.xml' => array(
-            'keyValues' => array(
-                'type' => 19372,
-            ),
-        ),
-        'sitemap-image.xml' => array(
-            'keyValues' => array(
-                'type' => 19373,
+        'filename' => array(
+            'index' => array(
+                'sitemap.xml' => array(
+                    'keyValues' => array(
+                        'type' => 19371,
+                    ),
+                ),
+                'sitemap-index.xml' => array(
+                    'keyValues' => array(
+                        'type' => 19372,
+                    ),
+                ),
+                'sitemap-image.xml' => array(
+                    'keyValues' => array(
+                        'type' => 19373,
+                    ),
+                ),
             ),
         ),
     );
@@ -59,7 +63,7 @@ class RealurlHook
     public function addConfiguration(array $params, AutomaticConfigurator $automaticConfigurator)
     {
         return array_merge_recursive(
-            $params['config']['fileName']['index'],
+            $params['config'],
             self::CONFIGURATION_SITEMAPS
         );
     }
