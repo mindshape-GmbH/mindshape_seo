@@ -111,8 +111,6 @@ class HeaderDataService
             $this->pageService->getCurrentSysLanguageUid()
         );
 
-        $this->currentSitename = $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
-
         $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
 
         $this->domainConfiguration = $this->configurationRepository->findByDomain($currentDomain, true);
@@ -122,6 +120,15 @@ class HeaderDataService
             true,
             $this->pageService->getCurrentSysLanguageUid()
         );
+
+        if (
+            $this->domainConfiguration instanceof Configuration &&
+            false === empty($this->domainConfiguration->getSitename())
+        ) {
+            $this->currentSitename = $this->domainConfiguration->getSitename();
+        } else {
+            $this->currentSitename = $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
+        }
 
         if (0 < (int) $page['mindshapeseo_ogimage']) {
             /** @var FileRepository $fileRepository */

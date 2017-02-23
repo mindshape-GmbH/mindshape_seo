@@ -51,6 +51,11 @@ class Configuration extends AbstractEntity
     /**
      * @var string
      */
+    protected $sitename = '';
+
+    /**
+     * @var string
+     */
     protected $googleAnalytics = '';
 
     /**
@@ -233,6 +238,23 @@ class Configuration extends AbstractEntity
     public function setDomain($domain)
     {
         $this->domain = $domain;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSitename()
+    {
+        return $this->sitename;
+    }
+
+    /**
+     * @param string $sitename
+     * @return void
+     */
+    public function setSitename($sitename)
+    {
+        $this->sitename = $sitename;
     }
 
     /**

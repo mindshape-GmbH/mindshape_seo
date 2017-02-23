@@ -163,6 +163,9 @@
             <trans-unit id="tx_mindshapeseo_label.page_description">
                 <target>Beschreibung (Description)</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.domainsettings">
+                <target>Domaineinstellungen</target>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <target>Vorschau</target>
@@ -264,6 +267,9 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.domain">
                 <target>Domain</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.sitename">
+                <target>Seitenname</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment">
                 <target>Titel-Ergänzung</target>

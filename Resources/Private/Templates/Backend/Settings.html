@@ -21,6 +21,18 @@
     <f:form id="mindshape-seo-configuration" action="saveConfiguration" name="configuration" object="{configuration}" enctype="multipart/form-data">
       <f:form.hidden property="domain"/>
       <fieldset class="form-section">
+        <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.domainsettings')}</h2>
+        <p>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.sitename.subhead')}</p>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group">
+              <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.sitename')}</label>
+              <f:form.textfield property="sitename" class="form-control"/>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset class="form-section">
         <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment')}</h2>
         <p>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment.subhead')}</p>
         <div class="row">

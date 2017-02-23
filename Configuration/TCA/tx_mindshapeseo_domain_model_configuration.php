@@ -17,10 +17,10 @@ return array(
         'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/Icons/tx_mindshapeseo_domain_model_configuration.gif',
     ),
     'interface' => array(
-        'showRecordFieldList' => 'domain, google_analytics, google_tagmanager, piwik_url, piwik_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, add_hreflang, add_jsonld, add_jsonld_breadcrumb, facebook_default_image, image_sitemap_min_height, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street',
+        'showRecordFieldList' => 'domain, sitename, google_analytics, google_tagmanager, piwik_url, piwik_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, add_hreflang, add_jsonld, add_jsonld_breadcrumb, facebook_default_image, image_sitemap_min_height, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street',
     ),
     'types' => array(
-        '1' => array('showitem' => 'domain, google_analytics, google_tagmanager, piwik_url, piwik_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, add_hreflang, add_jsonld, add_jsonld_breadcrumb, facebook_default_image, image_sitemap_min_width, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '),
+        '1' => array('showitem' => 'domain, sitename, google_analytics, google_tagmanager, piwik_url, piwik_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, add_hreflang, add_jsonld, add_jsonld_breadcrumb, facebook_default_image, image_sitemap_min_width, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '),
     ),
     'palettes' => array(
         '1' => array('showitem' => ''),
@@ -29,6 +29,15 @@ return array(
         'domain' => array(
             'exclude' => 1,
             'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.domain',
+            'config' => array(
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ),
+        ),
+        'sitename' => array(
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.sitename',
             'config' => array(
                 'type' => 'input',
                 'size' => 30,
