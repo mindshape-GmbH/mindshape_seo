@@ -27,12 +27,10 @@ namespace Mindshape\MindshapeSeo\Service;
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
-use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Page\PageRenderer;
-use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
-use TYPO3\CMS\Core\Resource\ProcessedFile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Lang\LanguageService as CoreLangugeService;
@@ -98,7 +96,7 @@ class HeaderDataService
         $this->pageRenderer = $pageRenderer;
         $this->params = $params;
 
-        /** @var ObjectManager $objectManager */
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->pageService = $objectManager->get(PageService::class);
         $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
@@ -131,16 +129,16 @@ class HeaderDataService
         }
 
         if (0 < (int) $page['mindshapeseo_ogimage']) {
-            /** @var FileRepository $fileRepository */
+            /** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
             $fileRepository = $objectManager->get(FileRepository::class);
-            /** @var ImageService $imageService */
+            /** @var \TYPO3\CMS\Extbase\Service\ImageService $imageService */
             $imageService = $objectManager->get(ImageService::class);
             $files = $fileRepository->findByRelation('pages', 'ogimage', $page['uid']);
 
             if (0 < count($files)) {
-                /** @var FileReference $file */
+                /** @var \TYPO3\CMS\Core\Resource\FileReference $file */
                 $file = $files[0];
-                /** @var ProcessedFile $processedFile */
+                /** @var \TYPO3\CMS\Core\Resource\ProcessedFile $processedFile */
                 $processedFile = $imageService->applyProcessingInstructions(
                     $file,
                     array(
@@ -201,6 +199,19 @@ class HeaderDataService
                     $this->addPiwik();
                 }
             }
+        }
+    }
+
+    /**
+     * @param string $metaTag
+     * @return void
+     */
+    public function addMetaTag($metaTag)
+    {
+        if (true === version_compare(VersionNumberUtility::getNumericTypo3Version(), '7.6.15', '<=')) {
+            $this->pageRenderer->addHeaderData($metaTag);
+        } else {
+            $this->pageRenderer->addMetaTag($metaTag);
         }
     }
 
@@ -282,7 +293,7 @@ class HeaderDataService
      */
     protected function addHreflang()
     {
-        /** @var DatabaseConnection $databaseConnection */
+        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
         /** @var \TYPO3\CMS\Lang\LanguageService $test */
         $languageService = $GLOBALS['LANG'];
@@ -391,7 +402,7 @@ class HeaderDataService
     {
         foreach ($metaData as $name => $content) {
             if (!empty($content)) {
-                $this->pageRenderer->addMetaTag(
+                $this->addMetaTag(
                     $this->renderMetaTag($name, $content, $nameAttribute)
                 );
             }

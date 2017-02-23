@@ -28,8 +28,6 @@ namespace Mindshape\MindshapeSeo\Generator;
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Model\SitemapImageNode;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
-use TYPO3\CMS\Core\Database\DatabaseConnection;
-use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -59,9 +57,9 @@ class ImageSitemapGenerator extends SitemapGenerator
     public function __construct()
     {
         parent::__construct();
-        /** @var ObjectManager $objectManager */
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var ConfigurationRepository $configurationRepository */
+        /** @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository */
         $configurationRepository = $objectManager->get(ConfigurationRepository::class);
         $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
         $this->configuration = $configurationRepository->findByDomain($currentDomain, true);
@@ -144,7 +142,7 @@ class ImageSitemapGenerator extends SitemapGenerator
      */
     protected function getPageImageUrls($pageUid)
     {
-        /** @var DatabaseConnection $databaseConnection */
+        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
         $imageUrls = array();

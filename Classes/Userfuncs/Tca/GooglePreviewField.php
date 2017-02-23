@@ -61,12 +61,12 @@ class GooglePreviewField
      */
     public function __construct()
     {
-        /** @var ObjectManager $objectManager */
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->pageService = $objectManager->get(PageService::class);
         $this->domainService = $objectManager->get(DomainService::class);
         $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
-        /** @var PageRenderer $pageRenderer */
+        /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
         $pageRenderer = $objectManager->get(PageRenderer::class);
         $pageRenderer->setBackPath('../typo3/');
         $pageRenderer->loadJquery();

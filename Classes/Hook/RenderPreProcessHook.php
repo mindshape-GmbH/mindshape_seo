@@ -43,9 +43,9 @@ class RenderPreProcessHook
     public function main(array &$params, PageRenderer $pageRenderer)
     {
         if ('FE' === TYPO3_MODE) {
-            /** @var ObjectManager $objectManager */
+            /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            /** @var HeaderDataService $headerDataService */
+            /** @var \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService */
             $headerDataService = $objectManager->get(HeaderDataService::class, $pageRenderer, $params);
             $headerDataService->manipulateHeaderData();
         }

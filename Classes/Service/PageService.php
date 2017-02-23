@@ -81,9 +81,9 @@ class PageService implements SingletonInterface
      */
     public function __construct()
     {
-        /** @var ObjectManager $objectManager */
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var ConfigurationManager $configurationManager */
+        /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
         $this->pageRepository = $objectManager->get(PageRepository::class);
 
@@ -391,7 +391,7 @@ class PageService implements SingletonInterface
      */
     public function getSubPageUidsFromPageUid($pageUid)
     {
-        /** @var QueryGenerator $queryGenerator */
+        /** @var \TYPO3\CMS\Core\Database\QueryGenerator $queryGenerator */
         $queryGenerator = GeneralUtility::makeInstance(QueryGenerator::class);
 
         return GeneralUtility::trimExplode(
