@@ -10,6 +10,11 @@
 Versionshistorie
 ----------------
 
+v1.0.16
+  - Google Tag Manager Integration
+  - Hinzufügen eines Seitennamens für die Domain
+  - Code Aufräumen
+
 v1.0.15
   - Verwende nicht den alternativen Titel für die Vorschau und den Titel Tag
 

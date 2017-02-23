@@ -10,6 +10,11 @@
 ChangeLog
 ---------
 
+v1.0.16
+  - Add google tag manager integration
+  - Add new sitename property for configuration
+  - Code Cleanup
+
 v1.0.15
   - Don't use alternative title for preview and titel tag
 
