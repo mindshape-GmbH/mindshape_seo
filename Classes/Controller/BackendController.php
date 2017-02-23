@@ -38,7 +38,6 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -108,7 +107,7 @@ class BackendController extends ActionController
      */
     protected function initializeView(ViewInterface $view)
     {
-        /** @var BackendTemplateView $view */
+        /** @var \TYPO3\CMS\Backend\View\BackendTemplateView $view */
         parent::initializeView($view);
 
         $currentAction = $this->request->getControllerActionName();
@@ -440,7 +439,7 @@ class BackendController extends ActionController
             UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER => '1:/mindshape_seo/',
         );
 
-        /** @var PropertyMappingConfiguration $newExampleConfiguration */
+        /** @var \TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration $newExampleConfiguration */
         $newExampleConfiguration = $this->arguments[$argumentName]->getPropertyMappingConfiguration();
         $newExampleConfiguration
             ->forProperty('facebookDefaultImage')

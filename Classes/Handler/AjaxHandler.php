@@ -25,7 +25,6 @@ namespace Mindshape\MindshapeSeo\Handler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Http\AjaxRequestHandler;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -43,7 +42,7 @@ class AjaxHandler implements SingletonInterface
      */
     public function savePage(array $params = array(), AjaxRequestHandler $ajaxRequestHandler = null)
     {
-        /** @var ServerRequest $request */
+        /** @var \TYPO3\CMS\Core\Http\ServerRequest $request */
         $request = $params['request'];
 
         if ($request instanceof ServerRequest) {
@@ -81,7 +80,7 @@ class AjaxHandler implements SingletonInterface
      */
     protected function savePageData($pageUid, $sysLanguageUid = 0, array $data)
     {
-        /** @var DatabaseConnection $databaseConnection */
+        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
         if (0 < $sysLanguageUid) {

@@ -59,7 +59,7 @@ class SitemapController implements SingletonInterface
      */
     public function __construct()
     {
-        /** @var ObjectManager $objectManager */
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->sitemapGenerator = $objectManager->get(SitemapGenerator::class);
         $this->imageSitemapGenerator = $objectManager->get(ImageSitemapGenerator::class);

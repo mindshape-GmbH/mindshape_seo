@@ -84,7 +84,7 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
     /**
      * Take precedence over the available FileReferenceConverter
      *
-     * @var integer
+     * @var int
      */
     protected $priority = 2;
 
@@ -259,7 +259,7 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
     protected function createFileReferenceFromFalFileReferenceObject(FalFileReference $falFileReference, $resourcePointer = null)
     {
         if ($resourcePointer === null) {
-            /** @var $fileReference \Mindshape\MindshapeSeo\Domain\Model\FileReference */
+            /** @var \Mindshape\MindshapeSeo\Domain\Model\FileReference $fileReference */
             $fileReference = $this->objectManager->get(FileReference::class);
         } else {
             $fileReference = $this->persistenceManager->getObjectByIdentifier(

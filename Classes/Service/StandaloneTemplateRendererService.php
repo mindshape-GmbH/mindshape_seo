@@ -56,9 +56,9 @@ class StandaloneTemplateRendererService implements SingletonInterface
      */
     public function __construct()
     {
-        /** @var ObjectManager $objectManager */
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var ConfigurationManager $configurationManager */
+        /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
 
         $config = GeneralUtility::removeDotsFromTS(
@@ -98,7 +98,7 @@ class StandaloneTemplateRendererService implements SingletonInterface
      */
     protected function getView($templateFolder = self::TEMPLATES_DEFAULT_FOLDER, $templateName, $format = 'html')
     {
-        /** @var StandaloneView $view */
+        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setFormat($format);
         $view->getRequest()->setControllerExtensionName('MindshapeSeo');

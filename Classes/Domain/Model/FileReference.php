@@ -34,7 +34,7 @@ use TYPO3\CMS\Core\Resource\ResourceInterface;
 class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
 {
     /**
-     * @var integer
+     * @var int
      */
     protected $originalFileIdentifier;
 
