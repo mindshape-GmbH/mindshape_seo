@@ -7,9 +7,13 @@ if (!defined('TYPO3_MODE')) {
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mindshapeseo_domain_model_configuration');
 
 if (TYPO3_MODE === 'BE') {
+    $mainModuleKey = 'mindshapeseo';
+
+    $GLOBALS['TBE_MODULES'][$mainModuleKey] = '';
+
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Mindshape.' . $_EXTKEY,
-        'web',
+        $mainModuleKey,
         'preview',
         '',
         array(
@@ -19,12 +23,13 @@ if (TYPO3_MODE === 'BE') {
             'access' => 'user,group',
             'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/seo-preview.svg',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_backend_preview.xlf',
+            'navigationComponentId' => 'typo3-pagetree',
         )
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Mindshape.' . $_EXTKEY,
-        'tools',
+        $mainModuleKey,
         'settings',
         '',
         array(
@@ -36,6 +41,33 @@ if (TYPO3_MODE === 'BE') {
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_backend_settings.xlf',
         )
     );
+
+    $tempModules = array();
+
+    foreach ($GLOBALS['TBE_MODULES'] as $key => $mainModule) {
+        switch ($key) {
+            case 'web';
+                $tempModules['web'] = $mainModule;
+                $tempModules[$mainModuleKey] = $GLOBALS['TBE_MODULES'][$mainModuleKey];
+                break;
+            case $mainModuleKey:
+                break;
+            case '_configuration':
+                $tempModules['_configuration'] = $mainModule;
+                $tempModules['_configuration'][$mainModuleKey] = array(
+                    'labels' => array(
+                        'll_ref' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_seo_mainmodule.xlf',
+                    ),
+                    'name' => $mainModuleKey,
+                    'iconIdentifier' => 'module-' . $mainModuleKey,
+                );
+                break;
+            default:
+                $tempModules[$key] = $mainModule;
+        };
+    }
+
+    $GLOBALS['TBE_MODULES'] = $tempModules;
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
         'MindshapeSeoAjaxHandler::savePage',
@@ -50,6 +82,12 @@ if (TYPO3_MODE === 'BE') {
 
 /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
 $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+
+$iconRegistry->registerIcon(
+    'module-mindshapeseo',
+    \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+    ['name' => 'pie-chart']
+);
 
 $iconRegistry->registerIcon(
     'provider-fontawesome-info',
