@@ -148,13 +148,18 @@ class BackendController extends ActionController
             $pageRenderer->setBackPath('../typo3/');
         }
 
-        if ($currentAction === 'settings') {
+        if (
+            $currentAction === 'settings' ||
+            $currentAction === 'redirectManager'
+        ) {
             $domains = $this->domainService->getAvailableDomains();
 
             if (2 <= count($domains)) {
                 $this->buildDomainMenu($domains);
             }
+        }
 
+        if ($currentAction === 'settings') {
             $this->buildButtons();
         }
 
@@ -267,6 +272,32 @@ class BackendController extends ActionController
             ->setIcon($iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL));
 
         $buttonBar->addButton($saveButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+    }
+
+    /**
+     * @param string $argumentName
+     * @return void
+     */
+    protected function setTypeConverterConfigurationForImageUpload($argumentName)
+    {
+        $uploadConfiguration = array(
+            UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+            UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER => '1:/mindshape_seo/',
+        );
+
+        /** @var \TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration $newExampleConfiguration */
+        $newExampleConfiguration = $this->arguments[$argumentName]->getPropertyMappingConfiguration();
+        $newExampleConfiguration
+            ->forProperty('facebookDefaultImage')
+            ->setTypeConverterOptions(
+                UploadedFileReferenceConverter::class,
+                $uploadConfiguration
+            )
+            ->forProperty('jsonldLogo')
+            ->setTypeConverterOptions(
+                UploadedFileReferenceConverter::class,
+                $uploadConfiguration
+            );
     }
 
     /**
@@ -429,28 +460,10 @@ class BackendController extends ActionController
     }
 
     /**
-     * @param string $argumentName
      * @return void
      */
-    protected function setTypeConverterConfigurationForImageUpload($argumentName)
+    public function redirectManagerAction()
     {
-        $uploadConfiguration = array(
-            UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
-            UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER => '1:/mindshape_seo/',
-        );
 
-        /** @var \TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration $newExampleConfiguration */
-        $newExampleConfiguration = $this->arguments[$argumentName]->getPropertyMappingConfiguration();
-        $newExampleConfiguration
-            ->forProperty('facebookDefaultImage')
-            ->setTypeConverterOptions(
-                UploadedFileReferenceConverter::class,
-                $uploadConfiguration
-            )
-            ->forProperty('jsonldLogo')
-            ->setTypeConverterOptions(
-                UploadedFileReferenceConverter::class,
-                $uploadConfiguration
-            );
     }
 }
