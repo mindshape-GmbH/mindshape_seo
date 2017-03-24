@@ -37,8 +37,8 @@ class Configuration extends AbstractEntity
     const DEFAULT_DOMAIN = '*';
     const DEFAULT_TITLE_ATTACHMENT_SEPERATOR = '|';
 
-    const JSONLD_TYPE_ORGANIZATION = 'organization';
-    const JSONLD_TYPE_PERSON = 'person';
+    const JSONLD_TYPE_ORGANIZATION = 'Organization';
+    const JSONLD_TYPE_PERSON = 'Person';
 
     const TITLE_ATTACHMENT_POSITION_PREFIX = 'prefix';
     const TITLE_ATTACHMENT_POSITION_SUFFIX = 'suffix';

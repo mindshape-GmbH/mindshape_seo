@@ -46,7 +46,8 @@ class RenderPreProcessHook
             /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             /** @var \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService */
-            $headerDataService = $objectManager->get(HeaderDataService::class, $pageRenderer, $params);
+            $headerDataService = $objectManager->get(HeaderDataService::class);
+            $headerDataService->addTitle($params['headerData']);
             $headerDataService->manipulateHeaderData();
         }
     }

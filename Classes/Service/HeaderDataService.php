@@ -29,6 +29,7 @@ use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Resource\FileRepository;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -39,7 +40,7 @@ use TYPO3\CMS\Lang\LanguageService as CoreLangugeService;
  * @package mindshape_seo
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class HeaderDataService
+class HeaderDataService implements SingletonInterface
 {
     /**
      * @var \TYPO3\CMS\Core\Page\PageRenderer
@@ -74,6 +75,11 @@ class HeaderDataService
     /**
      * @var array
      */
+    protected $jsonLd = array();
+
+    /**
+     * @var array
+     */
     protected $currentPageMetaData;
 
     /**
@@ -87,20 +93,16 @@ class HeaderDataService
     protected $currentSitename;
 
     /**
-     * @param PageRenderer $pageRenderer
-     * @param array $params
      * @return \Mindshape\MindshapeSeo\Service\HeaderDataService
      */
-    public function __construct(PageRenderer $pageRenderer, array &$params)
+    public function __construct()
     {
-        $this->pageRenderer = $pageRenderer;
-        $this->params = $params;
-
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->pageService = $objectManager->get(PageService::class);
         $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
         $this->configurationRepository = $objectManager->get(ConfigurationRepository::class);
+        $this->pageRenderer = $objectManager->get(PageRenderer::class);
 
         $page = $this->pageService->getCurrentPage();
 
@@ -118,6 +120,10 @@ class HeaderDataService
             true,
             $this->pageService->getCurrentSysLanguageUid()
         );
+
+        if ($this->domainConfiguration instanceof Configuration) {
+            $this->addJsonLd();
+        }
 
         if (
             $this->domainConfiguration instanceof Configuration &&
@@ -160,7 +166,6 @@ class HeaderDataService
      */
     public function manipulateHeaderData()
     {
-        $this->addTitle();
         $this->addBaseUrl();
         $this->addMetaData();
         $this->addFacebookData();
@@ -175,7 +180,7 @@ class HeaderDataService
             }
 
             if ($this->domainConfiguration->getAddJsonld()) {
-                $this->addJsonLd();
+                $this->renderJsonLd();
             }
 
             if ($this->domainConfiguration->getAddJsonldBreadcrumb()) {
@@ -203,6 +208,46 @@ class HeaderDataService
     }
 
     /**
+     * @return void
+     */
+    public function addTitle(array &$headerData = null)
+    {
+        $headerDataWithTitle = preg_grep('#<title>(.*)</title>#i', $headerData);
+
+        $title = reset($headerDataWithTitle);
+
+        if (false === $title) {
+            $title = $this->currentPageMetaData['title'];
+        } else {
+            preg_match('#<title>(.*)<\/title>#im', $title, $titleMatches);
+
+            $title = $titleMatches[1];
+
+            $key = reset(array_keys($headerDataWithTitle));
+
+            $headerData[$key] = preg_replace(
+                '#(<title>)(.*)(<\/title>)#i',
+                '',
+                $headerData[$key]
+            );
+        }
+
+        if (
+            $this->domainConfiguration instanceof Configuration &&
+            !$this->currentPageMetaData['disableTitleAttachment'] &&
+            !empty($this->domainConfiguration->getTitleAttachment())
+        ) {
+            if ($this->domainConfiguration->getTitleAttachmentPosition() === Configuration::TITLE_ATTACHMENT_POSITION_PREFIX) {
+                $title = $this->domainConfiguration->getTitleAttachment() . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $title;
+            } else {
+                $title = $title . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $this->domainConfiguration->getTitleAttachment();
+            }
+        }
+
+        $this->pageRenderer->setTitle($title);
+    }
+
+    /**
      * @param string $metaTag
      * @return void
      */
@@ -216,6 +261,23 @@ class HeaderDataService
     }
 
     /**
+     * @return array
+     */
+    public function getJsonLd()
+    {
+        return $this->jsonLd;
+    }
+
+    /**
+     * @param array $jsonLd
+     * @return void
+     */
+    public function setJsonLd(array $jsonLd)
+    {
+        $this->jsonLd = $jsonLd;
+    }
+
+    /**
      * @return void
      */
     protected function addBaseUrl()
@@ -225,7 +287,7 @@ class HeaderDataService
 
         $rootpage = array_pop($rootline);
 
-        $rootpages = array_filter($rootline, function($page) {
+        $rootpages = array_filter($rootline, function ($page) {
             return (bool) $page['is_siteroot'];
         });
 
@@ -246,46 +308,6 @@ class HeaderDataService
         $this->pageRenderer->addHeaderData(
             '<link rel="canonical" href="' . $this->currentPageMetaData['canonicalUrl'] . '"/>'
         );
-    }
-
-    /**
-     * @return void
-     */
-    protected function addTitle()
-    {
-        $headerDataWithTitle = preg_grep('#<title>(.*)</title>#i', $this->params['headerData']);
-
-        $title = reset($headerDataWithTitle);
-
-        if (false === $title) {
-            $title = $this->currentPageMetaData['title'];
-        } else {
-            preg_match('#<title>(.*)<\/title>#im', $title, $titleMatches);
-
-            $title = $titleMatches[1];
-
-            $key = reset(array_keys($headerDataWithTitle));
-
-            $this->params['headerData'][$key] = preg_replace(
-                '#(<title>)(.*)(<\/title>)#i',
-                '',
-                $this->params['headerData'][$key]
-            );
-        }
-
-        if (
-            $this->domainConfiguration instanceof Configuration &&
-            !$this->currentPageMetaData['disableTitleAttachment'] &&
-            !empty($this->domainConfiguration->getTitleAttachment())
-        ) {
-            if ($this->domainConfiguration->getTitleAttachmentPosition() === Configuration::TITLE_ATTACHMENT_POSITION_PREFIX) {
-                $title = $this->domainConfiguration->getTitleAttachment() . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $title;
-            } else {
-                $title = $title . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $this->domainConfiguration->getTitleAttachment();
-            }
-        }
-
-        $this->pageRenderer->setTitle($title);
     }
 
     /**
@@ -468,16 +490,20 @@ class HeaderDataService
      */
     protected function addJsonLd()
     {
-        $jsonLdArray = array();
-
         if ($this->domainConfiguration->getAddJsonld()) {
-            $jsonLdArray[] = $this->renderJsonWebsiteName();
-            $jsonLdArray[] = $this->renderJsonLdInformation();
+            $this->jsonLd[] = $this->renderJsonWebsiteName();
+            $this->jsonLd[] = $this->renderJsonLdInformation();
         }
+    }
 
-        if (0 < count($jsonLdArray)) {
+    /**
+     * @return void
+     */
+    protected function renderJsonLd()
+    {
+        if (0 < count($this->jsonLd)) {
             $this->pageRenderer->addHeaderData(
-                '<script type="application/ld+json" data-ignore="1">' . json_encode($jsonLdArray) . '</script>'
+                '<script type="application/ld+json" data-ignore="1">' . json_encode($this->jsonLd) . '</script>'
             );
         }
     }
