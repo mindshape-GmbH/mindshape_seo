@@ -27,7 +27,7 @@ mindshape SEO Extension
         mindshape,seo,google,preview
 
     :Copyright:
-        2016
+        2017
 
     :Author:
         Daniel Dorndorf

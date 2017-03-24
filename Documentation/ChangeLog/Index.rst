@@ -10,6 +10,11 @@
 ChangeLog
 ---------
 
+v1.0.17
+  - Fix for metatag rendering on TYPO3 below 7.6.15
+  - Correctly determine url in settings module
+  - Refactor of headerdata service to be injectable as singleton
+
 v1.0.16
   - Add google tag manager integration
   - Add new sitename property for configuration

@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2016 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *

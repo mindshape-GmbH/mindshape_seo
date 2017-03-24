@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Property\TypeConverter;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2016 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *

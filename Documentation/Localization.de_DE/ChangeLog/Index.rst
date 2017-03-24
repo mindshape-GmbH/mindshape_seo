@@ -10,6 +10,11 @@
 Versionshistorie
 ----------------
 
+v1.0.17
+  - Beheben des Metatag renderings für TYPO3 unter 7.6.15
+  - Korrigiere das herausfinden der domain url im Einstellungs Modul
+  - Umschreiben des HeaderData Service damit die Klasse injected werden kann
+
 v1.0.16
   - Google Tag Manager Integration
   - Hinzufügen eines Seitennamens für die Domain
