@@ -95,14 +95,38 @@ $columns = array(
             'renderType' => 'selectSingle',
             'default' => '',
             'items' => array(
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.none', null),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.always', \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_ALWAYS),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.hourly', \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_HOULRY),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.daily', \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_DAILY),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.weekly', \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_WEEKLY),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.monthly', \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_MONTHLY),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.yearly', \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_YEARLY),
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.never', \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_NEVER),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.none',
+                    null,
+                ),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.always',
+                    \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_ALWAYS,
+                ),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.hourly',
+                    \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_HOULRY,
+                ),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.daily',
+                    \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_DAILY,
+                ),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.weekly',
+                    \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_WEEKLY,
+                ),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.monthly',
+                    \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_MONTHLY,
+                ),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.yearly',
+                    \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_YEARLY,
+                ),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.never',
+                    \Mindshape\MindshapeSeo\Domain\Model\SitemapNode::CHANGE_FREQUENCY_NEVER,
+                ),
             ),
         ),
     ),
@@ -112,7 +136,10 @@ $columns = array(
         'config' => array(
             'type' => 'check',
             'items' => array(
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index', ''),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index',
+                    '',
+                ),
             ),
         ),
     ),
@@ -122,7 +149,10 @@ $columns = array(
         'config' => array(
             'type' => 'check',
             'items' => array(
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_recursive', ''),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_recursive',
+                    '',
+                ),
             ),
         ),
     ),
@@ -132,7 +162,10 @@ $columns = array(
         'config' => array(
             'type' => 'check',
             'items' => array(
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow', ''),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow',
+                    '',
+                ),
             ),
         ),
     ),
@@ -142,7 +175,10 @@ $columns = array(
         'config' => array(
             'type' => 'check',
             'items' => array(
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive', ''),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive',
+                    '',
+                ),
             ),
         ),
     ),
@@ -152,7 +188,10 @@ $columns = array(
         'config' => array(
             'type' => 'check',
             'items' => array(
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap', ''),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap',
+                    '',
+                ),
             ),
         ),
     ),
@@ -162,7 +201,10 @@ $columns = array(
         'config' => array(
             'type' => 'check',
             'items' => array(
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_suppages_from_sitemap', ''),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_suppages_from_sitemap',
+                    '',
+                ),
             ),
         ),
     ),
@@ -172,7 +214,10 @@ $columns = array(
         'config' => array(
             'type' => 'check',
             'items' => array(
-                array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_sub_sitemap', ''),
+                array(
+                    'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_sub_sitemap',
+                    '',
+                ),
             ),
         ),
     ),
@@ -197,6 +242,16 @@ $columns = array(
                     'JSopenParams' => 'height=600,width=500,status=0,menubar=0,scrollbars=1',
                 ),
             ),
+        ),
+    ),
+    'mindshapeseo_alternative_title' => array(
+        'exclude' => 1,
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_alternative_title',
+        'config' => array(
+            'type' => 'input',
+            'size' => 50,
+            'eval' => 'trim',
+            'max' => 255
         ),
     ),
 );
@@ -257,6 +312,16 @@ foreach ($tables as $table) {
         --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.sitemap;mindshape_seo_sitemap_pallette',
         '1,4',
         ''
+    );
+
+    // Force inject alternative page title into title palette after nav_title
+    $GLOBALS['TCA'][$table]['palettes']['title']['showitem'] = preg_replace_callback(
+        '/(title.*?,)/i',
+        function ($matches) {
+            return $matches[1] . '--linebreak--,mindshapeseo_alternative_title,';
+        },
+        $GLOBALS['TCA'][$table]['palettes']['title']['showitem'],
+        1
     );
 }
 

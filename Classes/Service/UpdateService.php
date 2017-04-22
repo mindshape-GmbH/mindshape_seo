@@ -107,6 +107,7 @@ class UpdateService implements SingletonInterface
         $this->checkAddAnalyticsColumn();
         $this->checkTagmanagerColumn();
         $this->checkSitenameColumn();
+        $this->checkAlternativeTitleColumn();
     }
 
     /**
@@ -202,6 +203,35 @@ class UpdateService implements SingletonInterface
         $this->databaseConnection->sql_query('
             ALTER TABLE tx_mindshapeseo_domain_model_configuration
             ADD sitename varchar(255) DEFAULT \'\' NOT NULL
+        ');
+    }
+
+    /**
+     * @return void
+     */
+    protected function checkAlternativeTitleColumn()
+    {
+        /** @var \mysqli_result $checkSortingColumn */
+        $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM pages LIKE "mindshapeseo_alternative_title"');
+
+        if(0 === $check->num_rows) {
+            $this->updateChecks['updateAlternativeTitleColumn'] = 'The missing "mindshapeseo_alternative_title" column was added';
+        }
+    }
+
+    /**
+     * @return void
+     */
+    protected function updateAlternativeTitleColumn()
+    {
+        $this->databaseConnection->sql_query('
+            ALTER TABLE pages
+            ADD mindshapeseo_alternative_title varchar(255) DEFAULT \'\' NOT NULL
+        ');
+
+        $this->databaseConnection->sql_query('
+            ALTER TABLE pages_language_overlay
+            ADD mindshapeseo_alternative_title varchar(255) DEFAULT \'\' NOT NULL
         ');
     }
 }

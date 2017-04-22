@@ -267,7 +267,9 @@ class PageService implements SingletonInterface
 
         return array(
             'uid' => $pageUid,
-            'title' => $page['title'],
+            'title' => false === empty($page['mindshapeseo_alternative_title'])
+                ? $page['mindshapeseo_alternative_title']
+                : $page['title'],
             'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             'url' => $pageUrl,
             'previewUrl' => $previewUrl,

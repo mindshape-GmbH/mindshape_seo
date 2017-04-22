@@ -208,6 +208,7 @@ class HeaderDataService implements SingletonInterface
     }
 
     /**
+     * @param array $headerData
      * @return void
      */
     public function addTitle(array &$headerData = null)
