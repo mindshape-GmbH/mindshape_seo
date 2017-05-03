@@ -102,7 +102,6 @@ class HeaderDataService implements SingletonInterface
         $this->pageService = $objectManager->get(PageService::class);
         $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
         $this->configurationRepository = $objectManager->get(ConfigurationRepository::class);
-        $this->pageRenderer = $objectManager->get(PageRenderer::class);
 
         $page = $this->pageService->getCurrentPage();
 
@@ -166,6 +165,8 @@ class HeaderDataService implements SingletonInterface
      */
     public function manipulateHeaderData()
     {
+        $this->injectPageRenderer();
+
         $this->addBaseUrl();
         $this->addMetaData();
         $this->addFacebookData();
@@ -213,6 +214,8 @@ class HeaderDataService implements SingletonInterface
      */
     public function addTitle(array &$headerData = null)
     {
+        $this->injectPageRenderer();
+
         $headerDataWithTitle = preg_grep('#<title>(.*)</title>#i', $headerData);
 
         $title = reset($headerDataWithTitle);
@@ -276,6 +279,16 @@ class HeaderDataService implements SingletonInterface
     public function setJsonLd(array $jsonLd)
     {
         $this->jsonLd = $jsonLd;
+    }
+
+    /**
+     * @return void
+     */
+    protected function injectPageRenderer()
+    {
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $this->pageRenderer = $objectManager->get(PageRenderer::class);
     }
 
     /**
