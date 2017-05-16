@@ -10,6 +10,10 @@
 ChangeLog
 ---------
 
+v1.0.18
+  - Add altenative pagetitle
+  - Fix problem with instanciation order of pageRenderer
+
 v1.0.17
   - Fix for metatag rendering on TYPO3 below 7.6.15
   - Correctly determine url in settings module

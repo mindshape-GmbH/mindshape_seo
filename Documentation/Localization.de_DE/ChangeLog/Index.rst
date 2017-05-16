@@ -10,6 +10,10 @@
 Versionshistorie
 ----------------
 
+v1.0.18
+  - Neues Feld alternativer Seitentitel
+  - Behebe ein Problem in der Instanziierungsreihenfolge beim PageRenderer
+
 v1.0.17
   - Beheben des Metatag renderings für TYPO3 unter 7.6.15
   - Korrigiere das herausfinden der domain url im Einstellungs Modul
