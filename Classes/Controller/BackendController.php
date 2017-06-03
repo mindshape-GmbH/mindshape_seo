@@ -26,7 +26,12 @@ namespace Mindshape\MindshapeSeo\Controller;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter;
+use Mindshape\MindshapeSeo\Service\DomainService;
+use Mindshape\MindshapeSeo\Service\LanguageService;
+use Mindshape\MindshapeSeo\Service\SessionService;
+use Mindshape\MindshapeSeo\Utility\BackendUtility;
 use Mindshape\MindshapeSeo\Service\PageService;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
@@ -48,31 +53,26 @@ class BackendController extends ActionController
 {
     /**
      * @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository
-     * @inject
      */
     protected $configurationRepository;
 
     /**
      * @var \Mindshape\MindshapeSeo\Service\DomainService
-     * @inject
      */
     protected $domainService;
 
     /**
      * @var \Mindshape\MindshapeSeo\Service\PageService
-     * @inject
      */
     protected $pageService;
 
     /**
      * @var \Mindshape\MindshapeSeo\Service\LanguageService
-     * @inject
      */
     protected $languageService;
 
     /**
      * @var \Mindshape\MindshapeSeo\Service\SessionService
-     * @inject
      */
     protected $sessionService;
 
@@ -92,11 +92,56 @@ class BackendController extends ActionController
     protected $currentPageUid;
 
     /**
+     * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
+     * @return void
+     */
+    public function injectConfigurationRepository(ConfigurationRepository $configurationRepository)
+    {
+        $this->configurationRepository = $configurationRepository;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Service\DomainService $domainService
+     * @return void
+     */
+    public function injectDomainService(DomainService $domainService)
+    {
+        $this->domainService = $domainService;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Service\LanguageService $languageService
+     * @return void
+     */
+    public function injectLanguageService(LanguageService $languageService)
+    {
+        $this->languageService = $languageService;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Service\PageService $pageService
+     * @return void
+     */
+    public function injectPageService(PageService $pageService)
+    {
+        $this->pageService = $pageService;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Service\SessionService $sessionService
+     * @return void
+     */
+    public function injectSessionService(SessionService $sessionService)
+    {
+        $this->sessionService = $sessionService;
+    }
+
+    /**
      * @return void
      */
     protected function initializeAction()
     {
-        $this->currentPageUid = (int) GeneralUtility::_GET('id');
+        $this->currentPageUid = BackendUtility::getCurrentPageTreeSelectedPage();
 
         $this->settings = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'mindshape_seo');
     }
@@ -122,11 +167,11 @@ class BackendController extends ActionController
             $pageRenderer->loadJquery();
 
             if (GeneralUtility::getApplicationContext()->isProduction()) {
-                $pageRenderer->addCssFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.min.css');
-                $pageRenderer->addJsFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.min.js');
+                $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
+                $pageRenderer->addJsFile('/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js');
             } else {
                 $pageRenderer->addCssFile(
-                    ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.min.css',
+                    '/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css',
                     'stylesheet',
                     'all',
                     '',
@@ -136,7 +181,7 @@ class BackendController extends ActionController
                     true
                 );
                 $pageRenderer->addJsFile(
-                    ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.min.js',
+                    '/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js',
                     'text/javascript',
                     false,
                     false,
@@ -144,22 +189,15 @@ class BackendController extends ActionController
                     true
                 );
             }
-
-            $pageRenderer->setBackPath('../typo3/');
         }
 
-        if (
-            $currentAction === 'settings' ||
-            $currentAction === 'redirectManager'
-        ) {
+        if ($currentAction === 'settings') {
             $domains = $this->domainService->getAvailableDomains();
 
             if (2 <= count($domains)) {
                 $this->buildDomainMenu($domains);
             }
-        }
 
-        if ($currentAction === 'settings') {
             $this->buildButtons();
         }
 
@@ -272,32 +310,6 @@ class BackendController extends ActionController
             ->setIcon($iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL));
 
         $buttonBar->addButton($saveButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
-    }
-
-    /**
-     * @param string $argumentName
-     * @return void
-     */
-    protected function setTypeConverterConfigurationForImageUpload($argumentName)
-    {
-        $uploadConfiguration = array(
-            UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
-            UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER => '1:/mindshape_seo/',
-        );
-
-        /** @var \TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration $newExampleConfiguration */
-        $newExampleConfiguration = $this->arguments[$argumentName]->getPropertyMappingConfiguration();
-        $newExampleConfiguration
-            ->forProperty('facebookDefaultImage')
-            ->setTypeConverterOptions(
-                UploadedFileReferenceConverter::class,
-                $uploadConfiguration
-            )
-            ->forProperty('jsonldLogo')
-            ->setTypeConverterOptions(
-                UploadedFileReferenceConverter::class,
-                $uploadConfiguration
-            );
     }
 
     /**
@@ -460,10 +472,28 @@ class BackendController extends ActionController
     }
 
     /**
+     * @param string $argumentName
      * @return void
      */
-    public function redirectManagerAction()
+    protected function setTypeConverterConfigurationForImageUpload($argumentName)
     {
+        $uploadConfiguration = array(
+            UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
+            UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER => '1:/mindshape_seo/',
+        );
 
+        /** @var \TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration $newExampleConfiguration */
+        $newExampleConfiguration = $this->arguments[$argumentName]->getPropertyMappingConfiguration();
+        $newExampleConfiguration
+            ->forProperty('facebookDefaultImage')
+            ->setTypeConverterOptions(
+                UploadedFileReferenceConverter::class,
+                $uploadConfiguration
+            )
+            ->forProperty('jsonldLogo')
+            ->setTypeConverterOptions(
+                UploadedFileReferenceConverter::class,
+                $uploadConfiguration
+            );
     }
 }

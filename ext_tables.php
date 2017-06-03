@@ -30,21 +30,6 @@ if (TYPO3_MODE === 'BE') {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Mindshape.' . $_EXTKEY,
         $mainModuleKey,
-        'redirectmanager',
-        '',
-        array(
-            'Backend' => 'redirectmanager',
-        ),
-        array(
-            'access' => 'user,group',
-            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/seo-redirectmanager.svg',
-            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_backend_redirectmanager.xlf',
-        )
-    );
-
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'Mindshape.' . $_EXTKEY,
-        $mainModuleKey,
         'settings',
         '',
         array(

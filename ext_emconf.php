@@ -11,13 +11,13 @@ $EM_CONF[$_EXTKEY] = array(
     'internal' => '',
     'uploadfolder' => false,
     'clearCacheOnLoad' => true,
-    'version' => '1.0.18',
+    'version' => '1.1.0',
     'createDirs' => 'fileadmin/mindshape_seo',
     'constraints' => array(
         'depends' => array(
-            'typo3' => '7.6.0-7.6.99',
-            'php' => '5.5.0',
-            'realurl' => '1.10.0-0.0.0',
+            'typo3' => '8.7.0-8.7.99',
+            'php' => '7.0.0',
+            'realurl' => '2.2.0',
         ),
         'conflicts' => array(),
         'suggests' => array(),

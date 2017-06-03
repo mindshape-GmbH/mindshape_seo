@@ -68,15 +68,14 @@ class GooglePreviewField
         $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
         /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
         $pageRenderer = $objectManager->get(PageRenderer::class);
-        $pageRenderer->setBackPath('../typo3/');
         $pageRenderer->loadJquery();
 
         if (GeneralUtility::getApplicationContext()->isProduction()) {
-            $pageRenderer->addCssFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.min.css');
-            $pageRenderer->addJsFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.min.js');
+            $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
+            $pageRenderer->addJsFile('/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js');
         } else {
             $pageRenderer->addCssFile(
-                ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.min.css',
+                '/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css',
                 'stylesheet',
                 'all',
                 '',
@@ -86,7 +85,7 @@ class GooglePreviewField
                 true
             );
             $pageRenderer->addJsFile(
-                ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.min.js',
+                '/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js',
                 'text/javascript',
                 false,
                 false,

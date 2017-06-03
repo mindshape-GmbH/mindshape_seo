@@ -28,7 +28,7 @@ namespace Mindshape\MindshapeSeo\Controller;
 
 use Mindshape\MindshapeSeo\Generator\ImageSitemapGenerator;
 use Mindshape\MindshapeSeo\Generator\SitemapGenerator;
-use Mindshape\MindshapeSeo\Service\PageService;
+use Mindshape\MindshapeSeo\Utility\PageUtility;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -64,11 +64,7 @@ class SitemapController implements SingletonInterface
         $this->sitemapGenerator = $objectManager->get(SitemapGenerator::class);
         $this->imageSitemapGenerator = $objectManager->get(ImageSitemapGenerator::class);
 
-        /** @var \Mindshape\MindshapeSeo\Service\PageService $pageService */
-        $pageService = $objectManager->get(PageService::class);
-        $currentPage = $pageService->getCurrentPage();
-
-        $this->currentPageUid = (int) $currentPage['uid'];
+        $this->currentPageUid = PageUtility::getCurrentPageUid();
     }
 
     /**

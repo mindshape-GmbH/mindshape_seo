@@ -26,12 +26,12 @@ namespace Mindshape\MindshapeSeo\Service;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Backend\Tree\View\PageTreeView;
+use Mindshape\MindshapeSeo\Utility\BackendUtility as MindshapeBackendUtility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
@@ -88,7 +88,7 @@ class PageService implements SingletonInterface
         $this->pageRepository = $objectManager->get(PageRepository::class);
 
         if ('BE' === TYPO3_MODE) {
-            $currentPageUid = GeneralUtility::_GET('id');
+            $currentPageUid = MindshapeBackendUtility::getCurrentPageTreeSelectedPage();
             $currentSysLanguageUid = 0;
 
             if (
@@ -119,18 +119,11 @@ class PageService implements SingletonInterface
             ) {
                 $this->typoScriptFrontendController = null;
             } else {
-                if (!is_object($GLOBALS['TT'])) {
-                    /** @var \TYPO3\CMS\Core\TimeTracker\NullTimeTracker $nullTimeTracker */
-                    $nullTimeTracker = GeneralUtility::makeInstance(NullTimeTracker::class);
-                    $GLOBALS['TT'] = $nullTimeTracker;
-                    $nullTimeTracker->start();
-                }
-
                 try {
                     $this->typoScriptFrontendController = $objectManager->get(
                         TypoScriptFrontendController::class,
                         $GLOBALS['TYPO3_CONF_VARS'],
-                        GeneralUtility::_GET('id'),
+                        $currentPageUid,
                         GeneralUtility::_GET('type')
                     );
 
@@ -150,7 +143,7 @@ class PageService implements SingletonInterface
 
                     if (ExtensionManagementUtility::isLoaded('realurl')) {
                         $_SERVER['HTTP_HOST'] = BackendUtility::firstDomainRecord(
-                            BackendUtility::BEgetRootLine(GeneralUtility::_GET('id'))
+                            BackendUtility::BEgetRootLine($currentPageUid)
                         );
                     }
                 } catch (\Exception $exception) {
@@ -245,7 +238,7 @@ class PageService implements SingletonInterface
         $pageUrl = $this->getPageLink($pageUid, true, $sysLanguageUid);
         $previewUrl = $pageUrl;
 
-        if ('' !== $customUrl && '/' === substr($customUrl, -1, 1)) {
+        if ('' !== $customUrl && '/' === $customUrl[strlen($customUrl) -1]) {
             $customUrl = substr($customUrl, 0, -1);
         }
 
@@ -348,11 +341,13 @@ class PageService implements SingletonInterface
     {
         $pages = array();
 
+        $currentPageUid = MindshapeBackendUtility::getCurrentPageTreeSelectedPage();
+
         if (null === $pageUid) {
             if (0 < (int) $this->typoScriptFrontendController->id) {
                 $pageUid = (int) $this->typoScriptFrontendController->id;
-            } elseif (0 < (int) GeneralUtility::_GET('id')) {
-                $pageUid = (int) GeneralUtility::_GET('id');
+            } elseif (0 < $currentPageUid) {
+                $pageUid = $currentPageUid;
             }
         }
 
@@ -432,11 +427,10 @@ class PageService implements SingletonInterface
         /** @var \Mindshape\MindshapeSeo\Backend\Tree\View\PageTreeView $tree */
         $tree = GeneralUtility::makeInstance(PageTreeView::class);
         $tree->init();
-        $tree->table = 'pages LEFT JOIN pages_language_overlay ON pages.uid = pages_language_overlay.pid';
         $tree->clause = ' AND pages.deleted = 0 AND (pages.doktype = 1 OR pages.doktype = 4) AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
 
         if (0 < $sysLanguageUid) {
-            $tree->clause .= ' AND pages_language_overlay.sys_language_uid = ' . $sysLanguageUid;
+            $tree->sysLanguageUid = $sysLanguageUid;
         }
 
         $tree->parentField = 'pages.pid';

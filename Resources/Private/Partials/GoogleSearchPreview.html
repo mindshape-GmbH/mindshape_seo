@@ -5,7 +5,7 @@
 
   <f:section name="Main">
 
-    <div class="google-preview" data-editing="{f:if(condition: editing: then: 1, else: 0)}" data-original-title="{title}" data-original-description="{description}" data-original-focuskeyword="{focusKeyword}" data-original-noindex="{f:if(condition: noindex, then: 1, else: 0)}" data-original-nofollow="{f:if(condition: nofollow, then: 1, else: 0)}">
+    <div class="google-preview" data-editing="{f:if(condition: editing, then: '1', else: '0')}" data-original-title="{title}" data-original-description="{description}" data-original-focuskeyword="{focusKeyword}" data-original-noindex="{f:if(condition: noindex, then: 1, else: 0)}" data-original-nofollow="{f:if(condition: nofollow, then: 1, else: 0)}">
       <div class="thumbnail">
         <f:if condition="{editing}">
           <f:then>

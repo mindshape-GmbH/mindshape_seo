@@ -26,6 +26,10 @@ namespace Mindshape\MindshapeSeo\Backend\Tree\View;
  ***************************************************************/
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryHelper;
+use TYPO3\CMS\Core\Database\Query\Restriction\BackendWorkspaceRestriction;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -37,14 +41,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class PageTreeView extends \TYPO3\CMS\Backend\Tree\View\PageTreeView
 {
     /**
+     * @var int
+     */
+    public $sysLanguageUid = 0;
+
+    /**
      * @param array|int $row Item row or uid
      * @return string Image tag.
      */
     public function getIcon($row)
     {
-        if (is_int($row)) {
-            $row = BackendUtility::getRecord($this->table, $row);
-        }
+        $row = true === is_int($row)
+            ? BackendUtility::getRecord($this->table, $row)
+            : $row;
+
         $title = $this->showDefaultTitleAttribute ? htmlspecialchars('UID: ' . $row['uid']) : $this->getTitleAttrib($row);
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
         $icon = '<span title="' . $title . '">' . $iconFactory->getIconForRecord('pages', $row, Icon::SIZE_SMALL)->render() . '</span>';
@@ -53,20 +63,47 @@ class PageTreeView extends \TYPO3\CMS\Backend\Tree\View\PageTreeView
     }
 
     /**
-     * @param int $uid
-     * @return int
+     * @param int $parentId
+     * @return mixed
      */
-    public function getCount($uid)
+    public function getDataInit($parentId)
     {
         if (is_array($this->data)) {
-            $res = $this->getDataInit($uid);
-
-            return $this->getDataCount($res);
+            if (!is_array($this->dataLookup[$parentId][$this->subLevelID])) {
+                $parentId = -1;
+            } else {
+                reset($this->dataLookup[$parentId][$this->subLevelID]);
+            }
+            return $parentId;
         } else {
-            $db = $this->getDatabaseConnection();
-            $where = $this->parentField . '=' . $db->fullQuoteStr($uid, $this->table) . BackendUtility::deleteClause($this->table) . BackendUtility::versioningPlaceholderClause($this->table) . $this->clause;
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($this->table);
+            $queryBuilder->getRestrictions()
+                ->removeAll()
+                ->add(GeneralUtility::makeInstance(DeletedRestriction::class))
+                ->add(GeneralUtility::makeInstance(BackendWorkspaceRestriction::class));
+            $queryBuilder
+                ->select(...$this->fieldArray)
+                ->from($this->table)
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        $this->parentField,
+                        $queryBuilder->createNamedParameter($parentId, \PDO::PARAM_INT)
+                    ),
+                    QueryHelper::stripLogicalOperatorPrefix($this->clause)
+                );
 
-            return $db->exec_SELECTcountRows('pages.uid', $this->table, $where);
+            if (0 < $this->sysLanguageUid) {
+                // LEFT JOIN pages_language_overlay ON pages.uid = pages_language_overlay.pid
+                $queryBuilder->leftJoin('pages', 'pages_language_overlay', 'pages_language_overlay', 'pages.uid = pages_language_overlay.pid');
+                $queryBuilder->andWhere('pages_language_overlay.sys_language_uid = ' . $this->sysLanguageUid);
+            }
+
+            foreach (QueryHelper::parseOrderBy($this->orderByFields) as $orderPair) {
+                list($fieldName, $order) = $orderPair;
+                $queryBuilder->addOrderBy($fieldName, $order);
+            }
+
+            return $queryBuilder->execute();
         }
     }
 }
