@@ -55,4 +55,16 @@ class PageUtility
 
         return $pageService->getCurrentPage();
     }
+
+    /**
+     * @return array
+     */
+    public static function getPage($pageUid) {
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        /** @var \Mindshape\MindshapeSeo\Service\PageService $pageService */
+        $pageService = $objectManager->get(PageService::class);
+
+        return $pageService->getPage($pageUid);
+    }
 }
