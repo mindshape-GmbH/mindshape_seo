@@ -1,4 +1,5 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Handler;
 
 /***************************************************************
@@ -25,8 +26,9 @@ namespace Mindshape\MindshapeSeo\Handler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Http\AjaxRequestHandler;
-use TYPO3\CMS\Core\Http\ServerRequest;
+use Mindshape\MindshapeSeo\Utility\PageUtility;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -36,41 +38,56 @@ use TYPO3\CMS\Core\SingletonInterface;
 class AjaxHandler implements SingletonInterface
 {
     /**
-     * @param array $params
-     * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler $ajaxRequestHandler
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
      * @return \Psr\Http\Message\ResponseInterface
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
-    public function savePage(array $params = array(), AjaxRequestHandler $ajaxRequestHandler = null)
+    public function savePage(ServerRequestInterface $request, ResponseInterface $response)
     {
-        /** @var \TYPO3\CMS\Core\Http\ServerRequest $request */
-        $request = $params['request'];
+        $data = $request->getParsedBody();
 
-        if ($request instanceof ServerRequest) {
-            $data = $request->getParsedBody();
+        $responseArray = array(
+            'saved' => false,
+        );
 
-            if (is_array($data)) {
-                if (
-                    0 < $data['pageUid'] &&
-                    !empty($data['title'])
-                ) {
-                    $this->savePageData(
-                        (int) $data['pageUid'],
-                        (int) $data['sysLanguageUid'],
-                        array(
-                            'title' => $data['title'],
-                            'description' => $data['description'],
-                            'mindshapeseo_focus_keyword' => $data['focusKeyword'],
-                            'mindshapeseo_no_index' => (bool) $data['noindex'] ? 1 : 0,
-                            'mindshapeseo_no_follow' => (bool) $data['nofollow'] ? 1 : 0,
-                        )
-                    );
-                } else {
-                    $ajaxRequestHandler->setError('Invalid Data');
+        if (is_array($data)) {
+            if (
+                0 < $data['pageUid'] &&
+                !empty($data['title'])
+            ) {
+                $page = PageUtility::getPage((int) $data['pageUid']);
+
+                $titleField = 'title';
+
+                if (false === empty($page['mindshapeseo_alternative_title'])) {
+                    $titleField = 'mindshapeseo_alternative_title';
                 }
+
+                $this->savePageData(
+                    (int) $data['pageUid'],
+                    (int) $data['sysLanguageUid'],
+                    array(
+                        $titleField => $data['title'],
+                        'description' => $data['description'],
+                        'mindshapeseo_focus_keyword' => $data['focusKeyword'],
+                        'mindshapeseo_no_index' => (bool) $data['noindex'] ? 1 : 0,
+                        'mindshapeseo_no_follow' => (bool) $data['nofollow'] ? 1 : 0,
+                    )
+                );
+
+                $responseArray['saved'] = true;
+
+                $response->getBody()->write(json_encode($responseArray));
+            } else {
+                $response
+                    ->withStatus(500, ' Invalid Data');
+                $response->getBody()->write(json_encode($responseArray));
             }
         }
 
-        return $ajaxRequestHandler->render();
+        return $response;
     }
 
     /**

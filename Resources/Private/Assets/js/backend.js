@@ -440,15 +440,19 @@
         type: "POST",
         url: TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::savePage'],
         data: $previewContainer.find('form').serialize(),
-        success: function () {
-          $previewContainer.attr('data-original-title', $previewContainer.find('.edit-panel .title').val().trim());
-          $previewContainer.attr('data-original-description', $previewContainer.find('.edit-panel .description').val().trim());
-          $previewContainer.attr('data-original-focuskeyword', $previewContainer.find('.edit-panel .focus-keyword input').val().trim());
+        success: function (response) {
+          if (response.saved !== true) {
+            $previewContainer.find('.icon-provider-fontawesome-error').show();
+          } else {
+            $previewContainer.attr('data-original-title', $previewContainer.find('.edit-panel .title').val().trim());
+            $previewContainer.attr('data-original-description', $previewContainer.find('.edit-panel .description').val().trim());
+            $previewContainer.attr('data-original-focuskeyword', $previewContainer.find('.edit-panel .focus-keyword input').val().trim());
 
-          that.checkAndChangeIndexPreview($previewContainer, true);
+            that.checkAndChangeIndexPreview($previewContainer, true);
 
-          that.checkPreviewEditPanelSaveState($previewContainer);
-          that.closePreviewEditPanel($previewContainer);
+            that.checkPreviewEditPanelSaveState($previewContainer);
+            that.closePreviewEditPanel($previewContainer);
+          }
         },
         error: function () {
           $previewContainer.find('.icon-provider-fontawesome-error').show();

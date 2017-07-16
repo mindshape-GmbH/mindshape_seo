@@ -68,16 +68,6 @@ if (TYPO3_MODE === 'BE') {
     }
 
     $GLOBALS['TBE_MODULES'] = $tempModules;
-
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-        'MindshapeSeoAjaxHandler::savePage',
-        Mindshape\MindshapeSeo\Handler\AjaxHandler::class . '->savePage'
-    );
-
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
-        'MindshapeSeoAjaxHandler::savePageRobots',
-        Mindshape\MindshapeSeo\Handler\AjaxHandler::class . '->savePageRobots'
-    );
 }
 
 /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
