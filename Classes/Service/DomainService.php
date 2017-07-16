@@ -119,18 +119,32 @@ class DomainService implements SingletonInterface
         $domainSelectOptions = array();
 
         foreach ($domains as $domain) {
-            if (
-                $currentDomain !== $domain &&
-                $this->configurationRepository->findByDomain($domain) instanceof Configuration
-            ) {
+            if ($this->configurationRepository->findByDomain($domain) instanceof Configuration) {
                 continue;
             }
 
-            $domainSelectOptions[$domain] = Configuration::DEFAULT_DOMAIN === $domain
+            $domainSelectOptions[$domain] = $domain;
+        }
+
+        if (false === array_key_exists($currentDomain, $domainSelectOptions)) {
+            $domainSelectOptions[$currentDomain] = $currentDomain;
+        }
+
+        $this->renameDomains($domainSelectOptions);
+
+        return $domainSelectOptions;
+    }
+
+    /**
+     * @param array $domains
+     * @return void
+     */
+    protected function renameDomains(array &$domains)
+    {
+        foreach ($domains as &$domain) {
+            $domain = Configuration::DEFAULT_DOMAIN === $domain
                 ? LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.domain.default', 'mindshape_seo')
                 : $domain;
         }
-
-        return $domainSelectOptions;
     }
 }

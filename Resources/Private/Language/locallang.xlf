@@ -127,6 +127,12 @@
             <trans-unit id="tx_mindshapeseo_label.delete">
                 <source>Delete</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.delete_configuration">
+                <source>You really want to delete this configuration?</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.abort">
+                <source>Cancel</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.add_options">
                 <source>Add Metadata automaticly</source>
             </trans-unit>

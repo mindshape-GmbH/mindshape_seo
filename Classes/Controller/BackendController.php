@@ -26,9 +26,15 @@ namespace Mindshape\MindshapeSeo\Controller;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter;
+use Mindshape\MindshapeSeo\Service\DomainService;
+use Mindshape\MindshapeSeo\Service\LanguageService;
+use Mindshape\MindshapeSeo\Service\SessionService;
+use Mindshape\MindshapeSeo\Utility\BackendUtility;
 use Mindshape\MindshapeSeo\Service\PageService;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Utility\BackendUtility as CoreBackendUtility;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
@@ -47,33 +53,38 @@ class BackendController extends ActionController
 {
     /**
      * @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository
-     * @inject
      */
     protected $configurationRepository;
 
     /**
      * @var \Mindshape\MindshapeSeo\Service\DomainService
-     * @inject
      */
     protected $domainService;
 
     /**
      * @var \Mindshape\MindshapeSeo\Service\PageService
-     * @inject
      */
     protected $pageService;
 
     /**
      * @var \Mindshape\MindshapeSeo\Service\LanguageService
-     * @inject
      */
     protected $languageService;
 
     /**
      * @var \Mindshape\MindshapeSeo\Service\SessionService
-     * @inject
      */
     protected $sessionService;
+
+    /**
+     * @var \TYPO3\CMS\Core\Imaging\IconFactory
+     */
+    protected $iconFactory;
+
+    /**
+     * @var \TYPO3\CMS\Backend\Template\Components\ButtonBar
+     */
+    protected $buttonBar;
 
     /**
      * @var \TYPO3\CMS\Backend\View\BackendTemplateView
@@ -89,6 +100,60 @@ class BackendController extends ActionController
      * @var int
      */
     protected $currentPageUid;
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
+     * @return void
+     */
+    public function injectConfigurationRepository(ConfigurationRepository $configurationRepository)
+    {
+        $this->configurationRepository = $configurationRepository;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Service\DomainService $domainService
+     * @return void
+     */
+    public function injectDomainService(DomainService $domainService)
+    {
+        $this->domainService = $domainService;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Service\LanguageService $languageService
+     * @return void
+     */
+    public function injectLanguageService(LanguageService $languageService)
+    {
+        $this->languageService = $languageService;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Service\PageService $pageService
+     * @return void
+     */
+    public function injectPageService(PageService $pageService)
+    {
+        $this->pageService = $pageService;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Service\SessionService $sessionService
+     * @return void
+     */
+    public function injectSessionService(SessionService $sessionService)
+    {
+        $this->sessionService = $sessionService;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory
+     * @®return void
+     */
+    public function injectIconFactory(IconFactory $iconFactory)
+    {
+        $this->iconFactory = $iconFactory;
+    }
 
     /**
      * @return void
@@ -115,10 +180,12 @@ class BackendController extends ActionController
             $currentAction === 'settings' ||
             $currentAction === 'preview'
         ) {
+            $this->buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
             $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
 
             $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
-            $pageRenderer->loadJquery();
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Severity');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
 
             if (GeneralUtility::getApplicationContext()->isProduction()) {
                 $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
@@ -204,6 +271,18 @@ class BackendController extends ActionController
             );
         }
 
+        /** @var \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration */
+        foreach ($this->configurationRepository->findAll() as $configuration) {
+            if (false === in_array($configuration->getDomain(), $domains, true)) {
+                $menu->addMenuItem(
+                    $menu->makeMenuItem()
+                        ->setTitle($configuration->getDomain())
+                        ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => $configuration->getDomain()), 'Backend'))
+                        ->setActive($currentDomain === $configuration->getDomain())
+                );
+            }
+        }
+
         $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
     }
 
@@ -254,22 +333,13 @@ class BackendController extends ActionController
      */
     protected function buildButtons()
     {
-        /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
-        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
-
-        $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
-
-        /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
-        $uriBuilder = $this->objectManager->get(UriBuilder::class);
-        $uriBuilder->setRequest($this->request);
-
-        $saveButton = $buttonBar->makeLinkButton()
+        $saveButton = $this->buttonBar->makeLinkButton()
             ->setClasses('mindshape-seo-savebutton')
             ->setHref('#')
             ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.save', 'mindshape_seo'))
-            ->setIcon($iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL));
+            ->setIcon($this->iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL));
 
-        $buttonBar->addButton($saveButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+        $this->buttonBar->addButton($saveButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
     }
 
     /**
@@ -301,6 +371,23 @@ class BackendController extends ActionController
             $configuration->setTitleAttachmentPosition(Configuration::TITLE_ATTACHMENT_POSITION_SUFFIX);
         } elseif (0 === count($domains)) {
             $configuration->setDomain(Configuration::DEFAULT_DOMAIN);
+        }
+
+        if (false === $configuration->_isNew()) {
+            $deleteButton = $this->buttonBar->makeLinkButton()
+                ->setClasses('mindshape-seo-deletebutton')
+                ->setHref('#')
+                ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.delete', 'mindshape_seo'))
+                ->setIcon($this->iconFactory->getIcon('actions-edit-delete', Icon::SIZE_SMALL))
+                ->setDataAttributes([
+                    'uid' => $configuration->getUid(),
+                    'message' => LocalizationUtility::translate('tx_mindshapeseo_label.delete_configuration', 'mindshape_seo'),
+                    'label-abort' => LocalizationUtility::translate('tx_mindshapeseo_label.abort', 'mindshape_seo'),
+                    'label-delete' => LocalizationUtility::translate('tx_mindshapeseo_label.delete', 'mindshape_seo'),
+                    'redirect-url' => CoreBackendUtility::getModuleUrl('mindshapeseo_MindshapeSeoSettings'),
+                ]);
+
+            $this->buttonBar->addButton($deleteButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
         }
 
         $this->view->assignMultiple(array(

@@ -25,9 +25,13 @@ namespace Mindshape\MindshapeSeo\Handler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use TYPO3\CMS\Core\Http\AjaxRequestHandler;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 /**
  * @package mindshape_seo
@@ -69,6 +73,45 @@ class AjaxHandler implements SingletonInterface
                 }
             }
         }
+
+        return $ajaxRequestHandler->render();
+    }
+
+    /**
+     * @param array $params
+     * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler $ajaxRequestHandler
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function deleteConfiguration(array $params = array(), AjaxRequestHandler $ajaxRequestHandler)
+    {
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        /** @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository */
+        $configurationRepository = $objectManager->get(ConfigurationRepository::class);
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager */
+        $persistenceManager = $objectManager->get(PersistenceManager::class);
+
+        /** @var \TYPO3\CMS\Core\Http\ServerRequest $request */
+        $request = $params['request'];
+
+        if ($request instanceof ServerRequest) {
+            $data = $request->getParsedBody();
+
+            if (
+                is_array($data) &&
+                0 < (int) $data['configurationUid']
+            ) {
+                $configuration = $configurationRepository->findByUid($data['configurationUid']);
+
+                $configurationRepository->remove($configuration);
+
+                $persistenceManager->persistAll();
+
+                return $ajaxRequestHandler->render();
+            }
+        }
+
+        $ajaxRequestHandler->setError('Invalid Data');
 
         return $ajaxRequestHandler->render();
     }

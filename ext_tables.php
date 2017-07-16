@@ -75,6 +75,11 @@ if (TYPO3_MODE === 'BE') {
     );
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
+        'MindshapeSeoAjaxHandler::deleteConfiguration',
+        Mindshape\MindshapeSeo\Handler\AjaxHandler::class . '->deleteConfiguration'
+    );
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::registerAjaxHandler(
         'MindshapeSeoAjaxHandler::savePageRobots',
         Mindshape\MindshapeSeo\Handler\AjaxHandler::class . '->savePageRobots'
     );
