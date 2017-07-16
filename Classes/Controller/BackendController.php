@@ -32,7 +32,6 @@ use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -122,11 +121,11 @@ class BackendController extends ActionController
             $pageRenderer->loadJquery();
 
             if (GeneralUtility::getApplicationContext()->isProduction()) {
-                $pageRenderer->addCssFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.min.css');
-                $pageRenderer->addJsFile(ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.min.js');
+                $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
+                $pageRenderer->addJsFile('/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js');
             } else {
                 $pageRenderer->addCssFile(
-                    ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/css/backend.min.css',
+                    '/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css',
                     'stylesheet',
                     'all',
                     '',
@@ -136,7 +135,7 @@ class BackendController extends ActionController
                     true
                 );
                 $pageRenderer->addJsFile(
-                    ExtensionManagementUtility::extRelPath('mindshape_seo') . 'Resources/Public/js/backend.min.js',
+                    '/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js',
                     'text/javascript',
                     false,
                     false,
@@ -195,7 +194,11 @@ class BackendController extends ActionController
         foreach ($domains as $domain) {
             $menu->addMenuItem(
                 $menu->makeMenuItem()
-                    ->setTitle($domain)
+                    ->setTitle(
+                        Configuration::DEFAULT_DOMAIN === $domain
+                            ? LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.domain.default', 'mindshape_seo')
+                            : $domain
+                    )
                     ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => $domain), 'Backend'))
                     ->setActive($currentDomain === $domain)
             );
@@ -285,8 +288,8 @@ class BackendController extends ActionController
 
         $domains = $this->domainService->getAvailableDomains();
 
-        if (0 < count($domains) && $domain === Configuration::DEFAULT_DOMAIN) {
-            $domain = $domains[0];
+        if (0 === count($domains)) {
+            $domain = '*';
         }
 
         $configuration = $this->configurationRepository->findByDomain($domain);
@@ -301,7 +304,8 @@ class BackendController extends ActionController
         }
 
         $this->view->assignMultiple(array(
-            'domains' => $this->domainService->getAvailableDomains(),
+            'domains' => $domains,
+            'domainsSelectOptions' => $this->domainService->getConfigurationDomainSelectOptions($domain),
             'currentDomain' => $domain === Configuration::DEFAULT_DOMAIN ?
                 GeneralUtility::getIndpEnv('HTTP_HOST') :
                 $domain,
@@ -335,6 +339,7 @@ class BackendController extends ActionController
     public function saveConfigurationAction(Configuration $configuration)
     {
         $this->configurationRepository->save($configuration);
+        $this->sessionService->setKey('domain', $configuration->getDomain());
 
         $this->redirect(
             'settings',

@@ -42,7 +42,6 @@ class StandaloneTemplateRendererService implements SingletonInterface
 
     /**
      * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
-     * @inject
      */
     protected $configurationManager;
 
@@ -50,6 +49,15 @@ class StandaloneTemplateRendererService implements SingletonInterface
      * @var array
      */
     protected $settings;
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
+     * @return void
+     */
+    public function injectConfigurationManager(ConfigurationManager $configurationManager)
+    {
+        $this->configurationManager = $configurationManager;
+    }
 
     /**
      * @return \Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService

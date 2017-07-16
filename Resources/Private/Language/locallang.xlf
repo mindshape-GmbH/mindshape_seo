@@ -169,6 +169,9 @@
             <trans-unit id="tx_mindshapeseo_label.domainsettings">
                 <source>Domainsettings</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.change_domain">
+                <source>The settings domain</source>
+            </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_label.preview">
                 <source>Preview</source>
@@ -270,6 +273,9 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.domain">
                 <source>Domain</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.domain.default">
+                <source>Default</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.sitename">
                 <source>Sitename</source>
