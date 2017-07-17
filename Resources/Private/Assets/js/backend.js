@@ -4,7 +4,7 @@ require([
   'TYPO3/CMS/Backend/Modal'
 ], function ($, Severity, Modal) {
 
-  (function ($, TYPO3, Severity, Modal, MSH) {
+  (function ($, Settings, Severity, Modal, MSH) {
     MSH = MSH || {};
     MSH = {
       numberOfSeoChecks: 6,
@@ -85,7 +85,7 @@ require([
 
                 $.ajax({
                   type: "POST",
-                  url: TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::deleteConfiguration'],
+                  url: Settings.ajaxUrls['MindshapeSeoAjaxHandler::deleteConfiguration'],
                   data: { configurationUid: $deleteButton.attr('data-uid') },
                   success: function (response) {
                     if (response.deleted === true) {
@@ -482,7 +482,7 @@ require([
 
         $.ajax({
           type: "POST",
-          url: TYPO3.settings.ajaxUrls['MindshapeSeoAjaxHandler::savePage'],
+          url: Settings.ajaxUrls['MindshapeSeoAjaxHandler::savePage'],
           data: $previewContainer.find('form').serialize(),
           success: function (response) {
             if (response.saved !== true) {
@@ -719,6 +719,6 @@ require([
         });
       }
     });
-  })($, TYPO3, Severity, Modal, MSH = null);
+  })($, TYPO3.settings, Severity, Modal, MSH = null);
 
 });

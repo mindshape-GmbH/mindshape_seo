@@ -31,6 +31,17 @@ $lightgrey: #666;
         padding: 0;
         top: 0;
         width: 17px;
+
+        &.treeline-icon-joinbottom,
+        &.treeline-icon-join {
+          &:nth-child(2) {
+            right: 4px;
+          }
+        }
+
+        &.treeline-icon-line:nth-child(3){
+          right: -4px;
+        }
       }
 
       .icon {
