@@ -10,6 +10,11 @@
 Versionshistorie
 ----------------
 
+v1.1.0
+  - TYPO3 8.7.x Kompatibilität
+  - Hinzufügen eines Domainfeldes zum wechseln der Einstellungen im Einstellungsmodul
+  - Diverse Optimierungen
+
 v1.0.18
   - Neues Feld alternativer Seitentitel
   - Behebe ein Problem in der Instanziierungsreihenfolge beim PageRenderer
