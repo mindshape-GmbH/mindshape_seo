@@ -43,7 +43,7 @@ class LanguageService implements SingletonInterface
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
         $result = $databaseConnection->exec_SELECTgetRows(
-            'l.*',
+            'DISTINCT l.*',
             'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.sys_language_uid',
             'o.pid = ' . $pageUid
         );
