@@ -26,7 +26,15 @@ sitemap {
         admPanel = 0
         debug = 0
         no_cache = 1
-        additionalHeaders = Content-type:application/xml
+        index_enable = 0
+        removeDefaultJS = 1
+        removeDefaultCss = 1
+        removePageCss = 1
+        additionalHeaders = Content-Type:application/xml;charset=utf-8
+        additionalHeaders.10 {
+            header = Content-Type:application/xml;charset=utf-8
+            replace = 1
+        }
     }
 
     10 = USER_INT
@@ -42,7 +50,15 @@ sitemapIndex {
         admPanel = 0
         debug = 0
         no_cache = 1
-        additionalHeaders = Content-type:application/xml
+        index_enable = 0
+        removeDefaultJS = 1
+        removeDefaultCss = 1
+        removePageCss = 1
+        additionalHeaders = Content-Type:application/xml;charset=utf-8
+        additionalHeaders.10 {
+            header = Content-Type:application/xml;charset=utf-8
+            replace = 1
+        }
     }
 
     10 = USER_INT
@@ -58,7 +74,15 @@ imageSitemap {
         admPanel = 0
         debug = 0
         no_cache = 1
-        additionalHeaders = Content-type:application/xml
+        index_enable = 0
+        removeDefaultJS = 1
+        removeDefaultCss = 1
+        removePageCss = 1
+        additionalHeaders = Content-Type:application/xml;charset=utf-8
+        additionalHeaders.10 {
+            header = Content-Type:application/xml;charset=utf-8
+            replace = 1
+        }
     }
 
     10 = USER_INT
