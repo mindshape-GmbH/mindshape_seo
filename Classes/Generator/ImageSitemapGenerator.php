@@ -29,6 +29,7 @@ use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Model\SitemapImageNode;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
@@ -52,6 +53,11 @@ class ImageSitemapGenerator extends SitemapGenerator
     protected $configuration;
 
     /**
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * @return \Mindshape\MindshapeSeo\Generator\ImageSitemapGenerator
      */
     public function __construct()
@@ -61,8 +67,11 @@ class ImageSitemapGenerator extends SitemapGenerator
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository */
         $configurationRepository = $objectManager->get(ConfigurationRepository::class);
-        $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
-        $this->configuration = $configurationRepository->findByDomain($currentDomain, true);
+        /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
+        $configurationManager = $objectManager->get(ConfigurationManager::class);
+
+        $this->configuration = $configurationRepository->findByDomain(GeneralUtility::getIndpEnv('HTTP_HOST'), true);
+        $this->settings = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'mindshape_seo');
     }
 
     /**
@@ -111,7 +120,9 @@ class ImageSitemapGenerator extends SitemapGenerator
             if (
                 0 !== (int) $parentsProperties['fe_group'] ||
                 0 !== (int) $page['fe_group'] ||
-                true === (bool) $page['hidden']
+                true === (bool) $page['hidden'] ||
+                true === (bool) $page['mindshapeseo_no_index'] ||
+                true === (bool) $page['mindshapeseo_exclude_from_sitemap']
             ) {
                 continue;
             }
@@ -147,18 +158,36 @@ class ImageSitemapGenerator extends SitemapGenerator
 
         $imageUrls = array();
 
-        $rows = $databaseConnection->exec_SELECTgetRows(
-            'sys_file_reference.*',
-            'sys_file_reference, tt_content, pages',
-            'sys_file_reference.tablenames = "tt_content" ' .
-            'AND (sys_file_reference.fieldname = "image" ' .
-            'OR sys_file_reference.fieldname = "assets" ' .
-            'OR sys_file_reference.fieldname = "media")' .
-            'AND sys_file_reference.uid_foreign = tt_content.uid ' .
-            'AND tt_content.pid = pages.uid AND pages.uid = ' . $pageUid
-        );
+        $tables = $this->settings['sitemap']['imageSitemap']['tables'];
 
-        foreach ($rows as $row) {
+        $fileReferences = array();
+
+        foreach ($tables as $table => $fields) {
+            $fieldsArray = GeneralUtility::trimExplode(',', $fields);
+            $fieldsQuery = '';
+
+            if (1 < count($fieldsArray)) {
+
+                foreach ($fieldsArray as $key => $field) {
+                    $fieldsQuery .= PHP_EOL . 'OR sys_file_reference.fieldname = "' . $field . '"';
+                }
+            }
+
+            $fileReferences += $databaseConnection->exec_SELECTgetRows(
+                'sys_file_reference.*',
+                'sys_file_reference, ' . $table,
+                'sys_file_reference.tablenames = "' . $table . '"' . PHP_EOL .
+                'AND (sys_file_reference.fieldname = "' . $fields[0] . '"' . (
+                    false === empty($fieldsQuery)
+                        ? $fieldsQuery
+                        : ''
+                ) . ')' . PHP_EOL .
+                'AND sys_file_reference.uid_foreign = ' . $table . '.uid' . PHP_EOL .
+                'AND ' . $table . '.pid = ' . $pageUid
+            );
+        }
+
+        foreach ($fileReferences as $row) {
             $imageUrl = urldecode($this->resourceFactory->getFileReferenceObject($row['uid'], $row)->getPublicUrl());
 
             if (!$this->configuration instanceof Configuration) {

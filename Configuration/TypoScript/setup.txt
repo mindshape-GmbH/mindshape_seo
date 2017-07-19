@@ -7,7 +7,15 @@ plugin.tx_mindshape_seo {
 
     settings {
         pageTree.usePagination = {$plugin.tx_mindshape_seo.settings.pageTree.usePagination}
-        sitemap.newsDetailPage = {$plugin.tx_mindshape_seo.settings.sitemap.newsDetailPage}
+
+        sitemap {
+            newsDetailPage = {$plugin.tx_mindshape_seo.settings.sitemap.newsDetailPage}
+
+            imageSitemap.tables {
+                pages = media
+                tt_content = image,media,assets
+            }
+        }
     }
 }
 
