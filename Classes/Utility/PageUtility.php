@@ -38,7 +38,8 @@ class PageUtility
     /**
      * @return int
      */
-    public static function getCurrentPageUid() {
+    public static function getCurrentPageUid()
+    {
         return 0 < (int) $GLOBALS['TSFE']->id
             ? (int) $GLOBALS['TSFE']->id
             : (int) GeneralUtility::_GET('id');
@@ -47,7 +48,8 @@ class PageUtility
     /**
      * @return array
      */
-    public static function getCurrentPage() {
+    public static function getCurrentPage()
+    {
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var \Mindshape\MindshapeSeo\Service\PageService $pageService */
@@ -59,7 +61,8 @@ class PageUtility
     /**
      * @return array
      */
-    public static function getPage($pageUid) {
+    public static function getPage($pageUid)
+    {
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var \Mindshape\MindshapeSeo\Service\PageService $pageService */

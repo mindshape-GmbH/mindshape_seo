@@ -1,22 +1,22 @@
 plugin.tx_mindshape_seo {
-    view {
-        templateRootPaths.0 = {$plugin.tx_mindshape_seo.view.templateRootPath}
-        partialRootPaths.0 = {$plugin.tx_mindshape_seo.view.partialRootPath}
-        layoutRootPaths.0 = {$plugin.tx_mindshape_seo.view.layoutRootPath}
+  view {
+    templateRootPaths.0 = {$plugin.tx_mindshape_seo.view.templateRootPath}
+    partialRootPaths.0 = {$plugin.tx_mindshape_seo.view.partialRootPath}
+    layoutRootPaths.0 = {$plugin.tx_mindshape_seo.view.layoutRootPath}
+  }
+
+  settings {
+    pageTree.usePagination = {$plugin.tx_mindshape_seo.settings.pageTree.usePagination}
+
+    sitemap {
+      newsDetailPage = {$plugin.tx_mindshape_seo.settings.sitemap.newsDetailPage}
+
+      imageSitemap.tables {
+        pages = media
+        tt_content = image,media,assets
+      }
     }
-
-    settings {
-        pageTree.usePagination = {$plugin.tx_mindshape_seo.settings.pageTree.usePagination}
-
-        sitemap {
-            newsDetailPage = {$plugin.tx_mindshape_seo.settings.sitemap.newsDetailPage}
-
-            imageSitemap.tables {
-                pages = media
-                tt_content = image,media,assets
-            }
-        }
-    }
+  }
 }
 
 module.tx_mindshape_seo < plugin.tx_mindshape_seo
@@ -27,72 +27,72 @@ module.tx_mindshape_seo < plugin.tx_mindshape_seo
 # and robot.txt add "Sitemap: /index.php?type=10000"
 sitemap = PAGE
 sitemap {
-    typeNum = {$sitemap.typeNum}
-    config {
-        disableAllHeaderCode = 1
-        xhtml_cleaning = 0
-        admPanel = 0
-        debug = 0
-        no_cache = 1
-        index_enable = 0
-        removeDefaultJS = 1
-        removeDefaultCss = 1
-        removePageCss = 1
-        additionalHeaders = Content-Type:application/xml;charset=utf-8
-        additionalHeaders.10 {
-            header = Content-Type:application/xml;charset=utf-8
-            replace = 1
-        }
+  typeNum = {$sitemap.typeNum}
+  config {
+    disableAllHeaderCode = 1
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+    no_cache = 1
+    index_enable = 0
+    removeDefaultJS = 1
+    removeDefaultCss = 1
+    removePageCss = 1
+    additionalHeaders = Content-Type:application/xml;charset=utf-8
+    additionalHeaders.10 {
+      header = Content-Type:application/xml;charset=utf-8
+      replace = 1
     }
+  }
 
-    10 = USER_INT
-    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapController->sitemapAction
+  10 = USER_INT
+  10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapController->sitemapAction
 }
 
 sitemapIndex = PAGE
 sitemapIndex {
-    typeNum = {$sitemapIndex.typeNum}
-    config {
-        disableAllHeaderCode = 1
-        xhtml_cleaning = 0
-        admPanel = 0
-        debug = 0
-        no_cache = 1
-        index_enable = 0
-        removeDefaultJS = 1
-        removeDefaultCss = 1
-        removePageCss = 1
-        additionalHeaders = Content-Type:application/xml;charset=utf-8
-        additionalHeaders.10 {
-            header = Content-Type:application/xml;charset=utf-8
-            replace = 1
-        }
+  typeNum = {$sitemapIndex.typeNum}
+  config {
+    disableAllHeaderCode = 1
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+    no_cache = 1
+    index_enable = 0
+    removeDefaultJS = 1
+    removeDefaultCss = 1
+    removePageCss = 1
+    additionalHeaders = Content-Type:application/xml;charset=utf-8
+    additionalHeaders.10 {
+      header = Content-Type:application/xml;charset=utf-8
+      replace = 1
     }
+  }
 
-    10 = USER_INT
-    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapController->sitemapIndexAction
+  10 = USER_INT
+  10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapController->sitemapIndexAction
 }
 
 imageSitemap = PAGE
 imageSitemap {
-    typeNum = {$imageSitemap.typeNum}
-    config {
-        disableAllHeaderCode = 1
-        xhtml_cleaning = 0
-        admPanel = 0
-        debug = 0
-        no_cache = 1
-        index_enable = 0
-        removeDefaultJS = 1
-        removeDefaultCss = 1
-        removePageCss = 1
-        additionalHeaders = Content-Type:application/xml;charset=utf-8
-        additionalHeaders.10 {
-            header = Content-Type:application/xml;charset=utf-8
-            replace = 1
-        }
+  typeNum = {$imageSitemap.typeNum}
+  config {
+    disableAllHeaderCode = 1
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+    no_cache = 1
+    index_enable = 0
+    removeDefaultJS = 1
+    removeDefaultCss = 1
+    removePageCss = 1
+    additionalHeaders = Content-Type:application/xml;charset=utf-8
+    additionalHeaders.10 {
+      header = Content-Type:application/xml;charset=utf-8
+      replace = 1
     }
+  }
 
-    10 = USER_INT
-    10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapController->imageSitemapAction
+  10 = USER_INT
+  10.userFunc = Mindshape\MindshapeSeo\Controller\SitemapController->imageSitemapAction
 }

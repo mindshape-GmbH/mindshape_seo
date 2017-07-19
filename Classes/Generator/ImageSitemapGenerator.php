@@ -101,8 +101,7 @@ class ImageSitemapGenerator extends SitemapGenerator
      */
     protected function getUrlsStartTag()
     {
-        return '<?xml version="1.0" encoding="UTF-8"?>' .
-               '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" image:schemaLocation="http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">';
+        return '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" image:schemaLocation="http://www.google.com/schemas/sitemap-image/1.1/sitemap-image.xsd">';
     }
 
     /**
@@ -177,11 +176,8 @@ class ImageSitemapGenerator extends SitemapGenerator
                 'sys_file_reference.*',
                 'sys_file_reference, ' . $table,
                 'sys_file_reference.tablenames = "' . $table . '"' . PHP_EOL .
-                'AND (sys_file_reference.fieldname = "' . $fields[0] . '"' . (
-                    false === empty($fieldsQuery)
-                        ? $fieldsQuery
-                        : ''
-                ) . ')' . PHP_EOL .
+                'AND (sys_file_reference.fieldname = "' . $fields[0] . '"' .
+                (empty($fieldsQuery) ? '' : $fieldsQuery) . ')' . PHP_EOL .
                 'AND sys_file_reference.uid_foreign = ' . $table . '.uid' . PHP_EOL .
                 'AND ' . $table . '.pid = ' . $pageUid
             );

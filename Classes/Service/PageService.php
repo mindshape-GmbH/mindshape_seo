@@ -238,7 +238,7 @@ class PageService implements SingletonInterface
         $pageUrl = $this->getPageLink($pageUid, true, $sysLanguageUid);
         $previewUrl = $pageUrl;
 
-        if ('' !== $customUrl && '/' === $customUrl[strlen($customUrl) -1]) {
+        if ('' !== $customUrl && '/' === $customUrl[strlen($customUrl) - 1]) {
             $customUrl = substr($customUrl, 0, -1);
         }
 

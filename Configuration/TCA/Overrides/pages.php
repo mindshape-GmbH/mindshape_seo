@@ -251,7 +251,7 @@ $columns = array(
             'type' => 'input',
             'size' => 50,
             'eval' => 'trim',
-            'max' => 255
+            'max' => 255,
         ),
     ),
 );

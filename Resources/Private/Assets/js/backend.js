@@ -86,7 +86,7 @@ require([
                 $.ajax({
                   type: "POST",
                   url: Settings.ajaxUrls['MindshapeSeoAjaxHandler::deleteConfiguration'],
-                  data: { configurationUid: $deleteButton.attr('data-uid') },
+                  data: {configurationUid: $deleteButton.attr('data-uid')},
                   success: function (response) {
                     if (response.deleted === true) {
                       self.location.href = $deleteButton.attr('data-redirect-url');

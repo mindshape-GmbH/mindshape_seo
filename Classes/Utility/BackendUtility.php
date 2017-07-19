@@ -36,7 +36,8 @@ class BackendUtility
     /**
      * @return int
      */
-    public static function getCurrentPageTreeSelectedPage() {
+    public static function getCurrentPageTreeSelectedPage()
+    {
         $selectedPage = (int) GeneralUtility::_GET('id');
 
         if (0 === $selectedPage) {

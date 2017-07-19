@@ -118,7 +118,7 @@ class UpdateService implements SingletonInterface
         /** @var \mysqli_result $checkSortingColumn */
         $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM tx_mindshapeseo_domain_model_configuration LIKE "jsonld_same_as_xing"');
 
-        if(0 === $check->num_rows) {
+        if (0 === $check->num_rows) {
             $this->updateChecks['updateXingColumn'] = 'The missing "JSON-LD SameAs Xing" column was added';
         }
     }
@@ -142,7 +142,7 @@ class UpdateService implements SingletonInterface
         /** @var \mysqli_result $checkSortingColumn */
         $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM tx_mindshapeseo_domain_model_configuration LIKE "add_analytics"');
 
-        if(0 === $check->num_rows) {
+        if (0 === $check->num_rows) {
             $this->updateChecks['updateAddAnalyticsColumn'] = 'The missing "add analytics" column was added';
         }
     }
@@ -166,7 +166,7 @@ class UpdateService implements SingletonInterface
         /** @var \mysqli_result $checkSortingColumn */
         $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM tx_mindshapeseo_domain_model_configuration LIKE "google_tagmanager"');
 
-        if(0 === $check->num_rows) {
+        if (0 === $check->num_rows) {
             $this->updateChecks['updateTagmanagerColumn'] = 'The missing "google_tagmanager" column was added';
         }
     }
@@ -190,7 +190,7 @@ class UpdateService implements SingletonInterface
         /** @var \mysqli_result $checkSortingColumn */
         $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM tx_mindshapeseo_domain_model_configuration LIKE "sitename"');
 
-        if(0 === $check->num_rows) {
+        if (0 === $check->num_rows) {
             $this->updateChecks['updateSitenameColumn'] = 'The missing "sitename" column was added';
         }
     }
@@ -214,7 +214,7 @@ class UpdateService implements SingletonInterface
         /** @var \mysqli_result $checkSortingColumn */
         $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM pages LIKE "mindshapeseo_alternative_title"');
 
-        if(0 === $check->num_rows) {
+        if (0 === $check->num_rows) {
             $this->updateChecks['updateAlternativeTitleColumn'] = 'The missing "mindshapeseo_alternative_title" column was added';
         }
     }

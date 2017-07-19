@@ -202,8 +202,14 @@ return array(
                 'maxitems' => 1,
                 'minitems' => 1,
                 'items' => array(
-                    array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.type.organization', \Mindshape\MindshapeSeo\Domain\Model\Configuration::JSONLD_TYPE_ORGANIZATION),
-                    array('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.type.person', \Mindshape\MindshapeSeo\Domain\Model\Configuration::JSONLD_TYPE_PERSON),
+                    array(
+                        'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.type.organization',
+                        \Mindshape\MindshapeSeo\Domain\Model\Configuration::JSONLD_TYPE_ORGANIZATION,
+                    ),
+                    array(
+                        'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.type.person',
+                        \Mindshape\MindshapeSeo\Domain\Model\Configuration::JSONLD_TYPE_PERSON,
+                    ),
                 ),
             ),
         ),

@@ -74,36 +74,37 @@ class PageTreeView extends \TYPO3\CMS\Backend\Tree\View\PageTreeView
             } else {
                 reset($this->dataLookup[$parentId][$this->subLevelID]);
             }
+
             return $parentId;
-        } else {
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($this->table);
-            $queryBuilder->getRestrictions()
-                ->removeAll()
-                ->add(GeneralUtility::makeInstance(DeletedRestriction::class))
-                ->add(GeneralUtility::makeInstance(BackendWorkspaceRestriction::class));
-            $queryBuilder
-                ->select(...$this->fieldArray)
-                ->from($this->table)
-                ->where(
-                    $queryBuilder->expr()->eq(
-                        $this->parentField,
-                        $queryBuilder->createNamedParameter($parentId, \PDO::PARAM_INT)
-                    ),
-                    QueryHelper::stripLogicalOperatorPrefix($this->clause)
-                );
-
-            if (0 < $this->sysLanguageUid) {
-                // LEFT JOIN pages_language_overlay ON pages.uid = pages_language_overlay.pid
-                $queryBuilder->leftJoin('pages', 'pages_language_overlay', 'pages_language_overlay', 'pages.uid = pages_language_overlay.pid');
-                $queryBuilder->andWhere('pages_language_overlay.sys_language_uid = ' . $this->sysLanguageUid);
-            }
-
-            foreach (QueryHelper::parseOrderBy($this->orderByFields) as $orderPair) {
-                list($fieldName, $order) = $orderPair;
-                $queryBuilder->addOrderBy($fieldName, $order);
-            }
-
-            return $queryBuilder->execute();
         }
+
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($this->table);
+        $queryBuilder->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class))
+            ->add(GeneralUtility::makeInstance(BackendWorkspaceRestriction::class));
+        $queryBuilder
+            ->select(...$this->fieldArray)
+            ->from($this->table)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    $this->parentField,
+                    $queryBuilder->createNamedParameter($parentId, \PDO::PARAM_INT)
+                ),
+                QueryHelper::stripLogicalOperatorPrefix($this->clause)
+            );
+
+        if (0 < $this->sysLanguageUid) {
+            // LEFT JOIN pages_language_overlay ON pages.uid = pages_language_overlay.pid
+            $queryBuilder->leftJoin('pages', 'pages_language_overlay', 'pages_language_overlay', 'pages.uid = pages_language_overlay.pid');
+            $queryBuilder->andWhere('pages_language_overlay.sys_language_uid = ' . $this->sysLanguageUid);
+        }
+
+        foreach (QueryHelper::parseOrderBy($this->orderByFields) as $orderPair) {
+            list($fieldName, $order) = $orderPair;
+            $queryBuilder->addOrderBy($fieldName, $order);
+        }
+
+        return $queryBuilder->execute();
     }
 }
