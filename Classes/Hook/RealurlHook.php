@@ -34,7 +34,7 @@ use DmitryDulepov\Realurl\Configuration\AutomaticConfigurator;
 class RealurlHook
 {
     const CONFIGURATION_SITEMAPS = array(
-        'filename' => array(
+        'fileName' => array(
             'index' => array(
                 'sitemap.xml' => array(
                     'keyValues' => array(
