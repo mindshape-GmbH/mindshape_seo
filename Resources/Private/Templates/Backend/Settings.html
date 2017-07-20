@@ -33,7 +33,15 @@
           <div class="col-sm-6">
             <div class="form-group">
               <label>{f:translate(key: 'tx_mindshapeseo_label.change_domain')}</label>
-              <f:form.select property="domain" options="{domainsSelectOptions}" class="form-control"/>
+              <f:if condition="1 < {domainsSelectOptions -> f:count()}">
+                <f:then>
+                  <f:form.select property="domain" options="{domainsSelectOptions}" class="form-control"/>
+                </f:then>
+                <f:else>
+                  <f:form.textfield name="dummyDomain" value="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.domain.default')}" disabled="disabled" class="form-control"/>
+                  <f:form.hidden property="domain"/>
+                </f:else>
+              </f:if>
             </div>
           </div>
         </div>
