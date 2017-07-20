@@ -38,15 +38,6 @@ class BackendUtility
      */
     public static function getCurrentPageTreeSelectedPage()
     {
-        $selectedPage = (int) GeneralUtility::_GET('id');
-
-        if (0 === $selectedPage) {
-            $selectedPage = (int) ltrim(
-                $GLOBALS['BE_USER']->uc['BackendComponents']['States']['Pagetree']['stateHash']['lastSelectedNode'],
-                'p'
-            );
-        }
-
-        return $selectedPage;
+        return (int) GeneralUtility::_GET('id');
     }
 }
