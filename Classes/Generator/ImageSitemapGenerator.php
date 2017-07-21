@@ -28,6 +28,7 @@ namespace Mindshape\MindshapeSeo\Generator;
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Model\SitemapImageNode;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -43,7 +44,6 @@ class ImageSitemapGenerator extends SitemapGenerator
 
     /**
      * @var \TYPO3\CMS\Core\Resource\ResourceFactory
-     * @inject
      */
     protected $resourceFactory;
 
@@ -56,6 +56,15 @@ class ImageSitemapGenerator extends SitemapGenerator
      * @var array
      */
     protected $settings;
+
+    /**
+     * @param \TYPO3\CMS\Core\Resource\ResourceFactory $resourceFactory
+     * @return void
+     */
+    public function injectResourceFactory(ResourceFactory $resourceFactory)
+    {
+        $this->resourceFactory = $resourceFactory;
+    }
 
     /**
      * @return \Mindshape\MindshapeSeo\Generator\ImageSitemapGenerator
@@ -159,7 +168,7 @@ class ImageSitemapGenerator extends SitemapGenerator
 
         $tables = $this->settings['sitemap']['imageSitemap']['tables'];
 
-        $fileReferences = array();
+        $fileReferenceArrays = array();
 
         foreach ($tables as $table => $fields) {
             $fieldsArray = GeneralUtility::trimExplode(',', $fields);
@@ -172,33 +181,38 @@ class ImageSitemapGenerator extends SitemapGenerator
                 }
             }
 
-            $fileReferences += $databaseConnection->exec_SELECTgetRows(
+            $result = $databaseConnection->exec_SELECTgetRows(
                 'sys_file_reference.*',
                 'sys_file_reference, ' . $table,
                 'sys_file_reference.tablenames = "' . $table . '"' . PHP_EOL .
-                'AND (sys_file_reference.fieldname = "' . $fields[0] . '"' .
-                (empty($fieldsQuery) ? '' : $fieldsQuery) . ')' . PHP_EOL .
+                'AND (sys_file_reference.fieldname = "' . $fieldsArray[0] . '"' .
+                (false === empty($fieldsQuery) ? $fieldsQuery : '') . ')' . PHP_EOL .
                 'AND sys_file_reference.uid_foreign = ' . $table . '.uid' . PHP_EOL .
+                'AND sys_file_reference.deleted = 0 AND sys_file_reference.hidden = 0' . PHP_EOL .
                 'AND ' . $table . '.pid = ' . $pageUid
             );
+
+            $fileReferenceArrays[] = $result;
         }
 
-        foreach ($fileReferences as $row) {
-            $imageUrl = urldecode($this->resourceFactory->getFileReferenceObject($row['uid'], $row)->getPublicUrl());
+        foreach ($fileReferenceArrays as $fileReferences) {
+            foreach ($fileReferences as $row) {
+                $imageUrl = urldecode($this->resourceFactory->getFileReferenceObject($row['uid'], $row)->getPublicUrl());
 
-            if (!$this->configuration instanceof Configuration) {
-                $imageUrls[] = $imageUrl;
-            } elseif (
-                0 === $this->configuration->getImageSitemapMinHeight() &&
-                0 === $this->configuration->getImageSitemapMinWidth()
-            ) {
-                $imageSize = getimagesize($imageUrl);
-
-                if (
-                    $imageSize[1] >= $this->configuration->getImageSitemapMinHeight() &&
-                    $imageSize[0] >= $this->configuration->getImageSitemapMinWidth()
-                ) {
+                if (!$this->configuration instanceof Configuration) {
                     $imageUrls[] = $imageUrl;
+                } elseif (
+                    0 === $this->configuration->getImageSitemapMinHeight() &&
+                    0 === $this->configuration->getImageSitemapMinWidth()
+                ) {
+                    $imageSize = getimagesize($imageUrl);
+
+                    if (
+                        $imageSize[1] >= $this->configuration->getImageSitemapMinHeight() &&
+                        $imageSize[0] >= $this->configuration->getImageSitemapMinWidth()
+                    ) {
+                        $imageUrls[] = $imageUrl;
+                    }
                 }
             }
         }
