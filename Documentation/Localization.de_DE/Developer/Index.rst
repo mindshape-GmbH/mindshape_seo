@@ -13,6 +13,13 @@ Entwickler Anleitung
 
 Zielgruppe: **Entwickler**
 
+.. _image-sitemap-configuration:
+
+Konfiguration für die Bilder-Sitemap
+------------------------------------
+
+Es ist möglich eigene Bilder hinzuzufügen wenn man "sys_file_references" verwendet, mit der TypoScript Einstellung "imageSitemap.tables". Man fügt einfach den Tabellennamen mit den Kommaseparierten Feldern der Dateireferenzen hinzu.
+
 .. _developer-hooks:
 
 Verfügbare Hooks

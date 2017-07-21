@@ -15,6 +15,13 @@ Das folgende Beispiel beinhaltet alle Einstellungsmöglichkeiten der Extension:
     plugin.tx_mindshape_seo {
       settings {
         pageTree.usePagination = 0
+
+        sitemap {
+          imageSitemap.tables {
+            pages = media
+            tt_content = image,media,assets
+          }
+        }
       }
     }
 

@@ -27,4 +27,18 @@ plugin.tx_mindshape_seo.settings:
    Default
          0
 
+.. container:: table-row
+
+   Constant
+         sitemap.newsDetailPage
+
+   Data Type
+         integer
+
+   Description
+         Detailpage to get news (tx_news) links into the sitemap
+
+   Default
+         0
+
 .. ###### END~OF~TABLE ######
