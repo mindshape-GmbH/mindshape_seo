@@ -26,4 +26,18 @@ Alle Konstanten zugehörig zu plugin.tx_mindshape_seo.settings:
    Default
          0
 
+.. container:: table-row
+
+   Constant
+         sitemap.newsDetailPage
+
+   Data Type
+         integer
+
+   Description
+         Detailseite zum aufnehmen von News (tx_news) Links in die Sitemap
+
+   Default
+         0
+
 .. ###### END~OF~TABLE ######

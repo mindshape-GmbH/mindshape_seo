@@ -13,6 +13,13 @@ Developer Manual
 
 Target group: **Developers**
 
+.. _image-sitemap-configuration:
+
+Image-Sitemap table configuration
+---------------------------------
+
+It is possible to easily add own images when using "sys_file_references" using the typoscript settings "imageSitemap.tables". Just add the tablename and commaseperated fields used for the file references.
+
 .. _developer-hooks:
 
 Available Hooks
