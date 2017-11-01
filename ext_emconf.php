@@ -1,6 +1,6 @@
 <?php
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title' => 'mindshape SEO',
     'description' => 'Extension to manage the SEO of your site',
     'category' => 'be',
@@ -11,15 +11,15 @@ $EM_CONF[$_EXTKEY] = array(
     'internal' => '',
     'uploadfolder' => false,
     'clearCacheOnLoad' => true,
-    'version' => '1.0.18',
+    'version' => '1.0.20',
     'createDirs' => 'fileadmin/mindshape_seo',
-    'constraints' => array(
-        'depends' => array(
+    'constraints' => [
+        'depends' => [
             'typo3' => '7.6.0-7.6.99',
             'php' => '5.5.0',
-            'realurl' => '1.10.0-0.0.0',
-        ),
-        'conflicts' => array(),
-        'suggests' => array(),
-    ),
-);
+            'realurl' => '2.2.0',
+        ],
+        'conflicts' => [],
+        'suggests' => [],
+    ],
+];
