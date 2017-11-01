@@ -10,6 +10,9 @@
 Versionshistorie
 ----------------
 
+v1.1.2
+  - Behebe Upload Probleme bei Dateikonflikten
+
 v1.1.1
   - Hinzufügen einer dynamischen Tabellenkonfiguration für die Bilder-Sitemap
   - Behebe die automatische RealUrl Konfiguration
@@ -18,6 +21,9 @@ v1.1.0
   - TYPO3 8.7.x Kompatibilität
   - Hinzufügen eines Domainfeldes zum wechseln der Einstellungen im Einstellungsmodul
   - Diverse Optimierungen
+
+v1.0.20
+  - Behebe Upload Probleme bei Dateikonflikten
 
 v1.0.19
   - Hinzufügen eines Domainfeldes zum wechseln der Einstellungen im Einstellungsmodul

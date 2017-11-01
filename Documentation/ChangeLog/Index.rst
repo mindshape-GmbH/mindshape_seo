@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v1.1.2
+  - Fix bug on image uploading conflicts
+
 v1.1.1
   - Add dynamic table configuration for image sitemap
   - Fix automatic realurl configuration
@@ -18,6 +21,9 @@ v1.1.0
   - TYPO3 8.7.x compatibility
   - Add domain settings switch
   - Various optimizations
+
+v1.0.20
+  - Fix bug on image uploading conflicts
 
 v1.0.19
   - Add domain settings switch
