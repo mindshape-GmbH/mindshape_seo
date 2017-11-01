@@ -25,6 +25,7 @@ namespace Mindshape\MindshapeSeo\Property\TypeConverter;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Resource\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileReference as FalFileReference;
@@ -69,12 +70,12 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
     /**
      * @var string
      */
-    protected $defaultConflictMode = 'changeName';
+    protected $defaultConflictMode = DuplicationBehavior::RENAME;
 
     /**
      * @var array<string>
      */
-    protected $sourceTypes = array('array');
+    protected $sourceTypes = ['array'];
 
     /**
      * @var string
