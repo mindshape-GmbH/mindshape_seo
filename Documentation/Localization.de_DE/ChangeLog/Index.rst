@@ -10,6 +10,10 @@
 Versionshistorie
 ----------------
 
+v1.1.3
+  - Neues Analytics Snippet
+  - Verbesserte PageRenderer Einbindung
+
 v1.1.2
   - Behebe Upload Probleme bei Dateikonflikten
 

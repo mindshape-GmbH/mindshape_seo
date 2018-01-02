@@ -10,6 +10,10 @@
 ChangeLog
 ---------
 
+v1.1.3
+  - Add new analytics snippet
+  - Implement better page renderer injection
+
 v1.1.2
   - Fix bug on image uploading conflicts
 
