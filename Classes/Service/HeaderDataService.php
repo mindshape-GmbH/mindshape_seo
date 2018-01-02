@@ -27,7 +27,7 @@ namespace Mindshape\MindshapeSeo\Service;
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
-use TYPO3\CMS\Core\Page\PageRenderer;
+use Mindshape\MindshapeSeo\Utility\PageUtility;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -286,9 +286,7 @@ class HeaderDataService implements SingletonInterface
      */
     protected function injectPageRenderer()
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->pageRenderer = $objectManager->get(PageRenderer::class);
+        $this->pageRenderer = PageUtility::getPageRenderer();
     }
 
     /**
