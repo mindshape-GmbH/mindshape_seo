@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v1.1.4
+  - Fix organization letter case in backend JavaScript
+
 v1.1.3
   - Add new analytics snippet
   - Implement better page renderer injection

@@ -10,6 +10,9 @@
 Versionshistorie
 ----------------
 
+v1.1.4
+  - Korrigiere Groß- und Kleinschreibung von "Organization" im Backend JavaScript
+
 v1.1.3
   - Neues Analytics Snippet
   - Verbesserte PageRenderer Einbindung
