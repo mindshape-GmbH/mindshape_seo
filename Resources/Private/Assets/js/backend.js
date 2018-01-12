@@ -684,12 +684,12 @@ require([
       var $jsonldLogo = $('fieldset.logo');
 
       if ('undefined' !== typeof $jsonldTypeSelect) {
-        if ($jsonldTypeSelect.val() === 'organization') {
+        if ($jsonldTypeSelect.val() === 'Organization') {
           $jsonldLogo.show();
         }
 
         $jsonldTypeSelect.on('change', function () {
-          if ($jsonldTypeSelect.val() === 'organization') {
+          if ($jsonldTypeSelect.val() === 'Organization') {
             $jsonldLogo.slideDown();
           } else {
             $jsonldLogo.slideUp();
