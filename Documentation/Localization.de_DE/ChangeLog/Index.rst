@@ -10,6 +10,9 @@
 Versionshistorie
 ----------------
 
+v1.1.5
+  - Verwende ebenfalls den alternativen Titel für den Opengraph Titel
+
 v1.1.4
   - Korrigiere Groß- und Kleinschreibung von "Organization" im Backend JavaScript
 

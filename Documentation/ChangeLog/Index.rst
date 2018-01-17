@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v1.1.5
+  - Also use alternative page title for opengraph title
+
 v1.1.4
   - Fix organization letter case in backend JavaScript
 
