@@ -258,11 +258,13 @@ class PageService implements SingletonInterface
             $previewUrl = '/' === $pageUrlRelative ? $customUrl : $customUrl . '/' . $pageUrlRelative;
         }
 
+        $title = false === empty($page['mindshapeseo_alternative_title'])
+            ? $page['mindshapeseo_alternative_title']
+            : $page['title'];
+
         return array(
             'uid' => $pageUid,
-            'title' => false === empty($page['mindshapeseo_alternative_title'])
-                ? $page['mindshapeseo_alternative_title']
-                : $page['title'],
+            'title' => $title,
             'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             'url' => $pageUrl,
             'previewUrl' => $previewUrl,
@@ -292,7 +294,7 @@ class PageService implements SingletonInterface
                 ),
             ),
             'facebook' => array(
-                'title' => empty($page['mindshapeseo_ogtitle']) ? $page['title'] : $page['mindshapeseo_ogtitle'],
+                'title' => empty($page['mindshapeseo_ogtitle']) ? $title : $page['mindshapeseo_ogtitle'],
                 'url' => empty($page['mindshapeseo_ogurl']) ? $pageUrl : $page['mindshapeseo_ogurl'],
                 'description' => empty($page['mindshapeseo_ogdescription']) ? $page['description'] : $page['mindshapeseo_ogdescription'],
             ),
