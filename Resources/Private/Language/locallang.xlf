@@ -28,6 +28,13 @@
                 <source>Priority</source>
             </trans-unit>
 
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_description_long">
+                <source>Long description</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_description_short">
+                <source>Short description</source>
+            </trans-unit>
+
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency">
                 <source>Change frequency</source>
             </trans-unit>
