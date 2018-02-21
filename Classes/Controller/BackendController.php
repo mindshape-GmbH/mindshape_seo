@@ -26,24 +26,33 @@ namespace Mindshape\MindshapeSeo\Controller;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use Mindshape\MindshapeSeo\Domain\Model\Redirect;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
+use Mindshape\MindshapeSeo\Domain\Repository\RedirectRepository;
 use Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter;
 use Mindshape\MindshapeSeo\Service\DomainService;
 use Mindshape\MindshapeSeo\Service\LanguageService;
 use Mindshape\MindshapeSeo\Service\SessionService;
 use Mindshape\MindshapeSeo\Utility\BackendUtility;
 use Mindshape\MindshapeSeo\Service\PageService;
+use ReflectionClass;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility as CoreBackendUtility;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Core\Utility\StringUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 
 /**
  * @package mindshape_seo
@@ -55,6 +64,11 @@ class BackendController extends ActionController
      * @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository
      */
     protected $configurationRepository;
+
+    /**
+     * @var \Mindshape\MindshapeSeo\Domain\Repository\RedirectRepository
+     */
+    protected $redirectRepository;
 
     /**
      * @var \Mindshape\MindshapeSeo\Service\DomainService
@@ -101,6 +115,7 @@ class BackendController extends ActionController
      */
     protected $currentPageUid;
 
+
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
      * @return void
@@ -108,6 +123,15 @@ class BackendController extends ActionController
     public function injectConfigurationRepository(ConfigurationRepository $configurationRepository)
     {
         $this->configurationRepository = $configurationRepository;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Repository\RedirectRepository $redirectRepository
+     * @return void
+     */
+    public function injectRedirectRepository(RedirectRepository $redirectRepository)
+    {
+        $this->redirectRepository = $redirectRepository;
     }
 
     /**
@@ -177,8 +201,10 @@ class BackendController extends ActionController
         $currentAction = $this->request->getControllerActionName();
 
         if (
-            $currentAction === 'settings' ||
-            $currentAction === 'preview'
+            $currentAction === 'settings'     ||
+            $currentAction === 'preview'      ||
+            $currentAction === 'redirectList' ||
+            $currentAction === 'redirectNew'
         ) {
             $this->buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
             $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
@@ -221,6 +247,15 @@ class BackendController extends ActionController
 
             $this->buildButtons();
         }
+
+        if ($currentAction === 'redirectList') {
+            $this->buildNewRedirectButton();
+        }
+
+        if ($currentAction === 'redirectNew') {
+            $this->buildSaveRedirectButton();
+        }
+
 
         if ($currentAction === 'preview') {
             $languages = $this->languageService->getPageLanguagesAvailable($this->currentPageUid);
@@ -336,6 +371,33 @@ class BackendController extends ActionController
             ->setHref('#')
             ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.save', 'mindshape_seo'))
             ->setIcon($this->iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL));
+
+        $this->buttonBar->addButton($saveButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+    }
+
+    /**
+     * @return void
+     */
+    protected function buildNewRedirectButton()
+    {
+        $newButton = $this->buttonBar->makeLinkButton()
+            ->setClasses('mindshape-seo-newRedirectButton')
+            ->setHref('#')
+            ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.new', 'mindshape_seo'))
+            ->setIcon($this->iconFactory->getIcon('actions-document-new', Icon::SIZE_SMALL));
+
+
+        $this->buttonBar->addButton($newButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
+    }
+
+    protected function buildSaveRedirectButton()
+    {
+        $saveButton = $this->buttonBar->makeLinkButton()
+            ->setClasses('mindshape-seo-saveRedirectButton')
+            ->setHref('#')
+            ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.save', 'mindshape_seo'))
+            ->setIcon($this->iconFactory->getIcon('actions-document-save', Icon::SIZE_SMALL));
+
 
         $this->buttonBar->addButton($saveButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
     }
@@ -519,6 +581,218 @@ class BackendController extends ActionController
     }
 
     /**
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function redirectListAction()
+    {
+        $sessionService = GeneralUtility::makeInstance(SessionService::class);
+
+        if($this->request->hasArgument('redirectFilter')) {
+            $filter = $this->request->getArgument('redirectFilter');
+
+            $sourcePath = $filter['sourcePath'];
+
+            $target = $filter['target'];
+
+            $sourceDomain = $filter['sourceDomain'];
+
+            $httpStatuscode = $filter['httpStatuscode'];
+
+            $filter_array = [
+                'sourcePath' => $sourcePath,
+                'target' => $target,
+                'sourceDomain' => $sourceDomain,
+                'httpStatuscode' => $httpStatuscode
+            ];
+
+            $sessionService->setKey('redirect_filter', $filter_array);
+
+            $this->view->assign('redirects', $this->redirectRepository
+                ->findByFilter($filter_array['sourcePath'], $filter_array['target'], $filter_array['sourceDomain'], $filter_array['httpStatuscode']));
+            $this->view->assign('sourceDomains', $this->redirectRepository->getSysDomains());
+            $this->view->assign('httpStatusCodes', $this->getHttpStatus());
+
+        }
+        else {
+            if ($sessionService->hasKey('redirect_filter')) {
+                $filter_array = $sessionService->getKey('redirect_filter');
+
+                if (!is_null($filter_array)) {
+                    $redirects = $this->redirectRepository
+                        ->findByFilter($filter_array['sourcePath'], $filter_array['target'], $filter_array['sourceDomain'], $filter_array['httpStatuscode']);
+                } else {
+                    $redirects = $this->redirectRepository->findAll();
+                }
+
+            } else {
+                $redirects = $this->redirectRepository->findAll();
+            }
+
+            $this->view->assign('redirects', $redirects);
+            $this->view->assign('sourceDomains', $this->redirectRepository->getSysDomains());
+            $this->view->assign('httpStatusCodes', $this->getHttpStatus());
+        }
+
+        $this->view->assign('httpStatuscode', $filter_array['httpStatuscode']);
+        $this->view->assign('filterPath', $filter_array['sourcePath']);
+        $this->view->assign('filterTarget', $filter_array['target']);
+        $this->view->assign('filterDomain', $filter_array['sourceDomain']);
+    }
+
+    /**
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     */
+    public function resetFilterAction() {
+        $sessionService = GeneralUtility::makeInstance(SessionService::class);
+        $sessionService->setKey('redirect_filter', null);
+
+        $redirects = $this->redirectRepository->findAll();
+        $this->addFlashMessage('Filter has been reset');
+        $this->view->assign('redirects', $redirects);
+        $this->redirect('redirectList', 'Backend', 'mindshape_seo');
+    }
+
+    /**
+     * @param Redirect|null $newRedirect
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function redirectNewAction(\Mindshape\MindshapeSeo\Domain\Model\Redirect $newRedirect = null)
+    {
+        $this->view->assign('httpStatusCodes', $this->getHttpStatus());
+        $this->view->assign('sourceDomains', $this->redirectRepository->getSysDomains());
+        $this->view->assign('newRedirect', $newRedirect);
+    }
+
+    /**
+     * @param Redirect $newRedirect
+     * @return void
+     * @throws \InvalidArgumentException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     */
+
+    public function redirectCreateAction(\Mindshape\MindshapeSeo\Domain\Model\Redirect $newRedirect)
+    {
+        $enteredSourcePath = $newRedirect->getSourcePath();
+        $enteredSourceDomain = $newRedirect->getSourceDomain();
+        $enteredTarget = $newRedirect->getTarget();
+        $enteredHttpStatuscode = $newRedirect->getHttpStatuscode();
+
+        if (empty($enteredSourceDomain) ||
+            empty($enteredSourcePath) ||
+            empty($enteredTarget) ||
+            empty($enteredHttpStatuscode) ) {
+
+
+            $this->addFlashMessage('Bitte alle Felder ausfüllen', 'Error', FlashMessage::ERROR);
+            $this->redirect('redirectNew', 'Backend', 'mindshape_seo');
+        } else {
+
+            $foundMatches = $this->redirectRepository->findBySourceDomainAndSourcePath($enteredSourceDomain, $enteredSourcePath);
+
+            if ($foundMatches->count() > 0 ) {
+
+                $this->addFlashMessage('Eintrag existiert bereits', 'Error', FlashMessage::ERROR);
+                $this->redirect('redirectList', 'Backend', 'mindshape_seo');
+
+
+            } else {
+                $this->redirectRepository->add($newRedirect);
+                $this->addFlashMessage('Redirect was saved successfully');
+                $this->redirect('redirectList', 'Backend', 'mindshape_seo');
+            }
+        }
+
+
+    }
+
+
+    /**
+     * Get all HTTP status constants of HttpUtility
+     *
+     * @return array
+     * @throws \ReflectionException
+     * @throws \ReflectionException
+     */
+    public function getHttpStatus()
+    {
+        $httpStatus = [];
+        $httpReflection = new ReflectionClass(HttpUtility::class);
+        $constants = $httpReflection->getConstants();
+        foreach ($constants as $constant => $value) {
+            if (StringUtility::beginsWith($constant, 'HTTP_STATUS_')) {
+                $status = str_replace('HTTP_STATUS_', '', $constant);
+                $httpStatus[$status] = $value;
+            }
+        }
+
+        return $httpStatus;
+    }
+
+    /**
+     * @param Redirect $redirect The offer to be shown
+     * @return string The rendered HTML string
+     * @throws \ReflectionException
+     */
+    public function redirectShowAction(Redirect $redirect)
+    {
+        $httpStatusCodes = $this->getHttpStatus();
+        $this->view->assign('redirect', $redirect);
+        $this->view->assign('sourceDomains', $this->redirectRepository->getSysDomains());
+        $this->view->assign('httpStatusCodes', $httpStatusCodes);
+
+    }
+
+    /**
+     * @param Redirect $redirect
+     * @throws \InvalidArgumentException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     */
+    public function redirectUpdateAction(Redirect $redirect)
+    {
+
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager */
+        $persistenceManager = $objectManager->get(PersistenceManager::class);
+
+        $foundMatches = $this->redirectRepository
+            ->findBySourceDomainAndSourcePath($redirect->getSourceDomain(), $redirect->getSourcePath(), $redirect->getUid());
+
+        if ($foundMatches->count() > 0 ) {
+
+            $this->addFlashMessage('Eintrag existiert bereits', 'Error', FlashMessage::ERROR);
+            $this->redirect('redirectShow', 'Backend', 'mindshape_seo');
+
+
+        } else {
+            $this->redirectRepository->update($redirect);
+
+            $redirect->setEdited(time());
+
+            $this->redirectRepository->update($redirect);
+
+            $persistenceManager->persistAll();
+
+            $this->addFlashMessage('Configuration was updated successfully');
+            $this->redirect('redirectList');
+        }
+
+
+
+
+
+    }
+
+    /**
      * @param string $argumentName
      * @return void
      */
@@ -543,4 +817,5 @@ class BackendController extends ActionController
                 $uploadConfiguration
             );
     }
+
 }

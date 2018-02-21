@@ -71,6 +71,14 @@ $columns = array(
             'eval' => 'trim',
         ),
     ),
+    'mindshapeseo_ogclearcache' => array(
+        'exclude' => 0,
+        'config' => array(
+            'type' => 'user',
+            'size' => 30,
+            'userFunc' => \Mindshape\MindshapeSeo\Userfuncs\Tca\FbScrapeButton::class . '->render',
+        ),
+    ),
     'mindshapeseo_disable_title_attachment' => array(
         'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_disable_title_attachment',
         'exclude' => 1,
@@ -295,7 +303,8 @@ foreach ($tables as $table) {
         mindshapeseo_ogtitle,
         mindshapeseo_ogurl,
         mindshapeseo_ogimage,
-        mindshapeseo_ogdescription',
+        mindshapeseo_ogdescription,
+        mindshapeseo_ogclearcache',
         '1,4',
         ''
     );

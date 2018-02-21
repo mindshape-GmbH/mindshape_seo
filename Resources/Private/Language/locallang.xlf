@@ -128,11 +128,17 @@
             <trans-unit id="tx_mindshapeseo_label.google_search_preview">
                 <source>Google search preview</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.new">
+                <source>New</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.save">
                 <source>Save</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.delete">
                 <source>Delete</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.hide">
+                <source>Hide</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.delete_configuration">
                 <source>You really want to delete this configuration?</source>
@@ -449,6 +455,71 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr">
                 <source>Tumblr</source>
+            </trans-unit>
+
+
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect">
+                <source>Redirect</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.source_domain">
+                <source>Source Domain</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.allDomains">
+                <source>All Domains</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.source_path">
+                <source>Source Path</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.source_path_target">
+                <source>Source Path or Target</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.target">
+                <source>Target</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.http_statuscode">
+                <source>HTTP Statuscode</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.hits">
+                <source>Hits</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.last_hit_on">
+                <source>Last hit on</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.regexp">
+                <source>Regular Expression</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.actions">
+                <source>Actions</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.delete">
+                <source>Delete</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.edit">
+                <source>Edit</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.hide">
+                <source>Hide</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.unhide">
+                <source>Unhide</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.reset_filter">
+                <source>Reset filter</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.apply_filter">
+                <source>Apply Filter</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.confirm_delete">
+                <source>Do you really want to delete the record?</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.data_label_abort">
+                <source>Cancel</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.data_label_delete">
+                <source>Delete</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_redirect.please_select">
+                <source>--</source>
             </trans-unit>
         </body>
     </file>

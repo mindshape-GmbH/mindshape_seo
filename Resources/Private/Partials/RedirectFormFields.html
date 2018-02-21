@@ -1,0 +1,80 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:flashMessages />
+    <fieldset class="form-section">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="sourceDomain">
+                        {f:translate(key: 'tx_mindshapeseo_domain_model_redirect.source_domain')}
+                    </label><br/>
+                    <f:form.select name="sourceDomain"
+                                   id="sourceDomain"
+                                   value=""
+                                   property="sourceDomain"
+                                   options="{sourceDomains}"
+                                   prependOptionLabel="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.allDomains')}"
+                                   prependOptionValue="0"/>
+                    <br/>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="sourcePath">
+                        {f:translate(key: 'tx_mindshapeseo_domain_model_redirect.source_path')}
+                    </label><br/>
+                    <f:form.textfield property="sourcePath" type="text" id="sourcePath" class="form-control"/>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="target">
+                        {f:translate(key: 'tx_mindshapeseo_domain_model_redirect.target')}
+                    </label><br/>
+                    <f:form.textfield property="target" type="text" id="target" class="form-control"/>
+                    <br/>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="httpStatusCode">
+                        {f:translate(key: 'tx_mindshapeseo_domain_model_redirect.http_statuscode')}
+                    </label><br/>
+                    <f:form.select name="httpStatusCode"
+                                   id="httpStatusCode"
+                                   value="301"
+                                   property="httpStatuscode"
+                                   options="{httpStatusCodes}"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="regexp">
+                        {f:translate(key: 'tx_mindshapeseo_domain_model_redirect.regexp')}
+                    </label><br/>
+                    <f:form.checkbox name="regexp" value="regexp" id="regexp" property="regex"/>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <f:if condition="{validationResults.flattenedErrors}">
+                    <f:for each="{validationResults.flattenedErrors}" key="propertyPath" as="errors">
+                        <f:for each="{errors}" as="error"><p>{error}</p></f:for>
+                    </f:for>
+                </f:if>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <button class="btn btn-default" type="submit">{f:translate(key: 'tx_mindshapeseo_label.save')}</button>
+            </div>
+        </div>
+    </fieldset>
+</html>

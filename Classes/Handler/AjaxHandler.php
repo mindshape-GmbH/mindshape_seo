@@ -26,7 +26,7 @@ namespace Mindshape\MindshapeSeo\Handler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
+use Mindshape\MindshapeSeo\Domain\Repository\RedirectRepository;
 use Mindshape\MindshapeSeo\Utility\PageUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -34,6 +34,7 @@ use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * @package mindshape_seo
@@ -134,6 +135,160 @@ class AjaxHandler implements SingletonInterface
                 $response->getBody()->write(json_encode($responseArray));
             }
         }
+
+        return $response;
+    }
+
+    /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    public function deleteRedirect(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        /** @var \Mindshape\MindshapeSeo\Domain\Repository\redirectRepository $redirectRepository */
+        $redirectRepository = $objectManager->get(RedirectRepository::class);
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager */
+        $persistenceManager = $objectManager->get(PersistenceManager::class);
+
+        $data = $request->getParsedBody();
+
+        $responseArray = array(
+            'deleted' => false,
+        );
+
+        if (is_array($data)) {
+            if (0 < (int) $data['redirectUid']) {
+                $redirect = $redirectRepository->findByUid($data['redirectUid']);
+
+                $redirectRepository->remove($redirect);
+
+                $persistenceManager->persistAll();
+
+                $responseArray['deleted'] = true;
+
+                $response->getBody()->write(json_encode($responseArray));
+            } else {
+                $response
+                    ->withStatus(500, ' Invalid Data');
+                $response->getBody()->write(json_encode($responseArray));
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     */
+    public function hideRedirect(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        /** @var \Mindshape\MindshapeSeo\Domain\Repository\redirectRepository $redirectRepository */
+        $redirectRepository = $objectManager->get(RedirectRepository::class);
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager */
+        $persistenceManager = $objectManager->get(PersistenceManager::class);
+
+        $data = $request->getParsedBody();
+
+        $responseArray = array(
+            'hidden' => false,
+        );
+
+        if (is_array($data)) {
+            if (0 < (int) $data['redirectUid']) {
+                $redirect = $redirectRepository->findByUid($data['redirectUid']);
+
+
+                $redirect->setHidden(1);
+
+                $redirectRepository->update($redirect);
+
+                $persistenceManager->persistAll();
+
+                $responseArray['hidden'] = true;
+
+                $response->getBody()->write(json_encode($responseArray));
+            } else {
+                $response
+                    ->withStatus(500, ' Invalid Data');
+                $response->getBody()->write(json_encode($responseArray));
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     */
+    public function unhideRedirect(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        /** @var \Mindshape\MindshapeSeo\Domain\Repository\redirectRepository $redirectRepository */
+        $redirectRepository = $objectManager->get(RedirectRepository::class);
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager */
+        $persistenceManager = $objectManager->get(PersistenceManager::class);
+
+        $data = $request->getParsedBody();
+
+        $responseArray = array(
+            'hidden' => false,
+        );
+
+        if (is_array($data)) {
+            if (0 < (int) $data['redirectUid']) {
+                $redirect = $redirectRepository->findByUid($data['redirectUid']);
+
+                $redirect->setHidden(0);
+
+                $redirectRepository->update($redirect);
+
+                $persistenceManager->persistAll();
+
+                $responseArray['hidden'] = true;
+
+                $response->getBody()->write(json_encode($responseArray));
+            } else {
+                $response
+                    ->withStatus(500, ' Invalid Data');
+                $response->getBody()->write(json_encode($responseArray));
+            }
+        }
+
+        return $response;
+    }
+
+    /**
+     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ResponseInterface $response
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function facebookScrape(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $data = $request->getParsedBody();
+        $pageUid = $data['pageUid'];
 
         return $response;
     }

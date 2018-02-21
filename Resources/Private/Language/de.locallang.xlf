@@ -121,6 +121,9 @@
             <trans-unit id="tx_mindshapeseo_label.google_search_preview">
                 <target>Google Suche Vorschau</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.new">
+                <target>Neu</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.save">
                 <target>Speichern</target>
             </trans-unit>

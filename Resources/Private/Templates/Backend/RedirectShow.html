@@ -1,0 +1,19 @@
+<html data-namespace-typo3-fluid="true" lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      xmlns:msh="http://typo3.org/ns/Mindshape/MindshapeSeo/ViewHelpers"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
+
+<f:layout name="Backend"/>
+<f:section name="Main">
+    <section class="grid-section no-padding-bottom">
+        <f:if condition="{redirect}">
+            <f:form action="redirectUpdate" name="redirect" object="{redirect}" id="editRedirectForm"
+                    additionalAttributes="{novalidate: 'true'}" class="form form-custom">
+                    <f:render partial="RedirectFormFields"
+                              arguments="{redirect: redirect, httpStatusCodes: httpStatusCodes, sourceDomains: sourceDomains}"/>
+            </f:form>
+        </f:if>
+    </section>
+</f:section>
+</html>

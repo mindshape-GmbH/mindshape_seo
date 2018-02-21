@@ -1,5 +1,5 @@
 <?php
-namespace Mindshape\MindshapeSeo\ViewHelpers\Widget;
+namespace Mindshape\MindshapeSeo\Userfuncs\Tca;
 
 /***************************************************************
  *  Copyright notice
@@ -25,44 +25,37 @@ namespace Mindshape\MindshapeSeo\ViewHelpers\Widget;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Mindshape\MindshapeSeo\ViewHelpers\Widget\Controller\PaginateController;
-use TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper;
+use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use Mindshape\MindshapeSeo\Service\DomainService;
+use Mindshape\MindshapeSeo\Service\PageService;
+use Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService;
+use TYPO3\CMS\Backend\Form\Element\UserElement;
+use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package mindshape_seo
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class PaginateViewHelper extends AbstractWidgetViewHelper
+class FbScrapeButton
 {
     /**
-     * @var \Mindshape\MindshapeSeo\ViewHelpers\Widget\Controller\PaginateController
-     */
-    protected $controller;
-
-    /**
-     * @param \Mindshape\MindshapeSeo\ViewHelpers\Widget\Controller\PaginateController $controller
-     */
-    public function injectPaginateController(PaginateController $controller)
-    {
-        $this->controller = $controller;
-    }
-
-    /**
-     * @param mixed $objects
-     * @param string $as
-     * @param array $configuration
+     * @param
      * @return string
      */
-    public function render(
-        $objects,
-        $as,
-        array $configuration = array(
-            'itemsPerPage' => 10,
-            'insertAbove' => false,
-            'insertBelow' => true,
-            'maximumNumberOfLinks' => 99,
-        )
-    ) {
-        return $this->initiateSubRequest();
+    public function render()
+    {
+        $button  = '<a href="#" id="fbScrapeButton" class="btn btn-default">';
+        $button .= 'Scrape Facebook';
+        $button .= '</a>';
+        $message = '<div class="fbScrapeMessage" style="margin-bottom:0;"></div>';
+
+        $result = '<div class="row" style="display:flex; align-items:center;">';
+        $result.= '<div class="col-sm-2">' . $button;
+        $result.= '</div><div class="col-sm-10">' . $message ;
+        $result.= '</div></div>';
+        return $result;
     }
 }

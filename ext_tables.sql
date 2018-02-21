@@ -98,3 +98,26 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration (
   KEY parent (pid),
   KEY t3ver_oid (t3ver_oid,t3ver_wsid)
 );
+
+CREATE TABLE tx_mindshapeseo_domain_model_redirect (
+  uid                        int(11)                            NOT NULL auto_increment,
+  pid                        int(11) DEFAULT '0'                NOT NULL,
+
+  source_domain              int(11) unsigned DEFAULT '0'       NOT NULL,
+  source_path                varchar(255) DEFAULT ''            NOT NULL,
+  target                     varchar(255) DEFAULT ''            NOT NULL,
+  http_statuscode            varchar(255) DEFAULT ''            NOT NULL,
+  hits                       int(11) DEFAULT '0'                NOT NULL,
+  last_hit_on                int(11) unsigned DEFAULT '0'       NOT NULL,
+  edited                     int(11) unsigned DEFAULT '0'       NOT NULL,
+  hidden                     tinyint(4) unsigned DEFAULT '0'    NOT NULL,
+  regex                      tinyint(1) unsigned DEFAULT '0'    NOT NULL,
+
+  tstamp                     int(11) unsigned DEFAULT '0'       NOT NULL,
+  crdate                     int(11) unsigned DEFAULT '0'       NOT NULL,
+  cruser_id                  int(11) unsigned DEFAULT '0'       NOT NULL,
+  deleted                    tinyint(4) unsigned DEFAULT '0'    NOT NULL,
+
+  PRIMARY KEY (uid),
+  KEY Source_Domain_Source_Path (source_domain, source_path),
+);

@@ -42,6 +42,23 @@ if (TYPO3_MODE === 'BE') {
         )
     );
 
+    // Module Redirect Management
+
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+        'Mindshape.' . $_EXTKEY,
+        $mainModuleKey,
+        'redirectList',
+        '',
+        array(
+            'Backend' => 'redirectList, resetFilter, redirectShow, redirectNew, redirectCreate, redirectUpdate',
+        ),
+        array(
+            'access' => 'user,group',
+            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/seo-settings.svg',
+            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_backend_redirectmanager.xlf',
+        )
+    );
+
     $tempModules = array();
 
     foreach ($GLOBALS['TBE_MODULES'] as $key => $mainModule) {

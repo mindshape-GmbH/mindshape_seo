@@ -1,0 +1,92 @@
+<html data-namespace-typo3-fluid="true" lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      xmlns:msh="http://typo3.org/ns/Mindshape/MindshapeSeo/ViewHelpers"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
+
+<f:layout name="Backend"/>
+
+<f:section name="Main">
+
+    <f:link.action action="redirectNew"
+                   title="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.source_domain')}">
+        <core:icon identifier="actions-document-new"/>
+    </f:link.action>
+
+    <f:form action="redirectList" name="redirectFilter" object="{redirectFilter}" arguments="{_all}">
+
+        <f:form.validationResults for="{redirect}">
+            <f:render partial="RedirectFilterFields" arguments="{_all}"/>
+        </f:form.validationResults>
+
+    </f:form>
+
+    <table class="table table-dark">
+        <thead>
+        <tr>
+            <th scope="col">{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.source_domain')}</th>
+            <th scope="col">{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.source_path')}</th>
+            <th scope="col">{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.target')}</th>
+            <th scope="col">{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.http_statuscode')}</th>
+            <th scope="col">{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.hits')}</th>
+            <th scope="col">{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.last_hit_on')}</th>
+            <th scope="col"></th>
+
+        </tr>
+        </thead>
+
+        <msh:widget.paginate objects="{redirects}" as="paginatedRedirects"
+                             configuration="{itemsPerPage: 10, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
+            <f:for each="{paginatedRedirects}" as="redirect">
+                <tr>
+                    <td>
+                        <f:if condition="{redirect.sourceDomain} == 0">
+                            <f:then>
+                                *
+                            </f:then>
+                            <f:else>
+                                {sourceDomains.{redirect.sourceDomain}}
+                            </f:else>
+                        </f:if>
+                    </td>
+                    <td>{redirect.sourcePath}</td>
+                    <td>{redirect.target}</td>
+                    <td>{redirect.httpStatuscode}</td>
+                    <td>{redirect.hits}</td>
+                    <td>
+                        <f:if condition="{redirect.lastHitOn}!=0">
+                            <f:then>{redirect.lastHitOn -> f:format.date(format: 'd-m-Y H:i:s')}</f:then>
+                        </f:if>
+                    </td>
+                    <td class="col-control nowrap">
+                        <div class="btn-group" role="group">
+                            <f:link.action action="redirectShow"
+                                           arguments="{redirect: redirect}"
+                                           title="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.edit')}"
+                                           class="btn btn-default">
+                                <core:icon identifier="actions-page-open"/>
+                            </f:link.action>
+
+                            <a href="#" title="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.hide')}"
+                               class="mindshape-seo-hideRedirectbutton btn btn-default" data-id="{redirect.uid}"
+                               data-redirect-url="#">
+                                <core:icon
+                                        identifier="{f:if(condition:'{redirect.hidden}==1',then:'actions-edit-unhide',else:'actions-edit-hide')}"/>
+                            </a>
+
+                            <a href="#" title="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.delete')}"
+                               class="mindshape-seo-deleteRedirectbutton btn btn-default" data-id="{redirect.uid}"
+                               data-message="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.confirm_delete')}"
+                               data-label-abort="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.data_label_abort')}"
+                               data-label-delete="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.data_label_delete')}"
+                               data-redirect-url="#">
+                                <core:icon identifier="actions-selection-delete"/>
+                            </a>
+                        </div>
+                    </td>
+                  <tr>
+            </f:for>
+        </msh:widget.paginate>
+    </table>
+</f:section>
+</html>

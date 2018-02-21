@@ -17,6 +17,9 @@ plugin.tx_mindshape_seo {
       # cat=mindshape_seo/sitemapsettings; type=int; label=News Detailpage for sitemap index
       newsDetailPage =
     }
+    facebook {
+      apiToken = EAACEdEose0cBAEUcS9RclN903plu0NrVXZBdIDaUtw9lKZAUmeN8FnPRvPOCNCZCghZCCY8dqHmNs2ZAYfT6HZC7iHDydBtM7XUX1FSnxJzczdzw55w3Ht06jpVZAP0MbWdgvHLOMghzlWZCtI3lJZCJFwk3IDTv3AnuNS2YRST5YAKoZBL1PCrfcX3XCFZAiD9WNmgij9scvw7PQZDZD
+    }
   }
 }
 

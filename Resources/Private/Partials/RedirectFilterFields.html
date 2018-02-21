@@ -1,0 +1,86 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:flashMessages />
+<fieldset class="form-section">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="sourceDomain">
+                    {f:translate(key: 'tx_mindshapeseo_domain_model_redirect.source_domain')}
+                </label><br/>
+                <f:form.select name="sourceDomain"
+                               id="sourceDomain"
+                               value="{filterDomain}"
+                               property="sourceDomain"
+                               options="{sourceDomains}"
+                               prependOptionLabel="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.please_select')}"
+                               class="form-control"/>
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label for="sourcePath">
+                    {f:translate(key: 'tx_mindshapeseo_domain_model_redirect.source_path')}
+                </label><br/>
+                <f:form.textfield name="sourcePath"
+                                  id="sourcePath"
+                                  value="{filterPath}"
+                                  property="sourcePath"
+                                  additionalAttributes="{class: 'form-control'}"/>
+
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label for="target">
+                    {f:translate(key: 'tx_mindshapeseo_domain_model_redirect.target')}
+                </label><br/>
+                <f:form.textfield name="target"
+                                  id="target"
+                                  value="{filterTarget}"
+                                  property="target"
+                                  additionalAttributes="{class: 'form-control'}"/>
+            </div>
+        </div>
+
+
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label for="httpStatusCode">
+                    {f:translate(key: 'tx_mindshapeseo_domain_model_redirect.http_statuscode')}
+                </label><br/>
+                <f:form.select name="httpStatusCode"
+                               id="httpStatusCode"
+                               value="{httpStatuscode}"
+                               property="httpStatuscode"
+                               options="{httpStatusCodes}"
+                               prependOptionLabel="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.please_select')}"
+                               class="form-control"/>
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <span>&nbsp;</span>
+            <br/>
+            <div class="btn-group" role="group">
+                    <f:form.button type="submit" name="applyFilterButton" value="buttonValue" formmethod="post"
+                                   formnovalidate="formnovalidate"
+                                   title="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.apply_filter')}"
+                                   additionalAttributes="{class : 'btn btn-default'}">
+                        <core:icon identifier="actions-filter"/>
+                    </f:form.button>
+
+                <f:link.action action="resetFilter"
+                               title="{f:translate(key: 'tx_mindshapeseo_domain_model_redirect.reset_filter')}"
+                               class="btn btn-default">
+                    <core:icon identifier="actions-input-clear"/>
+                </f:link.action>
+
+            </div>
+        </div>
+    </div>
+
+
+</fieldset>
+</html>

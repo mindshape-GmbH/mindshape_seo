@@ -11,6 +11,14 @@ config.tx_extbase {
           }
         }
       }
+      Mindshape\MindshapeSeo\Domain\Model\Redirect {
+        mapping {
+          tableName = tx_mindshapeseo_domain_model_redirect
+          columns {
+            hidden.mapOnProperty = hidden
+          }
+        }
+      }
     }
   }
 

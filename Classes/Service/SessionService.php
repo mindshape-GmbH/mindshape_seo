@@ -87,4 +87,5 @@ class SessionService implements SingletonInterface
     {
         return null !== $this->userAuthentication->getSessionData(self::SESSION_KEY_PREFIX . $key);
     }
+
 }

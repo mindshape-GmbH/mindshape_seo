@@ -30,3 +30,11 @@ if (
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController::class] = [
     'className' => \Mindshape\MindshapeSeo\XClass\TypoScriptFrontendController::class
 ];
+
+call_user_func(function() {
+    // call very first TYPO3 hook for redirecting requests
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/index_ts.php']['preprocessRequest'][] = function($parameters, $parent) {
+        $preProcess = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\Mindshape\MindshapeSeo\Hook\PreProcess::class);
+        $preProcess->redirect($parameters, $parent);
+    };
+});

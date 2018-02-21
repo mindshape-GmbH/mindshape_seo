@@ -69,7 +69,7 @@ require([
                     $('#mindshape-seo-configuration').submit();
                 });
 
-                // Save configuration form
+                // Delete configuration form
                 $('.mindshape-seo-deletebutton').on('click', function (e) {
                     e.preventDefault();
 
@@ -105,6 +105,130 @@ require([
                             }
                         }
                     ]);
+                });
+
+                // Delete redirect form
+                $('.mindshape-seo-deleteRedirectbutton').on('click', function (e) {
+                    e.preventDefault();
+
+                    var $deleteButton = $(this);
+
+                    Modal.confirm($deleteButton.attr('title'), $deleteButton.attr('data-message'), Severity.warning, [
+                        {
+                            text: $deleteButton.attr('data-label-abort'),
+                            trigger: function () {
+                                Modal.dismiss();
+                            }
+                        },
+                        {
+                            text: $deleteButton.attr('data-label-delete'),
+                            trigger: function () {
+                                Modal.dismiss();
+
+                                $.ajax({
+                                    type: "POST",
+                                    url: Settings.ajaxUrls['MindshapeSeoAjaxHandler::deleteRedirect'],
+                                    data: {redirectUid: $deleteButton.attr('data-id')},
+                                    success: function (response) {
+                                        if (response.deleted === true) {
+                                            self.location.href = $deleteButton.attr('href');
+                                            console.log("Success");
+                                            top.list_frame.location.reload();
+
+                                        } else {
+                                            console.error('Failed to delete configuration: ' + $deleteButton.attr('data-id'));
+                                        }
+                                    },
+                                    error: function () {
+                                        console.error('Failed to delete configuration: ' + $deleteButton.attr('data-id'));
+                                    }
+                                });
+                            }
+                        }
+                    ]);
+                });
+
+                // Delete redirect form
+                $('.mindshape-seo-hideRedirectbutton').on('click', function (e) {
+
+                    e.preventDefault();
+                    var $hidebutton = $(this);
+                    var $childspan = $(this).find(' > span');
+                    var $icon = $(this).find('> .t3js-icon > .icon-markup > img');
+                    var $typo3path = '/typo3/sysext/core/Resources/Public/Icons/T3Icons/actions/';
+
+                    if ($childspan.hasClass('icon-actions-edit-hide')) {
+                        $childspan.removeClass('icon-actions-edit-hide').addClass('icon-actions-edit-unhide');
+                        $childspan.attr('data-identifier', 'actions-edit-unhide');
+                        $icon.attr('src', $typo3path + 'actions-edit-unhide.svg');
+
+                            $.ajax({
+                                type: "POST",
+                                url: Settings.ajaxUrls['MindshapeSeoAjaxHandler::hideRedirect'],
+                                data: {redirectUid: $hidebutton.attr('data-id')},
+                                success: function (response) {
+                                    if (response.hidden === true) {
+                                        self.location.href = $hidebutton.attr('data-redirect-url');
+                                        console.log("Record has been hidden");
+                                    } else {
+                                        console.error('Failed to hide redirect: ' + $hidebutton.attr('data-id'));
+                                    }
+                                },
+                                error: function () {
+                                    console.error('Failed to hide redirect: ' + $hidebutton.attr('data-id'));
+                                }
+                            });
+
+                    } else {
+                        $childspan.removeClass('icon-actions-edit-unhide').addClass('icon-actions-edit-hide');
+                        $childspan.attr('data-identifier', 'actions-edit-hide');
+                        $icon.attr('src', $typo3path + 'actions-edit-hide.svg');
+
+                            $.ajax({
+                                type: "POST",
+                                url: Settings.ajaxUrls['MindshapeSeoAjaxHandler::unhideRedirect'],
+                                data: {redirectUid: $hidebutton.attr('data-id')},
+                                success: function (response) {
+                                    if (response.hidden === true) {
+                                        self.location.href = $hidebutton.attr('data-redirect-url');
+                                        console.log("Record has been unhidden");
+                                    } else {
+                                        console.error('Failed to unhide redirect: ' + $hidebutton.attr('data-id'));
+                                    }
+                                },
+                                error: function () {
+                                    console.error('Failed to unhide redirect: ' + $hidebutton.attr('data-id'));
+                                }
+                            });
+                        }
+                });
+
+                $('#fbScrapeButton').click(function(e) {
+                    var ajaxUrl = Settings.ajaxUrls['MindshapeSeoAjaxHandler::facebookScrape'];
+
+                    console.log(ajaxUrl);
+
+                    $.ajax({
+                        url: ajaxUrl,
+                        type: 'POST',
+                        dataType: "json",
+                        success: function(result) {
+                            $('.fbScrapeMessage')
+                                .addClass('alert')
+                                .addClass('alert-success')
+                                .html("Successfully scraped.");
+                            console.log(result);
+                            alert(result);
+
+                        },
+                        error: function(error) {
+                            $('.fbScrapeMessage')
+                                .addClass('alert')
+                                .addClass('alert-danger')
+                                .html("Error occured.");
+                            console.log(error);
+                        }
+                    });
                 });
 
                 // Configuration form upload fields delete function
@@ -304,6 +428,7 @@ require([
                     $modal.modal();
                 });
             },
+
             restorePreviewOriginalData: function ($previewContainer) {
                 $previewContainer.find('.preview-box .title').html($previewContainer.attr('data-original-title'));
                 $previewContainer.find('.preview-box .description').html($previewContainer.attr('data-original-description'));
@@ -713,6 +838,8 @@ require([
                     .replace(/"/g, "&quot;")
                     .replace(/'/g, "&#039;");
             }
+
+
         };
 
         $(document).ready(function () {
