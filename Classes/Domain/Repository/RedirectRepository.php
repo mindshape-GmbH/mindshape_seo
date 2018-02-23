@@ -41,9 +41,10 @@ class RedirectRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     /**
      * @param $sourceDomain
      * @param $sourcePath
+     * @param null $currentUid
      * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function findBySourceDomainAndSourcePath($sourceDomain, $sourcePath, $currentUid)
+    public function findBySourceDomainAndSourcePath($sourceDomain, $sourcePath, $currentUid = null)
     {
 
         $query = $this->createQuery();
