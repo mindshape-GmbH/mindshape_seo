@@ -140,6 +140,15 @@
             <trans-unit id="tx_mindshapeseo_label.hide">
                 <source>Hide</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.fb">
+                <source>Facebook</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.fb_app_id">
+                <source>Facebook app ID</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.fb_app_key">
+                <source>Facebook app secret key</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.delete_configuration">
                 <source>You really want to delete this configuration?</source>
             </trans-unit>
@@ -374,9 +383,6 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_idsite">
                 <source>Piwik Site ID</source>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_url">
-                <source>Piwik URL</source>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld">
                 <source>Website information (JSON-LD)</source>
             </trans-unit>
@@ -455,6 +461,12 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr">
                 <source>Tumblr</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.fb_app_id">
+                <source>Facebook app ID</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.fb_app_key">
+                <source>Facebook app secret key</source>
             </trans-unit>
 
 

@@ -130,6 +130,15 @@
             <trans-unit id="tx_mindshapeseo_label.delete">
                 <target>Löschen</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.fb">
+                <source>Facebook</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.fb_app_id">
+                <source>Facebook app ID</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.fb_app_key">
+                <source>Facebook app secret key</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.delete_configuration">
                 <target>Wollen Sie diese Konfiguration wirklich Löschen?</target>
             </trans-unit>
@@ -445,6 +454,12 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr">
                 <target>Tumblr</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.fb_app_id">
+                <source>Facebook app ID</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.fb_app_key">
+                <source>Facebook app secret key</source>
             </trans-unit>
         </body>
     </file>

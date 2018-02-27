@@ -58,6 +58,10 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration (
   facebook_default_image     int(11) unsigned                NOT NULL DEFAULT '0',
   image_sitemap_min_height   int(11) unsigned                NOT NULL DEFAULT '50',
   image_sitemap_min_width    int(11) unsigned                NOT NULL DEFAULT '50',
+
+  fb_app_id                  varchar(255) DEFAULT ''         NOT NULL,
+  fb_app_key                 varchar(255) DEFAULT ''         NOT NULL,
+
   jsonld_custom_url          varchar(255) DEFAULT ''         NOT NULL,
   jsonld_type                varchar(255) DEFAULT ''         NOT NULL,
   jsonld_name                varchar(255) DEFAULT ''         NOT NULL,

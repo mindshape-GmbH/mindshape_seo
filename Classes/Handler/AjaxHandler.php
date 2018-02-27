@@ -26,15 +26,32 @@ namespace Mindshape\MindshapeSeo\Handler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Facebook\Exceptions\FacebookAuthenticationException;
+use Facebook\Exceptions\FacebookClientException;
+use Facebook\Exceptions\FacebookOtherException;
+use Facebook\Exceptions\FacebookResponseException;
+use Facebook\Exceptions\FacebookSDKException;
+use Facebook\Facebook;
+use Facebook\FacebookApp;
+use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use Mindshape\MindshapeSeo\Domain\Repository\RedirectRepository;
 use Mindshape\MindshapeSeo\Utility\PageUtility;
+use Mindshape\MindshapeSeo\Service\PageService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Frontend\Page\PageRepository;
+use TYPO3\CMS\Frontend\Utility\EidUtility;
 
 /**
  * @package mindshape_seo
@@ -42,6 +59,15 @@ use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
  */
 class AjaxHandler implements SingletonInterface
 {
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
+     * @return void
+     */
+    public function injectConfigurationRepository(ConfigurationRepository $configurationRepository)
+    {
+        $this->configurationRepository = $configurationRepository;
+    }
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @param \Psr\Http\Message\ResponseInterface $response
@@ -283,12 +309,119 @@ class AjaxHandler implements SingletonInterface
      * @param \Psr\Http\Message\ResponseInterface $response
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function facebookScrape(ServerRequestInterface $request, ResponseInterface $response)
+    public function facebookScrape(ServerRequestInterface $request, ResponseInterface $response, $currentSysLanguageUid = 0)
     {
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+
+        /** @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository */
+        $configurationRepository = $objectManager->get(ConfigurationRepository::class);
+
+        $configuration = $configurationRepository->findByDomain($_SERVER['HTTP_HOST']);
+
+        /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
+        $configurationManager = $objectManager->get(ConfigurationManager::class);
+
         $data = $request->getParsedBody();
-        $pageUid = $data['pageUid'];
+
+        $data['pageUid'] = (int)$data['pageUid'];
+
+        //$pageService = $objectManager->get(PageService::class);
+
+        //$pageLink = $pageService->getPageLink($data['pageUid'], true);
+
+        $feUserObj 	= EidUtility::initFeUser();
+        $pageId 	= 1;
+        $typoScriptFrontendController = GeneralUtility::makeInstance(
+            TypoScriptFrontendController::class,
+            $GLOBALS['TYPO3_CONF_VARS'],
+            $pageId,
+            0,
+            true
+        );
+
+        $GLOBALS['TSFE'] = $typoScriptFrontendController;
+
+        $typoScriptFrontendController->connectToDB();
+        $typoScriptFrontendController->fe_user = $feUserObj;
+        $typoScriptFrontendController->id = $pageId;
+        $typoScriptFrontendController->determineId();
+        $typoScriptFrontendController->initTemplate();
+        $typoScriptFrontendController->getConfigArray();
+
+        if( \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded( 'realurl' ) )
+        {
+            $rootline 	= \TYPO3\CMS\Backend\Utility\BackendUtility::BEgetRootLine( $pageId );
+            $host 		= \TYPO3\CMS\Backend\Utility\BackendUtility::firstDomainRecord( $rootline );
+
+            $_SERVER['HTTP_HOST'] = $host;
+        }
+
+        EidUtility::initTCA();
+
+        $configurationManager->setContentObject(
+            $objectManager->get(ContentObjectRenderer::class)
+        );
+
+        $uriBuilder = $objectManager->get(UriBuilder::class);
+        $uriBuilder->injectConfigurationManager($configurationManager);
+
+        $url = $uriBuilder
+            ->reset()
+            ->setTargetPageUid($data['pageUid'])
+            ->setCreateAbsoluteUri(true)
+            ->setArguments(array('L' => 0))
+            ->buildFrontendUri();
+
+        $facebookApp = new FacebookApp(
+            $configuration->getFbAppId(),
+            $configuration->getFbAppKey()
+        );
+
+        $facebookSdk = new Facebook([
+            'app_id' => $configuration->getFbAppId(),
+            'app_secret' => $configuration->getFbAppKey(),
+            'default_graph_version' => 'v2.12',
+        ]);
+
+        $facebookSdk->setDefaultAccessToken($facebookApp->getAccessToken());
+
+        $responseArray = [
+            'scraped' => false,
+        ];
+
+        try {
+            $apiResponse = $facebookSdk->post(
+                '/',
+                [
+                    'id' => $url,
+                    'scrape' => 'true',
+                ]
+
+            );
+            if (200 === $apiResponse->getHttpStatusCode()) {
+                $responseArray['scraped'] = true;
+                $responseArray['msg'] = 'Scraped successfully';
+            } else {
+                $responseArray['scraped'] = false;
+                $responseArray['msg'] = 'Error';
+            }
+
+        } catch (FacebookResponseException $e) {
+            $error = 'Graph returned an error: ' . $e->getMessage();
+            $responseArray['msg'] = $error;
+
+        } catch (FacebookSDKException $e) {
+            $error = 'Facebook SDK returned an error: ' . $e->getMessage();
+            $responseArray['msg'] = $error;
+
+        } catch (\Exception $e) {
+            $error = 'Facebook returned an error: ' . $e->getMessage();
+            $responseArray['msg'] = $error;
+        }
+
+
+        $response->getBody()->write(json_encode($responseArray));
 
         return $response;
     }

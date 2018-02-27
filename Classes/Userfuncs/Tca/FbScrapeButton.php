@@ -42,12 +42,19 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class FbScrapeButton
 {
     /**
-     * @param
+     * @param array $params
+     * @param \TYPO3\CMS\Backend\Form\Element\UserElement $userElement
      * @return string
      */
-    public function render()
+    public function render(array $params, UserElement $userElement)
     {
-        $button  = '<a href="#" id="fbScrapeButton" class="btn btn-default">';
+        if ('pages_language_overlay' === $params['table']) {
+            $pageUid = $params['row']['pid'];
+        } else {
+            $pageUid = $params['row']['uid'];
+        }
+
+        $button  = '<a href="#" id="fbScrapeButton" data-uid=" '.$pageUid . '"' . 'data-error=""' . ' class="btn btn-default">';
         $button .= 'Scrape Facebook';
         $button .= '</a>';
         $message = '<div class="fbScrapeMessage" style="margin-bottom:0;"></div>';

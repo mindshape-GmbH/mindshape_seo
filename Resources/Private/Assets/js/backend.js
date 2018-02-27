@@ -204,29 +204,49 @@ require([
                 });
 
                 $('#fbScrapeButton').click(function(e) {
+                    $(this).addClass('loading');
+                    $(this).attr("disabled", true);
                     var ajaxUrl = Settings.ajaxUrls['MindshapeSeoAjaxHandler::facebookScrape'];
-
-                    console.log(ajaxUrl);
 
                     $.ajax({
                         url: ajaxUrl,
                         type: 'POST',
+                        data: {pageUid: $(this).attr('data-uid')},
                         dataType: "json",
-                        success: function(result) {
-                            $('.fbScrapeMessage')
+                        success: function(response) {
+                            if (response.scraped === true) {
+                              $('.fbScrapeMessage')
                                 .addClass('alert')
+                                .removeClass('alert-danger')
                                 .addClass('alert-success')
-                                .html("Successfully scraped.");
-                            console.log(result);
-                            alert(result);
+                                .html(response.msg);
 
+                              $('#fbScrapeButton').attr("disabled", false);
+                              $('#fbScrapeButton').removeClass('loading');
+                              console.log(response);
+
+                            } else {
+                              $('.fbScrapeMessage')
+                                .addClass('alert')
+                                .removeClass('alert-success')
+                                .addClass('alert-danger')
+                                .html(response.msg);
+
+                              $('#fbScrapeButton').attr("disabled", false);
+                              $('#fbScrapeButton').removeClass('loading');
+                              console.log(response);
+                            }
                         },
-                        error: function(error) {
+                        error: function(response) {
                             $('.fbScrapeMessage')
                                 .addClass('alert')
+                                .removeClass('alert-success')
                                 .addClass('alert-danger')
-                                .html("Error occured.");
-                            console.log(error);
+                                .html('Internal error');
+
+                            $('#fbScrapeButton').attr("disabled", false);
+                            $('#fbScrapeButton').removeClass('loading');
+                            console.log(response);
                         }
                     });
                 });

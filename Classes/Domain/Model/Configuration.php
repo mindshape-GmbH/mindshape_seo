@@ -123,6 +123,7 @@ class Configuration extends AbstractEntity
      */
     protected $imageSitemapMinWidth = 0;
 
+
     /**
      * @var string
      */
@@ -222,6 +223,17 @@ class Configuration extends AbstractEntity
      * @var string
      */
     protected $jsonldAddressStreet = '';
+
+    /**
+     * @var string
+     */
+    protected $fbAppId = '';
+
+    /**
+     * @var string
+     */
+
+    protected $fbAppKey = '';
 
     /**
      * @return string $domain
@@ -526,6 +538,7 @@ class Configuration extends AbstractEntity
     {
         $this->imageSitemapMinWidth = $imageSitemapMinWidth;
     }
+
 
     /**
      * @return string $jsonldCustomUrl
@@ -866,4 +879,38 @@ class Configuration extends AbstractEntity
     {
         $this->jsonldAddressStreet = $jsonldAddressStreet;
     }
+
+    /**
+     * @return string
+     */
+    public function getFbAppId(): string
+    {
+        return $this->fbAppId;
+    }
+
+    /**
+     * @param string $fbAppId
+     */
+    public function setFbAppId(string $fbAppId)
+    {
+        $this->fbAppId = $fbAppId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFbAppKey(): string
+    {
+        return $this->fbAppKey;
+    }
+
+    /**
+     * @param string $fbAppKey
+     */
+    public function setFbAppKey(string $fbAppKey)
+    {
+        $this->fbAppKey = $fbAppKey;
+    }
+
+
 }
