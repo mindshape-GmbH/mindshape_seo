@@ -19,6 +19,10 @@ v1.1.0
   - Hinzufügen eines Domainfeldes zum wechseln der Einstellungen im Einstellungsmodul
   - Diverse Optimierungen
 
+v1.0.21
+  - Neues Feld alternative Breadcrumb Titel, standardmäßig wird der Seitentitel verwendet
+  - Erwzingen vom Tagmanager noscript Tag nach öffnendem Body Tag
+
 v1.0.20
   - Behebe Upload Probleme bei Dateikonflikten
 

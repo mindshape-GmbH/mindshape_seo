@@ -19,6 +19,10 @@ v1.1.0
   - Add domain settings switch
   - Various optimizations
 
+v1.0.21
+  - Add alternative breadcrumb title and use page title by default
+  - Add force rendering of tagmanager noscript tag after opening body
+
 v1.0.20
   - Fix bug on image uploading conflicts
 
