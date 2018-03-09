@@ -243,7 +243,7 @@ class PageService implements SingletonInterface
         }
 
         if ($useGoogleBreadcrumb) {
-            $rootline = $this->getRootlineReverse($pageUid, true, false, $sysLanguageUid);
+            $rootline = $this->getRootlineReverse($pageUid, false, false, $sysLanguageUid);
 
             $googleBreadcrumb = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
 
