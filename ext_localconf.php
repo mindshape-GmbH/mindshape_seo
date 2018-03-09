@@ -17,6 +17,7 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_content.php']['typoLink_PostProc']['realurl'] = \Mindshape\MindshapeSeo\Hook\TypoLinkHook::class . '->postProcessEncodedUrl';
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess'][] = \Mindshape\MindshapeSeo\Hook\RenderPreProcessHook::class . '->main';
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all'][] = \Mindshape\MindshapeSeo\Hook\ContentPostProcAllHook::class . '->main';
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/realurl/class.tx_realurl_autoconfgen.php']['extensionConfiguration'][] = \Mindshape\MindshapeSeo\Hook\RealurlHook::class . '->addConfiguration';
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(\Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter::class);
 
