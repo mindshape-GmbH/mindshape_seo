@@ -108,6 +108,7 @@ class UpdateService implements SingletonInterface
         $this->checkTagmanagerColumn();
         $this->checkSitenameColumn();
         $this->checkAlternativeTitleColumn();
+        $this->checkBreadcrumbTitleColumn();
     }
 
     /**
@@ -222,6 +223,19 @@ class UpdateService implements SingletonInterface
     /**
      * @return void
      */
+    protected function checkBreadcrumbTitleColumn()
+    {
+        /** @var \mysqli_result $checkSortingColumn */
+        $check = $this->databaseConnection->sql_query('SHOW COLUMNS FROM pages LIKE "mindshapeseo_jsonld_breadcrumb_title"');
+
+        if(0 === $check->num_rows) {
+            $this->updateChecks['updateBreadcrumbTitleColumn'] = 'The missing "mindshapeseo_jsonld_breadcrumb_title" column was added';
+        }
+    }
+
+    /**
+     * @return void
+     */
     protected function updateAlternativeTitleColumn()
     {
         $this->databaseConnection->sql_query('
@@ -232,6 +246,22 @@ class UpdateService implements SingletonInterface
         $this->databaseConnection->sql_query('
             ALTER TABLE pages_language_overlay
             ADD mindshapeseo_alternative_title varchar(255) DEFAULT \'\' NOT NULL
+        ');
+    }
+
+    /**
+     * @return void
+     */
+    protected function updateBreadcrumbTitleColumn()
+    {
+        $this->databaseConnection->sql_query('
+            ALTER TABLE pages
+            ADD mindshapeseo_jsonld_breadcrumb_title varchar(255) DEFAULT \'\' NOT NULL
+        ');
+
+        $this->databaseConnection->sql_query('
+            ALTER TABLE pages_language_overlay
+            ADD mindshapeseo_jsonld_breadcrumb_title varchar(255) DEFAULT \'\' NOT NULL
         ');
     }
 }

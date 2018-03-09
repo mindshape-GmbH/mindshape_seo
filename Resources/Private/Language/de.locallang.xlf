@@ -101,10 +101,16 @@
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_alternative_title">
                 <target>Alternativer Seitentitel (Titel Tag)</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_jsonld_breadcrumb_title">
+                <target>Alternativer Breadcrumb Titel</target>
+            </trans-unit>
 
 
             <trans-unit id="tx_mindshapeseo_label.seo">
                 <target>SEO</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.jsonld">
+                <target>JSON-LD</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.indexing">
                 <target>Indexierung</target>
