@@ -665,8 +665,8 @@ class HeaderDataService implements SingletonInterface
                         true,
                         $this->pageService->getCurrentSysLanguageUid()
                     ),
-                    'name' => false === empty($page['mindshapeseo_alternative_title'])
-                        ? $page['mindshapeseo_alternative_title']
+                    'name' => false === empty($page['mindshapeseo_jsonld_breadcrumb_title'])
+                        ? $page['mindshapeseo_jsonld_breadcrumb_title']
                         : $page['title'],
                 ),
             );

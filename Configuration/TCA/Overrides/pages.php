@@ -254,6 +254,16 @@ $columns = array(
             'max' => 255
         ),
     ),
+    'mindshapeseo_jsonld_breadcrumb_title' => array(
+        'exclude' => 1,
+        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_pages.mindshapeseo_jsonld_breadcrumb_title',
+        'config' => array(
+            'type' => 'input',
+            'size' => 50,
+            'eval' => 'trim',
+            'max' => 255
+        ),
+    ),
 );
 
 $GLOBALS['TCA']['pages']['columns']['description']['label'] = 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.page_description';
@@ -282,6 +292,11 @@ foreach ($tables as $table) {
                        --linebreak--,
                        mindshapeseo_no_follow_recursive',
     );
+
+    $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_jsonld_pallette'] = array(
+        'showitem' => 'mindshapeseo_jsonld_breadcrumb_title',
+    );
+
     $GLOBALS['TCA'][$table]['palettes']['mindshape_seo_meta_pallette']['showitem'] =
         'mindshapeseo_focus_keyword,--linebreak--,mindshapeseo_disable_title_attachment,--linebreak--,' .
         'description,--linebreak--,mindshapeseo_canonical';
@@ -308,6 +323,7 @@ foreach ($tables as $table) {
         --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:label.general;mindshape_seo_general_pallette,
         --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.tabs.metadata;mindshape_seo_meta_pallette, 
         --palette--;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.palettes.editorial;mindshape_seo_editorial_pallette, 
+        --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.jsonld;mindshape_seo_jsonld_pallette, 
         --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.indexing;mindshape_seo_indexing_pallette, 
         --palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.sitemap;mindshape_seo_sitemap_pallette',
         '1,4',
