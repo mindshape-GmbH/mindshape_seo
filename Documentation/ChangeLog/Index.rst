@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v1.1.7
+  - Fix inproper analytics noscript tag appending to html
+
 v1.1.6
   - Add alternative breadcrumb title and use page title by default
   - Add force rendering of tagmanager noscript tag after opening body
@@ -35,6 +38,9 @@ v1.1.0
   - TYPO3 8.7.x compatibility
   - Add domain settings switch
   - Various optimizations
+
+v1.0.22
+  - Fix inproper tagmanager noscript tag appending to html
 
 v1.0.21
   - Add alternative breadcrumb title and use page title by default
