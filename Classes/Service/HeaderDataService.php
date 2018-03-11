@@ -287,13 +287,21 @@ class HeaderDataService implements SingletonInterface
      */
     public function addGoogleTagmanagerBodyToHtml($html)
     {
-        $tagmanagerBody = $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerBody', array(
-            'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
-        ));
+        if (
+            $this->domainConfiguration instanceof Configuration &&
+            false === empty($this->domainConfiguration->getGoogleTagmanager()) &&
+            true === $this->domainConfiguration->getAddAnalytics()
+        ) {
+            $tagmanagerBody = $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerBody', array(
+                'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
+            ));
 
-        $tagmanagerBody = trim(preg_replace('/\\>\\s+\\</', '><', $tagmanagerBody));
+            $tagmanagerBody = trim(preg_replace('/\\>\\s+\\</', '><', $tagmanagerBody));
 
-        return preg_replace('/<body>/', '<body>' . $tagmanagerBody, $html, 1);
+            return preg_replace('/<body>/', '<body>' . $tagmanagerBody, $html, 1);
+        }
+
+        return $html;
     }
 
     /**
