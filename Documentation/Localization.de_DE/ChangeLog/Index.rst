@@ -10,6 +10,26 @@
 Versionshistorie
 ----------------
 
+v1.1.7
+  - Behebe fehlerhaftes einfügen des Tagmanager noscript tags zum HTML
+
+v1.1.6
+  - Neues Feld alternative Breadcrumb Titel, standardmäßig wird der Seitentitel verwendet
+  - Erwzingen vom Tagmanager noscript Tag nach öffnendem Body Tag
+
+v1.1.5
+  - Verwende ebenfalls den alternativen Titel für den Opengraph Titel
+
+v1.1.4
+  - Korrigiere Groß- und Kleinschreibung von "Organization" im Backend JavaScript
+
+v1.1.3
+  - Neues Analytics Snippet
+  - Verbesserte PageRenderer Einbindung
+
+v1.1.2
+  - Behebe Upload Probleme bei Dateikonflikten
+
 v1.1.1
   - Hinzufügen einer dynamischen Tabellenkonfiguration für die Bilder-Sitemap
   - Behebe die automatische RealUrl Konfiguration
@@ -18,6 +38,9 @@ v1.1.0
   - TYPO3 8.7.x Kompatibilität
   - Hinzufügen eines Domainfeldes zum wechseln der Einstellungen im Einstellungsmodul
   - Diverse Optimierungen
+
+v1.0.22
+  - Behebe fehlerhaftes einfügen des Tagmanager noscript tags zum HTML
 
 v1.0.21
   - Neues Feld alternative Breadcrumb Titel, standardmäßig wird der Seitentitel verwendet

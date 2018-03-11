@@ -10,6 +10,26 @@
 ChangeLog
 ---------
 
+v1.1.7
+  - Fix inproper analytics noscript tag appending to html
+
+v1.1.6
+  - Add alternative breadcrumb title and use page title by default
+  - Add force rendering of tagmanager noscript tag after opening body
+
+v1.1.5
+  - Also use alternative page title for opengraph title
+
+v1.1.4
+  - Fix organization letter case in backend JavaScript
+
+v1.1.3
+  - Add new analytics snippet
+  - Implement better page renderer injection
+
+v1.1.2
+  - Fix bug on image uploading conflicts
+
 v1.1.1
   - Add dynamic table configuration for image sitemap
   - Fix automatic realurl configuration
@@ -18,6 +38,9 @@ v1.1.0
   - TYPO3 8.7.x compatibility
   - Add domain settings switch
   - Various optimizations
+
+v1.0.22
+  - Fix inproper tagmanager noscript tag appending to html
 
 v1.0.21
   - Add alternative breadcrumb title and use page title by default
