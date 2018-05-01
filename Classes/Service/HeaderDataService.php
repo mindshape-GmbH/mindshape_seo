@@ -158,6 +158,8 @@ class HeaderDataService implements SingletonInterface
                 $this->currentPageMetaData['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage()->getOriginalResource()->getPublicUrl();
             }
         }
+
+        $this->pageRenderer = PageUtility::getPageRenderer();
     }
 
     /**
@@ -165,8 +167,6 @@ class HeaderDataService implements SingletonInterface
      */
     public function manipulateHeaderData()
     {
-        $this->injectPageRenderer();
-
         $this->addBaseUrl();
         $this->addMetaData();
         $this->addFacebookData();
@@ -214,8 +214,6 @@ class HeaderDataService implements SingletonInterface
      */
     public function addTitle(array &$headerData = null)
     {
-        $this->injectPageRenderer();
-
         $headerDataWithTitle = preg_grep('#<title>(.*)</title>#i', $headerData);
 
         $title = reset($headerDataWithTitle);
@@ -302,14 +300,6 @@ class HeaderDataService implements SingletonInterface
         }
 
         return $html;
-    }
-
-    /**
-     * @return void
-     */
-    protected function injectPageRenderer()
-    {
-        $this->pageRenderer = PageUtility::getPageRenderer();
     }
 
     /**

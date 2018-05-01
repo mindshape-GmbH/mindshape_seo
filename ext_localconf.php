@@ -27,7 +27,3 @@ if (
 ) {
     \Mindshape\MindshapeSeo\Hook\RealurlHook::checkConfiguration();
 }
-
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController::class] = [
-    'className' => \Mindshape\MindshapeSeo\XClass\TypoScriptFrontendController::class
-];

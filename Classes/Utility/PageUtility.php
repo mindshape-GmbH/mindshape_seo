@@ -26,7 +26,6 @@ namespace Mindshape\MindshapeSeo\Utility;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Service\PageService;
-use Mindshape\MindshapeSeo\XClass\TypoScriptFrontendController;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -78,16 +77,26 @@ class PageUtility
      */
     public static function getPageRenderer()
     {
-        /** @var \Mindshape\MindshapeSeo\XClass\TypoScriptFrontendController $typoScriptFrontendController */
+        /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController */
         $typoScriptFrontendController = $GLOBALS['TSFE'];
 
-        if ($typoScriptFrontendController instanceof TypoScriptFrontendController) {
-            $pageRenderer = $typoScriptFrontendController->getPageRenderer();
-        } else {
-            /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $pageRenderer = $objectManager->get(PageRenderer::class);
-        }
+        try {
+            $typoScriptFrontendControllerReflectionClass = new \ReflectionClass($typoScriptFrontendController);
+
+            $pageRendererPropertyReflection = $typoScriptFrontendControllerReflectionClass->getProperty('pageRenderer');
+            $pageRendererPropertyReflection->setAccessible(true);
+
+            /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
+            $pageRenderer = $pageRendererPropertyReflection->getValue($typoScriptFrontendController);
+
+            if ($pageRenderer instanceof PageRenderer) {
+                return $pageRenderer;
+            }
+        } catch (\ReflectionException $exception) {}
+
+        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        $pageRenderer = $objectManager->get(PageRenderer::class);
 
         return $pageRenderer;
     }
