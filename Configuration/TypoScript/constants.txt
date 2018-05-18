@@ -1,4 +1,4 @@
-plugin.tx_mindshape_seo {
+plugin.tx_mindshapeseo {
   view {
     # cat=mindshape_seo/file; type=string; label=Path to template root (BE)
     templateRootPath = EXT:mindshape_seo/Resources/Private/Templates/
@@ -12,6 +12,8 @@ plugin.tx_mindshape_seo {
   settings {
     # cat=mindshape_seo/settings; type=boolean; label=Use a pagination in previews pagetree
     pageTree.usePagination = 1
+    # cat=mindshape_seo/settings; type=boolean; label=Disable auto included headerdata
+    metadata.disable = 1
     # customsubcategory=sitemapsettings=Sitemap Settings
     sitemap {
       # cat=mindshape_seo/sitemapsettings; type=int; label=News Detailpage for sitemap index

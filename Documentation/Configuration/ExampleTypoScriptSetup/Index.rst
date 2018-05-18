@@ -12,7 +12,7 @@ The following example shows all usable settings for the extension:
 
 ::
 
-    plugin.tx_mindshape_seo {
+    plugin.tx_mindshapeseo {
       settings {
         pageTree.usePagination = 0
 

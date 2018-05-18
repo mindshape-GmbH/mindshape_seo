@@ -1,15 +1,16 @@
-plugin.tx_mindshape_seo {
+plugin.tx_mindshapeseo {
   view {
-    templateRootPaths.0 = {$plugin.tx_mindshape_seo.view.templateRootPath}
-    partialRootPaths.0 = {$plugin.tx_mindshape_seo.view.partialRootPath}
-    layoutRootPaths.0 = {$plugin.tx_mindshape_seo.view.layoutRootPath}
+    templateRootPaths.0 = {$plugin.tx_mindshapeseo.view.templateRootPath}
+    partialRootPaths.0 = {$plugin.tx_mindshapeseo.view.partialRootPath}
+    layoutRootPaths.0 = {$plugin.tx_mindshapeseo.view.layoutRootPath}
   }
 
   settings {
-    pageTree.usePagination = {$plugin.tx_mindshape_seo.settings.pageTree.usePagination}
+    metadata.disable = {$plugin.tx_mindshapeseo.settings.metadata.disable}
+    pageTree.usePagination = {$plugin.tx_mindshapeseo.settings.pageTree.usePagination}
 
     sitemap {
-      newsDetailPage = {$plugin.tx_mindshape_seo.settings.sitemap.newsDetailPage}
+      newsDetailPage = {$plugin.tx_mindshapeseo.settings.sitemap.newsDetailPage}
 
       imageSitemap.tables {
         pages = media
@@ -19,7 +20,7 @@ plugin.tx_mindshape_seo {
   }
 }
 
-module.tx_mindshape_seo < plugin.tx_mindshape_seo
+module.tx_mindshapeseo < plugin.tx_mindshapeseo
 
 # sitemap.xml page type
 # make a htaccess redirect "RewriteRule sitemap.xml$ /index.php?type=10000 [L,R=301]"

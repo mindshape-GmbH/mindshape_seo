@@ -32,6 +32,8 @@ use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3\CMS\Lang\LanguageService as CoreLangugeService;
@@ -80,6 +82,11 @@ class HeaderDataService implements SingletonInterface
     /**
      * @var array
      */
+    protected $settings = array();
+
+    /**
+     * @var array
+     */
     protected $currentPageMetaData;
 
     /**
@@ -102,6 +109,11 @@ class HeaderDataService implements SingletonInterface
         $this->pageService = $objectManager->get(PageService::class);
         $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
         $this->configurationRepository = $objectManager->get(ConfigurationRepository::class);
+
+        /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
+        $configurationManager = $objectManager->get(ConfigurationManager::class);
+
+        $this->settings = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'mindshapeseo');
 
         $page = $this->pageService->getCurrentPage();
 
@@ -168,11 +180,14 @@ class HeaderDataService implements SingletonInterface
     public function manipulateHeaderData()
     {
         $this->addBaseUrl();
-        $this->addMetaData();
-        $this->addFacebookData();
 
-        if (null !== $this->currentPageMetaData['canonicalUrl']) {
-            $this->addCanonicalUrl();
+        if (false === (bool) $this->settings['metadata']['disable']) {
+            $this->addMetaData();
+            $this->addFacebookData();
+
+            if (null !== $this->currentPageMetaData['canonicalUrl']) {
+                $this->addCanonicalUrl();
+            }
         }
 
         if ($this->domainConfiguration instanceof Configuration) {

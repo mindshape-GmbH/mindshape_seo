@@ -8,7 +8,7 @@
 Referenz
 ^^^^^^^^
 
-Alle Konstanten zugehörig zu plugin.tx_mindshape_seo.settings:
+Alle Konstanten zugehörig zu plugin.tx_mindshapeseo.settings:
 
 .. ### BEGIN~OF~TABLE ###
 
