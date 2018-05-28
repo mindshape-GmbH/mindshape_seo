@@ -203,7 +203,10 @@ class HeaderDataService implements SingletonInterface
                 $this->addJsonLdBreadcrumb();
             }
 
-            if ($this->domainConfiguration->getAddAnalytics()) {
+            if (
+                $this->domainConfiguration->getAddAnalytics() &&
+                true === GeneralUtility::getApplicationContext()->isProduction()
+            ) {
                 if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
                     $this->addGoogleAnalytics();
                 }
