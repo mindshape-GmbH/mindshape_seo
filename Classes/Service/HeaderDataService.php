@@ -538,6 +538,14 @@ class HeaderDataService implements SingletonInterface
      */
     protected function renderJsonLd()
     {
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'] as $userFunc) {
+                $params = array('jsonld' => &$this->jsonLd);
+
+                GeneralUtility::callUserFunction($userFunc, $params, $this);
+            }
+        }
+
         if (0 < count($this->jsonLd)) {
             $this->pageRenderer->addHeaderData(
                 '<script type="application/ld+json" data-ignore="1">' . json_encode($this->jsonLd) . '</script>'
@@ -652,6 +660,14 @@ class HeaderDataService implements SingletonInterface
     protected function addJsonLdBreadcrumb()
     {
         $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
+
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'] as $userFunc) {
+                $params = array('jsonldBreadcrumb' => &$jsonLdbreadcrumb);
+
+                GeneralUtility::callUserFunction($userFunc, $params, $this);
+            }
+        }
 
         if (0 < count($jsonLdbreadcrumb['itemListElement'])) {
             $this->pageRenderer->addFooterData(
