@@ -205,6 +205,7 @@ class HeaderDataService implements SingletonInterface
 
             if (
                 $this->domainConfiguration->getAddAnalytics() &&
+                false === (bool) $this->settings['analytics']['disable'] &&
                 true === GeneralUtility::getApplicationContext()->isProduction()
             ) {
                 if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
@@ -305,6 +306,8 @@ class HeaderDataService implements SingletonInterface
     {
         if (
             $this->domainConfiguration instanceof Configuration &&
+            false === (bool) $this->settings['analytics']['disable'] &&
+            true === GeneralUtility::getApplicationContext()->isProduction() &&
             false === empty($this->domainConfiguration->getGoogleTagmanager()) &&
             true === $this->domainConfiguration->getAddAnalytics()
         ) {

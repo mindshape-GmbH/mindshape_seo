@@ -14,6 +14,8 @@ plugin.tx_mindshapeseo {
     pageTree.usePagination = 1
     # cat=mindshape_seo/settings; type=boolean; label=Disable auto included headerdata
     metadata.disable = 1
+    # cat=mindshape_seo/settings; type=boolean; label=Disable analytics injection
+    analytics.disable =
     # customsubcategory=sitemapsettings=Sitemap Settings
     sitemap {
       # cat=mindshape_seo/sitemapsettings; type=int; label=News Detailpage for sitemap index

@@ -6,8 +6,9 @@ plugin.tx_mindshapeseo {
   }
 
   settings {
-    metadata.disable = {$plugin.tx_mindshapeseo.settings.metadata.disable}
     pageTree.usePagination = {$plugin.tx_mindshapeseo.settings.pageTree.usePagination}
+    metadata.disable = {$plugin.tx_mindshapeseo.settings.metadata.disable}
+    analytics.disable = {$plugin.tx_mindshapeseo.settings.analytics.disable}
 
     sitemap {
       newsDetailPage = {$plugin.tx_mindshapeseo.settings.sitemap.newsDetailPage}
