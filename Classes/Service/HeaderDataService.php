@@ -317,7 +317,7 @@ class HeaderDataService implements SingletonInterface
 
             $tagmanagerBody = trim(preg_replace('/\\>\\s+\\</', '><', $tagmanagerBody));
 
-            return preg_replace('/<body>/', '<body>' . $tagmanagerBody, $html, 1);
+            return preg_replace('/<body(.*?)>/', '<body$1>' . $tagmanagerBody, $html, 1);
         }
 
         return $html;
