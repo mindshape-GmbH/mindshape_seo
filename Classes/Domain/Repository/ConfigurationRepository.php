@@ -1,10 +1,11 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Domain\Repository;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *
@@ -26,6 +27,13 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
+use Mindshape\MindshapeSeo\Utility\ObjectUtility;
+use PDO;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -39,9 +47,9 @@ class ConfigurationRepository extends Repository
     /**
      * @var array $defaultOrderings
      */
-    protected $defaultOrderings = array(
+    protected $defaultOrderings = [
         'domain' => QueryInterface::ORDER_DESCENDING,
-    );
+    ];
 
     /**
      * @return void
@@ -58,10 +66,15 @@ class ConfigurationRepository extends Repository
     /**
      * @param string $domain
      * @param bool $returnDefaultIfNotFound
+     * @param int|null $sysLanguageUid
      * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration
      */
-    public function findByDomain($domain, $returnDefaultIfNotFound = false)
+    public function findByDomain(string $domain, bool $returnDefaultIfNotFound = false, int $sysLanguageUid = null)
     {
+        if (0 < $sysLanguageUid) {
+            return $this->findByDomainTranslation($domain, $returnDefaultIfNotFound, $sysLanguageUid);
+        }
+
         $query = $this->createQuery();
 
         $constraint[] = $query->equals('domain', $domain);
@@ -78,8 +91,84 @@ class ConfigurationRepository extends Repository
     }
 
     /**
+     * @param string $domain
+     * @param bool $returnDefaultIfNotFound
+     * @param null $sysLanguageUid
+     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
+     */
+    public function findByDomainTranslation(string $domain, bool $returnDefaultIfNotFound = false, $sysLanguageUid = null): ?Configuration
+    {
+        $queryBuilder = DatabaseUtility::queryBuilder();
+
+        $queryBuilder->getRestrictions()->removeAll();
+        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+
+        $queryBuilder
+            ->select('*')
+            ->from(Configuration::TABLE)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'sys_language_uid',
+                    $queryBuilder->createNamedParameter($sysLanguageUid, PDO::PARAM_INT)
+                )
+            );
+
+
+        $domainQueryExpression = $queryBuilder->expr()->eq(
+            'domain',
+            $queryBuilder->createNamedParameter($domain)
+        );
+
+        if (false === $returnDefaultIfNotFound) {
+            $queryBuilder->andWhere($domainQueryExpression);
+        } else {
+            $queryBuilder->orWhere(
+                $queryBuilder->expr()->orX(
+                    $domainQueryExpression,
+                    $queryBuilder->expr()->eq('domain', '*')
+                )
+            );
+        }
+
+        $rawConfiguration = $queryBuilder->execute()->fetch();
+
+        if (
+            true === is_array($rawConfiguration) &&
+            0 < count($rawConfiguration)
+        ) {
+            return $this->mapRawConfiguration($rawConfiguration);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $record
+     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
+     */
+    protected function mapRawConfiguration(array $record): ?Configuration
+    {
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper $dataMapper */
+        $dataMapper = ObjectUtility::makeInstance(DataMapper::class);
+        $records = $dataMapper->map(Configuration::class, [$record]);
+
+        if (count($records) > 0) {
+            /** @var \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration */
+            $configuration = array_shift($records);
+        } else {
+            $configuration = null;
+        }
+
+        return $configuration;
+    }
+
+    /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
     public function save(Configuration $configuration)
     {
@@ -105,74 +194,72 @@ class ConfigurationRepository extends Repository
 
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
-     * @return void
      */
-    protected function checkFileReferences(Configuration $configuration)
+    public function mergeConfigurationWithDefault(Configuration $configuration): void
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
+        if (Configuration::DEFAULT_DOMAIN !== $configuration->getDomain()) {
+            $defaultConfiguration = $this->findByDomain(Configuration::DEFAULT_DOMAIN);
 
-        if (null === $configuration->getFacebookDefaultImage()) {
-            $fileReference = $databaseConnection->exec_SELECTgetSingleRow(
-                '*',
-                'sys_file_reference',
-                'deleted != 1 AND tablenames = "tx_mindshapeseo_domain_model_configuration" AND fieldname = "facebook_default_image" AND uid_foreign = ' . $configuration->getUid()
-            );
-
-            if (is_array($fileReference)) {
-                $this->updateFileReferences(
-                    $configuration->getUid(),
-                    'facebook_default_image',
-                    $fileReference
-                );
-            }
-        }
-
-        if (null === $configuration->getJsonldLogo()) {
-            $fileReference = $databaseConnection->exec_SELECTgetSingleRow(
-                '*',
-                'sys_file_reference',
-                'deleted != 1 AND tablenames = "tx_mindshapeseo_domain_model_configuration" AND fieldname = "jsonld_logo" AND uid_foreign = ' . $configuration->getUid()
-            );
-
-            if (is_array($fileReference)) {
-                $this->updateFileReferences(
-                    $configuration->getUid(),
-                    'jsonld_logo',
-                    $fileReference
-                );
+            if ($defaultConfiguration instanceof Configuration) {
+                $configuration->mergeConfiguration($defaultConfiguration);
             }
         }
     }
 
     /**
-     * @param int $configurationUid
-     * @param string $field
-     * @param array $fileReference
+     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
+     * @return void
      */
-    protected function updateFileReferences($configurationUid, $field, array $fileReference)
+    protected function checkFileReferences(Configuration $configuration)
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
+        if (null === $configuration->getJsonldLogo()) {
+            $queryBuilder = DatabaseUtility::queryBuilder();
 
-        $databaseConnection->sql_query('START TRANSACTION');
+            $fileReference = $queryBuilder
+                ->select('f.uid')
+                ->from('sys_file_reference', 'f')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'f.tablenames',
+                        $queryBuilder->createNamedParameter(Configuration::TABLE, PDO::PARAM_STR)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'f.fieldname',
+                        $queryBuilder->createNamedParameter('jsonld_logo', PDO::PARAM_STR)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'f.uid_foreign',
+                        $queryBuilder->createNamedParameter($configuration->getUid(), PDO::PARAM_INT)
+                    )
+                )
+                ->execute()
+                ->fetch();
 
-        $databaseConnection->exec_UPDATEquery(
-            'sys_file_reference',
-            'uid = ' . $fileReference['uid'],
-            array(
-                'deleted' => 1,
-            )
-        );
+            if (is_array($fileReference)) {
+                $queryBuilder = DatabaseUtility::queryBuilder();
+                $queryBuilder
+                    ->update('sys_file_reference', 'f')
+                    ->where(
+                        $queryBuilder->expr()->eq(
+                            'f.uid',
+                            $queryBuilder->createNamedParameter($fileReference['uid'], PDO::PARAM_INT)
+                        )
+                    )
+                    ->set('deleted', 1, true, PDO::PARAM_INT)
+                    ->execute();
 
-        $databaseConnection->exec_UPDATEquery(
-            'tx_mindshapeseo_domain_model_configuration',
-            'uid = ' . $configurationUid,
-            array(
-                $field => 0,
-            )
-        );
-
-        $databaseConnection->sql_query('COMMIT');
+                $queryBuilder = DatabaseUtility::queryBuilder();
+                $queryBuilder
+                    ->update(Configuration::TABLE, 'c')
+                    ->where(
+                        $queryBuilder->expr()->eq(
+                            'c.uid',
+                            $queryBuilder->createNamedParameter($configuration->getUid(), PDO::PARAM_INT)
+                        )
+                    )
+                    ->set('jsonld_logo', 0, true, PDO::PARAM_INT)
+                    ->execute();
+            }
+        }
     }
 }

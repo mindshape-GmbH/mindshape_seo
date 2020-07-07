@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Property\TypeConverter;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *
@@ -25,18 +25,24 @@ namespace Mindshape\MindshapeSeo\Property\TypeConverter;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileReference as FalFileReference;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Error\Error;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Property\Exception\TypeConverterException;
 use TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface;
 use TYPO3\CMS\Extbase\Property\TypeConverter\AbstractTypeConverter;
-use TYPO3\Flow\Utility\Files;
+use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * @package mindshape_seo
@@ -91,36 +97,57 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
 
     /**
      * @var \TYPO3\CMS\Core\Resource\ResourceFactory
-     * @inject
      */
     protected $resourceFactory;
 
     /**
      * @var \TYPO3\CMS\Extbase\Security\Cryptography\HashService
-     * @inject
      */
     protected $hashService;
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager
-     * @inject
      */
     protected $persistenceManager;
 
     /**
      * @var \TYPO3\CMS\Core\Resource\FileInterface[]
      */
-    protected $convertedResources = array();
+    protected $convertedResources = [];
+
+    /**
+     * @param \TYPO3\CMS\Core\Resource\ResourceFactory $resourceFactory
+     */
+    public function injectResourceFactory(ResourceFactory $resourceFactory): void
+    {
+        $this->resourceFactory = $resourceFactory;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Security\Cryptography\HashService $hashService
+     */
+    public function injectHashService(HashService $hashService): void
+    {
+        $this->hashService = $hashService;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager
+     */
+    public function injectPersistenceManager(PersistenceManager $persistenceManager): void
+    {
+        $this->persistenceManager = $persistenceManager;
+    }
 
     /**
      * @param array $source
      * @param string $targetType
      * @param array $convertedChildProperties
      * @param \TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface $configuration
-     * @throws \TYPO3\CMS\Extbase\Property\Exception
      * @return \TYPO3\CMS\Core\Resource\FileInterface|\TYPO3\CMS\Extbase\Domain\Model\AbstractFileFolder|\TYPO3\CMS\Extbase\Error\Error
+     * @throws \TYPO3\CMS\Extbase\Property\Exception
      */
-    public function convertFrom($source, $targetType, array $convertedChildProperties = array(), PropertyMappingConfigurationInterface $configuration = null)
+    public function convertFrom($source, $targetType, array $convertedChildProperties = [], PropertyMappingConfigurationInterface $configuration = null)
     {
         if (
             !array_key_exists('error', $source) ||
@@ -159,7 +186,7 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
                 case \UPLOAD_ERR_INI_SIZE:
                 case \UPLOAD_ERR_FORM_SIZE:
                 case \UPLOAD_ERR_PARTIAL:
-                    return new Error(Files::getUploadErrorMessage($source['error']), 1264440823);
+                    return new Error($this->getUploadErrorMessage($source['error']), 1264440823);
                 default:
                     return new Error('An error occurred while uploading. Please try again or contact the administrator if the problem remains', 1340193849);
             }
@@ -186,13 +213,23 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
      * @param array $uploadInfo
      * @param PropertyMappingConfigurationInterface $configuration
      * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
-     * @throws TypeConverterException
-     * @throws ExistingTargetFileNameException
+     * @throws \TYPO3\CMS\Extbase\Property\Exception\TypeConverterException
+     * @throws \TYPO3\CMS\Extbase\Security\Exception\InvalidArgumentForHashGenerationException
+     * @throws \TYPO3\CMS\Extbase\Security\Exception\InvalidHashException
      */
     protected function importUploadedResource(array $uploadInfo, PropertyMappingConfigurationInterface $configuration)
     {
-        if (!GeneralUtility::verifyFilenameAgainstDenyPattern($uploadInfo['name'])) {
-            throw new TypeConverterException('Uploading files with PHP file extensions is not allowed!', 1399312430);
+        /** @var Typo3Version $typo3Version */
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+
+        if (version_compare($typo3Version->getMajorVersion(), '10', '>=')) {
+            if (!GeneralUtility::makeInstance(FileNameValidator::class)->isValid($uploadInfo['name'])) {
+                throw new TypeConverterException('Uploading files with PHP file extensions is not allowed!', 1399312430);
+            }
+        } else {
+            if (!GeneralUtility::verifyFilenameAgainstDenyPattern($uploadInfo['name'])) {
+                throw new TypeConverterException('Uploading files with PHP file extensions is not allowed!', 1399312430);
+            }
         }
 
         $uploadInfo['name'] = $this->sanitizeFilename($uploadInfo['name']);
@@ -240,14 +277,12 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
      */
     protected function createFileReferenceFromFalFileObject(File $file, $resourcePointer = null)
     {
-        $fileReference = $this->resourceFactory->createFileReferenceObject(
-            array(
-                'uid_local' => $file->getUid(),
-                'uid_foreign' => uniqid('NEW_', false),
-                'uid' => uniqid('NEW_', false),
-                'crop' => null,
-            )
-        );
+        $fileReference = $this->resourceFactory->createFileReferenceObject([
+            'uid_local' => $file->getUid(),
+            'uid_foreign' => uniqid('NEW_', false),
+            'uid' => uniqid('NEW_', false),
+            'crop' => null,
+        ]);
 
         return $this->createFileReferenceFromFalFileReferenceObject($fileReference, $resourcePointer);
     }
@@ -273,5 +308,49 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
         $fileReference->setOriginalResource($falFileReference);
 
         return $fileReference;
+    }
+
+    /**
+     * @param int $errorCode
+     * @return string
+     */
+    protected function getUploadErrorMessage(int $errorCode): string
+    {
+        $logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(static::class);
+
+        switch ($errorCode) {
+            case \UPLOAD_ERR_INI_SIZE:
+                $logger->error('The uploaded file exceeds the upload_max_filesize directive in php.ini.', []);
+
+                return LocalizationUtility::translate('upload.error.150530345', 'form');
+            case \UPLOAD_ERR_FORM_SIZE:
+                $logger->error('The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.', []);
+
+                return LocalizationUtility::translate('upload.error.150530345', 'form');
+            case \UPLOAD_ERR_PARTIAL:
+                $logger->error('The uploaded file was only partially uploaded.', []);
+
+                return LocalizationUtility::translate('upload.error.150530346', 'form');
+            case \UPLOAD_ERR_NO_FILE:
+                $logger->error('No file was uploaded.', []);
+
+                return LocalizationUtility::translate('upload.error.150530347', 'form');
+            case \UPLOAD_ERR_NO_TMP_DIR:
+                $logger->error('Missing a temporary folder.', []);
+
+                return LocalizationUtility::translate('upload.error.150530348', 'form');
+            case \UPLOAD_ERR_CANT_WRITE:
+                $logger->error('Failed to write file to disk.', []);
+
+                return LocalizationUtility::translate('upload.error.150530348', 'form');
+            case \UPLOAD_ERR_EXTENSION:
+                $logger->error('File upload stopped by extension.', []);
+
+                return LocalizationUtility::translate('upload.error.150530348', 'form');
+            default:
+                $logger->error('Unknown upload error.', []);
+
+                return LocalizationUtility::translate('upload.error.150530348', 'form');
+        }
     }
 }

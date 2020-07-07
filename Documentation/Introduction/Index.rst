@@ -17,17 +17,19 @@ your websites SEO to the best.
 Advantage of mindshape_seo
 --------------------------
 
-+ SEO configurations for each domain
+*  SEO configurations for each domain and language
+*  New fields for pages
+*  Google SERP preview for pages
+*  Injection of analytics:
 
-+ New fields for pages
+   *  Google Analytics Unviversal
+   *  Google Analytics 4
+   *  Google TagManager
+   *  Matomo
 
-+ Sitemap.xml generator (incl. sub sitemap option on each page)
-
-+ Google SERP preview for pages
-
-+ Facebook Metadata
-
-+ Metadata validation
+*  Support for `mindshape Cookie Consent <https://extensions.typo3.org/extension/mindshape_cookie_consent>`__
+*  Metadata validation
+*  410 support for redirect module
 
 Screenshots
 -----------
@@ -41,11 +43,6 @@ Screenshots
     :alt: Settings module
 
     The settings module lets you configure your global SEO settings for each domain
-
-.. figure:: ../Images/screen_page_settings_facebook.png
-    :alt: Page module (Facebook Metadata Tab)
-
-    The page module has been extendet with additional fields to add facebook meta tags
 
 .. figure:: ../Images/screen_page_settings_seo.png
     :alt: Page module (SEO Tab)

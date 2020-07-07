@@ -1,10 +1,11 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Controller;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -31,13 +32,22 @@ use Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter
 use Mindshape\MindshapeSeo\Service\DomainService;
 use Mindshape\MindshapeSeo\Service\LanguageService;
 use Mindshape\MindshapeSeo\Service\SessionService;
+use Mindshape\MindshapeSeo\Service\TranslationService;
 use Mindshape\MindshapeSeo\Utility\BackendUtility;
 use Mindshape\MindshapeSeo\Service\PageService;
+use Mindshape\MindshapeSeo\Utility\ObjectUtility;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
+use TYPO3\CMS\Backend\Routing\UriBuilder as BackendUriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
-use TYPO3\CMS\Backend\Utility\BackendUtility as CoreBackendUtility;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
+use TYPO3\CMS\Core\Resource\Folder;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -75,6 +85,11 @@ class BackendController extends ActionController
      * @var \Mindshape\MindshapeSeo\Service\SessionService
      */
     protected $sessionService;
+
+    /**
+     * @var \Mindshape\MindshapeSeo\Service\TranslationService
+     */
+    protected $translationService;
 
     /**
      * @var \TYPO3\CMS\Core\Imaging\IconFactory
@@ -147,6 +162,15 @@ class BackendController extends ActionController
     }
 
     /**
+     * @param \Mindshape\MindshapeSeo\Service\TranslationService $translationService
+     * @return void
+     */
+    public function injectTranslationService(TranslationService $translationService)
+    {
+        $this->translationService = $translationService;
+    }
+
+    /**
      * @param \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory
      * @®return void
      */
@@ -162,7 +186,7 @@ class BackendController extends ActionController
     {
         $this->currentPageUid = BackendUtility::getCurrentPageTreeSelectedPage();
 
-        $this->settings = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'mindshape_seo');
+        $this->settings = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'mindshapeseo');
     }
 
     /**
@@ -187,7 +211,7 @@ class BackendController extends ActionController
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Severity');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
 
-            if (GeneralUtility::getApplicationContext()->isProduction()) {
+            if (\TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
                 $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
                 $pageRenderer->addJsFile('/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js');
             } else {
@@ -219,6 +243,19 @@ class BackendController extends ActionController
                 $this->buildDomainMenu($domains);
             }
 
+            $languages = $this->languageService->getLanguagesAvailable();
+
+            if (0 < count($languages)) {
+                $this->buildLanguageMenu(
+                    $languages,
+                    $this->getCurrentDomain(
+                        $this->arguments->getArgument('domain')->getValue()
+                    )
+                );
+            } else {
+                $this->arguments->addNewArgument('sysLanguageUid', 'int', false, 0);
+            }
+
             $this->buildButtons();
         }
 
@@ -244,7 +281,7 @@ class BackendController extends ActionController
         $uriBuilder->setRequest($this->request);
 
         $menu = $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
-        $menu->setIdentifier('mindshape_seo');
+        $menu->setIdentifier('mindshape_seo-DomainMenu');;
 
         $arguments = $this->request->getArguments();
 
@@ -256,6 +293,14 @@ class BackendController extends ActionController
                 Configuration::DEFAULT_DOMAIN;
         }
 
+        if (array_key_exists('sysLanguageUid', $arguments)) {
+            $sysLanguageUid = (int)$arguments['sysLanguageUid'];
+        } else {
+            $sysLanguageUid = $this->sessionService->hasKey('sysLanguageUid')
+                ? $this->sessionService->getKey('sysLanguageUid')
+                : 0;
+        }
+
         foreach ($domains as $domain) {
             $menu->addMenuItem(
                 $menu->makeMenuItem()
@@ -264,7 +309,7 @@ class BackendController extends ActionController
                             ? LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.domain.default', 'mindshape_seo')
                             : $domain
                     )
-                    ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => $domain), 'Backend'))
+                    ->setHref($uriBuilder->reset()->uriFor('settings', ['domain' => $domain, 'sysLanguageUid' => $sysLanguageUid], 'Backend'))
                     ->setActive($currentDomain === $domain)
             );
         }
@@ -275,7 +320,7 @@ class BackendController extends ActionController
                 $menu->addMenuItem(
                     $menu->makeMenuItem()
                         ->setTitle($configuration->getDomain())
-                        ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => $configuration->getDomain()), 'Backend'))
+                        ->setHref($uriBuilder->reset()->uriFor('settings', ['domain' => $configuration->getDomain()], 'Backend'))
                         ->setActive($currentDomain === $configuration->getDomain())
                 );
             }
@@ -286,40 +331,54 @@ class BackendController extends ActionController
 
     /**
      * @param array $languages
+     * @param string|null $domain
      * @return void
      */
-    protected function buildLanguageMenu(array $languages)
+    protected function buildLanguageMenu(array $languages, string $domain = null)
     {
         /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
         $uriBuilder = $this->objectManager->get(UriBuilder::class);
         $uriBuilder->setRequest($this->request);
 
         $menu = $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
-        $menu->setIdentifier('mindshape_seo');
+        $menu->setIdentifier('mindshape_seo-languageMenu');
 
         $arguments = $this->request->getArguments();
+        $currentAction = $this->request->getControllerActionName();
 
         if (array_key_exists('sysLanguageUid', $arguments)) {
-            $sysLanguageUid = (int) $arguments['sysLanguageUid'];
+            $sysLanguageUid = (int)$arguments['sysLanguageUid'];
         } else {
             $sysLanguageUid = $this->sessionService->hasKey('sysLanguageUid')
                 ? $this->sessionService->getKey('sysLanguageUid')
                 : 0;
         }
 
+        $defaultMenuItemParameters = ['sysLanguageUid' => 0];
+
+        if (true === is_string($domain)) {
+            $defaultMenuItemParameters['domain'] = $domain;
+        }
+
         $defaultMenuItem = $menu->makeMenuItem()
             ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.default_language', 'mindshape_seo'))
-            ->setHref($uriBuilder->reset()->uriFor('preview', array('sysLanguageUid' => 0), 'Backend'))
+            ->setHref($uriBuilder->reset()->uriFor($currentAction, $defaultMenuItemParameters, 'Backend'))
             ->setActive(0 === $sysLanguageUid);
 
         $menu->addMenuItem($defaultMenuItem);
 
         foreach ($languages as $language) {
+            $menuItemParameters = ['sysLanguageUid' => $language['uid']];
+
+            if (true === is_string($domain)) {
+                $defaultMenuItemParameters['domain'] = $domain;
+            }
+
             $menu->addMenuItem(
                 $menu->makeMenuItem()
                     ->setTitle($language['title'])
-                    ->setHref($uriBuilder->reset()->uriFor('preview', array('sysLanguageUid' => $language['uid']), 'Backend'))
-                    ->setActive($sysLanguageUid === (int) $language['uid'])
+                    ->setHref($uriBuilder->reset()->uriFor($currentAction, $menuItemParameters, 'Backend'))
+                    ->setActive($sysLanguageUid === (int)$language['uid'])
             );
         }
 
@@ -341,17 +400,22 @@ class BackendController extends ActionController
     }
 
     /**
-     * @param string $domain
+     * @param string|null $domain
+     * @param int|null $sysLanguageUid
      * @return void
+     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
-    public function settingsAction($domain = null)
+    public function settingsAction(string $domain = null, int $sysLanguageUid = null)
     {
-        if (null === $domain) {
-            $domain = $this->sessionService->hasKey('domain') ?
-                $this->sessionService->getKey('domain') :
-                Configuration::DEFAULT_DOMAIN;
+        $domain = $this->getCurrentDomain($domain);
+
+        if (null === $sysLanguageUid) {
+            $sysLanguageUid = $this->sessionService->hasKey('sysLanguageUid')
+                ? $this->sessionService->getKey('sysLanguageUid')
+                : 0;
         } else {
-            $this->sessionService->setKey('domain', $domain);
+            $this->sessionService->setKey('sysLanguageUid', $sysLanguageUid);
         }
 
         $domains = $this->domainService->getAvailableDomains();
@@ -360,7 +424,8 @@ class BackendController extends ActionController
             $domain = '*';
         }
 
-        $configuration = $this->configurationRepository->findByDomain($domain);
+        $defaultConfiguration = null;
+        $configuration = $this->configurationRepository->findByDomain($domain, false, $sysLanguageUid);
 
         if (!$configuration instanceof Configuration) {
             $configuration = new Configuration();
@@ -371,7 +436,23 @@ class BackendController extends ActionController
             $configuration->setDomain(Configuration::DEFAULT_DOMAIN);
         }
 
+        if (Configuration::DEFAULT_DOMAIN !== $configuration->getDomain()) {
+            $defaultConfiguration = $this->configurationRepository->findByDomain(
+                Configuration::DEFAULT_DOMAIN,
+                false,
+                $sysLanguageUid
+            );
+        }
+
         if (false === $configuration->_isNew()) {
+            $uriBuilder = ObjectUtility::makeInstance(BackendUriBuilder::class);
+
+            try {
+                $redirectUrl = (string)$uriBuilder->buildUriFromRoute('mindshapeseo_MindshapeSeoSettings');
+            } catch (RouteNotFoundException $exception) {
+                $redirectUrl = (string)$uriBuilder->buildUriFromRoutePath('mindshapeseo_MindshapeSeoSettings');
+            }
+
             $deleteButton = $this->buttonBar->makeLinkButton()
                 ->setClasses('mindshape-seo-deletebutton')
                 ->setHref('#')
@@ -382,30 +463,67 @@ class BackendController extends ActionController
                     'message' => LocalizationUtility::translate('tx_mindshapeseo_label.delete_configuration', 'mindshape_seo'),
                     'label-abort' => LocalizationUtility::translate('tx_mindshapeseo_label.abort', 'mindshape_seo'),
                     'label-delete' => LocalizationUtility::translate('tx_mindshapeseo_label.delete', 'mindshape_seo'),
-                    'redirect-url' => CoreBackendUtility::getModuleUrl('mindshapeseo_MindshapeSeoSettings'),
+                    'redirect-url' => $redirectUrl,
                 ]);
 
             $this->buttonBar->addButton($deleteButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
         }
 
-        $this->view->assignMultiple(array(
+        $robotsTxtNotExists = true;
+        $robotsContent = false;
+        $currentDomain = $domain === Configuration::DEFAULT_DOMAIN ? GeneralUtility::getIndpEnv('HTTP_HOST') : $domain;
+
+        if (file_exists(Environment::getPublicPath() . '/robots.txt')) {
+            $robotsTxtNotExists = false;
+        }
+
+        if ($robotsTxtNotExists === true) {
+            /** @var \TYPO3\CMS\Core\Site\SiteFinder $siteFinder */
+            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+            /** @var \TYPO3\CMS\Core\Site\Entity\Site $allSites */
+            $allSites = $siteFinder->getAllSites();
+
+            /** @var \TYPO3\CMS\Core\Site\Entity\Site $site */
+            foreach ($allSites as $site) {
+                if ($site->getBase()->getHost() === $currentDomain) {
+                    $siteConf = $site->getConfiguration();
+                    $routes = $siteConf['routes'];
+
+                    if (true === is_array($routes)) {
+                        foreach ($routes as $route) {
+                            if ($route['route'] === 'robots.txt') {
+                                $robotsTxtNotExists = false;
+                                $robotsContent = $route['content'];
+                                break;
+                            }
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        $this->view->assignMultiple([
             'domains' => $domains,
             'domainsSelectOptions' => $this->domainService->getConfigurationDomainSelectOptions($domain),
-            'currentDomain' => $domain === Configuration::DEFAULT_DOMAIN ?
-                GeneralUtility::getIndpEnv('HTTP_HOST') :
-                $domain,
+            'currentDomain' => $currentDomain,
+            'defaultConfiguration' => $defaultConfiguration,
             'configuration' => $configuration,
-            'titleAttachmentPositionOptions' => array(
+            'languageUid' => $sysLanguageUid,
+            'titleAttachmentPositionOptions' => [
                 Configuration::TITLE_ATTACHMENT_POSITION_SUFFIX => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.title_attachment_position.suffix', 'mindshape_seo'),
                 Configuration::TITLE_ATTACHMENT_POSITION_PREFIX => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.title_attachment_position.prefix', 'mindshape_seo'),
-            ),
-            'jsonldTypeOptions' => array(
+            ],
+            'jsonldTypeOptions' => [
                 Configuration::JSONLD_TYPE_ORGANIZATION => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.organization', 'mindshape_seo'),
                 Configuration::JSONLD_TYPE_PERSON => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.person', 'mindshape_seo'),
-            ),
+            ],
             'domainUrl' => (GeneralUtility::getIndpEnv('TYPO3_SSL') ? 'https' : 'http') . '://' . ($domain !== Configuration::DEFAULT_DOMAIN ? $domain : GeneralUtility::getIndpEnv('HTTP_HOST')),
-            'robotsTxtNotExists' => !file_exists(PATH_site . '/robots.txt'),
-        ));
+            'robotsTxtNotExists' => $robotsTxtNotExists,
+            'robotsTxtContent' => $robotsContent,
+            'cookieExtensionIsActive' => ExtensionManagementUtility::isLoaded('mindshape_cookie_consent'),
+        ]);
     }
 
     /**
@@ -418,11 +536,28 @@ class BackendController extends ActionController
 
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
-     * @validate $configuration \Mindshape\MindshapeSeo\Validation\Validator\ConfigurationValidator
-     * @return void
+     * @param int $languageUid
+     * @throws \Mindshape\MindshapeSeo\Service\Exception
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
+     * @TYPO3\CMS\Extbase\Annotation\Validate("\Mindshape\MindshapeSeo\Validation\Validator\ConfigurationValidator", param="configuration")
      */
-    public function saveConfigurationAction(Configuration $configuration)
+    public function saveConfigurationAction(Configuration $configuration, int $languageUid)
     {
+        if (0 < $languageUid) {
+            $defaultLanguageConfiguration = $this->configurationRepository->findByDomain($configuration->getDomain());
+
+            $this->translationService->translate(
+                $configuration,
+                $languageUid,
+                $defaultLanguageConfiguration instanceof Configuration
+                    ? $defaultLanguageConfiguration->getUid()
+                    : 0
+            );
+        }
+
         $this->configurationRepository->save($configuration);
         $this->sessionService->setKey('domain', $configuration->getDomain());
 
@@ -430,9 +565,9 @@ class BackendController extends ActionController
             'settings',
             'Backend',
             null,
-            array(
+            [
                 'domain' => $configuration->getDomain(),
-            )
+            ]
         );
     }
 
@@ -444,16 +579,21 @@ class BackendController extends ActionController
     public function previewAction($depth = null, $sysLanguageUid = null)
     {
         $currentPage = $this->pageService->getCurrentPage();
+        $showHiddenPages = (bool)$this->settings['googlePreview']['showHiddenPages'];
+        $respectDoktypes = GeneralUtility::trimExplode(',', $this->settings['googlePreview']['respectDoktypes']);
 
         if (
             0 === $this->currentPageUid ||
-            (bool) $currentPage['hidden'] ||
-            (
-                1 !== (int) $currentPage['doktype'] &&
-                4 !== (int) $currentPage['doktype']
-            )
+            !in_array($currentPage['doktype'], $respectDoktypes) ||
+            ($showHiddenPages === false && (bool)$currentPage['hidden'] === true)
         ) {
-            $this->view->assign('noPageSelected', true);
+            if ($showHiddenPages === false && (bool)$currentPage['hidden'] === true) {
+                $this->view->assign('pageHidden', true);
+            } else if (!in_array($currentPage['doktype'], $respectDoktypes)) {
+                $this->view->assign('unsupportedDoktype', true);
+            } else {
+                $this->view->assign('noPageSelected', true);
+            }
         } else {
             if (null === $depth) {
                 $depth = $this->sessionService->hasKey('depth') ?
@@ -474,7 +614,7 @@ class BackendController extends ActionController
             $configuration = $this->domainService->getPageDomainConfiguration();
 
             if ($configuration instanceof Configuration) {
-                $this->view->assignMultiple(array(
+                $this->view->assignMultiple([
                     'pageTree' => $this->pageService->getPageMetadataTree(
                         $this->currentPageUid,
                         $depth,
@@ -485,7 +625,7 @@ class BackendController extends ActionController
                     'titleAttachment' => $configuration->getTitleAttachment(),
                     'titleAttachmentSeperator' => $configuration->getTitleAttachmentSeperator(),
                     'titleAttachmentPosition' => $configuration->getTitleAttachmentPosition(),
-                ));
+                ]);
             } else {
                 $this->view->assign(
                     'pageTree',
@@ -497,10 +637,10 @@ class BackendController extends ActionController
                 );
             }
 
-            $this->view->assignMultiple(array(
+            $this->view->assignMultiple([
                 'sysLanguageUid' => $sysLanguageUid,
                 'depth' => $depth,
-                'levelOptions' => array(
+                'levelOptions' => [
                     PageService::TREE_DEPTH_INFINITY => LocalizationUtility::translate('tx_mindshapeseo_label.preview.levels.infinity', 'mindshape_seo'),
                     0 => '0',
                     1 => '1',
@@ -513,8 +653,8 @@ class BackendController extends ActionController
                     8 => '8',
                     9 => '9',
                     10 => '10',
-                ),
-            ));
+                ],
+            ]);
         }
     }
 
@@ -522,25 +662,48 @@ class BackendController extends ActionController
      * @param string $argumentName
      * @return void
      */
-    protected function setTypeConverterConfigurationForImageUpload($argumentName)
+    protected function setTypeConverterConfigurationForImageUpload(string $argumentName)
     {
-        $uploadConfiguration = array(
-            UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
-            UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER => '1:/mindshape_seo/',
-        );
+        $uploadConfiguration = [UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']];
+
+        $resourceFactory = ResourceFactory::getInstance();
+
+        try {
+            $folder = $resourceFactory->getDefaultStorage()->getFolder('mindshape_seo');
+        } catch (FolderDoesNotExistException $exception) {
+            $folder = null;
+        }
+
+        if (!$folder instanceof Folder) {
+            $folder = $resourceFactory->getDefaultStorage()->createFolder('mindshape_seo');
+        }
+
+        $uploadConfiguration[UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER] = $folder->getCombinedIdentifier();
 
         /** @var \TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration $newExampleConfiguration */
         $newExampleConfiguration = $this->arguments[$argumentName]->getPropertyMappingConfiguration();
         $newExampleConfiguration
-            ->forProperty('facebookDefaultImage')
-            ->setTypeConverterOptions(
-                UploadedFileReferenceConverter::class,
-                $uploadConfiguration
-            )
             ->forProperty('jsonldLogo')
             ->setTypeConverterOptions(
                 UploadedFileReferenceConverter::class,
                 $uploadConfiguration
             );
+    }
+
+    /**
+     * @param string|null $domain
+     * @return string
+     */
+    protected function getCurrentDomain(string $domain = null): string
+    {
+        if (null === $domain) {
+            $domain = $this->sessionService->hasKey('domain') ?
+                $this->sessionService->getKey('domain') :
+                Configuration::DEFAULT_DOMAIN;
+        } else {
+            $this->sessionService->setKey('domain', $domain);
+        }
+
+        return $domain;
     }
 }

@@ -1,10 +1,11 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Service;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -25,6 +26,8 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
+use PDO;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -34,24 +37,51 @@ use TYPO3\CMS\Core\SingletonInterface;
 class LanguageService implements SingletonInterface
 {
     /**
+     * @return array
+     */
+    public function getLanguagesAvailable(): array
+    {
+        $result = DatabaseUtility::queryBuilder()
+            ->select('*')
+            ->from('sys_language')
+            ->execute()
+            ->fetchAll();
+
+        if (true === is_array($result)) {
+            return $result;
+        }
+
+        return [];
+    }
+
+    /**
      * @param int $pageUid
      * @return array
      */
-    public function getPageLanguagesAvailable($pageUid)
+    public function getPageLanguagesAvailable(int $pageUid): array
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
+        $queryBuilder = DatabaseUtility::queryBuilder();
 
-        $result = $databaseConnection->exec_SELECTgetRows(
-            'DISTINCT l.*',
-            'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.sys_language_uid',
-            'o.pid = ' . $pageUid
-        );
+        $result = $queryBuilder
+            ->select('l.uid', 'l.title')
+            ->from('sys_language', 'l')
+            ->innerJoin(
+                'l',
+                'pages',
+                'p',
+                $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->quoteIdentifier('l.uid'))
+            )
+            ->where(
+                $queryBuilder->expr()->eq('p.l10n_parent', $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
+                $queryBuilder->expr()->neq('p.sys_language_uid', 0)
+            )
+            ->execute()
+            ->fetchAll();
 
         if (is_array($result)) {
             return $result;
         } else {
-            return array();
+            return [];
         }
     }
 }

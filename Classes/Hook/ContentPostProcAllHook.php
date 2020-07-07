@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Hook;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *
@@ -39,6 +39,7 @@ class ContentPostProcAllHook
     /**
      * @param array $params
      * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function main(array &$params, TypoScriptFrontendController $typoScriptFrontendController)
     {

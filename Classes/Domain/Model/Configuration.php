@@ -1,10 +1,11 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Domain\Model;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -34,14 +35,16 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
  */
 class Configuration extends AbstractEntity
 {
-    const DEFAULT_DOMAIN = '*';
-    const DEFAULT_TITLE_ATTACHMENT_SEPERATOR = '|';
+    public const TABLE = 'tx_mindshapeseo_domain_model_configuration';
 
-    const JSONLD_TYPE_ORGANIZATION = 'Organization';
-    const JSONLD_TYPE_PERSON = 'Person';
+    public const DEFAULT_DOMAIN = '*';
+    public const DEFAULT_TITLE_ATTACHMENT_SEPERATOR = '|';
 
-    const TITLE_ATTACHMENT_POSITION_PREFIX = 'prefix';
-    const TITLE_ATTACHMENT_POSITION_SUFFIX = 'suffix';
+    public const JSONLD_TYPE_ORGANIZATION = 'Organization';
+    public const JSONLD_TYPE_PERSON = 'Person';
+
+    public const TITLE_ATTACHMENT_POSITION_PREFIX = 'prefix';
+    public const TITLE_ATTACHMENT_POSITION_SUFFIX = 'suffix';
 
     /**
      * @var string
@@ -49,9 +52,9 @@ class Configuration extends AbstractEntity
     protected $domain = '';
 
     /**
-     * @var string
+     * @var bool
      */
-    protected $sitename = '';
+    protected $mergeWithDefault = true;
 
     /**
      * @var string
@@ -61,17 +64,12 @@ class Configuration extends AbstractEntity
     /**
      * @var string
      */
+    protected $googleAnalyticsV4 = '';
+
+    /**
+     * @var string
+     */
     protected $googleTagmanager = '';
-
-    /**
-     * @var string
-     */
-    protected $piwikUrl = '';
-
-    /**
-     * @var string
-     */
-    protected $piwikIdsite = '';
 
     /**
      * @var string
@@ -96,7 +94,22 @@ class Configuration extends AbstractEntity
     /**
      * @var bool
      */
-    protected $addHreflang = false;
+    protected $googleAnalyticsUseCookieConsent = false;
+
+    /**
+     * @var bool
+     */
+    protected $googleAnalyticsV4UseCookieConsent = false;
+
+    /**
+     * @var bool
+     */
+    protected $tagmanagerUseCookieConsent = false;
+
+    /**
+     * @var bool
+     */
+    protected $matomoUseCookieConsent = false;
 
     /**
      * @var bool
@@ -107,21 +120,6 @@ class Configuration extends AbstractEntity
      * @var bool
      */
     protected $addJsonldBreadcrumb = false;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
-     */
-    protected $facebookDefaultImage;
-
-    /**
-     * @var int
-     */
-    protected $imageSitemapMinHeight = 0;
-
-    /**
-     * @var int
-     */
-    protected $imageSitemapMinWidth = 0;
 
     /**
      * @var string
@@ -162,11 +160,6 @@ class Configuration extends AbstractEntity
      * @var string
      */
     protected $jsonldSameAsTwitter = '';
-
-    /**
-     * @var string
-     */
-    protected $jsonldSameAsGoogleplus = '';
 
     /**
      * @var string
@@ -224,6 +217,16 @@ class Configuration extends AbstractEntity
     protected $jsonldAddressStreet = '';
 
     /**
+     * @var string
+     */
+    protected $matomoUrl = '';
+
+    /**
+     * @var string
+     */
+    protected $matomoIdsite = '';
+
+    /**
      * @return string $domain
      */
     public function getDomain()
@@ -241,20 +244,19 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getSitename()
+    public function isMergeWithDefault()
     {
-        return $this->sitename;
+        return $this->mergeWithDefault;
     }
 
     /**
-     * @param string $sitename
-     * @return void
+     * @param bool $mergeWithDefault
      */
-    public function setSitename($sitename)
+    public function setMergeWithDefault($mergeWithDefault)
     {
-        $this->sitename = $sitename;
+        $this->mergeWithDefault = $mergeWithDefault;
     }
 
     /**
@@ -277,6 +279,22 @@ class Configuration extends AbstractEntity
     /**
      * @return string
      */
+    public function getGoogleAnalyticsV4()
+    {
+        return $this->googleAnalyticsV4;
+    }
+
+    /**
+     * @param string $googleAnalyticsV4
+     */
+    public function setGoogleAnalyticsV4($googleAnalyticsV4)
+    {
+        $this->googleAnalyticsV4 = $googleAnalyticsV4;
+    }
+
+    /**
+     * @return string
+     */
     public function getGoogleTagmanager()
     {
         return $this->googleTagmanager;
@@ -289,40 +307,6 @@ class Configuration extends AbstractEntity
     public function setGoogleTagmanager($googleTagmanager)
     {
         $this->googleTagmanager = $googleTagmanager;
-    }
-
-    /**
-     * @return string $piwikUrl
-     */
-    public function getPiwikUrl()
-    {
-        return $this->piwikUrl;
-    }
-
-    /**
-     * @param string $piwikUrl
-     * @return void
-     */
-    public function setPiwikUrl($piwikUrl)
-    {
-        $this->piwikUrl = $piwikUrl;
-    }
-
-    /**
-     * @return string $piwikIdsite
-     */
-    public function getPiwikIdsite()
-    {
-        return $this->piwikIdsite;
-    }
-
-    /**
-     * @param string $piwikIdsite
-     * @return void
-     */
-    public function setPiwikIdsite($piwikIdsite)
-    {
-        $this->piwikIdsite = $piwikIdsite;
     }
 
     /**
@@ -402,28 +386,67 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return bool $addHreflang
+     * @return bool
      */
-    public function getAddHreflang()
+    public function getGoogleAnalyticsUseCookieConsent()
     {
-        return $this->addHreflang;
+        return $this->googleAnalyticsUseCookieConsent;
     }
 
     /**
-     * @param bool $addHreflang
-     * @return void
+     * @param bool $googleAnalyticsUseCookieConsent
      */
-    public function setAddHreflang($addHreflang)
+    public function setGoogleAnalyticsUseCookieConsent($googleAnalyticsUseCookieConsent)
     {
-        $this->addHreflang = $addHreflang;
+        $this->googleAnalyticsUseCookieConsent = $googleAnalyticsUseCookieConsent;
     }
 
     /**
      * @return bool
      */
-    public function isAddHreflang()
+    public function getGoogleAnalyticsV4UseCookieConsent()
     {
-        return $this->addHreflang;
+        return $this->googleAnalyticsV4UseCookieConsent;
+    }
+
+    /**
+     * @param bool $googleAnalyticsV4UseCookieConsent
+     */
+    public function setGoogleAnalyticsV4UseCookieConsent($googleAnalyticsV4UseCookieConsent)
+    {
+        $this->googleAnalyticsV4UseCookieConsent = $googleAnalyticsV4UseCookieConsent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getTagmanagerUseCookieConsent()
+    {
+        return $this->tagmanagerUseCookieConsent;
+    }
+
+    /**
+     * @param bool $tagmanagerUseCookieConsent
+     */
+    public function setTagmanagerUseCookieConsent($tagmanagerUseCookieConsent)
+    {
+        $this->tagmanagerUseCookieConsent = $tagmanagerUseCookieConsent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMatomoUseCookieConsent()
+    {
+        return $this->matomoUseCookieConsent;
+    }
+
+    /**
+     * @param bool $matomoUseCookieConsent
+     */
+    public function setMatomoUseCookieConsent($matomoUseCookieConsent)
+    {
+        $this->matomoUseCookieConsent = $matomoUseCookieConsent;
     }
 
     /**
@@ -474,57 +497,6 @@ class Configuration extends AbstractEntity
     public function isAddJsonldBreadcrumb()
     {
         return $this->addJsonldBreadcrumb;
-    }
-
-    /**
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference $facebookDefaultImage
-     */
-    public function getFacebookDefaultImage()
-    {
-        return $this->facebookDefaultImage;
-    }
-
-    /**
-     * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $facebookDefaultImage
-     * @return void
-     */
-    public function setFacebookDefaultImage(ExtbaseFileReference $facebookDefaultImage = null)
-    {
-        $this->facebookDefaultImage = $facebookDefaultImage;
-    }
-
-    /**
-     * @return string $imageSitemapMinHeight
-     */
-    public function getImageSitemapMinHeight()
-    {
-        return $this->imageSitemapMinHeight;
-    }
-
-    /**
-     * @param string $imageSitemapMinHeight
-     * @return void
-     */
-    public function setImageSitemapMinHeight($imageSitemapMinHeight)
-    {
-        $this->imageSitemapMinHeight = $imageSitemapMinHeight;
-    }
-
-    /**
-     * @return string $imageSitemapMinWidth
-     */
-    public function getImageSitemapMinWidth()
-    {
-        return $this->imageSitemapMinWidth;
-    }
-
-    /**
-     * @param string $imageSitemapMinWidth
-     * @return void
-     */
-    public function setImageSitemapMinWidth($imageSitemapMinWidth)
-    {
-        $this->imageSitemapMinWidth = $imageSitemapMinWidth;
     }
 
     /**
@@ -661,23 +633,6 @@ class Configuration extends AbstractEntity
     public function setJsonldSameAsTwitter($jsonldSameAsTwitter)
     {
         $this->jsonldSameAsTwitter = $jsonldSameAsTwitter;
-    }
-
-    /**
-     * @return string $jsonldSameAs
-     */
-    public function getJsonldSameAsGoogleplus()
-    {
-        return $this->jsonldSameAsGoogleplus;
-    }
-
-    /**
-     * @param string $jsonldSameAsGoogleplus
-     * @return void
-     */
-    public function setJsonldSameAsGoogleplus($jsonldSameAsGoogleplus)
-    {
-        $this->jsonldSameAsGoogleplus = $jsonldSameAsGoogleplus;
     }
 
     /**
@@ -865,5 +820,147 @@ class Configuration extends AbstractEntity
     public function setJsonldAddressStreet($jsonldAddressStreet)
     {
         $this->jsonldAddressStreet = $jsonldAddressStreet;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMatomoIdsite(): string
+    {
+        return $this->matomoIdsite;
+    }
+
+    /**
+     * @param string $matomoIdsite
+     */
+    public function setMatomoIdsite(string $matomoIdsite): void
+    {
+        $this->matomoIdsite = $matomoIdsite;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMatomoUrl(): string
+    {
+        return $this->matomoUrl;
+    }
+
+    /**
+     * @param string $matomoUrl
+     */
+    public function setMatomoUrl(string $matomoUrl): void
+    {
+        $this->matomoUrl = $matomoUrl;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
+     */
+    public function mergeConfiguration(Configuration $configuration): void
+    {
+        $this->googleAnalytics = true === empty($this->googleAnalytics)
+            ? $configuration->getGoogleAnalytics()
+            : $this->googleAnalytics;
+
+        $this->googleAnalyticsV4 = true === empty($this->googleAnalyticsV4)
+            ? $configuration->getGoogleAnalyticsV4()
+            : $this->googleAnalyticsV4;
+
+        $this->googleTagmanager = true === empty($this->googleTagmanager)
+            ? $configuration->getGoogleTagmanager()
+            : $this->googleTagmanager;
+
+        $this->matomoUrl = true === empty($this->matomoUrl)
+            ? $configuration->getMatomoUrl()
+            : $this->matomoUrl;
+
+        $this->matomoIdsite = true === empty($this->matomoIdsite)
+            ? $configuration->getMatomoIdsite()
+            : $this->matomoIdsite;
+
+        $this->titleAttachment = true === empty($this->titleAttachment)
+            ? $configuration->getTitleAttachment()
+            : $this->titleAttachment;
+
+        $this->jsonldCustomUrl = true === empty($this->jsonldCustomUrl)
+            ? $configuration->getJsonldCustomUrl()
+            : $this->jsonldCustomUrl;
+
+        $this->jsonldType = true === empty($this->jsonldType)
+            ? $configuration->getJsonldType()
+            : $this->jsonldType;
+
+        $this->jsonldName = true === empty($this->jsonldName)
+            ? $configuration->getJsonldName()
+            : $this->jsonldName;
+
+        $this->jsonldTelephone = true === empty($this->jsonldTelephone)
+            ? $configuration->getJsonldTelephone()
+            : $this->jsonldTelephone;
+
+        $this->jsonldFax = true === empty($this->jsonldFax)
+            ? $configuration->getJsonldFax()
+            : $this->jsonldFax;
+
+        $this->jsonldEmail = true === empty($this->jsonldEmail)
+            ? $configuration->getJsonldEmail()
+            : $this->jsonldEmail;
+
+        $this->jsonldSameAsFacebook = true === empty($this->jsonldSameAsFacebook)
+            ? $configuration->getJsonldSameAsFacebook()
+            : $this->jsonldSameAsFacebook;
+
+        $this->jsonldSameAsTwitter = true === empty($this->jsonldSameAsTwitter)
+            ? $configuration->getJsonldSameAsTwitter()
+            : $this->jsonldSameAsTwitter;
+
+        $this->jsonldSameAsInstagram = true === empty($this->jsonldSameAsInstagram)
+            ? $configuration->getJsonldSameAsInstagram()
+            : $this->jsonldSameAsInstagram;
+
+        $this->jsonldSameAsInstagram = true === empty($this->jsonldSameAsInstagram)
+            ? $configuration->getJsonldSameAsInstagram()
+            : $this->jsonldSameAsInstagram;
+
+        $this->jsonldSameAsYoutube = true === empty($this->jsonldSameAsYoutube)
+            ? $configuration->getJsonldSameAsYoutube()
+            : $this->jsonldSameAsYoutube;
+
+        $this->jsonldSameAsLinkedin = true === empty($this->jsonldSameAsLinkedin)
+            ? $configuration->getJsonldSameAsLinkedin()
+            : $this->jsonldSameAsLinkedin;
+
+        $this->jsonldSameAsXing = true === empty($this->jsonldSameAsXing)
+            ? $configuration->getJsonldSameAsXing()
+            : $this->jsonldSameAsXing;
+
+        $this->jsonldSameAsPrinterest = true === empty($this->jsonldSameAsPrinterest)
+            ? $configuration->getJsonldSameAsPrinterest()
+            : $this->jsonldSameAsPrinterest;
+
+        $this->jsonldSameAsSoundcloud = true === empty($this->jsonldSameAsSoundcloud)
+            ? $configuration->getJsonldSameAsSoundcloud()
+            : $this->jsonldSameAsSoundcloud;
+
+        $this->jsonldSameAsTumblr = true === empty($this->jsonldSameAsTumblr)
+            ? $configuration->getJsonldSameAsTumblr()
+            : $this->jsonldSameAsTumblr;
+
+        $this->jsonldLogo = !$this->jsonldLogo instanceof ExtbaseFileReference
+            ? $configuration->getJsonldLogo()
+            : $this->jsonldLogo;
+
+        $this->jsonldAddressLocality = true === empty($this->jsonldAddressLocality)
+            ? $configuration->getJsonldAddressLocality()
+            : $this->jsonldAddressLocality;
+
+        $this->jsonldAddressPostalcode = true === empty($this->jsonldAddressPostalcode)
+            ? $configuration->getJsonldAddressPostalcode()
+            : $this->jsonldAddressPostalcode;
+
+        $this->jsonldAddressStreet = true === empty($this->jsonldAddressStreet)
+            ? $configuration->getJsonldAddressStreet()
+            : $this->jsonldAddressStreet;
     }
 }

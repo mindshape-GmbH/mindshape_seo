@@ -10,6 +10,17 @@
 ChangeLog
 ---------
 
+v2.0.0
+  - Compatibility for TYPO3 v9.5 & v10.4
+  - Add debug option to force analytics injection
+  - Add matomo analytics
+  - Add Google Analytics v4 support
+  - Add mindshape cookie consent integration for analytics options
+  - Add 410 to redirect module (with option to disable it)
+  - Add multilanguage support for SEO settings
+  - Allow merging of configurations with default
+  - Various bugfixes
+
 v1.1.7
   - Fix inproper analytics noscript tag appending to html
 

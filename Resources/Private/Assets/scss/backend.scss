@@ -1,6 +1,6 @@
 $google-link-blue: #1a0dab;
-$google-url-green: #006621;
-$google-description-grey: #545454;
+$google-url-grey: #5f6368;
+$google-description-grey: #4d5156;
 $bootstrap-border-gray: #ddd;
 $bootstrap-link-blue: #337ab7;
 $bootstrap-success-green: #5cb85c;
@@ -245,11 +245,23 @@ $lightgrey: #666;
       display: block;
       font-size: 14px;
       font-style: normal;
-      line-height: 16px;
+      line-height: 1.3;
+      margin-bottom: 3px;
 
       cite {
-        color: $google-url-green;
+        color: $google-url-grey;
         font-style: normal;
+      }
+
+      .cache {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-left: 2px;
+        vertical-align: middle;
+        border-top: 4px dashed;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
       }
     }
 

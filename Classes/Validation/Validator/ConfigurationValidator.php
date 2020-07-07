@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Validation\Validator;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -35,30 +35,10 @@ use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
  */
 class ConfigurationValidator extends AbstractValidator
 {
-    const FACEBOOK_DEFAULT_IMAGE_MIN_HEIGHT = 200;
-    const FACEBOOK_DEFAULT_IMAGE_MIN_WIDTH = 200;
-
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $value
-     * @return void
      */
     public function isValid($value)
     {
-        if ($value->getFacebookDefaultImage() instanceof FileReference) {
-            $imageSize = getimagesize(PATH_site . '/' . $value->getFacebookDefaultImage()->getOriginalResource()->getPublicUrl());
-
-            if (
-                $imageSize[1] < self::FACEBOOK_DEFAULT_IMAGE_MIN_HEIGHT &&
-                $imageSize[0] < self::FACEBOOK_DEFAULT_IMAGE_MIN_WIDTH
-            ) {
-                $this->addError(
-                    LocalizationUtility::translate(
-                        'tx_mindshapeseo_validation.facebook_default_image_too_small',
-                        'mindshape_seo'
-                    ),
-                    1473748428
-                );
-            }
-        }
     }
 }
