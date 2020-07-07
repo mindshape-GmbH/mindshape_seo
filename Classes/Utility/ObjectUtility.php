@@ -1,5 +1,7 @@
 <?php
-namespace Mindshape\MindshapeSeo\Domain\Model;
+declare(strict_types=1);
+
+namespace Mindshape\MindshapeSeo\Utility;
 
 /***************************************************************
  *  Copyright notice
@@ -25,25 +27,31 @@ namespace Mindshape\MindshapeSeo\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Resource\ResourceInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package Mindshape\MindshapeSeo\Utility
  */
-class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
+class ObjectUtility
 {
     /**
-     * @var int
+     * @var \TYPO3\CMS\Extbase\Object\ObjectManager
      */
-    protected $originalFileIdentifier;
+    protected static $objectManager;
 
     /**
-     * @param \TYPO3\CMS\Core\Resource\ResourceInterface $originalResource
+     * @param string $className
+     * @param array $arguments
+     * @return object
      */
-    public function setOriginalResource(ResourceInterface $originalResource)
+    public static function makeInstance(string $className, ...$arguments): object
     {
-        $this->originalResource = $originalResource;
-        $this->originalFileIdentifier = (int) $originalResource->getOriginalFile()->getUid();
+        if (!static::$objectManager instanceof ObjectManager) {
+            /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
+            static::$objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        }
+
+        return static::$objectManager->get($className, ...$arguments);
     }
 }

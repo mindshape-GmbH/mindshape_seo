@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Userfuncs\Tca;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -132,13 +132,13 @@ class GooglePreviewField
             }
         }
 
-        return $this->standaloneTemplateRendererService->render('TCA', 'GooglePreview', array(
+        return $this->standaloneTemplateRendererService->render('TCA', 'GooglePreview', [
             'metadata' => $metadata,
             'titleAttachment' => $titleAttachment,
             'titleAttachmentSeperator' => $titleAttachmentSeperator,
             'titleAttachmentPosition' => $titleAttachmentPosition,
             'tcaName' => $params['itemFormElName'],
             'focusKeyword' => $params['itemFormElValue'],
-        ));
+        ]);
     }
 }

@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\ViewHelpers\Widget;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -56,12 +56,12 @@ class PaginateViewHelper extends AbstractWidgetViewHelper
     public function render(
         $objects,
         $as,
-        array $configuration = array(
+        array $configuration = [
             'itemsPerPage' => 10,
             'insertAbove' => false,
             'insertBelow' => true,
             'maximumNumberOfLinks' => 99,
-        )
+        ]
     ) {
         return $this->initiateSubRequest();
     }

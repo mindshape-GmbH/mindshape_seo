@@ -9,51 +9,8 @@
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword_akronym">
                 <target>FK</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogtitle">
-                <target>Titel</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogurl">
-                <target>URL</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogimage">
-                <target>Bild</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogdescription">
-                <target>Beschreibung</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_disable_title_attachment">
                 <target>Deaktiviere Titel-Ergänzung für diese Seite</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_priority">
-                <target>Priorität</target>
-            </trans-unit>
-
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency">
-                <target>Veränderungsrate</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.none">
-                <target>Keine Auswahl</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.always">
-                <target>Immer</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.hourly">
-                <target>Stündlich</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.daily">
-                <target>Täglich</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.weekly">
-                <target>Wöchentlich</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.monthly">
-                <target>Monatlich</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.yearly">
-                <target>Jährlich</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.never">
-                <target>Niemals</target>
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_index">
@@ -86,21 +43,6 @@
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive">
                 <target>nofollow rekursiv auf Unterseiten anwenden</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap">
-                <target>Schließe diese Seite von der XML-Sitemap aus</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_suppages_from_sitemap">
-                <target>Schließe Unterseiten von der XML-Sitemap aus</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_sub_sitemap">
-                <target>Erzeuge eine neue XML-Sitemap ab dieser Seite</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_canonical">
-                <target>Canonical URL</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_alternative_title">
-                <target>Alternativer Seitentitel (Titel Tag)</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_jsonld_breadcrumb_title">
                 <target>Alternativer Breadcrumb Titel</target>
             </trans-unit>
@@ -117,9 +59,6 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.sitemap">
                 <target>Sitemap.xml</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.facebook_metadata">
-                <target>Facebook Metadaten</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.metadata">
                 <target>Metadaten</target>
@@ -275,11 +214,6 @@
             </trans-unit>
 
 
-            <trans-unit id="tx_mindshapeseo_validation.facebook_default_image_too_small">
-                <target>Das hochgeladene Facebook Standard Bild ist zu klein</target>
-            </trans-unit>
-
-
             <trans-unit id="tx_mindshapeseo_domain_model_configuration">
                 <target>Konfiguration</target>
             </trans-unit>
@@ -313,20 +247,8 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_seperator">
                 <target>Trenner</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
-                <target>Facebook Standard Bild (empfohlene Größe mind. 200x200px)</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_height">
-                <target>Minimale Höhe für Bilder (Pixel)</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_width">
-                <target>Minimale Breite für Bilder (Pixel)</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_analytics">
                 <target>Einfügen des Analytics Scripts auf die Website</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
-                <target>hreflang-Tag für mehrsprachige Webseiten einfügen</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld">
                 <target>Website Informationen (JSON-LD)</target>
@@ -360,15 +282,6 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager_id">
                 <target>Google Tagmanager ID</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik">
-                <target>Piwik</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_idsite">
-                <target>Piwik Seiten ID</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_url">
-                <target>Piwik URL</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld">
                 <target>Website Informationen (JSON-LD)</target>

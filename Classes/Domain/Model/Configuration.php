@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Domain\Model;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -34,6 +34,8 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
  */
 class Configuration extends AbstractEntity
 {
+    const TABLE = 'tx_mindshapeseo_domain_model_configuration';
+
     const DEFAULT_DOMAIN = '*';
     const DEFAULT_TITLE_ATTACHMENT_SEPERATOR = '|';
 
@@ -66,16 +68,6 @@ class Configuration extends AbstractEntity
     /**
      * @var string
      */
-    protected $piwikUrl = '';
-
-    /**
-     * @var string
-     */
-    protected $piwikIdsite = '';
-
-    /**
-     * @var string
-     */
     protected $titleAttachment = '';
 
     /**
@@ -96,32 +88,12 @@ class Configuration extends AbstractEntity
     /**
      * @var bool
      */
-    protected $addHreflang = false;
-
-    /**
-     * @var bool
-     */
     protected $addJsonld = false;
 
     /**
      * @var bool
      */
     protected $addJsonldBreadcrumb = false;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
-     */
-    protected $facebookDefaultImage;
-
-    /**
-     * @var int
-     */
-    protected $imageSitemapMinHeight = 0;
-
-    /**
-     * @var int
-     */
-    protected $imageSitemapMinWidth = 0;
 
     /**
      * @var string
@@ -292,40 +264,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string $piwikUrl
-     */
-    public function getPiwikUrl()
-    {
-        return $this->piwikUrl;
-    }
-
-    /**
-     * @param string $piwikUrl
-     * @return void
-     */
-    public function setPiwikUrl($piwikUrl)
-    {
-        $this->piwikUrl = $piwikUrl;
-    }
-
-    /**
-     * @return string $piwikIdsite
-     */
-    public function getPiwikIdsite()
-    {
-        return $this->piwikIdsite;
-    }
-
-    /**
-     * @param string $piwikIdsite
-     * @return void
-     */
-    public function setPiwikIdsite($piwikIdsite)
-    {
-        $this->piwikIdsite = $piwikIdsite;
-    }
-
-    /**
      * @return string $titleAttachment
      */
     public function getTitleAttachment()
@@ -402,31 +340,6 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return bool $addHreflang
-     */
-    public function getAddHreflang()
-    {
-        return $this->addHreflang;
-    }
-
-    /**
-     * @param bool $addHreflang
-     * @return void
-     */
-    public function setAddHreflang($addHreflang)
-    {
-        $this->addHreflang = $addHreflang;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAddHreflang()
-    {
-        return $this->addHreflang;
-    }
-
-    /**
      * @return bool $addJsonld
      */
     public function getAddJsonld()
@@ -474,57 +387,6 @@ class Configuration extends AbstractEntity
     public function isAddJsonldBreadcrumb()
     {
         return $this->addJsonldBreadcrumb;
-    }
-
-    /**
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference $facebookDefaultImage
-     */
-    public function getFacebookDefaultImage()
-    {
-        return $this->facebookDefaultImage;
-    }
-
-    /**
-     * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $facebookDefaultImage
-     * @return void
-     */
-    public function setFacebookDefaultImage(ExtbaseFileReference $facebookDefaultImage = null)
-    {
-        $this->facebookDefaultImage = $facebookDefaultImage;
-    }
-
-    /**
-     * @return string $imageSitemapMinHeight
-     */
-    public function getImageSitemapMinHeight()
-    {
-        return $this->imageSitemapMinHeight;
-    }
-
-    /**
-     * @param string $imageSitemapMinHeight
-     * @return void
-     */
-    public function setImageSitemapMinHeight($imageSitemapMinHeight)
-    {
-        $this->imageSitemapMinHeight = $imageSitemapMinHeight;
-    }
-
-    /**
-     * @return string $imageSitemapMinWidth
-     */
-    public function getImageSitemapMinWidth()
-    {
-        return $this->imageSitemapMinWidth;
-    }
-
-    /**
-     * @param string $imageSitemapMinWidth
-     * @return void
-     */
-    public function setImageSitemapMinWidth($imageSitemapMinWidth)
-    {
-        $this->imageSitemapMinWidth = $imageSitemapMinWidth;
     }
 
     /**

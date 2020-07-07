@@ -1,5 +1,7 @@
 <?php
-namespace Mindshape\MindshapeSeo\Domain\Model;
+declare(strict_types=1);
+
+namespace Mindshape\MindshapeSeo\Utility\Exception;
 
 /***************************************************************
  *  Copyright notice
@@ -25,25 +27,11 @@ namespace Mindshape\MindshapeSeo\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Resource\ResourceInterface;
+use Exception;
 
 /**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
+ * @package Mindshape\MindshapeApi\Utility\Exception
  */
-class FileReference extends \TYPO3\CMS\Extbase\Domain\Model\FileReference
+class TypoScriptFrontendControllerBootException extends Exception
 {
-    /**
-     * @var int
-     */
-    protected $originalFileIdentifier;
-
-    /**
-     * @param \TYPO3\CMS\Core\Resource\ResourceInterface $originalResource
-     */
-    public function setOriginalResource(ResourceInterface $originalResource)
-    {
-        $this->originalResource = $originalResource;
-        $this->originalFileIdentifier = (int) $originalResource->getOriginalFile()->getUid();
-    }
 }

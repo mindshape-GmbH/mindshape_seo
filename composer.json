@@ -7,7 +7,8 @@
     "GPL-2.0-or-later"
   ],
   "require": {
-    "typo3/cms-core": ">=8.7.0,<8.8.0"
+    "typo3/cms-core": "^9.5||^10.4",
+    "php": ">=7.2 <7.5"
   },
   "autoload": {
     "psr-4": {
@@ -16,5 +17,10 @@
   },
   "replace": {
     "typo3-ter/mindshape_seo": "*"
+  },
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "mindshape_seo"
+    }
   }
 }

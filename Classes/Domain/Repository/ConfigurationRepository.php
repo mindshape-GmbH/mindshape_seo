@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *
@@ -26,6 +26,8 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
+use PDO;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -39,9 +41,9 @@ class ConfigurationRepository extends Repository
     /**
      * @var array $defaultOrderings
      */
-    protected $defaultOrderings = array(
+    protected $defaultOrderings = [
         'domain' => QueryInterface::ORDER_DESCENDING,
-    );
+    ];
 
     /**
      * @return void
@@ -112,67 +114,54 @@ class ConfigurationRepository extends Repository
         /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
         $databaseConnection = $GLOBALS['TYPO3_DB'];
 
-        if (null === $configuration->getFacebookDefaultImage()) {
-            $fileReference = $databaseConnection->exec_SELECTgetSingleRow(
-                '*',
-                'sys_file_reference',
-                'deleted != 1 AND tablenames = "tx_mindshapeseo_domain_model_configuration" AND fieldname = "facebook_default_image" AND uid_foreign = ' . $configuration->getUid()
-            );
-
-            if (is_array($fileReference)) {
-                $this->updateFileReferences(
-                    $configuration->getUid(),
-                    'facebook_default_image',
-                    $fileReference
-                );
-            }
-        }
-
         if (null === $configuration->getJsonldLogo()) {
-            $fileReference = $databaseConnection->exec_SELECTgetSingleRow(
-                '*',
-                'sys_file_reference',
-                'deleted != 1 AND tablenames = "tx_mindshapeseo_domain_model_configuration" AND fieldname = "jsonld_logo" AND uid_foreign = ' . $configuration->getUid()
-            );
+            $queryBuilder = DatabaseUtility::queryBuilder();
+
+            $fileReference = $queryBuilder
+                ->select('f.uid')
+                ->from('sys_file_reference', 'f')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'f.tablenames',
+                        $queryBuilder->createNamedParameter(Configuration::TABLE, PDO::PARAM_STR)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'f.fieldname',
+                        $queryBuilder->createNamedParameter('jsonld_logo', PDO::PARAM_STR)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'f.uid_foreign',
+                        $queryBuilder->createNamedParameter($configuration->getUid(), PDO::PARAM_INT)
+                    )
+                )
+                ->execute()
+                ->fetch();
 
             if (is_array($fileReference)) {
-                $this->updateFileReferences(
-                    $configuration->getUid(),
-                    'jsonld_logo',
-                    $fileReference
-                );
+                $queryBuilder = DatabaseUtility::queryBuilder();
+                $queryBuilder
+                    ->update('sys_file_reference', 'f')
+                    ->where(
+                        $queryBuilder->expr()->eq(
+                            'f.uid',
+                            $queryBuilder->createNamedParameter($fileReference['uid'], PDO::PARAM_INT)
+                        )
+                    )
+                    ->set('deleted', 1, true, PDO::PARAM_INT)
+                    ->execute();
+
+                $queryBuilder = DatabaseUtility::queryBuilder();
+                $queryBuilder
+                    ->update(Configuration::TABLE, 'c')
+                    ->where(
+                        $queryBuilder->expr()->eq(
+                            'c.uid',
+                            $queryBuilder->createNamedParameter($configuration->getUid(), PDO::PARAM_INT)
+                        )
+                    )
+                    ->set('jsonld_logo', 0, true, PDO::PARAM_INT)
+                    ->execute();
             }
         }
-    }
-
-    /**
-     * @param int $configurationUid
-     * @param string $field
-     * @param array $fileReference
-     */
-    protected function updateFileReferences($configurationUid, $field, array $fileReference)
-    {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
-
-        $databaseConnection->sql_query('START TRANSACTION');
-
-        $databaseConnection->exec_UPDATEquery(
-            'sys_file_reference',
-            'uid = ' . $fileReference['uid'],
-            array(
-                'deleted' => 1,
-            )
-        );
-
-        $databaseConnection->exec_UPDATEquery(
-            'tx_mindshapeseo_domain_model_configuration',
-            'uid = ' . $configurationUid,
-            array(
-                $field => 0,
-            )
-        );
-
-        $databaseConnection->sql_query('COMMIT');
     }
 }

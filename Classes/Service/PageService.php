@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -27,6 +27,11 @@ namespace Mindshape\MindshapeSeo\Service;
 
 use Mindshape\MindshapeSeo\Backend\Tree\View\PageTreeView;
 use Mindshape\MindshapeSeo\Utility\BackendUtility as MindshapeBackendUtility;
+use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
+use Mindshape\MindshapeSeo\Utility\Exception\TypoScriptFrontendControllerBootException;
+use Mindshape\MindshapeSeo\Utility\ObjectUtility;
+use Mindshape\MindshapeSeo\Utility\TypoScriptFrontendUtility;
+use PDO;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Imaging\Icon;
@@ -34,6 +39,7 @@ use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -81,34 +87,18 @@ class PageService implements SingletonInterface
      */
     public function __construct()
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
-        $configurationManager = $objectManager->get(ConfigurationManager::class);
-        $this->pageRepository = $objectManager->get(PageRepository::class);
+        $configurationManager = ObjectUtility::makeInstance(ConfigurationManager::class);
+        $this->pageRepository = ObjectUtility::makeInstance(PageRepository::class);
 
         if ('BE' === TYPO3_MODE) {
             $currentPageUid = MindshapeBackendUtility::getCurrentPageTreeSelectedPage();
-            $currentSysLanguageUid = 0;
 
             if (
                 null === $currentPageUid &&
                 null !== GeneralUtility::_GET('edit')['pages']
             ) {
                 $currentPageUid = key(GeneralUtility::_GET('edit')['pages']);
-            }
-
-            if (
-                null === $currentPageUid &&
-                null !== GeneralUtility::_GET('edit')['pages_language_overlay']
-            ) {
-                $pageOverlay = BackendUtility::getRecord(
-                    'pages_language_overlay',
-                    key(GeneralUtility::_GET('edit')['pages_language_overlay'])
-                );
-
-                $currentPageUid = $pageOverlay['pid'];
-                $currentSysLanguageUid = $pageOverlay['sys_language_uid'];
             }
 
             $currentPage = $this->pageRepository->getPage_noCheck($currentPageUid);
@@ -120,33 +110,9 @@ class PageService implements SingletonInterface
                 $this->typoScriptFrontendController = null;
             } else {
                 try {
-                    $this->typoScriptFrontendController = $objectManager->get(
-                        TypoScriptFrontendController::class,
-                        $GLOBALS['TYPO3_CONF_VARS'],
-                        $currentPageUid,
-                        GeneralUtility::_GET('type')
-                    );
-
-                    $GLOBALS['TSFE'] = $this->typoScriptFrontendController;
-
-                    if (!$this->typoScriptFrontendController->sys_page instanceof PageRepository) {
-                        $this->typoScriptFrontendController->sys_page = GeneralUtility::makeInstance(PageRepository::class);
-                    }
-
-                    $this->typoScriptFrontendController->connectToDB();
-                    $this->typoScriptFrontendController->initFEuser();
-                    $this->typoScriptFrontendController->determineId();
-                    $this->typoScriptFrontendController->initTemplate();
-                    $this->typoScriptFrontendController->getConfigArray();
-
-                    $this->typoScriptFrontendController->sys_language_uid = $currentSysLanguageUid;
-
-                    if (ExtensionManagementUtility::isLoaded('realurl')) {
-                        $_SERVER['HTTP_HOST'] = BackendUtility::firstDomainRecord(
-                            BackendUtility::BEgetRootLine($currentPageUid)
-                        );
-                    }
-                } catch (\Exception $exception) {
+                    TypoScriptFrontendUtility::bootTypoScriptFrontendController();
+                    $this->typoScriptFrontendController = $GLOBALS['TSFE'];
+                } catch (TypoScriptFrontendControllerBootException $exception) {
                     $this->typoScriptFrontendController = null;
                 }
             }
@@ -157,10 +123,10 @@ class PageService implements SingletonInterface
         }
 
         $configurationManager->setContentObject(
-            $objectManager->get(ContentObjectRenderer::class)
+            ObjectUtility::makeInstance(ContentObjectRenderer::class)
         );
 
-        $this->uriBuilder = $objectManager->get(UriBuilder::class);
+        $this->uriBuilder = ObjectUtility::makeInstance(UriBuilder::class);
         $this->uriBuilder->injectConfigurationManager($configurationManager);
     }
 
@@ -189,15 +155,21 @@ class PageService implements SingletonInterface
      * @param bool $linkAccessRestrictedPages
      * @return string
      */
-    public function getPageLink($pageId, $absolute = false, $sysLanguageUid = 0, $linkAccessRestrictedPages = true)
+    public function getPageLink($pageId, $absolute = false, int $sysLanguageUid = 0, $linkAccessRestrictedPages = true)
     {
-        return $this->uriBuilder
+        $this->uriBuilder
             ->reset()
             ->setTargetPageUid($pageId)
             ->setCreateAbsoluteUri($absolute)
-            ->setArguments(array('L' => $sysLanguageUid))
-            ->setLinkAccessRestrictedPages($linkAccessRestrictedPages)
-            ->buildFrontendUri();
+            ->setLinkAccessRestrictedPages($linkAccessRestrictedPages);
+
+        if (true === version_compare('10.4', TYPO3_branch, '<=')) {
+            $this->uriBuilder->setLanguage($sysLanguageUid);
+        } else {
+            $this->uriBuilder->setArguments(['L' => $sysLanguageUid]);
+        }
+
+        return $this->uriBuilder->buildFrontendUri();
     }
 
     /**
@@ -207,13 +179,43 @@ class PageService implements SingletonInterface
      */
     public function getPage($pageUid, $sysLanguageUid = 0)
     {
-        if (0 < $sysLanguageUid) {
-            $overlay = $this->pageRepository->getPageOverlay((int) $pageUid, $sysLanguageUid);
+        $queryBuilder = DatabaseUtility::queryBuilder();
 
-            return 0 < count($overlay) ? $overlay : false;
-        } else {
-            return $this->pageRepository->getPage((int) $pageUid);
+        $result = $queryBuilder
+            ->select('p.*')
+            ->from('pages', 'p')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'p.uid',
+                    $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)
+                ),
+                $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
+                    $sysLanguageUid,
+                    PDO::PARAM_INT)
+                )
+            )
+            ->execute();
+
+        if (0 === $result->rowCount()) {
+            $queryBuilder = DatabaseUtility::queryBuilder();
+
+            $result = $queryBuilder
+                ->select('p.*')
+                ->from('pages', 'p')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'p.' . $GLOBALS['TCA']['ctrl']['transOrigPointerField'],
+                        $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
+                    $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
+                        $sysLanguageUid,
+                        PDO::PARAM_INT)
+                    )
+                )
+                ->execute()
+                ->fetch();
         }
+
+        return $result->fetch();
     }
 
     /**
@@ -258,31 +260,29 @@ class PageService implements SingletonInterface
             $previewUrl = '/' === $pageUrlRelative ? $customUrl : $customUrl . '/' . $pageUrlRelative;
         }
 
-        $title = false === empty($page['mindshapeseo_alternative_title'])
-            ? $page['mindshapeseo_alternative_title']
+        $title = false === empty($page['seo_title'])
+            ? $page['seo_title']
             : $page['title'];
 
-        return array(
+        return [
             'uid' => $pageUid,
             'title' => $title,
             'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             'url' => $pageUrl,
             'previewUrl' => $previewUrl,
-            'canonicalUrl' => !empty($page['mindshapeseo_canonical']) ?
+            'canonicalUrl' => !empty($page['canonical_link']) ?
                 $this->getPageLink(
-                    $page['mindshapeseo_canonical'],
+                    $page['canonical_link'],
                     true,
                     $this->typoScriptFrontendController->sys_language_uid
                 ) :
                 null,
-            'meta' => array(
-                'author' => $page['author'],
-                'contact' => $page['author_email'],
+            'meta' => [
                 'description' => $page['description'],
                 'focusKeyword' => $page['mindshapeseo_focus_keyword'],
-                'robots' => array(
-                    'noindex' => (bool) $page['mindshapeseo_no_index'],
-                    'nofollow' => (bool) $page['mindshapeseo_no_follow'],
+                'robots' => [
+                    'noindex' => (bool) $page['no_index'],
+                    'nofollow' => (bool) $page['no_follow'],
                     'noindexInherited' => $this->pageInheritedProperty(
                         (int) $page['uid'],
                         'mindshapeseo_no_index_recursive'
@@ -291,14 +291,9 @@ class PageService implements SingletonInterface
                         (int) $page['uid'],
                         'mindshapeseo_no_follow_recursive'
                     ),
-                ),
-            ),
-            'facebook' => array(
-                'title' => empty($page['mindshapeseo_ogtitle']) ? $title : $page['mindshapeseo_ogtitle'],
-                'url' => empty($page['mindshapeseo_ogurl']) ? $pageUrl : $page['mindshapeseo_ogurl'],
-                'description' => empty($page['mindshapeseo_ogdescription']) ? $page['description'] : $page['mindshapeseo_ogdescription'],
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -309,7 +304,7 @@ class PageService implements SingletonInterface
      */
     public function getSubpagesMetaData($pageUid, $sysLanguageUid = 0, $customUrl = '')
     {
-        $metadata = array();
+        $metadata = [];
 
         foreach ($this->getSubPagesFromPageUid($pageUid) as $subPage) {
             if (1 !== (int) $subPage['doktype'] && 4 !== (int) $subPage['doktype']) {
@@ -341,7 +336,7 @@ class PageService implements SingletonInterface
      */
     public function getRootline($pageUid = null, $sysLanguageUid = 0)
     {
-        $pages = array();
+        $pages = [];
 
         $currentPageUid = MindshapeBackendUtility::getCurrentPageTreeSelectedPage();
 
@@ -353,7 +348,7 @@ class PageService implements SingletonInterface
             }
         }
 
-        foreach ($this->pageRepository->getRootLine($pageUid) as $page) {
+        foreach (ObjectUtility::makeInstance(RootlineUtility::class, $pageUid)->get() as $page) {
             $pages[] = $this->getPage($page['uid'], $sysLanguageUid);
         }
 
@@ -405,7 +400,7 @@ class PageService implements SingletonInterface
      */
     public function getSubPagesFromPageUid($pageUid)
     {
-        $pages = array();
+        $pages = [];
 
         foreach ($this->getSubPageUidsFromPageUid($pageUid) as $uid) {
             $pages[] = $this->pageRepository->getPage($uid);
@@ -422,21 +417,18 @@ class PageService implements SingletonInterface
      * @param bool $useGoogleBreadcrumb
      * @return array
      */
-    public function getPageMetadataTree($pageUid, $depth = self::TREE_DEPTH_DEFAULT, $sysLanguageUid = 0, $customUrl = '', $useGoogleBreadcrumb = false)
+    public function getPageMetadataTree(int $pageUid, int $depth = self::TREE_DEPTH_DEFAULT, int $sysLanguageUid = 0, string $customUrl = '', bool $useGoogleBreadcrumb = false): array
     {
         $page = $this->getPage($pageUid);
 
-        /** @var \Mindshape\MindshapeSeo\Backend\Tree\View\PageTreeView $tree */
-        $tree = GeneralUtility::makeInstance(PageTreeView::class);
+        /** @var \TYPO3\CMS\Backend\Tree\View\PageTreeView $tree */
+        $tree = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Tree\View\PageTreeView::class);
         $tree->init();
-        $tree->clause = ' AND pages.deleted = 0 AND (pages.doktype = 1 OR pages.doktype = 4) AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
-
-        if (0 < $sysLanguageUid) {
-            $tree->sysLanguageUid = $sysLanguageUid;
-        }
+        $tree->clause = ' AND pages.deleted = 0 AND pages.sys_language_uid = ' . $sysLanguageUid . ' AND (pages.doktype = 1 OR pages.doktype = 4) AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
+        $tree->sysLanguageUid = $sysLanguageUid;
 
         $tree->parentField = 'pages.pid';
-        $tree->fieldArray = array('pages.*');
+        $tree->fieldArray = ['pages.*'];
         $tree->orderByFields = 'pages.sorting';
 
         /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
@@ -448,10 +440,10 @@ class PageService implements SingletonInterface
             Icon::SIZE_SMALL
         );
 
-        $tree->tree[] = array(
+        $tree->tree[] = [
             'row' => $page,
             'HTML' => $html,
-        );
+        ];
 
         if (self::TREE_DEPTH_INFINITY === $depth) {
             $depth = 9999;
@@ -475,7 +467,7 @@ class PageService implements SingletonInterface
 
             $tree->tree[$key]['metadata'] = $this->getPageMetaData(
                 $treeItem['row']['uid'],
-                $sysLanguageUid,
+                0,
                 $customUrl,
                 $useGoogleBreadcrumb
             );

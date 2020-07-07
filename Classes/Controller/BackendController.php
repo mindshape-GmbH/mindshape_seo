@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -33,12 +33,17 @@ use Mindshape\MindshapeSeo\Service\LanguageService;
 use Mindshape\MindshapeSeo\Service\SessionService;
 use Mindshape\MindshapeSeo\Utility\BackendUtility;
 use Mindshape\MindshapeSeo\Service\PageService;
+use Mindshape\MindshapeSeo\Utility\ObjectUtility;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
+use TYPO3\CMS\Backend\Routing\UriBuilder as BackendUriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility as CoreBackendUtility;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -264,7 +269,7 @@ class BackendController extends ActionController
                             ? LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.domain.default', 'mindshape_seo')
                             : $domain
                     )
-                    ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => $domain), 'Backend'))
+                    ->setHref($uriBuilder->reset()->uriFor('settings', ['domain' => $domain], 'Backend'))
                     ->setActive($currentDomain === $domain)
             );
         }
@@ -275,7 +280,7 @@ class BackendController extends ActionController
                 $menu->addMenuItem(
                     $menu->makeMenuItem()
                         ->setTitle($configuration->getDomain())
-                        ->setHref($uriBuilder->reset()->uriFor('settings', array('domain' => $configuration->getDomain()), 'Backend'))
+                        ->setHref($uriBuilder->reset()->uriFor('settings', ['domain' => $configuration->getDomain()], 'Backend'))
                         ->setActive($currentDomain === $configuration->getDomain())
                 );
             }
@@ -309,7 +314,7 @@ class BackendController extends ActionController
 
         $defaultMenuItem = $menu->makeMenuItem()
             ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.default_language', 'mindshape_seo'))
-            ->setHref($uriBuilder->reset()->uriFor('preview', array('sysLanguageUid' => 0), 'Backend'))
+            ->setHref($uriBuilder->reset()->uriFor('preview', ['sysLanguageUid' => 0], 'Backend'))
             ->setActive(0 === $sysLanguageUid);
 
         $menu->addMenuItem($defaultMenuItem);
@@ -318,7 +323,7 @@ class BackendController extends ActionController
             $menu->addMenuItem(
                 $menu->makeMenuItem()
                     ->setTitle($language['title'])
-                    ->setHref($uriBuilder->reset()->uriFor('preview', array('sysLanguageUid' => $language['uid']), 'Backend'))
+                    ->setHref($uriBuilder->reset()->uriFor('preview', ['sysLanguageUid' => $language['uid']], 'Backend'))
                     ->setActive($sysLanguageUid === (int) $language['uid'])
             );
         }
@@ -372,6 +377,14 @@ class BackendController extends ActionController
         }
 
         if (false === $configuration->_isNew()) {
+            $uriBuilder = ObjectUtility::makeInstance(BackendUriBuilder::class);
+
+            try {
+                $redirectUrl = (string) $uriBuilder->buildUriFromRoute('mindshapeseo_MindshapeSeoSettings');
+            } catch (RouteNotFoundException $exception) {
+                $redirectUrl = (string) $uriBuilder->buildUriFromRoutePath('mindshapeseo_MindshapeSeoSettings');
+            }
+
             $deleteButton = $this->buttonBar->makeLinkButton()
                 ->setClasses('mindshape-seo-deletebutton')
                 ->setHref('#')
@@ -382,30 +395,30 @@ class BackendController extends ActionController
                     'message' => LocalizationUtility::translate('tx_mindshapeseo_label.delete_configuration', 'mindshape_seo'),
                     'label-abort' => LocalizationUtility::translate('tx_mindshapeseo_label.abort', 'mindshape_seo'),
                     'label-delete' => LocalizationUtility::translate('tx_mindshapeseo_label.delete', 'mindshape_seo'),
-                    'redirect-url' => CoreBackendUtility::getModuleUrl('mindshapeseo_MindshapeSeoSettings'),
+                    'redirect-url' => $redirectUrl,
                 ]);
 
             $this->buttonBar->addButton($deleteButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
         }
 
-        $this->view->assignMultiple(array(
+        $this->view->assignMultiple([
             'domains' => $domains,
             'domainsSelectOptions' => $this->domainService->getConfigurationDomainSelectOptions($domain),
             'currentDomain' => $domain === Configuration::DEFAULT_DOMAIN ?
                 GeneralUtility::getIndpEnv('HTTP_HOST') :
                 $domain,
             'configuration' => $configuration,
-            'titleAttachmentPositionOptions' => array(
+            'titleAttachmentPositionOptions' => [
                 Configuration::TITLE_ATTACHMENT_POSITION_SUFFIX => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.title_attachment_position.suffix', 'mindshape_seo'),
                 Configuration::TITLE_ATTACHMENT_POSITION_PREFIX => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.title_attachment_position.prefix', 'mindshape_seo'),
-            ),
-            'jsonldTypeOptions' => array(
+            ],
+            'jsonldTypeOptions' => [
                 Configuration::JSONLD_TYPE_ORGANIZATION => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.organization', 'mindshape_seo'),
                 Configuration::JSONLD_TYPE_PERSON => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.person', 'mindshape_seo'),
-            ),
+            ],
             'domainUrl' => (GeneralUtility::getIndpEnv('TYPO3_SSL') ? 'https' : 'http') . '://' . ($domain !== Configuration::DEFAULT_DOMAIN ? $domain : GeneralUtility::getIndpEnv('HTTP_HOST')),
-            'robotsTxtNotExists' => !file_exists(PATH_site . '/robots.txt'),
-        ));
+            'robotsTxtNotExists' => !file_exists(Environment::getPublicPath() . '/robots.txt'),
+        ]);
     }
 
     /**
@@ -418,8 +431,7 @@ class BackendController extends ActionController
 
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
-     * @validate $configuration \Mindshape\MindshapeSeo\Validation\Validator\ConfigurationValidator
-     * @return void
+     * @Validate("\Mindshape\MindshapeSeo\Validation\Validator\ConfigurationValidator", param="configuration")
      */
     public function saveConfigurationAction(Configuration $configuration)
     {
@@ -430,9 +442,9 @@ class BackendController extends ActionController
             'settings',
             'Backend',
             null,
-            array(
+            [
                 'domain' => $configuration->getDomain(),
-            )
+            ]
         );
     }
 
@@ -474,7 +486,7 @@ class BackendController extends ActionController
             $configuration = $this->domainService->getPageDomainConfiguration();
 
             if ($configuration instanceof Configuration) {
-                $this->view->assignMultiple(array(
+                $this->view->assignMultiple([
                     'pageTree' => $this->pageService->getPageMetadataTree(
                         $this->currentPageUid,
                         $depth,
@@ -485,7 +497,7 @@ class BackendController extends ActionController
                     'titleAttachment' => $configuration->getTitleAttachment(),
                     'titleAttachmentSeperator' => $configuration->getTitleAttachmentSeperator(),
                     'titleAttachmentPosition' => $configuration->getTitleAttachmentPosition(),
-                ));
+                ]);
             } else {
                 $this->view->assign(
                     'pageTree',
@@ -497,10 +509,10 @@ class BackendController extends ActionController
                 );
             }
 
-            $this->view->assignMultiple(array(
+            $this->view->assignMultiple([
                 'sysLanguageUid' => $sysLanguageUid,
                 'depth' => $depth,
-                'levelOptions' => array(
+                'levelOptions' => [
                     PageService::TREE_DEPTH_INFINITY => LocalizationUtility::translate('tx_mindshapeseo_label.preview.levels.infinity', 'mindshape_seo'),
                     0 => '0',
                     1 => '1',
@@ -513,8 +525,8 @@ class BackendController extends ActionController
                     8 => '8',
                     9 => '9',
                     10 => '10',
-                ),
-            ));
+                ],
+            ]);
         }
     }
 
@@ -524,19 +536,14 @@ class BackendController extends ActionController
      */
     protected function setTypeConverterConfigurationForImageUpload($argumentName)
     {
-        $uploadConfiguration = array(
+        $uploadConfiguration = [
             UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
             UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER => '1:/mindshape_seo/',
-        );
+        ];
 
         /** @var \TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration $newExampleConfiguration */
         $newExampleConfiguration = $this->arguments[$argumentName]->getPropertyMappingConfiguration();
         $newExampleConfiguration
-            ->forProperty('facebookDefaultImage')
-            ->setTypeConverterOptions(
-                UploadedFileReferenceConverter::class,
-                $uploadConfiguration
-            )
             ->forProperty('jsonldLogo')
             ->setTypeConverterOptions(
                 UploadedFileReferenceConverter::class,

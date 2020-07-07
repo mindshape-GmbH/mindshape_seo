@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Backend\Tree\View;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -95,9 +95,7 @@ class PageTreeView extends \TYPO3\CMS\Backend\Tree\View\PageTreeView
             );
 
         if (0 < $this->sysLanguageUid) {
-            // LEFT JOIN pages_language_overlay ON pages.uid = pages_language_overlay.pid
-            $queryBuilder->leftJoin('pages', 'pages_language_overlay', 'pages_language_overlay', 'pages.uid = pages_language_overlay.pid');
-            $queryBuilder->andWhere('pages_language_overlay.sys_language_uid = ' . $this->sysLanguageUid);
+            $queryBuilder->andWhere('sys_language_uid = ' . $this->sysLanguageUid);
         }
 
         foreach (QueryHelper::parseOrderBy($this->orderByFields) as $orderPair) {

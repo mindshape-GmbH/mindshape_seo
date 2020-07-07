@@ -84,12 +84,6 @@
               <div class="form-group">
                 <div class="checkbox">
                   <label>
-                    <f:form.checkbox property="addHreflang" value="1"/>
-                    {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_hreflang')}
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
                     <f:form.checkbox property="addJsonldBreadcrumb" value="1"/>
                     {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_jsonld_breadcrumb')}
                   </label>
@@ -100,26 +94,6 @@
                     {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_jsonld')}
                   </label>
                 </div>
-              </div>
-            </fieldset>
-          </div>
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.facebook_metadata')}</h3>
-              <div class="form-group mindshape-seo-upload">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.facebook_default_image')}</label>
-                <msh:form.upload property="facebookDefaultImage">
-                  <f:if condition="{resource}">
-                    <div class="image row">
-                      <div class="col-sm-12 col-md-6">
-                        <div class="thumbnail">
-                          <f:image image="{resource}" alt="" width="200"/>
-                        </div>
-                      </div>
-                    </div>
-                    <button class="mindshape-seo-delete">{f:translate(key: 'tx_mindshapeseo_label.delete')}</button>
-                  </f:if>
-                </msh:form.upload>
               </div>
             </fieldset>
           </div>
@@ -305,39 +279,6 @@
                   ({f:translate(key: 'tx_mindshapeseo_label.example')}: 'GTM-XXXX')
                   <f:link.external uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.link')}" target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.linktext')}</f:link.external>
                 </span>
-              </div>
-            </fieldset>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section piwik">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.piwik')}</h3>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.piwik_idsite')}</label>
-                <f:form.textfield property="piwikIdsite" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.piwik_url')}</label>
-                <f:form.textfield property="piwikUrl" class="form-control"/>
-              </div>
-            </fieldset>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset class="form-section">
-        <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.xml_sitemap')}</h2>
-        <div id="sitemapXml" class="row">
-          <div class="col-md-4">
-            <fieldset class="form-section">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.image_sitemap')}</h3>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.image_sitemap_min_height')}</label>
-                <f:form.textfield property="imageSitemapMinHeight" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.image_sitemap_min_width')}</label>
-                <f:form.textfield property="imageSitemapMinWidth" class="form-control"/>
               </div>
             </fieldset>
           </div>
