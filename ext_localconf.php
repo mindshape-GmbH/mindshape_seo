@@ -14,4 +14,11 @@ call_user_func(function () {
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all'][] = \Mindshape\MindshapeSeo\Hook\ContentPostProcAllHook::class . '->main';
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(\Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter::class);
+
+    if (version_compare(TYPO3_branch, '9.5', '>=')) {
+        \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
+            ->registerImplementation(\TYPO3\CMS\Extbase\Domain\Model\FileReference::class,
+                \Mindshape\MindshapeSeo\Domain\Model\FileReference::class);
+    }
+
 });

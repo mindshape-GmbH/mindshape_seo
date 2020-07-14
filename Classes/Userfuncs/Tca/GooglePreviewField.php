@@ -70,7 +70,7 @@ class GooglePreviewField
         $pageRenderer = $objectManager->get(PageRenderer::class);
         $pageRenderer->loadJquery();
 
-        if (GeneralUtility::getApplicationContext()->isProduction()) {
+        if (\TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
             $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
             $pageRenderer->addJsFile('/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js');
         } else {
@@ -102,11 +102,7 @@ class GooglePreviewField
      */
     public function render(array $params, UserElement $userElement)
     {
-        if ('pages_language_overlay' === $params['table']) {
-            $pageUid = $params['row']['pid'];
-        } else {
-            $pageUid = $params['row']['uid'];
-        }
+        $pageUid = $params['row']['uid'];
 
         $configuration = $this->domainService->getPageDomainConfiguration($pageUid);
 

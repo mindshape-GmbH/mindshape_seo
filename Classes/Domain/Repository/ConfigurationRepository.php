@@ -111,9 +111,6 @@ class ConfigurationRepository extends Repository
      */
     protected function checkFileReferences(Configuration $configuration)
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
-
         if (null === $configuration->getJsonldLogo()) {
             $queryBuilder = DatabaseUtility::queryBuilder();
 

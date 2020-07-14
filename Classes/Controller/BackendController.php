@@ -192,7 +192,7 @@ class BackendController extends ActionController
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Severity');
             $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
 
-            if (GeneralUtility::getApplicationContext()->isProduction()) {
+            if (\TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
                 $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
                 $pageRenderer->addJsFile('/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js');
             } else {
