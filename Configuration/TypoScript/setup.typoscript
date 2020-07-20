@@ -7,7 +7,10 @@ plugin.tx_mindshapeseo {
 
   settings {
     pageTree.usePagination = {$plugin.tx_mindshapeseo.settings.pageTree.usePagination}
-    analytics.disable = {$plugin.tx_mindshapeseo.settings.analytics.disable}
+    analytics {
+      disable = {$plugin.tx_mindshapeseo.settings.analytics.disable}
+      debug = {$plugin.tx_mindshapeseo.settings.analytics.debug}
+    }
   }
 }
 
