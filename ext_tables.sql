@@ -14,6 +14,8 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration (
   sitename                   varchar(255)        DEFAULT ''  NOT NULL,
   google_analytics           varchar(255)        DEFAULT ''  NOT NULL,
   google_tagmanager          varchar(255)        DEFAULT ''  NOT NULL,
+  matomo_url                 varchar(255) DEFAULT ''         NOT NULL,
+  matomo_idsite              varchar(255) DEFAULT ''         NOT NULL,
   title_attachment           varchar(255)        DEFAULT ''  NOT NULL,
   title_attachment_seperator varchar(255)        DEFAULT ''  NOT NULL,
   title_attachment_position  varchar(255)        DEFAULT ''  NOT NULL,

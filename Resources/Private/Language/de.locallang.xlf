@@ -209,8 +209,14 @@
             <trans-unit id="tx_mindshapeseo_text.robots_txt_example">
                 <target>Dieses Beispiel zeigt eine simple robots.txt für TYPO3, welche zusätzlich die Seiten &amp; Bilder XML-Sitemap beinhaltet. Diese Datei kannst Du auf der Root-Ebene unter "robots.txt" abspeichern.</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_text.robots_txt_exists">
+            <trans-unit id="tx_mindshapeseo_text.robots_txt_found">
+                <target>Inhalt der robots.txt:</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_text.robots_txt_not_exists">
                 <target>Hinweis: es wurde keine robots.txt auf Ihrer Website gefunden!</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_text.robots_txt_exists">
+                <target>Es wurde eine robots.txt auf Ihrer Website gefunden!</target>
             </trans-unit>
 
 

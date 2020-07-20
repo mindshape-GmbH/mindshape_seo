@@ -401,12 +401,41 @@ class BackendController extends ActionController
             $this->buttonBar->addButton($deleteButton, ButtonBar::BUTTON_POSITION_LEFT, 1);
         }
 
+        $robotsTxtNotExists = true;
+        $robotsContent = false;
+        $currentDomain =  $domain === Configuration::DEFAULT_DOMAIN ? GeneralUtility::getIndpEnv('HTTP_HOST') : $domain;
+
+        if (file_exists(Environment::getPublicPath() . '/robots.txt')) {
+            $robotsTxtNotExists = false;
+        }
+
+        if ($robotsTxtNotExists === true) {
+            /** @var \TYPO3\CMS\Core\Site\SiteFinder $siteFinder */
+            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+            /** @var \TYPO3\CMS\Core\Site\Entity\Site $allSites */
+            $allSites = $siteFinder->getAllSites();
+
+            /** @var \TYPO3\CMS\Core\Site\Entity\Site $site */
+            foreach ($allSites as $site) {
+                if ($site->getBase()->getHost() === $currentDomain) {
+                    $siteConf = $site->getConfiguration();
+                    $routes = $siteConf['routes'];
+                    foreach ($routes as $route) {
+                        if ($route['route'] === 'robots.txt') {
+                            $robotsTxtNotExists = false;
+                            $robotsContent = $route['content'];
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
         $this->view->assignMultiple([
             'domains' => $domains,
             'domainsSelectOptions' => $this->domainService->getConfigurationDomainSelectOptions($domain),
-            'currentDomain' => $domain === Configuration::DEFAULT_DOMAIN ?
-                GeneralUtility::getIndpEnv('HTTP_HOST') :
-                $domain,
+            'currentDomain' => $currentDomain,
             'configuration' => $configuration,
             'titleAttachmentPositionOptions' => [
                 Configuration::TITLE_ATTACHMENT_POSITION_SUFFIX => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.title_attachment_position.suffix', 'mindshape_seo'),
@@ -417,7 +446,8 @@ class BackendController extends ActionController
                 Configuration::JSONLD_TYPE_PERSON => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.person', 'mindshape_seo'),
             ],
             'domainUrl' => (GeneralUtility::getIndpEnv('TYPO3_SSL') ? 'https' : 'http') . '://' . ($domain !== Configuration::DEFAULT_DOMAIN ? $domain : GeneralUtility::getIndpEnv('HTTP_HOST')),
-            'robotsTxtNotExists' => !file_exists(Environment::getPublicPath() . '/robots.txt'),
+            'robotsTxtNotExists' => $robotsTxtNotExists,
+            'robotsTxtContent' => $robotsContent
         ]);
     }
 
