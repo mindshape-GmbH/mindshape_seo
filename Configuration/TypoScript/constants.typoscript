@@ -1,0 +1,23 @@
+plugin.tx_mindshapeseo {
+  view {
+    # cat=mindshapeseo/file; type=string; label=Path to template root (BE)
+    templateRootPath = EXT:mindshape_seo/Resources/Private/Templates/
+    # cat=mindshapeseo/file; type=string; label=Path to template partials (BE)
+    partialRootPath = EXT:mindshape_seo/Resources/Private/Partials/
+    # cat=mindshapeseo/file; type=string; label=Path to template layouts (BE)
+    layoutRootPath = EXT:mindshape_seo/Resources/Private/Layouts/
+  }
+
+  settings {
+    # cat=mindshapeseo/settings; type=boolean; label=Use a pagination in previews pagetree
+    pageTree.usePagination = 1
+
+    # customsubcategory=analytics=Analytics Settings
+    analytics {
+      # cat=mindshapeseo/analytics; type=boolean; label=Disable analytics injection
+      disable = 0
+      # cat=mindshapeseo/analytics; type=boolean; label=Enable analytics in dev environtment
+      debug = 0
+    }
+  }
+}
