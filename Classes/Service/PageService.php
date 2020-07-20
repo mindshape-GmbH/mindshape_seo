@@ -94,11 +94,11 @@ class PageService implements SingletonInterface
         if ('BE' === TYPO3_MODE) {
             $currentPageUid = MindshapeBackendUtility::getCurrentPageTreeSelectedPage();
 
-            if (
-                null === $currentPageUid &&
-                null !== GeneralUtility::_GET('edit')['pages']
-            ) {
-                $currentPageUid = key(GeneralUtility::_GET('edit')['pages']);
+            if ($currentPageUid === 0 || $currentPageUid === null) {
+                $page =  GeneralUtility::_GET('edit')['pages'];
+                if (!is_null($page)) {
+                    $currentPageUid = key($page);
+                }
             }
 
             $currentPage = $this->pageRepository->getPage_noCheck($currentPageUid);
@@ -143,7 +143,11 @@ class PageService implements SingletonInterface
      */
     public function getCurrentSysLanguageUid()
     {
-        return $this->typoScriptFrontendController->sys_language_uid;
+        if (version_compare(TYPO3_branch, '9.5', '>')) {
+            return $this->typoScriptFrontendController->getLanguage()->getLanguageId();
+        } else {
+            return $this->typoScriptFrontendController->sys_language_uid;
+        }
     }
 
     /**
@@ -199,10 +203,12 @@ class PageService implements SingletonInterface
         if (0 === $result->rowCount()) {
             $queryBuilder = DatabaseUtility::queryBuilder();
 
-            $result = $queryBuilder
+            $queryBuilder
                 ->select('p.*')
-                ->from('pages', 'p')
-                ->where(
+                ->from('pages', 'p');
+
+            if (isset($GLOBALS['TCA']['ctrl']['transOrigPointerField']) && !empty($GLOBALS['TCA']['ctrl']['transOrigPointerField'])) {
+                $queryBuilder->where(
                     $queryBuilder->expr()->eq(
                         'p.' . $GLOBALS['TCA']['ctrl']['transOrigPointerField'],
                         $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
@@ -210,9 +216,16 @@ class PageService implements SingletonInterface
                         $sysLanguageUid,
                         PDO::PARAM_INT)
                     )
-                )
-                ->execute()
-                ->fetch();
+                );
+            } else {
+                $queryBuilder->where(
+                    $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
+                        $sysLanguageUid,
+                        PDO::PARAM_INT)
+                    )
+                );
+            }
+            $result = $queryBuilder->execute();
         }
 
         return $result->fetch();

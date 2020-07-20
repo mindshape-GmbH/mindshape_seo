@@ -100,7 +100,7 @@ class TypoScriptFrontendUtility
 //
 //        $typoScriptFrontendController->rootLine = $rootline;
         $typoScriptFrontendController->sys_page = ObjectUtility::makeInstance(PageRepository::class);
-        $typoScriptFrontendController->getPageAndRootlineWithDomain($site->getRootPageId());
+        #$typoScriptFrontendController->getPageAndRootlineWithDomain($site->getRootPageId());
 
         $GLOBALS['TSFE'] = $typoScriptFrontendController;
 
