@@ -22,8 +22,8 @@ $GLOBALS['TCA']['pages']['columns']['description']['label'] = 'LLL:EXT:mindshape
             'exclude' => 0,
             'config' => [
                 'type' => 'user',
+                'renderType' => 'googlePreview',
                 'size' => 30,
-                'userFunc' => \Mindshape\MindshapeSeo\Userfuncs\Tca\GooglePreviewField::class . '->render',
             ],
         ],
         'mindshapeseo_disable_title_attachment' => [
