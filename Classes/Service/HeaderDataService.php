@@ -176,6 +176,14 @@ class HeaderDataService implements SingletonInterface
                 if ('' !== $this->domainConfiguration->getGoogleTagmanager()) {
                     $this->addGoogleTagmanager();
                 }
+
+                if (
+                    '' === $this->domainConfiguration->getGoogleAnalytics() &&
+                    '' !== $this->domainConfiguration->getMatomoUrl() &&
+                    '' !== $this->domainConfiguration->getMatomoIdsite()
+                ) {
+                    $this->addMatomo();
+                }
             }
         }
     }
@@ -305,6 +313,15 @@ class HeaderDataService implements SingletonInterface
         $this->pageRenderer->addHeaderData(
             $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerHead', [
                 'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
+            ])
+        );
+    }
+
+    protected function addMatomo() {
+        $this->pageRenderer->addHeaderData(
+            $this->standaloneTemplateRendererService->render('Analytics', 'Matomo', [
+                'matomoUrl' => $this->domainConfiguration->getMatomoUrl(),
+                'matomoIdSite' => $this->domainConfiguration->getMatomoIdsite(),
             ])
         );
     }

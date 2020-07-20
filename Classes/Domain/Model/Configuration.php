@@ -196,6 +196,16 @@ class Configuration extends AbstractEntity
     protected $jsonldAddressStreet = '';
 
     /**
+     * @var string
+     */
+    protected $matomoUrl = '';
+
+    /**
+     * @var string
+     */
+    protected $matomoIdsite = '';
+
+    /**
      * @return string $domain
      */
     public function getDomain()
@@ -727,5 +737,37 @@ class Configuration extends AbstractEntity
     public function setJsonldAddressStreet($jsonldAddressStreet)
     {
         $this->jsonldAddressStreet = $jsonldAddressStreet;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMatomoIdsite(): string
+    {
+        return $this->matomoIdsite;
+    }
+
+    /**
+     * @param string $matomoIdsite
+     */
+    public function setMatomoIdsite(string $matomoIdsite): void
+    {
+        $this->matomoIdsite = $matomoIdsite;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMatomoUrl(): string
+    {
+        return $this->matomoUrl;
+    }
+
+    /**
+     * @param string $matomoUrl
+     */
+    public function setMatomoUrl(string $matomoUrl): void
+    {
+        $this->matomoUrl = $matomoUrl;
     }
 }

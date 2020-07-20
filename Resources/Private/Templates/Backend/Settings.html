@@ -283,27 +283,19 @@
             </fieldset>
           </div>
         </div>
-      </fieldset>
-      <fieldset class="form-section">
-        <h2 class="form-section-headline">
-          <a href="#help" class="collapsed" role="button" data-toggle="collapse">
-            <core:icon identifier="provider-fontawesome-angle-up"/>
-            <core:icon identifier="provider-fontawesome-angle-down"/>
-            {f:translate(key: 'tx_mindshapeseo_label.help')}
-          </a>
-        </h2>
-        <div id="help" class="collapse">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">{f:translate(key: 'tx_mindshapeseo_label.robots_txt_example')}</h3>
-            </div>
-            <div class="panel-body">
-              <p>{f:translate(key: 'tx_mindshapeseo_text.robots_txt_example')}</p>
-              <f:if condition="{robotsTxtNotExists}">
-                <p class="alert alert-warning">{f:translate(key: 'tx_mindshapeseo_text.robots_txt_exists')}</p>
-              </f:if>
-              <pre>User-agent: *<br/>Allow: /<br/>Disallow: /typo3/&nbsp;&nbsp;&nbsp;&nbsp;# Nothing to see here<br/>Disallow: /*?id=*&nbsp;&nbsp;&nbsp;&nbsp;# Disallow non-realurl<br/>Disallow: *tx_news*&nbsp;&nbsp;# Disallow tx_news params<br/>Disallow: /*?eID=*&nbsp;&nbsp;&nbsp;# Disallow eID<br/><br/>#Page Sitemap<br/>Sitemap: {domainUrl}/sitemap.xml<br/>#Sitemap Index<br/>Sitemap: {domainUrl}/sitemap-index.xml<br/>#Image Sitemap<br/>Sitemap: {domainUrl}/sitemap-image.xml</pre>
-            </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <fieldset class="form-section matomo">
+              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo')}</h3>
+              <div class="form-group">
+                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_idsite')}</label>
+                <f:form.textfield property="matomoIdsite" class="form-control"/>
+              </div>
+              <div class="form-group">
+                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_url')}</label>
+                <f:form.textfield property="matomoUrl" class="form-control"/>
+              </div>
+            </fieldset>
           </div>
         </div>
       </fieldset>
@@ -325,7 +317,6 @@
         </f:if>
       </fieldset>
     </f:form>
-
   </f:section>
 
 </html>

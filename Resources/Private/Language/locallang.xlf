@@ -274,6 +274,15 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager">
                 <source>Google Tagmanager</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.matomo">
+                <source>Matomo</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.matomo_idsite">
+                <source>Matomo site id</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.matomo_url">
+                <source>Matomo url</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext">
                 <source>more information</source>
             </trans-unit>
