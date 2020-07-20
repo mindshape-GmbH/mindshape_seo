@@ -82,6 +82,7 @@ class GooglePreviewElement extends AbstractFormElement
 
     /**
      * @return array|string
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
      */
     public function render()
     {

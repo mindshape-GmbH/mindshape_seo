@@ -98,6 +98,7 @@ class UploadViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\UploadViewHelpe
 
     /**
      * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     * @throws \TYPO3\CMS\Extbase\Property\Exception
      */
     protected function getUploadedResource()
     {

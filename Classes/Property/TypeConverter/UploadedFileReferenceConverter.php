@@ -213,8 +213,9 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
      * @param array $uploadInfo
      * @param PropertyMappingConfigurationInterface $configuration
      * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
-     * @throws TypeConverterException
-     * @throws ExistingTargetFileNameException
+     * @throws \TYPO3\CMS\Extbase\Property\Exception\TypeConverterException
+     * @throws \TYPO3\CMS\Extbase\Security\Exception\InvalidArgumentForHashGenerationException
+     * @throws \TYPO3\CMS\Extbase\Security\Exception\InvalidHashException
      */
     protected function importUploadedResource(array $uploadInfo, PropertyMappingConfigurationInterface $configuration)
     {

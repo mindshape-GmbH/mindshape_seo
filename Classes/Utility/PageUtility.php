@@ -48,6 +48,7 @@ class PageUtility
 
     /**
      * @return array
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public static function getCurrentPage()
     {
@@ -60,7 +61,9 @@ class PageUtility
     }
 
     /**
+     * @param $pageUid
      * @return array
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public static function getPage($pageUid)
     {
@@ -74,6 +77,7 @@ class PageUtility
 
     /**
      * @return \TYPO3\CMS\Core\Page\PageRenderer
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public static function getPageRenderer()
     {

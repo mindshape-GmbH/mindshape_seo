@@ -52,6 +52,7 @@ class TypoScriptFrontendUtility
     /**
      * @param int $languageId
      * @throws \Mindshape\MindshapeSeo\Utility\Exception\TypoScriptFrontendControllerBootException
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public static function bootTypoScriptFrontendController(int $languageId = 0): void
     {

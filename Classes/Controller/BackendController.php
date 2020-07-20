@@ -349,6 +349,7 @@ class BackendController extends ActionController
     /**
      * @param string $domain
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function settingsAction($domain = null)
     {

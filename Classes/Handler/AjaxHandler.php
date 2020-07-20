@@ -47,6 +47,7 @@ class AjaxHandler implements SingletonInterface
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \Psr\Http\Message\ResponseInterface
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function savePage(ServerRequestInterface $request): ResponseInterface
     {
@@ -91,6 +92,7 @@ class AjaxHandler implements SingletonInterface
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \Psr\Http\Message\ResponseInterface
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function deleteConfiguration(ServerRequestInterface $request): ResponseInterface

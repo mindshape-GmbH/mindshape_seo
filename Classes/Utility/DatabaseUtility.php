@@ -44,6 +44,7 @@ class DatabaseUtility
 
     /**
      * @return \TYPO3\CMS\Core\Database\Connection
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public static function databaseConnection(): Connection
     {

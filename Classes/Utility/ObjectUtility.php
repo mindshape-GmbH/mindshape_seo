@@ -44,6 +44,7 @@ class ObjectUtility
      * @param string $className
      * @param array $arguments
      * @return object
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public static function makeInstance(string $className, ...$arguments): object
     {

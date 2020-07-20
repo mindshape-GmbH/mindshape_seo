@@ -84,8 +84,8 @@ class PageService implements SingletonInterface
     protected $typoScriptFrontendController;
 
     /**
-     * @return \Mindshape\MindshapeSeo\Service\PageService
      * @throws \Mindshape\MindshapeSeo\Service\Exception
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function __construct()
     {
@@ -349,6 +349,7 @@ class PageService implements SingletonInterface
      * @param int $pageUid
      * @param int $sysLanguageUid
      * @return array
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function getRootline($pageUid = null, $sysLanguageUid = 0)
     {
@@ -377,6 +378,7 @@ class PageService implements SingletonInterface
      * @param bool $withRootPage
      * @param int $sysLanguageUid
      * @return array
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function getRootlineReverse($pageUid = null, $withCurrentPage = false, $withRootPage = true, $sysLanguageUid = 0)
     {
@@ -441,7 +443,6 @@ class PageService implements SingletonInterface
         $tree = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Tree\View\PageTreeView::class);
         $tree->init();
         $tree->clause = ' AND pages.deleted = 0 AND pages.sys_language_uid = ' . $sysLanguageUid . ' AND (pages.doktype = 1 OR pages.doktype = 4) AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
-        $tree->sysLanguageUid = $sysLanguageUid;
 
         $tree->parentField = 'pages.pid';
         $tree->fieldArray = ['pages.*'];

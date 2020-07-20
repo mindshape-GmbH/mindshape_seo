@@ -40,6 +40,7 @@ class RenderPreProcessHook
     /**
      * @param array $params
      * @param PageRenderer $pageRenderer
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function main(array &$params, PageRenderer $pageRenderer)
     {

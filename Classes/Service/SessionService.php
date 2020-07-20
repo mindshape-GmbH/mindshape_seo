@@ -40,9 +40,6 @@ class SessionService implements SingletonInterface
      */
     protected $userAuthentication;
 
-    /**
-     * @return \Mindshape\MindshapeSeo\Service\SessionService
-     */
     public function __construct()
     {
         $this->userAuthentication = TYPO3_MODE === 'BE' ? $GLOBALS['BE_USER'] : $GLOBALS['TSFE']->fe_user;
