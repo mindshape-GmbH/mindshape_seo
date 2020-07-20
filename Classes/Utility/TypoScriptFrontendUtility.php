@@ -29,6 +29,7 @@ namespace Mindshape\MindshapeSeo\Utility;
 
 use Mindshape\MindshapeSeo\Utility\Exception;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -54,6 +55,9 @@ class TypoScriptFrontendUtility
      */
     public static function bootTypoScriptFrontendController(int $languageId = 0): void
     {
+        /** @var Typo3Version $typo3Version */
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+
         if (static::$typoScriptFrontendController instanceof TypoScriptFrontendController) {
             return;
         }
@@ -73,7 +77,7 @@ class TypoScriptFrontendUtility
 
         $siteLanguage = $currentSite->getLanguageById($languageId);
 
-        if (true === version_compare('9.5', TYPO3_branch, '==')) {
+        if (true === version_compare('9.5', $typo3Version->getBranch(), '==')) {
             /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController */
             $typoScriptFrontendController = ObjectUtility::makeInstance(
                 TypoScriptFrontendController::class,
@@ -81,7 +85,7 @@ class TypoScriptFrontendUtility
                 $currentSite->getRootPageId(),
                 static::DEFAULT_PAGETYPE
             );
-        } elseif (true === version_compare('10.4', TYPO3_branch, '==')) {
+        } elseif (true === version_compare('10.4', $typo3Version->getBranch(), '==')) {
             /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController */
             $typoScriptFrontendController = ObjectUtility::makeInstance(
                 TypoScriptFrontendController::class,
@@ -91,7 +95,7 @@ class TypoScriptFrontendUtility
             );
         } else {
             throw new Exception\TypoScriptFrontendControllerBootException(
-                'This Utility is not compatible with TYPO3 v' . TYPO3_branch
+                'This Utility is not compatible with TYPO3 v' . $typo3Version->getBranch()
             );
         }
 

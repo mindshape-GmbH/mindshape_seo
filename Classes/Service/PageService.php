@@ -33,9 +33,11 @@ use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use Mindshape\MindshapeSeo\Utility\TypoScriptFrontendUtility;
 use PDO;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -143,11 +145,9 @@ class PageService implements SingletonInterface
      */
     public function getCurrentSysLanguageUid()
     {
-        if (version_compare(TYPO3_branch, '9.5', '>')) {
-            return $this->typoScriptFrontendController->getLanguage()->getLanguageId();
-        } else {
-            return $this->typoScriptFrontendController->sys_language_uid;
-        }
+        /** @var \TYPO3\CMS\Core\Context\LanguageAspect $languageAspect */
+        $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+        return $languageAspect->getId();
     }
 
     /**
@@ -167,7 +167,10 @@ class PageService implements SingletonInterface
             ->setCreateAbsoluteUri($absolute)
             ->setLinkAccessRestrictedPages($linkAccessRestrictedPages);
 
-        if (true === version_compare('10.4', TYPO3_branch, '<=')) {
+        /** @var Typo3Version $typo3Version */
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+
+        if (true === version_compare('10.4', $typo3Version->getVersion(), '<=')) {
             $this->uriBuilder->setLanguage($sysLanguageUid);
         } else {
             $this->uriBuilder->setArguments(['L' => $sysLanguageUid]);
@@ -287,7 +290,7 @@ class PageService implements SingletonInterface
                 $this->getPageLink(
                     $page['canonical_link'],
                     true,
-                    $this->typoScriptFrontendController->sys_language_uid
+                    $this->getCurrentSysLanguageUid()
                 ) :
                 null,
             'meta' => [

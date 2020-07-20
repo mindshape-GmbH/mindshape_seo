@@ -463,6 +463,7 @@ class BackendController extends ActionController
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
      * @Validate("\Mindshape\MindshapeSeo\Validation\Validator\ConfigurationValidator", param="configuration")
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      */
     public function saveConfigurationAction(Configuration $configuration)
     {

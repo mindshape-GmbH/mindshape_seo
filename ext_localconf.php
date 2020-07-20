@@ -15,7 +15,7 @@ call_user_func(function () {
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(\Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter::class);
 
-    if (version_compare(TYPO3_branch, '9.5', '>=')) {
+    if (version_compare(\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Information\Typo3Version::class)->getBranch(), '9.5', '>=')) {
         \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\Container\Container::class)
             ->registerImplementation(\TYPO3\CMS\Extbase\Domain\Model\FileReference::class,
                 \Mindshape\MindshapeSeo\Domain\Model\FileReference::class);

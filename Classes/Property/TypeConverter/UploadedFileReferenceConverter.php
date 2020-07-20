@@ -25,12 +25,14 @@ namespace Mindshape\MindshapeSeo\Property\TypeConverter;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
 use TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileReference as FalFileReference;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Resource\Security\FileNameValidator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
@@ -216,8 +218,17 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
      */
     protected function importUploadedResource(array $uploadInfo, PropertyMappingConfigurationInterface $configuration)
     {
-        if (!GeneralUtility::verifyFilenameAgainstDenyPattern($uploadInfo['name'])) {
-            throw new TypeConverterException('Uploading files with PHP file extensions is not allowed!', 1399312430);
+        /** @var Typo3Version $typo3Version */
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+
+        if (version_compare($typo3Version->getMajorVersion(), '10', '>=')) {
+            if (!GeneralUtility::makeInstance(FileNameValidator::class)->isValid($uploadInfo['name'])) {
+                throw new TypeConverterException('Uploading files with PHP file extensions is not allowed!', 1399312430);
+            }
+        } else {
+            if (!GeneralUtility::verifyFilenameAgainstDenyPattern($uploadInfo['name'])) {
+                throw new TypeConverterException('Uploading files with PHP file extensions is not allowed!', 1399312430);
+            }
         }
 
         $uploadInfo['name'] = $this->sanitizeFilename($uploadInfo['name']);
