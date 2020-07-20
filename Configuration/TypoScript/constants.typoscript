@@ -12,11 +12,10 @@ plugin.tx_mindshapeseo {
     # cat=mindshapeseo/settings; type=boolean; label=Use a pagination in previews pagetree
     pageTree.usePagination = 1
 
-    # customsubcategory=analytics=Analytics Settings
     analytics {
-      # cat=mindshapeseo/analytics; type=boolean; label=Disable analytics injection
+      # cat=mindshapeseo/settings/analytics; type=boolean; label=Disable analytics injection
       disable = 0
-      # cat=mindshapeseo/analytics; type=boolean; label=Enable analytics in dev environtment
+      # cat=mindshapeseo/settings/analytics; type=boolean; label=Enable analytics in dev environtment (also if analytics injection is disabled)
       debug = 0
     }
   }
