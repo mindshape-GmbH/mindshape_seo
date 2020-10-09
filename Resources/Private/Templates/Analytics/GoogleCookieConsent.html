@@ -1,0 +1,28 @@
+<html data-namespace-typo3-fluid="true" lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
+
+  <script data-ignore="1">
+    window.cookieConsentLoadedGoogleAnalytics = false;
+    window.addEventListener('cookieConsent', function (event) {
+      if (
+        false === window.cookieConsentLoadedGoogleAnalytics &&
+        event.detail.hasOption('google_analytics')
+      ) {
+        let script = document.createElement('script');
+
+        script.async = true;
+        script.src = '//www.googletagmanager.com/gtag/js?id=<f:format.raw>{analyticsId}</f:format.raw>';
+
+        document.head.appendChild(script);
+
+        window.cookieConsentLoadedGoogleAnalytics = true;
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {dataLayer.push(arguments)}
+        gtag('js', new Date());
+        gtag('config', '<f:format.raw>{analyticsId}</f:format.raw>', { 'anonymize_ip': true });
+      }
+    });
+  </script>
+
+</html>

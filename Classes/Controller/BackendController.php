@@ -43,6 +43,7 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation\Validate;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
@@ -405,7 +406,7 @@ class BackendController extends ActionController
 
         $robotsTxtNotExists = true;
         $robotsContent = false;
-        $currentDomain =  $domain === Configuration::DEFAULT_DOMAIN ? GeneralUtility::getIndpEnv('HTTP_HOST') : $domain;
+        $currentDomain = $domain === Configuration::DEFAULT_DOMAIN ? GeneralUtility::getIndpEnv('HTTP_HOST') : $domain;
 
         if (file_exists(Environment::getPublicPath() . '/robots.txt')) {
             $robotsTxtNotExists = false;
@@ -449,7 +450,8 @@ class BackendController extends ActionController
             ],
             'domainUrl' => (GeneralUtility::getIndpEnv('TYPO3_SSL') ? 'https' : 'http') . '://' . ($domain !== Configuration::DEFAULT_DOMAIN ? $domain : GeneralUtility::getIndpEnv('HTTP_HOST')),
             'robotsTxtNotExists' => $robotsTxtNotExists,
-            'robotsTxtContent' => $robotsContent
+            'robotsTxtContent' => $robotsContent,
+            'cookieExtensionIsActive' => ExtensionManagementUtility::isLoaded('mindshape_cookie_consent'),
         ]);
     }
 

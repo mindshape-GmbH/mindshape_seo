@@ -256,6 +256,15 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_analytics">
                 <target>Einfügen des Analytics Scripts auf die Website</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent">
+                <target>Benutze den Cookie Consent für Google Analytics</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.tagmanager_use_cookie_consent">
+                <target>Benutze den Cookie Consent für Tagmanager</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.matomo_use_cookie_consent">
+                <target>Benutze den Cookie Consent für Matomo</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld">
                 <target>Website Informationen (JSON-LD)</target>
             </trans-unit>

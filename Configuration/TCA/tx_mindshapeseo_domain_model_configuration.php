@@ -96,6 +96,30 @@ return [
                 'default' => 0,
             ],
         ],
+        'google_analytics_use_cookie_consent' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent',
+            'config' => [
+                'type' => 'check',
+                'default' => 0,
+            ],
+        ],
+        'tagmanager_use_cookie_consent' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.tagmanager_use_cookie_consent',
+            'config' => [
+                'type' => 'check',
+                'default' => 0,
+            ],
+        ],
+        'matomo_use_cookie_consent' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.matomo_use_cookie_consent',
+            'config' => [
+                'type' => 'check',
+                'default' => 0,
+            ],
+        ],
         'add_jsonld' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.add_jsonld',

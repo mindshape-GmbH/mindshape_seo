@@ -239,7 +239,8 @@ class HeaderDataService implements SingletonInterface
             false === (bool) $this->settings['analytics']['disable'] &&
             true === \TYPO3\CMS\Core\Core\Environment::getContext()->isProduction() &&
             false === empty($this->domainConfiguration->getGoogleTagmanager()) &&
-            true === $this->domainConfiguration->getAddAnalytics()
+            true === $this->domainConfiguration->getAddAnalytics() &&
+            false === $this->domainConfiguration->getTagmanagerUseCookieConsent()
         ) {
             $tagmanagerBody = $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerBody', [
                 'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
@@ -293,36 +294,46 @@ class HeaderDataService implements SingletonInterface
         }
     }
 
-    /**
-     * @return void
-     */
     protected function addGoogleAnalytics()
     {
         $this->pageRenderer->addHeaderData(
-            $this->standaloneTemplateRendererService->render('Analytics', 'Google', [
-                'analyticsId' => $this->domainConfiguration->getGoogleAnalytics(),
-            ])
+            $this->standaloneTemplateRendererService->render(
+                'Analytics',
+                true === $this->domainConfiguration->getGoogleAnalyticsUseCookieConsent()
+                    ? 'GoogleCookieConsent'
+                    : 'Google',
+                ['analyticsId' => $this->domainConfiguration->getGoogleAnalytics()])
         );
     }
 
-    /**
-     * @return void
-     */
     protected function addGoogleTagmanager()
     {
         $this->pageRenderer->addHeaderData(
-            $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerHead', [
-                'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
-            ])
+            $this->standaloneTemplateRendererService->render(
+                'Analytics',
+                true === $this->domainConfiguration->getGoogleAnalyticsUseCookieConsent()
+                    ? 'GoogleTagmanagerHeadCookieConsent'
+                    : 'GoogleTagmanagerHead',
+                [
+                    'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
+                ]
+            )
         );
     }
 
-    protected function addMatomo() {
+    protected function addMatomo()
+    {
         $this->pageRenderer->addHeaderData(
-            $this->standaloneTemplateRendererService->render('Analytics', 'Matomo', [
-                'matomoUrl' => $this->domainConfiguration->getMatomoUrl(),
-                'matomoIdSite' => $this->domainConfiguration->getMatomoIdsite(),
-            ])
+            $this->standaloneTemplateRendererService->render(
+                'Analytics',
+                true === $this->domainConfiguration->getMatomoUseCookieConsent()
+                    ? 'MatomoCookieConsent'
+                    : 'Matomo',
+                [
+                    'matomoUrl' => $this->domainConfiguration->getMatomoUrl(),
+                    'matomoIdSite' => $this->domainConfiguration->getMatomoIdsite(),
+                ]
+            )
         );
     }
 

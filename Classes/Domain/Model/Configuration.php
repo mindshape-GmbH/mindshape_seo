@@ -88,6 +88,21 @@ class Configuration extends AbstractEntity
     /**
      * @var bool
      */
+    protected $googleAnalyticsUseCookieConsent = false;
+
+    /**
+     * @var bool
+     */
+    protected $tagmanagerUseCookieConsent = false;
+
+    /**
+     * @var bool
+     */
+    protected $matomoUseCookieConsent = false;
+
+    /**
+     * @var bool
+     */
     protected $addJsonld = false;
 
     /**
@@ -347,6 +362,54 @@ class Configuration extends AbstractEntity
     public function isAddAnalytics()
     {
         return $this->addAnalytics;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getGoogleAnalyticsUseCookieConsent()
+    {
+        return $this->googleAnalyticsUseCookieConsent;
+    }
+
+    /**
+     * @param bool $googleAnalyticsUseCookieConsent
+     */
+    public function setGoogleAnalyticsUseCookieConsent($googleAnalyticsUseCookieConsent)
+    {
+        $this->googleAnalyticsUseCookieConsent = $googleAnalyticsUseCookieConsent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getTagmanagerUseCookieConsent()
+    {
+        return $this->tagmanagerUseCookieConsent;
+    }
+
+    /**
+     * @param bool $tagmanagerUseCookieConsent
+     */
+    public function setTagmanagerUseCookieConsent($tagmanagerUseCookieConsent)
+    {
+        $this->tagmanagerUseCookieConsent = $tagmanagerUseCookieConsent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getMatomoUseCookieConsent()
+    {
+        return $this->matomoUseCookieConsent;
+    }
+
+    /**
+     * @param bool $matomoUseCookieConsent
+     */
+    public function setMatomoUseCookieConsent($matomoUseCookieConsent)
+    {
+        $this->matomoUseCookieConsent = $matomoUseCookieConsent;
     }
 
     /**
