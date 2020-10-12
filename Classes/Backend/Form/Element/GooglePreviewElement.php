@@ -86,41 +86,42 @@ class GooglePreviewElement extends AbstractFormElement
      */
     public function render()
     {
+        $result = $this->initializeResultArray();
         $pageUid =  $this->data['databaseRow']['uid'];
 
-        $configuration = $this->domainService->getPageDomainConfiguration($pageUid);
+        if ($pageUid > 0) {
+            $configuration = $this->domainService->getPageDomainConfiguration($pageUid);
 
-        $metadata = null;
-        $titleAttachment = null;
-        $titleAttachmentSeperator = null;
-        $titleAttachmentPosition = null;
+            $metadata = null;
+            $titleAttachment = null;
+            $titleAttachmentSeperator = null;
+            $titleAttachmentPosition = null;
 
-        if ($this->pageService->hasFrontendController()) {
-            if ($configuration instanceof Configuration) {
-                $metadata = $this->pageService->getPageMetaData(
-                    $pageUid,
-                    $this->pageService->getCurrentSysLanguageUid(),
-                    $configuration->getJsonldCustomUrl(),
-                    $configuration->getAddJsonldBreadcrumb()
-                );
+            if ($this->pageService->hasFrontendController()) {
+                if ($configuration instanceof Configuration) {
+                    $metadata = $this->pageService->getPageMetaData(
+                        $pageUid,
+                        $this->pageService->getCurrentSysLanguageUid(),
+                        $configuration->getJsonldCustomUrl(),
+                        $configuration->getAddJsonldBreadcrumb()
+                    );
 
-                $titleAttachment = $configuration->getTitleAttachment();
-                $titleAttachmentSeperator = $configuration->getTitleAttachmentSeperator();
-                $titleAttachmentPosition = $configuration->getTitleAttachmentPosition();
-            } else {
-                $metadata = $this->pageService->getPageMetaData($pageUid, $this->pageService->getCurrentSysLanguageUid());
+                    $titleAttachment = $configuration->getTitleAttachment();
+                    $titleAttachmentSeperator = $configuration->getTitleAttachmentSeperator();
+                    $titleAttachmentPosition = $configuration->getTitleAttachmentPosition();
+                } else {
+                    $metadata = $this->pageService->getPageMetaData($pageUid, $this->pageService->getCurrentSysLanguageUid());
+                }
             }
+            $result['html'] = $this->standaloneTemplateRendererService->render('TCA', 'GooglePreview', [
+                'metadata' => $metadata,
+                'titleAttachment' => $titleAttachment,
+                'titleAttachmentSeperator' => $titleAttachmentSeperator,
+                'titleAttachmentPosition' => $titleAttachmentPosition,
+                'tcaName' => $this->data['parameterArray']['itemFormElName'],
+                'focusKeyword' => $this->data['parameterArray']['itemFormElValue'],
+            ]);
         }
-
-        $result = $this->initializeResultArray();
-        $result['html'] = $this->standaloneTemplateRendererService->render('TCA', 'GooglePreview', [
-            'metadata' => $metadata,
-            'titleAttachment' => $titleAttachment,
-            'titleAttachmentSeperator' => $titleAttachmentSeperator,
-            'titleAttachmentPosition' => $titleAttachmentPosition,
-            'tcaName' => $this->data['parameterArray']['itemFormElName'],
-            'focusKeyword' => $this->data['parameterArray']['itemFormElValue'],
-        ]);
         return $result;
     }
 }
