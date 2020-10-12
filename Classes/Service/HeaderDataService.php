@@ -236,11 +236,11 @@ class HeaderDataService implements SingletonInterface
     {
         if (
             $this->domainConfiguration instanceof Configuration &&
-            false === (bool) $this->settings['analytics']['disable'] &&
-            true === \TYPO3\CMS\Core\Core\Environment::getContext()->isProduction() &&
+            (false === (bool) $this->settings['analytics']['disable'] || (bool) $this->settings['analytics']['debug'] === true) &&
+            (true === \TYPO3\CMS\Core\Core\Environment::getContext()->isProduction() || (bool) $this->settings['analytics']['debug'] === true) &&
             false === empty($this->domainConfiguration->getGoogleTagmanager()) &&
             true === $this->domainConfiguration->getAddAnalytics() &&
-            false === $this->domainConfiguration->getTagmanagerUseCookieConsent()
+            (false === $this->domainConfiguration->getTagmanagerUseCookieConsent() || (bool) $this->settings['analytics']['debug'] === true)
         ) {
             $tagmanagerBody = $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerBody', [
                 'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
