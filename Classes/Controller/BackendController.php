@@ -37,11 +37,14 @@ use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder as BackendUriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
-use TYPO3\CMS\Backend\Utility\BackendUtility as CoreBackendUtility;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
+use TYPO3\CMS\Core\Resource\Exception\InsufficientFolderAccessPermissionsException;
+use TYPO3\CMS\Core\Resource\Folder;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -569,12 +572,23 @@ class BackendController extends ActionController
      * @param string $argumentName
      * @return void
      */
-    protected function setTypeConverterConfigurationForImageUpload($argumentName)
+    protected function setTypeConverterConfigurationForImageUpload(string $argumentName)
     {
-        $uploadConfiguration = [
-            UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'],
-            UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER => '1:/mindshape_seo/',
-        ];
+        $uploadConfiguration = [UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']];
+
+        $resourceFactory = ResourceFactory::getInstance();
+
+        try {
+            $folder = $resourceFactory->getDefaultStorage()->getFolder('mindshape_seo');
+        } catch (FolderDoesNotExistException $exception) {
+            $folder = null;
+        }
+
+        if (!$folder instanceof Folder) {
+            $folder = $resourceFactory->getDefaultStorage()->createFolder('mindshape_seo');
+        }
+
+        $uploadConfiguration[UploadedFileReferenceConverter::CONFIGURATION_UPLOAD_FOLDER] = $folder->getCombinedIdentifier();
 
         /** @var \TYPO3\CMS\Extbase\Property\PropertyMappingConfiguration $newExampleConfiguration */
         $newExampleConfiguration = $this->arguments[$argumentName]->getPropertyMappingConfiguration();

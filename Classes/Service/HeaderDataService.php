@@ -311,7 +311,7 @@ class HeaderDataService implements SingletonInterface
         $this->pageRenderer->addHeaderData(
             $this->standaloneTemplateRendererService->render(
                 'Analytics',
-                true === $this->domainConfiguration->getGoogleAnalyticsUseCookieConsent()
+                true === $this->domainConfiguration->getTagmanagerUseCookieConsent()
                     ? 'GoogleTagmanagerHeadCookieConsent'
                     : 'GoogleTagmanagerHead',
                 [
