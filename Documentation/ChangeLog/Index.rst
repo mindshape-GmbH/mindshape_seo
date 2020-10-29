@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v2.0
+  - Compatibility for TYPO3 v10.4
+
 v1.1.7
   - Fix inproper analytics noscript tag appending to html
 

@@ -17,14 +17,6 @@ Target group: **Editors**
 Metadata
 ========
 
-Hreflang-Tag
-------------
-
-The hreflang tag is used for websites with multiple language versions of URLs.
-The tag makes it easier for Google to serve the correct language URL in search results.
-
-Further information can be found here: https://support.google.com/webmasters/answer/189077?hl=en&ref_topic=2370587
-
 Breadcrumb
 ----------
 
@@ -94,15 +86,3 @@ Search engines will understand the data and can present search results more attr
 in terms of rich snippets. For example stars for product reviews or the appearance of a breadcrumb.
 
 Further information can be found here: https://support.google.com/webmasters/answer/3069489?hl=en
-
-XML-Sitemap
-===========
-
-A XML-Sitemap is a file with all the pages of your website to give google and other
-search engines an understanding about the organization of your site content.
-Sitemaps can improve the crawling of your website, so that every site has the chance
-to get seen by the crawler. Additionally you can tag crawl priorities to each site
-by using a range from 0-1.  Especially if you have a large website with a lot of
-pages it`s really useful to have a XML-Sitemap.
-
-Further information can be found here: https://support.google.com/webmasters/answer/156184?hl=en

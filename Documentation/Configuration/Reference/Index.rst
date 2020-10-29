@@ -25,18 +25,32 @@ plugin.tx_mindshapeseo.settings:
          Use a pagination in the preview pagetree
 
    Default
+         1
+
+.. container:: table-row
+
+   Constant
+         analytics.disable
+
+   Data Type
+         boolean
+
+   Description
+         Disable the injection of Analytics, Tagmanager or Matomo
+
+   Default
          0
 
 .. container:: table-row
 
    Constant
-         sitemap.newsDetailPage
+         analytics.debug
 
    Data Type
-         integer
+         boolean
 
    Description
-         Detailpage to get news (tx_news) links into the sitemap
+         Force injection of any analytics no matter the context (for development purposes)
 
    Default
          0

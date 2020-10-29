@@ -1,51 +1,58 @@
-﻿.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
+﻿.. every .rst file should include Includes.txt
+.. use correct path!
 
 .. include:: Includes.txt
+
+.. Every manual should have a start label for cross-referencing to
+.. start page. Do not remove this!
+
+.. _start:
 
 =======================
 mindshape SEO Extension
 =======================
 
-.. only:: html
+:Version:
+    |release|
 
-    :Classification:
-        mindshape_seo
+:Language:
+    en
 
-    :Version:
-        |version|
+:Description:
+    SEO extension from mindshape GmbH with google preview and metadata validation
 
-    :Language:
-        en
+:Keywords:
+    mindshape,seo,google,preview
 
-    :Description:
-        SEO extension from mindshape GmbH with google preview and metadata validation
+:Author:
+    mindshape GmbH
 
-    :Keywords:
-        mindshape,seo,google,preview
+:Company:
+    `mindshape GmbH <https://www.mindshape.de/>`_
 
-    :Copyright:
-        2017
+:Email:
+    `info@mindshape.de <mailto:info@mindshape.de>`_
 
-    :Author:
-        Daniel Dorndorf
+:License:
+   This extension documentation is published under the
+   `CC BY-NC-SA 4.0 <https://creativecommons.org/licenses/by-nc-sa/4.0/>`__ (Creative Commons)
+   license
 
-    :Company:
-        `mindshape GmbH <https://www.mindshape.de/>`_
+**TYPO3**
 
-    :Email:
-        dorndorf@mindshape.de
+The content of this document is related to TYPO3 CMS,
+a GNU/GPL CMS/Framework available from `typo3.org <https://typo3.org/>`_ .
 
-    :License:
-        This document is published under the Open Content License
-        available from http://www.opencontent.org/openpub/
+**Community Documentation**
 
-    The content of this document is related to TYPO3,
-    a GNU/GPL CMS/Framework available from `www.typo3.org <http://www.typo3.org/>`_.
+This documentation is community documentation for the TYPO3 extension mindshape SEO
 
-    **Table of Contents**
+It is maintained as part of this third party extension.
+
+If you find an error or something is missing, please:
+`Report a Problem <https://github.com/mindshape-GmbH/mindshape_seo/issues/new>`__
+
+**Table of Contents**
 
 .. toctree::
     :maxdepth: 2
@@ -56,6 +63,5 @@ mindshape SEO Extension
     SeoGuide/Index
     Administrator/Index
     Configuration/Index
-    Developer/Index
     ChangeLog/Index
     Links

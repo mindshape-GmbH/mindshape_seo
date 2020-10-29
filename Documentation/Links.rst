@@ -20,4 +20,4 @@ Links
     `GitHub <https://github.com/mindshape-GmbH/mindshape_seo>`_
 
 :Contact:
-    `Daniel Dorndorf <mailto:dorndorf@mindshape.de>`_
+    `mindshape GmbH <mailto:info@mindshape.de>`_
