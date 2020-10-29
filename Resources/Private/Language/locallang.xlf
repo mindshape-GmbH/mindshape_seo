@@ -389,6 +389,11 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr">
                 <source>Tumblr</source>
             </trans-unit>
+
+
+            <trans-unit id="sys_redirect.target_statuscode.410">
+                <source>410 Gone</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
