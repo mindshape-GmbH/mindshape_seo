@@ -254,27 +254,8 @@ class PageService implements SingletonInterface
         $page = $this->getPage($pageUid, $sysLanguageUid);
 
         $pageUrl = $this->getPageLink($pageUid, true, $sysLanguageUid);
-        $previewUrl = $pageUrl;
 
-        if ('' !== $customUrl && '/' === $customUrl[strlen($customUrl) - 1]) {
-            $customUrl = substr($customUrl, 0, -1);
-        }
-
-        if ($useGoogleBreadcrumb) {
-            $rootline = $this->getRootlineReverse($pageUid, false, false, $sysLanguageUid);
-
-            $googleBreadcrumb = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
-
-            foreach ($rootline as $index => $parentPage) {
-                $googleBreadcrumb .= $index < count($rootline) ? ' › ' : '';
-                $googleBreadcrumb .= $parentPage['title'];
-            }
-
-            $previewUrl = $googleBreadcrumb;
-        } elseif (!empty($customUrl)) {
-            $pageUrlRelative = $this->getPageLink($pageUid, false, $sysLanguageUid);
-            $previewUrl = '/' === $pageUrlRelative ? $customUrl : $customUrl . '/' . $pageUrlRelative;
-        }
+        $previewUrl = $this->getSerpPreviewUrl($pageUid, $sysLanguageUid, $customUrl);
 
         $title = false === empty($page['seo_title'])
             ? $page['seo_title']
@@ -310,6 +291,47 @@ class PageService implements SingletonInterface
                 ],
             ],
         ];
+    }
+
+    public function getSerpPreviewUrl($pageUid, $sysLanguageUid, $customUrl = "") {
+        $baseUri = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
+        $baseUri = str_replace('https://', "", $baseUri);
+        $pageUrlNonAbsolute = parse_url($this->getPageLink($pageUid, false, $sysLanguageUid), PHP_URL_PATH);
+        $uri = $baseUri . $pageUrlNonAbsolute;
+
+        if ($pageUrlNonAbsolute == "/") return $baseUri;
+
+        if ($this->uriIsTooLong($uri)) {
+            if ($this->uriPathTooLong($uri)) {
+                $parts = explode("/", $pageUrlNonAbsolute);
+                $uri = $baseUri . "/.../" . $parts[count($parts) -1];
+                if ($this->uriIsTooLong($uri)) {
+                    $uri = substr($uri, 0, 60) . "...";
+                }
+            } else {
+                $uri = substr($uri, 0, 60) . "...";
+            }
+        }
+
+        return $this->formatUriForPreview($uri);
+    }
+
+    public function formatUriForPreview($uri) {
+        return str_replace("/", " › ", $uri);
+    }
+
+    public function uriIsTooLong($uri) {
+        return (strlen($uri) >= 57);
+    }
+
+    public function uriPathTooLong($uri) {
+       $parts = explode("/", $uri);
+       foreach ($parts as $part) {
+           if (strlen($part) > 28) {
+               return true;
+           }
+       }
+       return false;
     }
 
     /**

@@ -45,6 +45,10 @@
       <f:form.hidden name="sysLanguageUid" value="{sysLanguageUid}"/>
     </f:if>
     <div class="preview-box">
+        <div class="url">
+            <cite>{previewUrl -> f:format.raw()}</cite>
+            <span class="cache"></span>
+        </div>
       <h3>
         <a href="{url}" target="_blank">
           <f:if condition="{titleAttachment}">
@@ -73,22 +77,21 @@
           </f:if>
         </a>
       </h3>
-      <div class="url">
-        <cite>{previewUrl -> f:format.raw()}</cite>
-      </div>
       <div class="description">{description -> f:format.raw()}</div>
     </div>
     <f:if condition="{editing}">
       <div class="edit-panel">
         <hr/>
         <div class="form-group title-container">
-          <f:form.textfield name="title" value="{title}" class="title form-control"/>
+            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_title')}</label>
+            <f:form.textfield name="title" value="{title}" class="title form-control"/>
           <div class="progress progress-title">
             <div class="progress-bar" role="progressbar"></div>
           </div>
         </div>
         <div class="form-group description-container">
-          <f:form.textarea name="description" value="{description}" class="description form-control"/>
+            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_description')}</label>
+            <f:form.textarea name="description" value="{description}" class="description form-control"/>
           <div class="progress progress-description">
             <div class="progress-bar" role="progressbar"></div>
           </div>

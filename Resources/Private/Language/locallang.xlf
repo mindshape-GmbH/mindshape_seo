@@ -3,6 +3,12 @@
     <file source-language="en" datatype="plaintext" original="messages" product-name="mindshape_seo">
         <header/>
         <body>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_title">
+                <source>Title</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_description">
+                <source>Descripition</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword">
                 <source>Focus keyword</source>
             </trans-unit>
