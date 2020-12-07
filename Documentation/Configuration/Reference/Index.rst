@@ -55,4 +55,32 @@ plugin.tx_mindshapeseo.settings:
    Default
          0
 
+.. container:: table-row
+
+   Constant
+         googlePreview.showHiddenPages
+
+   Data Type
+         boolean
+
+   Description
+         Show hidden pages in google preview
+
+   Default
+         0
+
+.. container:: table-row
+
+   Constant
+         googlePreview.respectDoktypes
+
+   Data Type
+         string
+
+   Description
+         Comma separated list with the page types that are considered in the Google Preview
+
+   Default
+         1,4
+
 .. ###### END~OF~TABLE ######
