@@ -163,6 +163,12 @@
             <trans-unit id="tx_mindshapeseo_label.preview.no_page_selected">
                 <target>Keine Seite ausgewählt</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.page_hidden">
+                <target>Seite ist versteckt, wenn Sie auch versteckte Seiten anzeigen wollen, können Sie dies über Typoscript konfigurieren.</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.unsupportedDoktype">
+                <target>Seiten mit dem Seitentyp der aktuellen Seite sind ausgeschlossen. Wenn Sie Seiten mit dem aktuellen Seitentyp anzeigen möchten, können Sie das über Typoscript konfigurieren.</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword.not_available">
                 <target>n/a</target>
             </trans-unit>

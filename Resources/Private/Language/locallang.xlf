@@ -163,6 +163,12 @@
             <trans-unit id="tx_mindshapeseo_label.preview.no_page_selected">
                 <source>No page selected</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.page_hidden">
+                <source>Page is hidden, if you want to display also hidden pages you can configure this via typoscript</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.unsupportedDoktype">
+                <source>Pages with the pagetype of the current page are excluded, if you want to display pages with the current pagetype you can configure this via typoscript</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword.not_available">
                 <source>n/a</source>
             </trans-unit>

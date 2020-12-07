@@ -172,7 +172,7 @@ class BackendController extends ActionController
     {
         $this->currentPageUid = BackendUtility::getCurrentPageTreeSelectedPage();
 
-        $this->settings = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'mindshape_seo');
+        $this->settings = $this->configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'mindshapeseo');
     }
 
     /**
@@ -494,16 +494,21 @@ class BackendController extends ActionController
     public function previewAction($depth = null, $sysLanguageUid = null)
     {
         $currentPage = $this->pageService->getCurrentPage();
+        $showHiddenPages = (bool) $this->settings['googlePreview']['showHiddenPages'];
+        $respectDoktypes = GeneralUtility::trimExplode(',', $this->settings['googlePreview']['respectDoktypes']);
 
         if (
             0 === $this->currentPageUid ||
-            (bool) $currentPage['hidden'] ||
-            (
-                1 !== (int) $currentPage['doktype'] &&
-                4 !== (int) $currentPage['doktype']
-            )
+            !in_array($currentPage['doktype'], $respectDoktypes) ||
+            ($showHiddenPages === false && (bool) $currentPage['hidden'] === true)
         ) {
-            $this->view->assign('noPageSelected', true);
+            if ($showHiddenPages === false && (bool) $currentPage['hidden'] === true) {
+                $this->view->assign('pageHidden', true);
+            } else if (!in_array($currentPage['doktype'], $respectDoktypes)) {
+                $this->view->assign('unsupportedDoktype', true);
+            } else {
+                $this->view->assign('noPageSelected', true);
+            }
         } else {
             if (null === $depth) {
                 $depth = $this->sessionService->hasKey('depth') ?

@@ -11,6 +11,10 @@ plugin.tx_mindshapeseo {
       disable = {$plugin.tx_mindshapeseo.settings.analytics.disable}
       debug = {$plugin.tx_mindshapeseo.settings.analytics.debug}
     }
+    googlePreview {
+      showHiddenPages = {$plugin.tx_mindshapeseo.settings.googlePreview.showHiddenPages}
+      respectDoktypes = {$plugin.tx_mindshapeseo.settings.googlePreview.respectDoktypes}
+    }
   }
 }
 

@@ -26,25 +26,24 @@ namespace Mindshape\MindshapeSeo\Service;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Backend\Tree\View\PageTreeView;
+use Mindshape\MindshapeSeo\Utility\BackendUtility;
 use Mindshape\MindshapeSeo\Utility\BackendUtility as MindshapeBackendUtility;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use Mindshape\MindshapeSeo\Utility\Exception\TypoScriptFrontendControllerBootException;
 use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use Mindshape\MindshapeSeo\Utility\TypoScriptFrontendUtility;
 use PDO;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Page\PageRepository;
@@ -187,6 +186,7 @@ class PageService implements SingletonInterface
     public function getPage($pageUid, $sysLanguageUid = 0)
     {
         $queryBuilder = DatabaseUtility::queryBuilder();
+        $queryBuilder->getRestrictions()->removeByType(HiddenRestriction::class);
 
         $result = $queryBuilder
             ->select('p.*')
@@ -202,7 +202,6 @@ class PageService implements SingletonInterface
                 )
             )
             ->execute();
-
         if (0 === $result->rowCount()) {
             $queryBuilder = DatabaseUtility::queryBuilder();
 
@@ -239,7 +238,14 @@ class PageService implements SingletonInterface
      */
     public function getCurrentPage()
     {
-        return $this->getPage($this->typoScriptFrontendController->id);
+        $pageId = $this->typoScriptFrontendController->id;
+        if ($this->typoScriptFrontendController) {
+            $languageId = $this->typoScriptFrontendController->getLanguage()->getLanguageId();
+        }
+        if (is_null($pageId)) {
+            $pageId = BackendUtility::getCurrentPageTreeSelectedPage();
+        }
+        return $this->getPage((int) $pageId, $languageId ?? 0);
     }
 
     /**
