@@ -25,7 +25,6 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Mindshape\MindshapeSeo\Backend\Tree\View\PageTreeView;
 use Mindshape\MindshapeSeo\Utility\BackendUtility;
 use Mindshape\MindshapeSeo\Utility\BackendUtility as MindshapeBackendUtility;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
@@ -239,12 +238,12 @@ class PageService implements SingletonInterface
     public function getCurrentPage()
     {
         $pageId = $this->typoScriptFrontendController->id;
-        if ($this->typoScriptFrontendController) {
-            $languageId = $this->typoScriptFrontendController->getLanguage()->getLanguageId();
-        }
+        $languageId = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('language', 'id');
+
         if (is_null($pageId)) {
             $pageId = BackendUtility::getCurrentPageTreeSelectedPage();
         }
+
         return $this->getPage((int) $pageId, $languageId ?? 0);
     }
 
