@@ -29,6 +29,8 @@ use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use Mindshape\MindshapeSeo\Utility\PageUtility;
+use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -166,8 +168,17 @@ class HeaderDataService implements SingletonInterface
 
             if (
                 $this->domainConfiguration->getAddAnalytics() &&
-                (false === (bool) $this->settings['analytics']['disable'] || (bool) $this->settings['analytics']['debug'] === true) &&
-                (true === \TYPO3\CMS\Core\Core\Environment::getContext()->isProduction() || (bool) $this->settings['analytics']['debug'] === true)
+                (
+                    (bool) $this->settings['analytics']['debug'] === true ||
+                    (
+                        false === (bool) $this->settings['analytics']['disable'] &&
+                        true === Environment::getContext()->isProduction() &&
+                        (
+                            true === (bool) $this->settings['analytics']['disableOnBackendLogin'] &&
+                            !$GLOBALS['BE_USER'] instanceof FrontendBackendUserAuthentication
+                        )
+                    )
+                )
             ) {
                 if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
                     $this->addGoogleAnalytics();
@@ -237,7 +248,7 @@ class HeaderDataService implements SingletonInterface
         if (
             $this->domainConfiguration instanceof Configuration &&
             (false === (bool) $this->settings['analytics']['disable'] || (bool) $this->settings['analytics']['debug'] === true) &&
-            (true === \TYPO3\CMS\Core\Core\Environment::getContext()->isProduction() || (bool) $this->settings['analytics']['debug'] === true) &&
+            (true === Environment::getContext()->isProduction() || (bool) $this->settings['analytics']['debug'] === true) &&
             false === empty($this->domainConfiguration->getGoogleTagmanager()) &&
             true === $this->domainConfiguration->getAddAnalytics() &&
             (false === $this->domainConfiguration->getTagmanagerUseCookieConsent() || (bool) $this->settings['analytics']['debug'] === true)

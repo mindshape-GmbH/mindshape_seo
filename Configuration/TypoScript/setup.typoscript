@@ -9,6 +9,7 @@ plugin.tx_mindshapeseo {
     pageTree.usePagination = {$plugin.tx_mindshapeseo.settings.pageTree.usePagination}
     analytics {
       disable = {$plugin.tx_mindshapeseo.settings.analytics.disable}
+      disableOnBackendLogin = {$plugin.tx_mindshapeseo.settings.analytics.disableOnBackendLogin}
       debug = {$plugin.tx_mindshapeseo.settings.analytics.debug}
     }
     googlePreview {
