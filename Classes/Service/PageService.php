@@ -29,6 +29,7 @@ use Mindshape\MindshapeSeo\Utility\BackendUtility;
 use Mindshape\MindshapeSeo\Utility\BackendUtility as MindshapeBackendUtility;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use Mindshape\MindshapeSeo\Utility\Exception\TypoScriptFrontendControllerBootException;
+use Mindshape\MindshapeSeo\Utility\LinkUtility;
 use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use Mindshape\MindshapeSeo\Utility\TypoScriptFrontendUtility;
 use PDO;
@@ -272,13 +273,9 @@ class PageService implements SingletonInterface
             'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
             'url' => $pageUrl,
             'previewUrl' => $previewUrl,
-            'canonicalUrl' => !empty($page['canonical_link']) ?
-                $this->getPageLink(
-                    $page['canonical_link'],
-                    true,
-                    $this->getCurrentSysLanguageUid()
-                ) :
-                null,
+            'canonicalUrl' => !empty($page['canonical_link'])
+                ? LinkUtility::renderTypoLink($page['canonical_link'], true)
+                : null,
             'meta' => [
                 'description' => $page['description'],
                 'focusKeyword' => $page['mindshapeseo_focus_keyword'],
