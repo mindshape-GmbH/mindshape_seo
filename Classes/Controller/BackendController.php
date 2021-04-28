@@ -426,13 +426,17 @@ class BackendController extends ActionController
                 if ($site->getBase()->getHost() === $currentDomain) {
                     $siteConf = $site->getConfiguration();
                     $routes = $siteConf['routes'];
-                    foreach ($routes as $route) {
-                        if ($route['route'] === 'robots.txt') {
-                            $robotsTxtNotExists = false;
-                            $robotsContent = $route['content'];
-                            break;
+
+                    if (true === is_array($routes)) {
+                        foreach ($routes as $route) {
+                            if ($route['route'] === 'robots.txt') {
+                                $robotsTxtNotExists = false;
+                                $robotsContent = $route['content'];
+                                break;
+                            }
                         }
                     }
+
                     break;
                 }
             }
