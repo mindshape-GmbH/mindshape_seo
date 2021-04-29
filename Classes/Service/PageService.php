@@ -297,7 +297,7 @@ class PageService implements SingletonInterface
 
     public function getSerpPreviewUrl($pageUid, $sysLanguageUid, $customUrl = "") {
         $baseUri = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
-        $baseUri = str_replace('https://', "", $baseUri);
+        $baseUri = str_replace('https://', "", rtrim($baseUri, '/'));
         $pageUrlNonAbsolute = parse_url($this->getPageLink($pageUid, false, $sysLanguageUid), PHP_URL_PATH);
         $uri = $baseUri . $pageUrlNonAbsolute;
 
@@ -319,7 +319,7 @@ class PageService implements SingletonInterface
     }
 
     public function formatUriForPreview($uri) {
-        return str_replace("/", " › ", $uri);
+        return str_replace("/", " › ", rtrim($uri, '/'));
     }
 
     public function uriIsTooLong($uri) {
