@@ -1,4 +1,5 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Service;
 
 /***************************************************************
@@ -36,10 +37,28 @@ use TYPO3\CMS\Core\SingletonInterface;
 class LanguageService implements SingletonInterface
 {
     /**
+     * @return array
+     */
+    public function getLanguagesAvailable(): array
+    {
+        $result = DatabaseUtility::queryBuilder()
+            ->select('*')
+            ->from('sys_language')
+            ->execute()
+            ->fetchAll();
+
+        if (true === is_array($result)) {
+            return $result;
+        }
+
+        return [];
+    }
+
+    /**
      * @param int $pageUid
      * @return array
      */
-    public function getPageLanguagesAvailable($pageUid)
+    public function getPageLanguagesAvailable(int $pageUid): array
     {
         $queryBuilder = DatabaseUtility::queryBuilder();
 

@@ -27,7 +27,12 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
+use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use PDO;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
@@ -62,8 +67,12 @@ class ConfigurationRepository extends Repository
      * @param bool $returnDefaultIfNotFound
      * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration
      */
-    public function findByDomain($domain, $returnDefaultIfNotFound = false)
+    public function findByDomain(string $domain, bool $returnDefaultIfNotFound = false, int $sysLanguageUid = null)
     {
+        if (0 < $sysLanguageUid) {
+            return $this->findByDomainTranslation($domain, $returnDefaultIfNotFound, $sysLanguageUid);
+        }
+
         $query = $this->createQuery();
 
         $constraint[] = $query->equals('domain', $domain);
@@ -77,6 +86,79 @@ class ConfigurationRepository extends Repository
         );
 
         return $query->execute()->getFirst();
+    }
+
+    /**
+     * @param string $domain
+     * @param bool $returnDefaultIfNotFound
+     * @param int $sysLanguageUid
+     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration
+     */
+    public function findByDomainTranslation(string $domain, $returnDefaultIfNotFound = false, $sysLanguageUid = null): ?Configuration
+    {
+        $queryBuilder = DatabaseUtility::queryBuilder();
+
+        $queryBuilder->getRestrictions()->removeAll();
+        $queryBuilder->getRestrictions()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+
+        $queryBuilder
+            ->select('*')
+            ->from(Configuration::TABLE)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'sys_language_uid',
+                    $queryBuilder->createNamedParameter($sysLanguageUid, PDO::PARAM_INT)
+                )
+            );
+
+
+        $domainQueryExpression = $queryBuilder->expr()->eq(
+            'domain',
+            $queryBuilder->createNamedParameter($domain)
+        );
+
+        if (false === $returnDefaultIfNotFound) {
+            $queryBuilder->andWhere($domainQueryExpression);
+        } else {
+            $queryBuilder->orWhere(
+                $queryBuilder->expr()->orX(
+                    $domainQueryExpression,
+                    $queryBuilder->expr()->eq('domain', '*')
+                )
+            );
+        }
+
+        $rawConfiguration = $queryBuilder->execute()->fetch();
+
+        if (
+            true === is_array($rawConfiguration) &&
+            0 < count($rawConfiguration)
+        ) {
+            return $this->mapRawConfiguration($rawConfiguration);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array $record
+     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
+     */
+    protected function mapRawConfiguration(array $record): ?Configuration
+    {
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper $dataMapper */
+        $dataMapper = ObjectUtility::makeInstance(DataMapper::class);
+        $records    = $dataMapper->map(Configuration::class, [$record]);
+
+        if (count($records) > 0) {
+            /** @var \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration */
+            $configuration = array_shift($records);
+        } else {
+            $configuration = null;
+        }
+
+        return $configuration;
     }
 
     /**
