@@ -284,6 +284,29 @@
           </div>
           <div class="col-md-6 col-sm-12">
             <fieldset class="form-section">
+              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_v4')}</h3>
+              <div class="form-group">
+                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_v4_id')}</label>
+                <f:form.textfield property="googleAnalyticsV4" class="form-control"/>
+                <span class="help-block">
+                  ({f:translate(key: 'tx_mindshapeseo_label.example')}: 'G-XXXXXXXXXX')
+                  <f:link.external uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_v4.help.link')}" target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext')}</f:link.external>
+                </span>
+              </div>
+              <f:if condition="{cookieExtensionIsActive}">
+                <div class="form-group checkbox">
+                  <label>
+                    <f:form.checkbox property="googleAnalyticsV4UseCookieConsent" value="1"/>
+                    {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent')}
+                  </label>
+                </div>
+              </f:if>
+            </fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <fieldset class="form-section">
               <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager')}</h3>
               <div class="form-group">
                 <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager_id')}</label>
@@ -303,8 +326,6 @@
               </f:if>
             </fieldset>
           </div>
-        </div>
-        <div class="row">
           <div class="col-md-6 col-sm-12">
             <fieldset class="form-section matomo">
               <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo')}</h3>

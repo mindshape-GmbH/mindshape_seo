@@ -174,6 +174,10 @@ class HeaderDataService implements SingletonInterface
                     $this->addGoogleAnalytics();
                 }
 
+                if ('' !== $this->domainConfiguration->getGoogleAnalyticsV4()) {
+                    $this->addGoogleAnalyticsV4();
+                }
+
                 if ('' !== $this->domainConfiguration->getGoogleTagmanager()) {
                     $this->addGoogleTagmanager();
                 }
@@ -301,9 +305,21 @@ class HeaderDataService implements SingletonInterface
             $this->standaloneTemplateRendererService->render(
                 'Analytics',
                 true === $this->domainConfiguration->getGoogleAnalyticsUseCookieConsent()
-                    ? 'GoogleCookieConsent'
-                    : 'Google',
+                    ? 'GoogleAnalyticsCookieConsent'
+                    : 'GoogleAnalytics',
                 ['analyticsId' => $this->domainConfiguration->getGoogleAnalytics()])
+        );
+    }
+
+    protected function addGoogleAnalyticsV4()
+    {
+        $this->pageRenderer->addHeaderData(
+            $this->standaloneTemplateRendererService->render(
+                'Analytics',
+                true === $this->domainConfiguration->getGoogleAnalyticsV4UseCookieConsent()
+                    ? 'GoogleAnalyticsV4CookieConsent'
+                    : 'GoogleAnalyticsV4',
+                ['analyticsId' => $this->domainConfiguration->getGoogleAnalyticsV4()])
         );
     }
 

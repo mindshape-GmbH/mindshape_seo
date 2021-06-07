@@ -90,6 +90,15 @@ return [
                 'eval' => 'trim',
             ],
         ],
+        'google_analytics_v4' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.google_analytics_id',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ],
+        ],
         'google_tagmanager' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.google_tagmanager_id',
@@ -135,6 +144,14 @@ return [
             ],
         ],
         'google_analytics_use_cookie_consent' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent',
+            'config' => [
+                'type' => 'check',
+                'default' => 0,
+            ],
+        ],
+        'google_analytics_v4_use_cookie_consent' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent',
             'config' => [

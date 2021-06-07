@@ -293,7 +293,10 @@
                 <target>Analytics</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics">
-                <target>Google Analytics</target>
+                <target>Google Analytics (Universal)</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_v4">
+                <target>Google Analytics 4</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager">
                 <target>Google Tagmanager</target>
@@ -319,8 +322,14 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.link">
                 <source>https://support.google.com/analytics/answer/6164470?hl=de</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_v4.help.link">
+                <source>https://support.google.com/analytics/answer/9304153?hl=de</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_id">
-                <target>Google Analytics ID</target>
+                <source>Tracking ID</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_v4_id">
+                <source>Measurement ID</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager_id">
                 <target>Google Tagmanager ID</target>

@@ -64,6 +64,11 @@ class Configuration extends AbstractEntity
     /**
      * @var string
      */
+    protected $googleAnalyticsV4 = '';
+
+    /**
+     * @var string
+     */
     protected $googleTagmanager = '';
 
     /**
@@ -90,6 +95,11 @@ class Configuration extends AbstractEntity
      * @var bool
      */
     protected $googleAnalyticsUseCookieConsent = false;
+
+    /**
+     * @var bool
+     */
+    protected $googleAnalyticsV4UseCookieConsent = false;
 
     /**
      * @var bool
@@ -269,6 +279,22 @@ class Configuration extends AbstractEntity
     /**
      * @return string
      */
+    public function getGoogleAnalyticsV4()
+    {
+        return $this->googleAnalyticsV4;
+    }
+
+    /**
+     * @param string $googleAnalyticsV4
+     */
+    public function setGoogleAnalyticsV4($googleAnalyticsV4)
+    {
+        $this->googleAnalyticsV4 = $googleAnalyticsV4;
+    }
+
+    /**
+     * @return string
+     */
     public function getGoogleTagmanager()
     {
         return $this->googleTagmanager;
@@ -373,6 +399,22 @@ class Configuration extends AbstractEntity
     public function setGoogleAnalyticsUseCookieConsent($googleAnalyticsUseCookieConsent)
     {
         $this->googleAnalyticsUseCookieConsent = $googleAnalyticsUseCookieConsent;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getGoogleAnalyticsV4UseCookieConsent()
+    {
+        return $this->googleAnalyticsV4UseCookieConsent;
+    }
+
+    /**
+     * @param bool $googleAnalyticsV4UseCookieConsent
+     */
+    public function setGoogleAnalyticsV4UseCookieConsent($googleAnalyticsV4UseCookieConsent)
+    {
+        $this->googleAnalyticsV4UseCookieConsent = $googleAnalyticsV4UseCookieConsent;
     }
 
     /**
@@ -820,6 +862,10 @@ class Configuration extends AbstractEntity
         $this->googleAnalytics = true === empty($this->googleAnalytics)
             ? $configuration->getGoogleAnalytics()
             : $this->googleAnalytics;
+
+        $this->googleAnalyticsV4 = true === empty($this->googleAnalyticsV4)
+            ? $configuration->getGoogleAnalyticsV4()
+            : $this->googleAnalyticsV4;
 
         $this->googleTagmanager = true === empty($this->googleTagmanager)
             ? $configuration->getGoogleTagmanager()
