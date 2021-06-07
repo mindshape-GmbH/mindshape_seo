@@ -35,7 +35,6 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration
     jsonld_email                        varchar(255)        DEFAULT ''  NOT NULL,
     jsonld_same_as_facebook             varchar(255)        DEFAULT ''  NOT NULL,
     jsonld_same_as_twitter              varchar(255)        DEFAULT ''  NOT NULL,
-    jsonld_same_as_googleplus           varchar(255)        DEFAULT ''  NOT NULL,
     jsonld_same_as_instagram            varchar(255)        DEFAULT ''  NOT NULL,
     jsonld_same_as_youtube              varchar(255)        DEFAULT ''  NOT NULL,
     jsonld_same_as_linkedin             varchar(255)        DEFAULT ''  NOT NULL,

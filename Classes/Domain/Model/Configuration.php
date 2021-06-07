@@ -1,4 +1,5 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Domain\Model;
 
 /***************************************************************
@@ -149,11 +150,6 @@ class Configuration extends AbstractEntity
      * @var string
      */
     protected $jsonldSameAsTwitter = '';
-
-    /**
-     * @var string
-     */
-    protected $jsonldSameAsGoogleplus = '';
 
     /**
      * @var string
@@ -596,23 +592,6 @@ class Configuration extends AbstractEntity
     public function setJsonldSameAsTwitter($jsonldSameAsTwitter)
     {
         $this->jsonldSameAsTwitter = $jsonldSameAsTwitter;
-    }
-
-    /**
-     * @return string $jsonldSameAs
-     */
-    public function getJsonldSameAsGoogleplus()
-    {
-        return $this->jsonldSameAsGoogleplus;
-    }
-
-    /**
-     * @param string $jsonldSameAsGoogleplus
-     * @return void
-     */
-    public function setJsonldSameAsGoogleplus($jsonldSameAsGoogleplus)
-    {
-        $this->jsonldSameAsGoogleplus = $jsonldSameAsGoogleplus;
     }
 
     /**

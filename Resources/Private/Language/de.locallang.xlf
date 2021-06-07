@@ -374,9 +374,6 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.twitter">
                 <target>Twitter</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.googleplus">
-                <target>Google+</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram">
                 <target>Instagram</target>
             </trans-unit>

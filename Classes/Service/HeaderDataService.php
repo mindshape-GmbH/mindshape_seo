@@ -455,7 +455,6 @@ class HeaderDataService implements SingletonInterface
         $socialMediaLinks = [
             'facebook' => $this->domainConfiguration->getJsonldSameAsFacebook(),
             'twitter' => $this->domainConfiguration->getJsonldSameAsTwitter(),
-            'googleplus' => $this->domainConfiguration->getJsonldSameAsGoogleplus(),
             'instagram' => $this->domainConfiguration->getJsonldSameAsInstagram(),
             'youtube' => $this->domainConfiguration->getJsonldSameAsYoutube(),
             'linkedin' => $this->domainConfiguration->getJsonldSameAsLinkedin(),

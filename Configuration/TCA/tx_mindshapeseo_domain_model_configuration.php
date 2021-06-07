@@ -15,14 +15,14 @@ return [
         'translationSource' => 'l10n_source',
         'delete' => 'deleted',
         'enablecolumns' => [],
-        'searchFields' => 'domain,google_analytics,title_attachment,add_analytics,add_jsonld,add_jsonld_breadcrumb,jsonld_custom_url,jsonld_type,jsonld_telephone,jsonld_fax,jsonld_email,jsonld_same_as_facebook,jsonld_same_as_twitter,jsonld_same_as_googleplus,jsonld_same_as_instagram,jsonld_same_as_youtube,jsonld_same_as_linkedin,jsonld_same_as_xing,jsonld_same_as_printerest,jsonld_same_as_soundcloud,jsonld_same_as_tumblr,jsonld_logo,jsonld_address_locality,jsonld_address_postalcode,jsonld_address_street,',
+        'searchFields' => 'domain,google_analytics,title_attachment,add_analytics,add_jsonld,add_jsonld_breadcrumb,jsonld_custom_url,jsonld_type,jsonld_telephone,jsonld_fax,jsonld_email,jsonld_same_as_facebook,jsonld_same_as_twitter,jsonld_same_as_instagram,jsonld_same_as_youtube,jsonld_same_as_linkedin,jsonld_same_as_xing,jsonld_same_as_printerest,jsonld_same_as_soundcloud,jsonld_same_as_tumblr,jsonld_logo,jsonld_address_locality,jsonld_address_postalcode,jsonld_address_street,',
         'iconfile' => 'EXT:mindshape_seo/Resources/Public/Icons/tx_mindshapeseo_domain_model_configuration.gif',
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, domain, sitename, google_analytics, google_tagmanager, matomo_url, matomo_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, google_analytics_use_cookie_consent, tagmanager_use_cookie_consent, matomo_use_cookie_consent, add_jsonld, add_jsonld_breadcrumb, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street',
+        'showRecordFieldList' => 'sys_language_uid, domain, sitename, google_analytics, google_tagmanager, matomo_url, matomo_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, google_analytics_use_cookie_consent, tagmanager_use_cookie_consent, matomo_use_cookie_consent, add_jsonld, add_jsonld_breadcrumb, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, domain, sitename, google_analytics, google_tagmanager, matomo_url, matomo_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, google_analytics_use_cookie_consent, tagmanager_use_cookie_consent, matomo_use_cookie_consent, add_jsonld, add_jsonld_breadcrumb, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_googleplus, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '],
+        '1' => ['showitem' => 'sys_language_uid, domain, sitename, google_analytics, google_tagmanager, matomo_url, matomo_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, google_analytics_use_cookie_consent, tagmanager_use_cookie_consent, matomo_use_cookie_consent, add_jsonld, add_jsonld_breadcrumb, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '],
     ],
     'palettes' => [
         '1' => ['showitem' => ''],
@@ -253,15 +253,6 @@ return [
         'jsonld_same_as_twitter' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.twitter',
-            'config' => [
-                'type' => 'input',
-                'size' => 30,
-                'eval' => 'trim',
-            ],
-        ],
-        'jsonld_same_as_googleplus' => [
-            'exclude' => 1,
-            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.same_as.googleplus',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
