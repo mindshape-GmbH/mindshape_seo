@@ -1,4 +1,5 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Domain\Repository;
 
 /***************************************************************
@@ -65,6 +66,7 @@ class ConfigurationRepository extends Repository
     /**
      * @param string $domain
      * @param bool $returnDefaultIfNotFound
+     * @param int|null $sysLanguageUid
      * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration
      */
     public function findByDomain(string $domain, bool $returnDefaultIfNotFound = false, int $sysLanguageUid = null)
@@ -91,10 +93,11 @@ class ConfigurationRepository extends Repository
     /**
      * @param string $domain
      * @param bool $returnDefaultIfNotFound
-     * @param int $sysLanguageUid
+     * @param null $sysLanguageUid
      * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
-    public function findByDomainTranslation(string $domain, $returnDefaultIfNotFound = false, $sysLanguageUid = null): ?Configuration
+    public function findByDomainTranslation(string $domain, bool $returnDefaultIfNotFound = false, $sysLanguageUid = null): ?Configuration
     {
         $queryBuilder = DatabaseUtility::queryBuilder();
 
@@ -149,7 +152,7 @@ class ConfigurationRepository extends Repository
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper $dataMapper */
         $dataMapper = ObjectUtility::makeInstance(DataMapper::class);
-        $records    = $dataMapper->map(Configuration::class, [$record]);
+        $records = $dataMapper->map(Configuration::class, [$record]);
 
         if (count($records) > 0) {
             /** @var \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration */
@@ -187,6 +190,20 @@ class ConfigurationRepository extends Repository
         $this->checkFileReferences($configuration);
 
         parent::update($configuration);
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
+     */
+    public function mergeConfigurationWithDefault(Configuration $configuration): void
+    {
+        if (Configuration::DEFAULT_DOMAIN !== $configuration->getDomain()) {
+            $defaultConfiguration = $this->findByDomain(Configuration::DEFAULT_DOMAIN);
+
+            if ($defaultConfiguration instanceof Configuration) {
+                $configuration->mergeConfiguration($defaultConfiguration);
+            }
+        }
     }
 
     /**

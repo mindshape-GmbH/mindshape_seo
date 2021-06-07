@@ -13,7 +13,7 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration
     pid                                 int(11)             DEFAULT '0' NOT NULL,
 
     domain                              varchar(255)        DEFAULT ''  NOT NULL,
-    sitename                            varchar(255)        DEFAULT ''  NOT NULL,
+    merge_with_default                  tinyint(1) unsigned DEFAULT '1' NOT NULL,
     google_analytics                    varchar(255)        DEFAULT ''  NOT NULL,
     google_tagmanager                   varchar(255)        DEFAULT ''  NOT NULL,
     matomo_url                          varchar(255)        DEFAULT ''  NOT NULL,

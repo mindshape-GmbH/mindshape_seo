@@ -213,6 +213,9 @@
             <trans-unit id="tx_mindshapeseo_label.seo_settings_for">
                 <source>SEO Settings for</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.seo_settings_for_all_pages">
+                <source>SEO settings for all pages</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.seo_preview_for_page">
                 <source>SEO Preview</source>
             </trans-unit>
@@ -237,6 +240,9 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.domain">
                 <source>Domain</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.merge_with_default">
+                <source>Merge with default</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.domain.default">
                 <source>Default</source>

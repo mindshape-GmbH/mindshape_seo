@@ -35,16 +35,16 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
  */
 class Configuration extends AbstractEntity
 {
-    const TABLE = 'tx_mindshapeseo_domain_model_configuration';
+    public const TABLE = 'tx_mindshapeseo_domain_model_configuration';
 
-    const DEFAULT_DOMAIN = '*';
-    const DEFAULT_TITLE_ATTACHMENT_SEPERATOR = '|';
+    public const DEFAULT_DOMAIN = '*';
+    public const DEFAULT_TITLE_ATTACHMENT_SEPERATOR = '|';
 
-    const JSONLD_TYPE_ORGANIZATION = 'Organization';
-    const JSONLD_TYPE_PERSON = 'Person';
+    public const JSONLD_TYPE_ORGANIZATION = 'Organization';
+    public const JSONLD_TYPE_PERSON = 'Person';
 
-    const TITLE_ATTACHMENT_POSITION_PREFIX = 'prefix';
-    const TITLE_ATTACHMENT_POSITION_SUFFIX = 'suffix';
+    public const TITLE_ATTACHMENT_POSITION_PREFIX = 'prefix';
+    public const TITLE_ATTACHMENT_POSITION_SUFFIX = 'suffix';
 
     /**
      * @var string
@@ -52,9 +52,9 @@ class Configuration extends AbstractEntity
     protected $domain = '';
 
     /**
-     * @var string
+     * @var bool
      */
-    protected $sitename = '';
+    protected $mergeWithDefault = true;
 
     /**
      * @var string
@@ -234,20 +234,19 @@ class Configuration extends AbstractEntity
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getSitename()
+    public function isMergeWithDefault()
     {
-        return $this->sitename;
+        return $this->mergeWithDefault;
     }
 
     /**
-     * @param string $sitename
-     * @return void
+     * @param bool $mergeWithDefault
      */
-    public function setSitename($sitename)
+    public function setMergeWithDefault($mergeWithDefault)
     {
-        $this->sitename = $sitename;
+        $this->mergeWithDefault = $mergeWithDefault;
     }
 
     /**
@@ -811,5 +810,111 @@ class Configuration extends AbstractEntity
     public function setMatomoUrl(string $matomoUrl): void
     {
         $this->matomoUrl = $matomoUrl;
+    }
+
+    /**
+     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
+     */
+    public function mergeConfiguration(Configuration $configuration): void
+    {
+        $this->googleAnalytics = true === empty($this->googleAnalytics)
+            ? $configuration->getGoogleAnalytics()
+            : $this->googleAnalytics;
+
+        $this->googleTagmanager = true === empty($this->googleTagmanager)
+            ? $configuration->getGoogleTagmanager()
+            : $this->googleTagmanager;
+
+        $this->matomoUrl = true === empty($this->matomoUrl)
+            ? $configuration->getMatomoUrl()
+            : $this->matomoUrl;
+
+        $this->matomoIdsite = true === empty($this->matomoIdsite)
+            ? $configuration->getMatomoIdsite()
+            : $this->matomoIdsite;
+
+        $this->titleAttachment = true === empty($this->titleAttachment)
+            ? $configuration->getTitleAttachment()
+            : $this->titleAttachment;
+
+        $this->jsonldCustomUrl = true === empty($this->jsonldCustomUrl)
+            ? $configuration->getJsonldCustomUrl()
+            : $this->jsonldCustomUrl;
+
+        $this->jsonldType = true === empty($this->jsonldType)
+            ? $configuration->getJsonldType()
+            : $this->jsonldType;
+
+        $this->jsonldName = true === empty($this->jsonldName)
+            ? $configuration->getJsonldName()
+            : $this->jsonldName;
+
+        $this->jsonldTelephone = true === empty($this->jsonldTelephone)
+            ? $configuration->getJsonldTelephone()
+            : $this->jsonldTelephone;
+
+        $this->jsonldFax = true === empty($this->jsonldFax)
+            ? $configuration->getJsonldFax()
+            : $this->jsonldFax;
+
+        $this->jsonldEmail = true === empty($this->jsonldEmail)
+            ? $configuration->getJsonldEmail()
+            : $this->jsonldEmail;
+
+        $this->jsonldSameAsFacebook = true === empty($this->jsonldSameAsFacebook)
+            ? $configuration->getJsonldSameAsFacebook()
+            : $this->jsonldSameAsFacebook;
+
+        $this->jsonldSameAsTwitter = true === empty($this->jsonldSameAsTwitter)
+            ? $configuration->getJsonldSameAsTwitter()
+            : $this->jsonldSameAsTwitter;
+
+        $this->jsonldSameAsInstagram = true === empty($this->jsonldSameAsInstagram)
+            ? $configuration->getJsonldSameAsInstagram()
+            : $this->jsonldSameAsInstagram;
+
+        $this->jsonldSameAsInstagram = true === empty($this->jsonldSameAsInstagram)
+            ? $configuration->getJsonldSameAsInstagram()
+            : $this->jsonldSameAsInstagram;
+
+        $this->jsonldSameAsYoutube = true === empty($this->jsonldSameAsYoutube)
+            ? $configuration->getJsonldSameAsYoutube()
+            : $this->jsonldSameAsYoutube;
+
+        $this->jsonldSameAsLinkedin = true === empty($this->jsonldSameAsLinkedin)
+            ? $configuration->getJsonldSameAsLinkedin()
+            : $this->jsonldSameAsLinkedin;
+
+        $this->jsonldSameAsXing = true === empty($this->jsonldSameAsXing)
+            ? $configuration->getJsonldSameAsXing()
+            : $this->jsonldSameAsXing;
+
+        $this->jsonldSameAsPrinterest = true === empty($this->jsonldSameAsPrinterest)
+            ? $configuration->getJsonldSameAsPrinterest()
+            : $this->jsonldSameAsPrinterest;
+
+        $this->jsonldSameAsSoundcloud = true === empty($this->jsonldSameAsSoundcloud)
+            ? $configuration->getJsonldSameAsSoundcloud()
+            : $this->jsonldSameAsSoundcloud;
+
+        $this->jsonldSameAsTumblr = true === empty($this->jsonldSameAsTumblr)
+            ? $configuration->getJsonldSameAsTumblr()
+            : $this->jsonldSameAsTumblr;
+
+        $this->jsonldLogo = !$this->jsonldLogo instanceof ExtbaseFileReference
+            ? $configuration->getJsonldLogo()
+            : $this->jsonldLogo;
+
+        $this->jsonldAddressLocality = true === empty($this->jsonldAddressLocality)
+            ? $configuration->getJsonldAddressLocality()
+            : $this->jsonldAddressLocality;
+
+        $this->jsonldAddressPostalcode = true === empty($this->jsonldAddressPostalcode)
+            ? $configuration->getJsonldAddressPostalcode()
+            : $this->jsonldAddressPostalcode;
+
+        $this->jsonldAddressStreet = true === empty($this->jsonldAddressStreet)
+            ? $configuration->getJsonldAddressStreet()
+            : $this->jsonldAddressStreet;
     }
 }

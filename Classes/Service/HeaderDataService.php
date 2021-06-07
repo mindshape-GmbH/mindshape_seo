@@ -95,11 +95,6 @@ class HeaderDataService implements SingletonInterface
     protected $currentDomainUrl;
 
     /**
-     * @var string
-     */
-    protected $currentSitename;
-
-    /**
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function __construct()
@@ -132,17 +127,12 @@ class HeaderDataService implements SingletonInterface
             $this->pageService->getCurrentSysLanguageUid()
         );
 
-        if ($this->domainConfiguration instanceof Configuration) {
-            $this->addJsonLd();
-        }
-
         if (
             $this->domainConfiguration instanceof Configuration &&
-            false === empty($this->domainConfiguration->getSitename())
+            true === $this->domainConfiguration->isMergeWithDefault()
         ) {
-            $this->currentSitename = $this->domainConfiguration->getSitename();
-        } else {
-            $this->currentSitename = $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
+            $this->configurationRepository->mergeConfigurationWithDefault($this->domainConfiguration);
+            $this->addJsonLd();
         }
 
         $this->pageRenderer = PageUtility::getPageRenderer();

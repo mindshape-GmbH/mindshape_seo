@@ -424,6 +424,7 @@ class BackendController extends ActionController
             $domain = '*';
         }
 
+        $defaultConfiguration = null;
         $configuration = $this->configurationRepository->findByDomain($domain, false, $sysLanguageUid);
 
         if (!$configuration instanceof Configuration) {
@@ -433,6 +434,14 @@ class BackendController extends ActionController
             $configuration->setTitleAttachmentPosition(Configuration::TITLE_ATTACHMENT_POSITION_SUFFIX);
         } elseif (0 === count($domains)) {
             $configuration->setDomain(Configuration::DEFAULT_DOMAIN);
+        }
+
+        if (Configuration::DEFAULT_DOMAIN !== $configuration->getDomain()) {
+            $defaultConfiguration = $this->configurationRepository->findByDomain(
+                Configuration::DEFAULT_DOMAIN,
+                false,
+                $sysLanguageUid
+            );
         }
 
         if (false === $configuration->_isNew()) {
@@ -499,6 +508,7 @@ class BackendController extends ActionController
             'domains' => $domains,
             'domainsSelectOptions' => $this->domainService->getConfigurationDomainSelectOptions($domain),
             'currentDomain' => $currentDomain,
+            'defaultConfiguration' => $defaultConfiguration,
             'configuration' => $configuration,
             'languageUid' => $sysLanguageUid,
             'titleAttachmentPositionOptions' => [
