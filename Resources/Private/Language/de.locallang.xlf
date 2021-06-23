@@ -415,6 +415,11 @@
             <trans-unit id="sys_redirect.target_statuscode.410">
                 <target>410 Gone</target>
             </trans-unit>
+
+
+            <trans-unit id="extension_settings.enable_gone_redirects">
+                <target>Aktiviere 410 Gone Weiterleitungen für das Weiterleitungsmodul</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

@@ -418,6 +418,11 @@
             <trans-unit id="sys_redirect.target_statuscode.410">
                 <source>410 Gone</source>
             </trans-unit>
+
+
+            <trans-unit id="extension_settings.enable_gone_redirects">
+                <source>Enable 410 Gone redirects for the redirect module</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
