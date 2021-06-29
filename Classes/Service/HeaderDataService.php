@@ -183,7 +183,6 @@ class HeaderDataService implements SingletonInterface
                 }
 
                 if (
-                    '' === $this->domainConfiguration->getGoogleAnalytics() &&
                     '' !== $this->domainConfiguration->getMatomoUrl() &&
                     '' !== $this->domainConfiguration->getMatomoIdsite()
                 ) {
