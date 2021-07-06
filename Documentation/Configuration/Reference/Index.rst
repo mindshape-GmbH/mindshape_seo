@@ -11,76 +11,18 @@ Reference
 All constants have to be added to
 plugin.tx_mindshapeseo.settings:
 
-.. ### BEGIN~OF~TABLE ###
-
-.. container:: table-row
-
-   Constant
-         pageTree.usePagination
-
-   Data Type
-         boolean
-
-   Description
-         Use a pagination in the preview pagetree
-
-   Default
-         1
-
-.. container:: table-row
-
-   Constant
-         analytics.disable
-
-   Data Type
-         boolean
-
-   Description
-         Disable the injection of Analytics, Tagmanager or Matomo
-
-   Default
-         0
-
-.. container:: table-row
-
-   Constant
-         analytics.debug
-
-   Data Type
-         boolean
-
-   Description
-         Force injection of any analytics no matter the context (for development purposes)
-
-   Default
-         0
-
-.. container:: table-row
-
-   Constant
-         googlePreview.showHiddenPages
-
-   Data Type
-         boolean
-
-   Description
-         Show hidden pages in google preview
-
-   Default
-         0
-
-.. container:: table-row
-
-   Constant
-         googlePreview.respectDoktypes
-
-   Data Type
-         string
-
-   Description
-         Comma separated list with the page types that are considered in the Google Preview
-
-   Default
-         1,4
-
-.. ###### END~OF~TABLE ######
++---------------------------------+------------------------------------------------------------+---------+
+| Constants                       | Description                                                | Default |
++=================================+============================================================+=========+
+| pageTree.usePagination          | Use pagination in previews pagetree                        | 1       |
++---------------------------------+------------------------------------------------------------+---------+
+| analytics.disable               | Disable injection of analytics                             | 0       |
++---------------------------------+------------------------------------------------------------+---------+
+| analytics.disableOnBackendLogin | Disable analytics injection if user is logged into backend | 0       |
++---------------------------------+------------------------------------------------------------+---------+
+| analytics.debug                 | Force analytics injection even in development context      | 0       |
++---------------------------------+------------------------------------------------------------+---------+
+| googlePreview.showHiddenPages   | Show hidden pages in SEO preview                           | 0       |
++---------------------------------+------------------------------------------------------------+---------+
+| googlePreview.respectDoktypes   | The doktypes allowed to be shown in SEO preview            | 1,4     |
++---------------------------------+------------------------------------------------------------+---------+
