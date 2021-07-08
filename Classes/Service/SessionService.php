@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -40,9 +40,6 @@ class SessionService implements SingletonInterface
      */
     protected $userAuthentication;
 
-    /**
-     * @return \Mindshape\MindshapeSeo\Service\SessionService
-     */
     public function __construct()
     {
         $this->userAuthentication = TYPO3_MODE === 'BE' ? $GLOBALS['BE_USER'] : $GLOBALS['TSFE']->fe_user;

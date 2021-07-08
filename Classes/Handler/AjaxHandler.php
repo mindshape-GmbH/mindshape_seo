@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Handler;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -27,9 +27,12 @@ namespace Mindshape\MindshapeSeo\Handler;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
+use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use Mindshape\MindshapeSeo\Utility\PageUtility;
+use PDO;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -43,66 +46,56 @@ class AjaxHandler implements SingletonInterface
 {
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface $response
      * @return \Psr\Http\Message\ResponseInterface
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
-    public function savePage(ServerRequestInterface $request, ResponseInterface $response)
+    public function savePage(ServerRequestInterface $request): ResponseInterface
     {
         $data = $request->getParsedBody();
 
-        $responseArray = array(
-            'saved' => false,
-        );
+        $response = ['saved' => false];
+        $statusCode = 200;
 
         if (is_array($data)) {
-            if (
-                0 < $data['pageUid'] &&
-                !empty($data['title'])
-            ) {
+            if (0 < $data['pageUid'] && !empty($data['title'])) {
                 $page = PageUtility::getPage((int) $data['pageUid']);
 
                 $titleField = 'title';
 
-                if (false === empty($page['mindshapeseo_alternative_title'])) {
-                    $titleField = 'mindshapeseo_alternative_title';
+                if (false === empty($page['seo_title'])) {
+                    $titleField = 'seo_title';
                 }
 
                 $this->savePageData(
                     (int) $data['pageUid'],
                     (int) $data['sysLanguageUid'],
-                    array(
+                    [
                         $titleField => $data['title'],
                         'description' => $data['description'],
                         'mindshapeseo_focus_keyword' => $data['focusKeyword'],
-                        'mindshapeseo_no_index' => (bool) $data['noindex'] ? 1 : 0,
-                        'mindshapeseo_no_follow' => (bool) $data['nofollow'] ? 1 : 0,
-                    )
+                        'no_index' => (bool) $data['noindex'] ? 1 : 0,
+                        'no_follow' => (bool) $data['nofollow'] ? 1 : 0,
+                    ]
                 );
 
-                $responseArray['saved'] = true;
-
-                $response->getBody()->write(json_encode($responseArray));
+                $response['saved'] = true;
             } else {
-                $response
-                    ->withStatus(500, ' Invalid Data');
-                $response->getBody()->write(json_encode($responseArray));
+                $statusCode = 500;
             }
+        } else {
+            $statusCode = 500;
         }
 
-        return $response;
+        return new JsonResponse($response, $statusCode);
     }
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Message\ResponseInterface $response
      * @return \Psr\Http\Message\ResponseInterface
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      */
-    public function deleteConfiguration(ServerRequestInterface $request, ResponseInterface $response)
+    public function deleteConfiguration(ServerRequestInterface $request): ResponseInterface
     {
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -113,29 +106,24 @@ class AjaxHandler implements SingletonInterface
 
         $data = $request->getParsedBody();
 
-        $responseArray = array(
-            'deleted' => false,
-        );
+        $response = ['deleted' => false];
+        $statusCode = 200;
 
         if (is_array($data)) {
             if (0 < (int) $data['configurationUid']) {
                 $configuration = $configurationRepository->findByUid($data['configurationUid']);
-
                 $configurationRepository->remove($configuration);
-
                 $persistenceManager->persistAll();
 
-                $responseArray['deleted'] = true;
-
-                $response->getBody()->write(json_encode($responseArray));
+                $response['deleted'] = true;
             } else {
-                $response
-                    ->withStatus(500, ' Invalid Data');
-                $response->getBody()->write(json_encode($responseArray));
+                $statusCode = 500;
             }
+        } else {
+            $statusCode = 500;
         }
 
-        return $response;
+        return new JsonResponse($response, $statusCode);
     }
 
     /**
@@ -143,27 +131,58 @@ class AjaxHandler implements SingletonInterface
      * @param int $sysLanguageUid
      * @param array $data
      */
-    protected function savePageData($pageUid, $sysLanguageUid = 0, array $data)
+    protected function savePageData(int $pageUid, int $sysLanguageUid, array $data): void
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
+        $queryBuilder = DatabaseUtility::queryBuilder();
 
-        if (0 < $sysLanguageUid) {
-            $pageOverlay = $databaseConnection->exec_SELECTgetSingleRow(
-                'p.*',
-                'pages_language_overlay p',
-                'pid = ' . $pageUid . ' AND sys_language_uid = ' . $sysLanguageUid
-            );
+        $result = $queryBuilder
+            ->select('p.uid')
+            ->from('pages', 'p')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'p.uid',
+                    $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)
+                ),
+                $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
+                    $sysLanguageUid,
+                    PDO::PARAM_INT)
+                )
+            )
+            ->execute();
 
-            $pageUid = (int) $pageOverlay['uid'];
+        if (0 === $result->rowCount()) {
+            $queryBuilder = DatabaseUtility::queryBuilder();
+
+            $page = $queryBuilder
+                ->select('p.uid')
+                ->from('pages', 'p')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'p.' . $GLOBALS['TCA']['ctrl']['transOrigPointerField'],
+                        $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
+                    $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
+                        $sysLanguageUid,
+                        PDO::PARAM_INT)
+                    )
+                )
+                ->execute()
+                ->fetch();
+
+            $pageUid = $page['uid'];
         }
 
-        $databaseConnection->exec_UPDATEquery(
-            0 < $sysLanguageUid
-                ? 'pages_language_overlay'
-                : 'pages',
-            'uid = ' . $pageUid,
-            $data
-        );
+        $queryBuilder = DatabaseUtility::queryBuilder();
+
+        $queryBuilder
+            ->update('pages')
+            ->where(
+                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT))
+            );
+
+        foreach ($data as $column => $value) {
+            $queryBuilder->set($column, $value);
+        }
+
+        $queryBuilder->execute();
     }
 }

@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\ViewHelpers\Form;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -26,6 +26,8 @@ namespace Mindshape\MindshapeSeo\ViewHelpers\Form;
  ***************************************************************/
 
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
+use TYPO3\CMS\Extbase\Property\PropertyMapper;
+use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
 
 /**
  * @package mindshape_seo
@@ -35,15 +37,29 @@ class UploadViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\UploadViewHelpe
 {
     /**
      * @var \TYPO3\CMS\Extbase\Security\Cryptography\HashService
-     * @inject
      */
     protected $hashService;
 
     /**
      * @var \TYPO3\CMS\Extbase\Property\PropertyMapper
-     * @inject
      */
     protected $propertyMapper;
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Security\Cryptography\HashService $hashService
+     */
+    public function injectHashService(HashService $hashService): void
+    {
+        $this->hashService = $hashService;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Extbase\Property\PropertyMapper $propertyMapper
+     */
+    public function injectPropertyMapper(PropertyMapper $propertyMapper): void
+    {
+        $this->propertyMapper = $propertyMapper;
+    }
 
     /**
      * @return string
@@ -82,6 +98,7 @@ class UploadViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\UploadViewHelpe
 
     /**
      * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     * @throws \TYPO3\CMS\Extbase\Property\Exception
      */
     protected function getUploadedResource()
     {

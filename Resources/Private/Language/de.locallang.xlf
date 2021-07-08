@@ -3,57 +3,20 @@
     <file source-language="en" target-language="de" datatype="plaintext" original="messages" product-name="mindshape_seo">
         <header/>
         <body>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_title">
+                <target>Titel</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_description">
+                <target>Beschreibung</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword">
                 <target>Fokus Schlüsselwort</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword_akronym">
                 <target>FK</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogtitle">
-                <target>Titel</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogurl">
-                <target>URL</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogimage">
-                <target>Bild</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_ogdescription">
-                <target>Beschreibung</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_disable_title_attachment">
                 <target>Deaktiviere Titel-Ergänzung für diese Seite</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_priority">
-                <target>Priorität</target>
-            </trans-unit>
-
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency">
-                <target>Veränderungsrate</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.none">
-                <target>Keine Auswahl</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.always">
-                <target>Immer</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.hourly">
-                <target>Stündlich</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.daily">
-                <target>Täglich</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.weekly">
-                <target>Wöchentlich</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.monthly">
-                <target>Monatlich</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.yearly">
-                <target>Jährlich</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_change_frequency.never">
-                <target>Niemals</target>
             </trans-unit>
 
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_index">
@@ -86,21 +49,6 @@
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_recursive">
                 <target>nofollow rekursiv auf Unterseiten anwenden</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_from_sitemap">
-                <target>Schließe diese Seite von der XML-Sitemap aus</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_exclude_suppages_from_sitemap">
-                <target>Schließe Unterseiten von der XML-Sitemap aus</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_sub_sitemap">
-                <target>Erzeuge eine neue XML-Sitemap ab dieser Seite</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_canonical">
-                <target>Canonical URL</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_alternative_title">
-                <target>Alternativer Seitentitel (Titel Tag)</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_jsonld_breadcrumb_title">
                 <target>Alternativer Breadcrumb Titel</target>
             </trans-unit>
@@ -117,9 +65,6 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.sitemap">
                 <target>Sitemap.xml</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_label.facebook_metadata">
-                <target>Facebook Metadaten</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.metadata">
                 <target>Metadaten</target>
@@ -218,6 +163,12 @@
             <trans-unit id="tx_mindshapeseo_label.preview.no_page_selected">
                 <target>Keine Seite ausgewählt</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.page_hidden">
+                <target>Seite ist versteckt, wenn Sie auch versteckte Seiten anzeigen wollen, können Sie dies über Typoscript konfigurieren.</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.unsupportedDoktype">
+                <target>Seiten mit dem Seitentyp der aktuellen Seite sind ausgeschlossen. Wenn Sie Seiten mit dem aktuellen Seitentyp anzeigen möchten, können Sie das über Typoscript konfigurieren.</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword.not_available">
                 <target>n/a</target>
             </trans-unit>
@@ -262,6 +213,9 @@
             <trans-unit id="tx_mindshapeseo_label.seo_settings_for">
                 <target>SEO Einstellungen für</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.seo_settings_for_all_pages">
+                <target>SEO Einstellungen für alle Seiten</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.seo_preview_for_page">
                 <target>SEO Vorschau</target>
             </trans-unit>
@@ -270,13 +224,14 @@
             <trans-unit id="tx_mindshapeseo_text.robots_txt_example">
                 <target>Dieses Beispiel zeigt eine simple robots.txt für TYPO3, welche zusätzlich die Seiten &amp; Bilder XML-Sitemap beinhaltet. Diese Datei kannst Du auf der Root-Ebene unter "robots.txt" abspeichern.</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_text.robots_txt_exists">
+            <trans-unit id="tx_mindshapeseo_text.robots_txt_found">
+                <target>Inhalt der robots.txt:</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_text.robots_txt_not_exists">
                 <target>Hinweis: es wurde keine robots.txt auf Ihrer Website gefunden!</target>
             </trans-unit>
-
-
-            <trans-unit id="tx_mindshapeseo_validation.facebook_default_image_too_small">
-                <target>Das hochgeladene Facebook Standard Bild ist zu klein</target>
+            <trans-unit id="tx_mindshapeseo_text.robots_txt_exists">
+                <target>Es wurde eine robots.txt auf Ihrer Website gefunden!</target>
             </trans-unit>
 
 
@@ -285,6 +240,9 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.domain">
                 <target>Domain</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.merge_with_default">
+                <target>Mit der Standard Konfiguration zusammenführen</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.domain.default">
                 <target>Standard</target>
@@ -313,20 +271,17 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_seperator">
                 <target>Trenner</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.facebook_default_image">
-                <target>Facebook Standard Bild (empfohlene Größe mind. 200x200px)</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_height">
-                <target>Minimale Höhe für Bilder (Pixel)</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.image_sitemap_min_width">
-                <target>Minimale Breite für Bilder (Pixel)</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_analytics">
                 <target>Einfügen des Analytics Scripts auf die Website</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_hreflang">
-                <target>hreflang-Tag für mehrsprachige Webseiten einfügen</target>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent">
+                <target>Benutze den Cookie Consent für Google Analytics</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.tagmanager_use_cookie_consent">
+                <target>Benutze den Cookie Consent für Tagmanager</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.matomo_use_cookie_consent">
+                <target>Benutze den Cookie Consent für Matomo</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_jsonld">
                 <target>Website Informationen (JSON-LD)</target>
@@ -338,10 +293,22 @@
                 <target>Analytics</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics">
-                <target>Google Analytics</target>
+                <target>Google Analytics (Universal)</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_v4">
+                <target>Google Analytics 4</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager">
                 <target>Google Tagmanager</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.matomo">
+                <target>Matomo</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.matomo_idsite">
+                <target>Matomo Seiten ID</target>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.matomo_url">
+                <target>Matomo URL</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext">
                 <target>weitere Informationen</target>
@@ -355,20 +322,17 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.link">
                 <source>https://support.google.com/analytics/answer/6164470?hl=de</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_v4.help.link">
+                <source>https://support.google.com/analytics/answer/9304153?hl=de</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_id">
-                <target>Google Analytics ID</target>
+                <source>Tracking ID</source>
+            </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_analytics_v4_id">
+                <source>Measurement ID</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.google_tagmanager_id">
                 <target>Google Tagmanager ID</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik">
-                <target>Piwik</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_idsite">
-                <target>Piwik Seiten ID</target>
-            </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.piwik_url">
-                <target>Piwik URL</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld">
                 <target>Website Informationen (JSON-LD)</target>
@@ -425,9 +389,6 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.twitter">
                 <target>Twitter</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.googleplus">
-                <target>Google+</target>
-            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram">
                 <target>Instagram</target>
             </trans-unit>
@@ -448,6 +409,16 @@
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr">
                 <target>Tumblr</target>
+            </trans-unit>
+
+
+            <trans-unit id="sys_redirect.target_statuscode.410">
+                <target>410 Gone</target>
+            </trans-unit>
+
+
+            <trans-unit id="extension_settings.enable_gone_redirects">
+                <target>Aktiviere 410 Gone Weiterleitungen für das Weiterleitungsmodul</target>
             </trans-unit>
         </body>
     </file>

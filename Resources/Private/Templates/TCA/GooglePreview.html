@@ -11,16 +11,16 @@
         titleAttachment: titleAttachment,
         titleAttachmentSeperator: titleAttachmentSeperator,
         titleAttachmentPosition: titleAttachmentPosition,
-        disableTitleAttachment: metadata.disableTitleAttachment
+        disableTitleAttachment: metadata.disableTitleAttachment,
         title: metadata.title,
         url: metadata.url,
         previewUrl: metadata.previewUrl,
-        description: metadata.meta.description
-        focusKeyword: metadata.meta.focusKeyword
-        noindex: metadata.meta.robots.noindex
-        nofollow: metadata.meta.robots.nofollow
-        pageUid: metadata.uid
-        editing: 0
+        description: metadata.meta.description,
+        focusKeyword: metadata.meta.focusKeyword,
+        noindex: metadata.meta.robots.noindex,
+        nofollow: metadata.meta.robots.nofollow,
+        pageUid: metadata.uid,
+        editing: 0,
         focusKeywordFieldName: tcaName
       }"/>
 
@@ -42,7 +42,7 @@
     <div class="col-sm-12 col-md-6">
       <div class="form-group">
         <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword')}</label>
-        <f:form.textfield id="focusKeyword" name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" class="form-control"/>
+        <f:form.textfield id="focusKeyword" name="{f:if(condition: editing, then: 'focusKeyword', else: tcaName)}" value="{focusKeyword}" class="form-control"/>
       </div>
     </div>
   </div>

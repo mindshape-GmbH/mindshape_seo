@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Service;
  *
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -60,7 +60,8 @@ class StandaloneTemplateRendererService implements SingletonInterface
     }
 
     /**
-     * @return \Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function __construct()
     {
@@ -83,6 +84,7 @@ class StandaloneTemplateRendererService implements SingletonInterface
      * @param array $variables
      * @param string $format
      * @return string
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
      */
     public function render($templateFolder = self::TEMPLATES_DEFAULT_FOLDER, $templateName, array $variables, $format = 'html')
     {
@@ -104,6 +106,7 @@ class StandaloneTemplateRendererService implements SingletonInterface
      * @param string $templateName
      * @param string $format
      * @return \TYPO3\CMS\Fluid\View\StandaloneView
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
      */
     protected function getView($templateFolder = self::TEMPLATES_DEFAULT_FOLDER, $templateName, $format = 'html')
     {

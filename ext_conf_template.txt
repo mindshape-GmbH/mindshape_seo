@@ -1,0 +1,2 @@
+# cat=Settings/enable; type=boolean; label=LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:extension_settings.enable_gone_redirects
+enableGoneRedirects = 0

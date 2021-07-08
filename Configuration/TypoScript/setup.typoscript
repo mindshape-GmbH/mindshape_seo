@@ -1,0 +1,24 @@
+plugin.tx_mindshapeseo {
+  view {
+    templateRootPaths.0 = {$plugin.tx_mindshapeseo.view.templateRootPath}
+    partialRootPaths.0 = {$plugin.tx_mindshapeseo.view.partialRootPath}
+    layoutRootPaths.0 = {$plugin.tx_mindshapeseo.view.layoutRootPath}
+
+    widget.TYPO3\CMS\Fluid\ViewHelpers\Widget\PaginateViewHelper.templateRootPath = {$plugin.tx_mindshapeseo.view.templateRootPath}
+  }
+
+  settings {
+    pageTree.usePagination = {$plugin.tx_mindshapeseo.settings.pageTree.usePagination}
+    analytics {
+      disable = {$plugin.tx_mindshapeseo.settings.analytics.disable}
+      disableOnBackendLogin = {$plugin.tx_mindshapeseo.settings.analytics.disableOnBackendLogin}
+      debug = {$plugin.tx_mindshapeseo.settings.analytics.debug}
+    }
+    googlePreview {
+      showHiddenPages = {$plugin.tx_mindshapeseo.settings.googlePreview.showHiddenPages}
+      respectDoktypes = {$plugin.tx_mindshapeseo.settings.googlePreview.respectDoktypes}
+    }
+  }
+}
+
+module.tx_mindshapeseo < plugin.tx_mindshapeseo

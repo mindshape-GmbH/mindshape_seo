@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -28,7 +28,10 @@ namespace Mindshape\MindshapeSeo\Service;
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -43,6 +46,11 @@ class DomainService implements SingletonInterface
     protected $pageService;
 
     /**
+     * @var \TYPO3\CMS\Core\Site\SiteFinder
+     */
+    protected $siteFinder;
+
+    /**
      * @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository
      */
     protected $configurationRepository;
@@ -51,16 +59,24 @@ class DomainService implements SingletonInterface
      * @param \Mindshape\MindshapeSeo\Service\PageService $pageService
      * @return void
      */
-    public function injectPageService(PageService $pageService)
+    public function injectPageService(PageService $pageService): void
     {
         $this->pageService = $pageService;
+    }
+
+    /**
+     * @param \TYPO3\CMS\Core\Site\SiteFinder $siteFinder
+     */
+    public function injectSiteFinder(SiteFinder $siteFinder): void
+    {
+        $this->siteFinder = $siteFinder;
     }
 
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
      * @return void
      */
-    public function injectConfigurationRepository(ConfigurationRepository $configurationRepository)
+    public function injectConfigurationRepository(ConfigurationRepository $configurationRepository): void
     {
         $this->configurationRepository = $configurationRepository;
     }
@@ -70,23 +86,10 @@ class DomainService implements SingletonInterface
      */
     public function getAvailableDomains()
     {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
+        $domains = ['*'];
 
-        $result = $databaseConnection->exec_SELECTgetRows(
-            '*',
-            'sys_domain',
-            'TRIM(redirectTo) = "" AND hidden = 0',
-            '',
-            'sorting'
-        );
-
-        $domains = array('*');
-
-        if (is_array($result)) {
-            foreach ($result as $domain) {
-                $domains[] = $domain['domainName'];
-            }
+        foreach ($this->siteFinder->getAllSites() as $site) {
+            $domains[] = $site->getBase()->getHost();
         }
 
         return $domains;
@@ -98,12 +101,17 @@ class DomainService implements SingletonInterface
      */
     public function getPageDomainConfiguration($pageUid = null)
     {
-        $configuration = $this->configurationRepository->findByDomain(
-            BackendUtility::firstDomainRecord($this->pageService->getRootline($pageUid))
-        );
+        if (null !== $pageUid) {
+            try {
+                $site = $this->siteFinder->getSiteByPageId($pageUid);
+                $configuration = $this->configurationRepository->findByDomain($site->getBase()->getHost());
 
-        if ($configuration instanceof Configuration) {
-            return $configuration;
+                if ($configuration instanceof Configuration) {
+                    return $configuration;
+                }
+            } catch (SiteNotFoundException $exception) {
+                // nothing
+            }
         }
 
         return $this->configurationRepository->findByDomain(Configuration::DEFAULT_DOMAIN);
@@ -116,7 +124,7 @@ class DomainService implements SingletonInterface
     public function getConfigurationDomainSelectOptions($currentDomain)
     {
         $domains = $this->getAvailableDomains();
-        $domainSelectOptions = array();
+        $domainSelectOptions = [];
 
         foreach ($domains as $domain) {
             if ($this->configurationRepository->findByDomain($domain) instanceof Configuration) {

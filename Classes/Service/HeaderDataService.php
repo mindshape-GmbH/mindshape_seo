@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -27,16 +27,16 @@ namespace Mindshape\MindshapeSeo\Service;
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
+use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use Mindshape\MindshapeSeo\Utility\PageUtility;
-use TYPO3\CMS\Core\Resource\FileRepository;
+use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
+use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Service\ImageService;
-use TYPO3\CMS\Lang\LanguageService as CoreLangugeService;
 
 /**
  * @package mindshape_seo
@@ -72,17 +72,17 @@ class HeaderDataService implements SingletonInterface
     /**
      * @var array
      */
-    protected $params = array();
+    protected $params = [];
 
     /**
      * @var array
      */
-    protected $jsonLd = array();
+    protected $jsonLd = [];
 
     /**
      * @var array
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * @var array
@@ -95,12 +95,7 @@ class HeaderDataService implements SingletonInterface
     protected $currentDomainUrl;
 
     /**
-     * @var string
-     */
-    protected $currentSitename;
-
-    /**
-     * @return \Mindshape\MindshapeSeo\Service\HeaderDataService
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function __construct()
     {
@@ -132,43 +127,12 @@ class HeaderDataService implements SingletonInterface
             $this->pageService->getCurrentSysLanguageUid()
         );
 
-        if ($this->domainConfiguration instanceof Configuration) {
-            $this->addJsonLd();
-        }
-
         if (
             $this->domainConfiguration instanceof Configuration &&
-            false === empty($this->domainConfiguration->getSitename())
+            true === $this->domainConfiguration->isMergeWithDefault()
         ) {
-            $this->currentSitename = $this->domainConfiguration->getSitename();
-        } else {
-            $this->currentSitename = $GLOBALS['TYPO3_CONF_VARS']['SYS']['sitename'];
-        }
-
-        if (0 < (int) $page['mindshapeseo_ogimage']) {
-            /** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
-            $fileRepository = $objectManager->get(FileRepository::class);
-            /** @var \TYPO3\CMS\Extbase\Service\ImageService $imageService */
-            $imageService = $objectManager->get(ImageService::class);
-            $files = $fileRepository->findByRelation('pages', 'ogimage', $page['uid']);
-
-            if (0 < count($files)) {
-                /** @var \TYPO3\CMS\Core\Resource\FileReference $file */
-                $file = $files[0];
-                /** @var \TYPO3\CMS\Core\Resource\ProcessedFile $processedFile */
-                $processedFile = $imageService->applyProcessingInstructions(
-                    $file,
-                    array(
-                        'crop' => $file->getReferenceProperties()['crop'],
-                    )
-                );
-
-                $this->currentPageMetaData['facebook']['image'] = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/' . $processedFile->getPublicUrl();
-            }
-        } elseif ($this->domainConfiguration instanceof Configuration) {
-            if (null !== $this->domainConfiguration->getFacebookDefaultImage()) {
-                $this->currentPageMetaData['facebook']['image'] = $this->domainConfiguration->getFacebookDefaultImage()->getOriginalResource()->getPublicUrl();
-            }
+            $this->configurationRepository->mergeConfigurationWithDefault($this->domainConfiguration);
+            $this->addJsonLd();
         }
 
         $this->pageRenderer = PageUtility::getPageRenderer();
@@ -179,21 +143,10 @@ class HeaderDataService implements SingletonInterface
      */
     public function manipulateHeaderData()
     {
-        $this->addBaseUrl();
-
-        if (false === (bool) $this->settings['metadata']['disable']) {
-            $this->addMetaData();
-            $this->addFacebookData();
-
-            if (null !== $this->currentPageMetaData['canonicalUrl']) {
-                $this->addCanonicalUrl();
-            }
-        }
+        $this->setRobotsMetaTag();
 
         if ($this->domainConfiguration instanceof Configuration) {
-            if ($this->domainConfiguration->getAddHreflang()) {
-                $this->addHreflang();
-            }
+            $this->addTitle();
 
             if ($this->domainConfiguration->getAddJsonld()) {
                 $this->renderJsonLd();
@@ -205,11 +158,24 @@ class HeaderDataService implements SingletonInterface
 
             if (
                 $this->domainConfiguration->getAddAnalytics() &&
-                false === (bool) $this->settings['analytics']['disable'] &&
-                true === GeneralUtility::getApplicationContext()->isProduction()
+                (
+                    (bool) $this->settings['analytics']['debug'] === true ||
+                    (
+                        false === (bool) $this->settings['analytics']['disable'] &&
+                        true === Environment::getContext()->isProduction() &&
+                        (
+                            true === (bool) $this->settings['analytics']['disableOnBackendLogin'] &&
+                            !$GLOBALS['BE_USER'] instanceof FrontendBackendUserAuthentication
+                        )
+                    )
+                )
             ) {
                 if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
                     $this->addGoogleAnalytics();
+                }
+
+                if ('' !== $this->domainConfiguration->getGoogleAnalyticsV4()) {
+                    $this->addGoogleAnalyticsV4();
                 }
 
                 if ('' !== $this->domainConfiguration->getGoogleTagmanager()) {
@@ -217,40 +183,21 @@ class HeaderDataService implements SingletonInterface
                 }
 
                 if (
-                    '' === $this->domainConfiguration->getGoogleAnalytics() &&
-                    '' !== $this->domainConfiguration->getPiwikUrl() &&
-                    '' !== $this->domainConfiguration->getPiwikIdsite()
+                    '' !== $this->domainConfiguration->getMatomoUrl() &&
+                    '' !== $this->domainConfiguration->getMatomoIdsite()
                 ) {
-                    $this->addPiwik();
+                    $this->addMatomo();
                 }
             }
         }
     }
 
-    /**
-     * @param array $headerData
-     * @return void
-     */
-    public function addTitle(array &$headerData = null)
+    protected function addTitle()
     {
-        $headerDataWithTitle = preg_grep('#<title>(.*)</title>#i', $headerData);
+        $title = $this->pageRenderer->getTitle();
 
-        $title = reset($headerDataWithTitle);
-
-        if (false === $title) {
+        if (true === empty($title)) {
             $title = $this->currentPageMetaData['title'];
-        } else {
-            preg_match('#<title>(.*)<\/title>#im', $title, $titleMatches);
-
-            $title = $titleMatches[1];
-
-            $key = reset(array_keys($headerDataWithTitle));
-
-            $headerData[$key] = preg_replace(
-                '#(<title>)(.*)(<\/title>)#i',
-                '',
-                $headerData[$key]
-            );
         }
 
         if (
@@ -266,19 +213,6 @@ class HeaderDataService implements SingletonInterface
         }
 
         $this->pageRenderer->setTitle($title);
-    }
-
-    /**
-     * @param string $metaTag
-     * @return void
-     */
-    public function addMetaTag($metaTag)
-    {
-        if (true === version_compare(VersionNumberUtility::getNumericTypo3Version(), '7.6.15', '<=')) {
-            $this->pageRenderer->addHeaderData($metaTag);
-        } else {
-            $this->pageRenderer->addMetaTag($metaTag);
-        }
     }
 
     /**
@@ -306,14 +240,15 @@ class HeaderDataService implements SingletonInterface
     {
         if (
             $this->domainConfiguration instanceof Configuration &&
-            false === (bool) $this->settings['analytics']['disable'] &&
-            true === GeneralUtility::getApplicationContext()->isProduction() &&
+            (false === (bool) $this->settings['analytics']['disable'] || (bool) $this->settings['analytics']['debug'] === true) &&
+            (true === Environment::getContext()->isProduction() || (bool) $this->settings['analytics']['debug'] === true) &&
             false === empty($this->domainConfiguration->getGoogleTagmanager()) &&
-            true === $this->domainConfiguration->getAddAnalytics()
+            true === $this->domainConfiguration->getAddAnalytics() &&
+            (false === $this->domainConfiguration->getTagmanagerUseCookieConsent() || (bool) $this->settings['analytics']['debug'] === true)
         ) {
-            $tagmanagerBody = $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerBody', array(
+            $tagmanagerBody = $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerBody', [
                 'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
-            ));
+            ]);
 
             $tagmanagerBody = trim(preg_replace('/\\>\\s+\\</', '><', $tagmanagerBody));
 
@@ -323,205 +258,98 @@ class HeaderDataService implements SingletonInterface
         return $html;
     }
 
-    /**
-     * @return void
-     */
-    protected function addBaseUrl()
+    protected function setRobotsMetaTag()
     {
-        $currentSysLanguageUid = $GLOBALS['TSFE']->sys_language_uid;
-        $rootline = $this->pageService->getRootline();
-
-        $rootpage = array_pop($rootline);
-
-        $rootpages = array_filter($rootline, function ($page) {
-            return (bool) $page['is_siteroot'];
-        });
-
-        if (0 < count($rootpages)) {
-            $rootpage = $rootpages[1];
-        }
-
-        $this->pageRenderer->setBaseUrl(
-            $this->pageService->getPageLink($rootpage['uid'], true, $currentSysLanguageUid)
-        );
-    }
-
-    /**
-     * @return void
-     */
-    protected function addCanonicalUrl()
-    {
-        $this->pageRenderer->addHeaderData(
-            '<link rel="canonical" href="' . $this->currentPageMetaData['canonicalUrl'] . '"/>'
-        );
-    }
-
-    /**
-     * @return void
-     */
-    protected function addHreflang()
-    {
-        /** @var \TYPO3\CMS\Core\Database\DatabaseConnection $databaseConnection */
-        $databaseConnection = $GLOBALS['TYPO3_DB'];
-        /** @var \TYPO3\CMS\Lang\LanguageService $test */
-        $languageService = $GLOBALS['LANG'];
-
-        $result = $databaseConnection->exec_SELECTgetRows(
-            'l.*',
-            'sys_language l INNER JOIN pages_language_overlay o ON l.uid = o.sys_language_uid',
-            'o.pid = ' . $this->currentPageMetaData['uid']
-        );
-
-        $this->pageRenderer->addHeaderData(
-            $this->renderHreflang(
-                $this->pageService->getPageLink($this->currentPageMetaData['uid'], true),
-                'x-default'
-            )
-        );
-
-        if ($languageService instanceof CoreLangugeService) {
-            $this->pageRenderer->addHeaderData(
-                $this->renderHreflang(
-                    $this->pageService->getPageLink($this->currentPageMetaData['uid'], true),
-                    $languageService->lang
-                )
-            );
-        }
-
-        foreach ($result as $language) {
-            $this->pageRenderer->addHeaderData(
-                $this->renderHreflang(
-                    $this->pageService->getPageLink($this->currentPageMetaData['uid'], true, $language['uid']),
-                    $language['language_isocode']
-                )
-            );
-        }
-    }
-
-    /**
-     * @param string $url
-     * @param string $languageKey
-     * @return string
-     */
-    protected function renderHreflang($url, $languageKey)
-    {
-        return '<link rel="alternate" href="' . $url . '" hreflang="' . $languageKey . '"/>';
-    }
-
-    /**
-     * @return void
-     */
-    protected function addFacebookData()
-    {
-        $metaData = array(
-            'og:site_name' => $this->currentSitename,
-            'og:url' => $this->currentPageMetaData['facebook']['url'],
-            'og:title' => $this->currentPageMetaData['facebook']['title'],
-            'og:description' => $this->currentPageMetaData['facebook']['description'],
-        );
-
-        if (array_key_exists('image', $this->currentPageMetaData['facebook'])) {
-            $metaData['og:image'] = $this->currentPageMetaData['facebook']['image'];
-        }
-
-        $this->addMetaDataArray($metaData, 'property');
-    }
-
-    protected function addMetaData()
-    {
-        $robots = array();
+        $noindexInherited = (bool) $this->currentPageMetaData['meta']['robots']['noindexInherited'];
+        $nofollowInherited = (bool) $this->currentPageMetaData['meta']['robots']['nofollowInherited'];
 
         if (
-            (
-                $this->currentPageMetaData['meta']['robots']['noindex'] ||
-                $this->currentPageMetaData['meta']['robots']['noindexInherited']
-            ) &&
-            !in_array('noindex', $robots, true)
+            true === $noindexInherited ||
+            true === $nofollowInherited
         ) {
-            $robots[] = 'noindex';
-        }
+            $noindex = false;
+            $nofollow = false;
 
-        if (
-            (
-                $this->currentPageMetaData['meta']['robots']['nofollow'] ||
-                $this->currentPageMetaData['meta']['robots']['nofollowInherited']
-            ) &&
-            !in_array('nofollow', $robots, true)
-        ) {
-            $robots[] = 'nofollow';
-        }
+            $robotsMetaTagManager = ObjectUtility::makeInstance(MetaTagManagerRegistry::class)->getManagerForProperty('robots');
 
-        $metaData = array(
-            'author' => $this->currentPageMetaData['meta']['author'],
-            'contact' => $this->currentPageMetaData['meta']['contact'],
-            'description' => $this->currentPageMetaData['meta']['description'],
-            'robots' => implode(',', $robots),
-        );
+            $originalRobotsMetaTagValue = $robotsMetaTagManager->getProperty('robots');
 
-        $this->addMetaDataArray($metaData);
-    }
+            if (0 < count($originalRobotsMetaTagValue)) {
+                $originalRobotsMetaTagValue = GeneralUtility::trimExplode(',', $originalRobotsMetaTagValue[0]['content']);
 
-    /**
-     * @param array $metaData
-     * @param string $nameAttribute
-     * @return void
-     */
-    protected function addMetaDataArray(array $metaData, $nameAttribute = 'name')
-    {
-        foreach ($metaData as $name => $content) {
-            if (!empty($content)) {
-                $this->addMetaTag(
-                    $this->renderMetaTag($name, $content, $nameAttribute)
-                );
+                $noindex = true === in_array('noindex', $originalRobotsMetaTagValue, true);
+                $nofollow = true === in_array('nofollow', $originalRobotsMetaTagValue, true);
             }
+
+            if (true === $noindexInherited) {
+                $noindex = true;
+            }
+
+            if (true === $nofollowInherited) {
+                $nofollow = true;
+            }
+
+            $robotsMetaTagManager->addProperty(
+                'robots',
+                (true === $noindex ? 'noindex' : 'index') . ',' . (true === $nofollow ? 'nofollow' : 'follow'),
+                [],
+                true
+            );
         }
     }
 
-    /**
-     * @param string $name
-     * @param string $content
-     * @param string $nameAttribute
-     * @return string
-     */
-    protected function renderMetaTag($name, $content, $nameAttribute = 'name')
-    {
-        return '<meta ' . $nameAttribute . '="' . $name . '" content="' . $content . '">';
-    }
-
-    /**
-     * @return void
-     */
     protected function addGoogleAnalytics()
     {
         $this->pageRenderer->addHeaderData(
-            $this->standaloneTemplateRendererService->render('Analytics', 'Google', array(
-                'analyticsId' => $this->domainConfiguration->getGoogleAnalytics(),
-            ))
+            $this->standaloneTemplateRendererService->render(
+                'Analytics',
+                true === $this->domainConfiguration->getGoogleAnalyticsUseCookieConsent()
+                    ? 'GoogleAnalyticsCookieConsent'
+                    : 'GoogleAnalytics',
+                ['analyticsId' => $this->domainConfiguration->getGoogleAnalytics()])
         );
     }
 
-    /**
-     * @return void
-     */
+    protected function addGoogleAnalyticsV4()
+    {
+        $this->pageRenderer->addHeaderData(
+            $this->standaloneTemplateRendererService->render(
+                'Analytics',
+                true === $this->domainConfiguration->getGoogleAnalyticsV4UseCookieConsent()
+                    ? 'GoogleAnalyticsV4CookieConsent'
+                    : 'GoogleAnalyticsV4',
+                ['analyticsId' => $this->domainConfiguration->getGoogleAnalyticsV4()])
+        );
+    }
+
     protected function addGoogleTagmanager()
     {
         $this->pageRenderer->addHeaderData(
-            $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerHead', array(
-                'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
-            ))
+            $this->standaloneTemplateRendererService->render(
+                'Analytics',
+                true === $this->domainConfiguration->getTagmanagerUseCookieConsent()
+                    ? 'GoogleTagmanagerHeadCookieConsent'
+                    : 'GoogleTagmanagerHead',
+                [
+                    'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
+                ]
+            )
         );
     }
 
-    /**
-     * @return void
-     */
-    protected function addPiwik()
+    protected function addMatomo()
     {
         $this->pageRenderer->addHeaderData(
-            $this->standaloneTemplateRendererService->render('Analytics', 'Piwik', array(
-                'piwikUrl' => $this->domainConfiguration->getPiwikUrl(),
-                'piwikIdSite' => $this->domainConfiguration->getPiwikIdsite(),
-            ))
+            $this->standaloneTemplateRendererService->render(
+                'Analytics',
+                true === $this->domainConfiguration->getMatomoUseCookieConsent()
+                    ? 'MatomoCookieConsent'
+                    : 'Matomo',
+                [
+                    'matomoUrl' => $this->domainConfiguration->getMatomoUrl(),
+                    'matomoIdSite' => $this->domainConfiguration->getMatomoIdsite(),
+                ]
+            )
         );
     }
 
@@ -543,7 +371,7 @@ class HeaderDataService implements SingletonInterface
     {
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'] as $userFunc) {
-                $params = array('jsonld' => &$this->jsonLd);
+                $params = ['jsonld' => &$this->jsonLd];
 
                 GeneralUtility::callUserFunction($userFunc, $params, $this);
             }
@@ -561,13 +389,13 @@ class HeaderDataService implements SingletonInterface
      */
     protected function renderJsonWebsiteName()
     {
-        return array(
+        return [
             '@context' => 'http://schema.org',
             '@type' => 'WebSite',
             'url' => '' !== $this->domainConfiguration->getJsonldCustomUrl() ?
                 $this->domainConfiguration->getJsonldCustomUrl() :
                 GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST'),
-        );
+        ];
     }
 
     /**
@@ -575,11 +403,11 @@ class HeaderDataService implements SingletonInterface
      */
     protected function renderJsonLdInformation()
     {
-        $jsonld = array(
+        $jsonld = [
             '@context' => 'http://schema.org',
             '@type' => $this->domainConfiguration->getJsonldType(),
             'url' => $this->currentDomainUrl,
-        );
+        ];
 
         if (false === empty($this->domainConfiguration->getJsonldName())) {
             $jsonld['name'] = $this->domainConfiguration->getJsonldName();
@@ -602,9 +430,7 @@ class HeaderDataService implements SingletonInterface
             false === empty($this->domainConfiguration->getJsonldAddressPostalcode()) &&
             false === empty($this->domainConfiguration->getJsonldAddressStreet())
         ) {
-            $jsonld['address'] = array(
-                '@type' => 'PostalAddress',
-            );
+            $jsonld['address'] = ['@type' => 'PostalAddress',];
 
             if (false === empty($this->domainConfiguration->getJsonldAddressLocality())) {
                 $jsonld['address']['addressLocality'] = $this->domainConfiguration->getJsonldAddressLocality();
@@ -631,10 +457,9 @@ class HeaderDataService implements SingletonInterface
                     ->getPublicUrl();
         }
 
-        $socialMediaLinks = array(
+        $socialMediaLinks = [
             'facebook' => $this->domainConfiguration->getJsonldSameAsFacebook(),
             'twitter' => $this->domainConfiguration->getJsonldSameAsTwitter(),
-            'googleplus' => $this->domainConfiguration->getJsonldSameAsGoogleplus(),
             'instagram' => $this->domainConfiguration->getJsonldSameAsInstagram(),
             'youtube' => $this->domainConfiguration->getJsonldSameAsYoutube(),
             'linkedin' => $this->domainConfiguration->getJsonldSameAsLinkedin(),
@@ -642,12 +467,12 @@ class HeaderDataService implements SingletonInterface
             'printerest' => $this->domainConfiguration->getJsonldSameAsPrinterest(),
             'soundcloud' => $this->domainConfiguration->getJsonldSameAsSoundcloud(),
             'tumblr' => $this->domainConfiguration->getJsonldSameAsTumblr(),
-        );
+        ];
 
         foreach ($socialMediaLinks as $socialMediaLink) {
             if (!empty($socialMediaLink)) {
                 if (!is_array($jsonld['sameAs'])) {
-                    $jsonld['sameAs'] = array();
+                    $jsonld['sameAs'] = [];
                 }
 
                 $jsonld['sameAs'][] = $socialMediaLink;
@@ -666,7 +491,7 @@ class HeaderDataService implements SingletonInterface
 
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'] as $userFunc) {
-                $params = array('jsonldBreadcrumb' => &$jsonLdbreadcrumb);
+                $params = ['jsonldBreadcrumb' => &$jsonLdbreadcrumb];
 
                 GeneralUtility::callUserFunction($userFunc, $params, $this);
             }
@@ -684,11 +509,11 @@ class HeaderDataService implements SingletonInterface
      */
     protected function renderJsonLdBreadcrum()
     {
-        $breadcrumb = array(
+        $breadcrumb = [
             '@context' => 'http://schema.org',
             '@type' => 'BreadcrumbList',
-            'itemListElement' => array(),
-        );
+            'itemListElement' => [],
+        ];
 
         foreach ($this->pageService->getRootlineReverse(null, true) as $index => $page) {
             if (
@@ -698,10 +523,10 @@ class HeaderDataService implements SingletonInterface
                 continue;
             }
 
-            $breadcrumb['itemListElement'][] = array(
+            $breadcrumb['itemListElement'][] = [
                 '@type' => 'ListItem',
                 'position' => $index + 1,
-                'item' => array(
+                'item' => [
                     '@id' => $this->pageService->getPageLink(
                         $page['uid'],
                         true,
@@ -710,8 +535,8 @@ class HeaderDataService implements SingletonInterface
                     'name' => false === empty($page['mindshapeseo_jsonld_breadcrumb_title'])
                         ? $page['mindshapeseo_jsonld_breadcrumb_title']
                         : $page['title'],
-                ),
-            );
+                ],
+            ];
         }
 
         return $breadcrumb;
