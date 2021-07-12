@@ -93,7 +93,7 @@
               <span class="depth-markup{f:if(condition: iterator.isFirst, then: ' rootpage')}{f:if(condition: page.hasSub, then: ' subpages')}">
                   {page.depthData -> f:format.raw()}
                   <f:format.raw>{page.HTML}</f:format.raw>
-                  <span class="title">{f:if(condition: page.row.nav_title, then: page.row.nav_title, else: page.row.title)}</span>
+                  <span class="title">{f:if(condition: page.row.nav_title, then: page.row.nav_title, else: page.row.title) -> f:format.crop(maxCharacters: 30)}</span>
               </span>
             </td>
             <td width="50%" class="google-preview-column">
