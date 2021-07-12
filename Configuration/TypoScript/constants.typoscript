@@ -22,6 +22,12 @@ plugin.tx_mindshapeseo {
       debug = 0
     }
 
+    # customsubcategory=breadcrumb=JSON+LD Breadcrumb
+    breadcrumb {
+      # cat=mindshapeseo/breadcrumb; type=string; label=doktypes allowed to render a JSON+LD breadcrumb
+      respectDoktypes = 1,4
+    }
+
     # customsubcategory=googlePreview=Google Preview
     googlePreview {
       # cat=mindshapeseo/googlePreview; type=boolean; label=show hidden pages

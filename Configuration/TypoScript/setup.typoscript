@@ -14,6 +14,11 @@ plugin.tx_mindshapeseo {
       disableOnBackendLogin = {$plugin.tx_mindshapeseo.settings.analytics.disableOnBackendLogin}
       debug = {$plugin.tx_mindshapeseo.settings.analytics.debug}
     }
+
+    breadcrumb {
+      respectDoktypes = {$plugin.tx_mindshapeseo.settings.breadcrumb.respectDoktypes}
+    }
+
     googlePreview {
       showHiddenPages = {$plugin.tx_mindshapeseo.settings.googlePreview.showHiddenPages}
       respectDoktypes = {$plugin.tx_mindshapeseo.settings.googlePreview.respectDoktypes}

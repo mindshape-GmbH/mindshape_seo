@@ -509,6 +509,7 @@ class HeaderDataService implements SingletonInterface
      */
     protected function renderJsonLdBreadcrum()
     {
+        $respectDoktypes = GeneralUtility::trimExplode(',', $this->settings['breadcrumb']['respectDoktypes']);
         $breadcrumb = [
             '@context' => 'http://schema.org',
             '@type' => 'BreadcrumbList',
@@ -516,10 +517,7 @@ class HeaderDataService implements SingletonInterface
         ];
 
         foreach ($this->pageService->getRootlineReverse(null, true) as $index => $page) {
-            if (
-                1 !== (int) $page['doktype'] &&
-                4 !== (int) $page['doktype']
-            ) {
+            if (false === in_array($page['doktype'], $respectDoktypes)) {
                 continue;
             }
 
