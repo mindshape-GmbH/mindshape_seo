@@ -93,29 +93,11 @@ class PageService implements SingletonInterface
         $this->pageRepository = ObjectUtility::makeInstance(PageRepository::class);
 
         if ('BE' === TYPO3_MODE) {
-            $currentPageUid = MindshapeBackendUtility::getCurrentPageTreeSelectedPage();
-
-            if ($currentPageUid === 0 || $currentPageUid === null) {
-                $page =  GeneralUtility::_GET('edit')['pages'];
-                if (!is_null($page)) {
-                    $currentPageUid = key($page);
-                }
-            }
-
-            $currentPage = $this->pageRepository->getPage_noCheck($currentPageUid);
-
-            if (
-                1 !== (int) $currentPage['doktype'] &&
-                4 !== (int) $currentPage['doktype']
-            ) {
+            try {
+                TypoScriptFrontendUtility::bootTypoScriptFrontendController();
+                $this->typoScriptFrontendController = $GLOBALS['TSFE'];
+            } catch (TypoScriptFrontendControllerBootException $exception) {
                 $this->typoScriptFrontendController = null;
-            } else {
-                try {
-                    TypoScriptFrontendUtility::bootTypoScriptFrontendController();
-                    $this->typoScriptFrontendController = $GLOBALS['TSFE'];
-                } catch (TypoScriptFrontendControllerBootException $exception) {
-                    $this->typoScriptFrontendController = null;
-                }
             }
         } elseif ('FE' === TYPO3_MODE) {
             $this->typoScriptFrontendController = $GLOBALS['TSFE'];
