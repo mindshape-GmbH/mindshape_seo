@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Hook;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *

@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Validation\Validator;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *

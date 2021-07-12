@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2020 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -589,7 +589,7 @@ class BackendController extends ActionController
         ) {
             if ($showHiddenPages === false && (bool)$currentPage['hidden'] === true) {
                 $this->view->assign('pageHidden', true);
-            } else if (!in_array($currentPage['doktype'], $respectDoktypes)) {
+            } elseif (!in_array($currentPage['doktype'], $respectDoktypes)) {
                 $this->view->assign('unsupportedDoktype', true);
             } else {
                 $this->view->assign('noPageSelected', true);
