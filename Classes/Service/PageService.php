@@ -430,7 +430,7 @@ class PageService implements SingletonInterface
         /** @var \TYPO3\CMS\Core\Database\QueryGenerator $queryGenerator */
         $queryGenerator = GeneralUtility::makeInstance(QueryGenerator::class);
 
-        return GeneralUtility::trimExplode(
+        return GeneralUtility::intExplode(
             ',',
             $queryGenerator->getTreeList($pageUid, 9999999, 0, 1)
         );
@@ -457,16 +457,30 @@ class PageService implements SingletonInterface
      * @param int $sysLanguageUid
      * @param string $customUrl
      * @param bool $useGoogleBreadcrumb
+     * @param int[] $allowedDoktypes
      * @return array
      */
-    public function getPageMetadataTree(int $pageUid, int $depth = self::TREE_DEPTH_DEFAULT, int $sysLanguageUid = 0, string $customUrl = '', bool $useGoogleBreadcrumb = false): array
+    public function getPageMetadataTree(
+        int $pageUid,
+        int $depth = self::TREE_DEPTH_DEFAULT,
+        int $sysLanguageUid = 0,
+        string $customUrl = '',
+        bool $useGoogleBreadcrumb = false,
+        array $allowedDoktypes = [1,4]
+    ): array
     {
         $page = $this->getPage($pageUid);
 
         /** @var \TYPO3\CMS\Backend\Tree\View\PageTreeView $tree */
         $tree = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Tree\View\PageTreeView::class);
         $tree->init();
-        $tree->clause = ' AND pages.deleted = 0 AND pages.sys_language_uid = ' . $sysLanguageUid . ' AND (pages.doktype = 1 OR pages.doktype = 4) AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
+        $tree->clause = ' AND pages.deleted = 0 AND pages.sys_language_uid = ' . $sysLanguageUid;
+
+        if (0 < count($allowedDoktypes)) {
+            $tree->clause .= ' AND (pages.doktype = ' . implode(' OR pages.doktype = ', $allowedDoktypes) . ')';
+        }
+
+        $tree->clause .= ' AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
 
         $tree->parentField = 'pages.pid';
         $tree->fieldArray = ['pages.*'];

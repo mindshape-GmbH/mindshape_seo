@@ -580,7 +580,7 @@ class BackendController extends ActionController
     {
         $currentPage = $this->pageService->getCurrentPage();
         $showHiddenPages = (bool)$this->settings['googlePreview']['showHiddenPages'];
-        $respectDoktypes = GeneralUtility::trimExplode(',', $this->settings['googlePreview']['respectDoktypes']);
+        $respectDoktypes = GeneralUtility::intExplode(',', $this->settings['googlePreview']['respectDoktypes']);
 
         if (
             0 === $this->currentPageUid ||
@@ -620,7 +620,8 @@ class BackendController extends ActionController
                         $depth,
                         $sysLanguageUid,
                         $configuration->getJsonldCustomUrl(),
-                        $configuration->getAddJsonldBreadcrumb()
+                        $configuration->getAddJsonldBreadcrumb(),
+                        $respectDoktypes
                     ),
                     'titleAttachment' => $configuration->getTitleAttachment(),
                     'titleAttachmentSeperator' => $configuration->getTitleAttachmentSeperator(),
@@ -632,7 +633,10 @@ class BackendController extends ActionController
                     $this->pageService->getPageMetadataTree(
                         $this->currentPageUid,
                         $depth,
-                        $sysLanguageUid
+                        $sysLanguageUid,
+                        '',
+                        false,
+                        $respectDoktypes
                     )
                 );
             }
