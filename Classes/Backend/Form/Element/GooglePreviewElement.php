@@ -112,10 +112,13 @@ class GooglePreviewElement extends AbstractFormElement
     public function render()
     {
         $result = $this->initializeResultArray();
-        $pageUid =  $this->data['databaseRow']['uid'];
+        $pageUid = $this->data['databaseRow']['uid'];
+        $languageUid = (int)(true === is_array($this->data['databaseRow']['sys_language_uid'])
+            ? reset($this->data['databaseRow']['sys_language_uid'])
+            : $this->data['databaseRow']['sys_language_uid']);
 
         if ($pageUid > 0) {
-            $configuration = $this->domainService->getPageDomainConfiguration($pageUid);
+            $configuration = $this->domainService->getPageDomainConfiguration($pageUid, $languageUid);
 
             $metadata = null;
             $titleAttachment = null;
@@ -126,7 +129,7 @@ class GooglePreviewElement extends AbstractFormElement
                 if ($configuration instanceof Configuration) {
                     $metadata = $this->pageService->getPageMetaData(
                         $pageUid,
-                        $this->pageService->getCurrentSysLanguageUid(),
+                        $languageUid,
                         $configuration->getJsonldCustomUrl(),
                         $configuration->getAddJsonldBreadcrumb()
                     );

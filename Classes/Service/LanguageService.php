@@ -72,7 +72,7 @@ class LanguageService implements SingletonInterface
                 $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->quoteIdentifier('l.uid'))
             )
             ->where(
-                $queryBuilder->expr()->eq('p.l10n_parent', $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('p.' . $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'], $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
                 $queryBuilder->expr()->neq('p.sys_language_uid', 0)
             )
             ->execute()

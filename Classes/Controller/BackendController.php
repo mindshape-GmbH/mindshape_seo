@@ -603,7 +603,7 @@ class BackendController extends ActionController
                 $this->sessionService->setKey('sysLanguageUid', $sysLanguageUid);
             }
 
-            $configuration = $this->domainService->getPageDomainConfiguration();
+            $configuration = $this->domainService->getPageDomainConfiguration(null, $sysLanguageUid);
 
             if ($configuration instanceof Configuration) {
                 $this->view->assignMultiple([

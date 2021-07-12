@@ -169,6 +169,9 @@
             <trans-unit id="tx_mindshapeseo_label.preview.unsupportedDoktype">
                 <target>Seiten mit dem Seitentyp der aktuellen Seite sind ausgeschlossen. Wenn Sie Seiten mit dem aktuellen Seitentyp anzeigen möchten, können Sie das über Typoscript konfigurieren.</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.missing_translation">
+                <target>Die ausgewählte Seite hat keine Übersetzung für die aktuell ausgewählte Sprache</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword.not_available">
                 <target>n/a</target>
             </trans-unit>

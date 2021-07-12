@@ -12,17 +12,25 @@
       <f:then>
         {f:translate(key: 'tx_mindshapeseo_label.preview.no_page_selected')}
       </f:then>
-        <f:else if="{pageHidden}">
-            {f:translate(key: 'tx_mindshapeseo_label.preview.page_hidden')}
-        </f:else>
-        <f:else if="{unsupportedDoktype}">
-            {f:translate(key: 'tx_mindshapeseo_label.preview.unsupportedDoktype')}
-        </f:else>
+      <f:else if="{pageHidden}">
+        {f:translate(key: 'tx_mindshapeseo_label.preview.page_hidden')}
+      </f:else>
+      <f:else if="{unsupportedDoktype}">
+        {f:translate(key: 'tx_mindshapeseo_label.preview.unsupportedDoktype')}
+      </f:else>
       <f:else>
-        <div class="mindshapeseo-preview">
-          <f:render section="Preview" arguments="{_all}"/>
-          <f:render partial="AlertModal"/>
-        </div>
+        <f:if condition="{pageTree}">
+          <f:then>
+            <div class="mindshapeseo-preview">
+              <f:render section="Preview" arguments="{_all}"/>
+              <f:render partial="AlertModal"/>
+            </div>
+          </f:then>
+          <f:else>
+            {f:translate(key: 'tx_mindshapeseo_label.preview.missing_translation')}
+          </f:else>
+        </f:if>
+
       </f:else>
     </f:if>
 
@@ -85,7 +93,7 @@
               <span class="depth-markup{f:if(condition: iterator.isFirst, then: ' rootpage')}{f:if(condition: page.hasSub, then: ' subpages')}">
                   {page.depthData -> f:format.raw()}
                   <f:format.raw>{page.HTML}</f:format.raw>
-                  <span class="title">{page.row.title}</span>
+                  <span class="title">{f:if(condition: page.row.nav_title, then: page.row.nav_title, else: page.row.title)}</span>
               </span>
             </td>
             <td width="50%" class="google-preview-column">

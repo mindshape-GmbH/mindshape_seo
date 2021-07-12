@@ -33,6 +33,7 @@ use Mindshape\MindshapeSeo\Utility\LinkUtility;
 use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use Mindshape\MindshapeSeo\Utility\TypoScriptFrontendUtility;
 use PDO;
+use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Database\QueryGenerator;
@@ -191,10 +192,10 @@ class PageService implements SingletonInterface
                 ->select('p.*')
                 ->from('pages', 'p');
 
-            if (isset($GLOBALS['TCA']['ctrl']['transOrigPointerField']) && !empty($GLOBALS['TCA']['ctrl']['transOrigPointerField'])) {
+            if (isset($GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField']) && !empty($GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'])) {
                 $queryBuilder->where(
                     $queryBuilder->expr()->eq(
-                        'p.' . $GLOBALS['TCA']['ctrl']['transOrigPointerField'],
+                        'p.' . $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'],
                         $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
                     $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
                         $sysLanguageUid,
@@ -235,11 +236,15 @@ class PageService implements SingletonInterface
      * @param int $sysLanguageUid
      * @param string $customUrl
      * @param $useGoogleBreadcrumb
-     * @return array
+     * @return array|null
      */
     public function getPageMetaData($pageUid, $sysLanguageUid = 0, $customUrl = '', $useGoogleBreadcrumb = false)
     {
         $page = $this->getPage($pageUid, $sysLanguageUid);
+
+        if (false === $page) {
+            return null;
+        }
 
         $pageUrl = $this->getPageLink($pageUid, true, $sysLanguageUid);
 
@@ -449,14 +454,18 @@ class PageService implements SingletonInterface
         string $customUrl = '',
         bool $useGoogleBreadcrumb = false,
         array $allowedDoktypes = [1,4]
-    ): array
+    )
     {
-        $page = $this->getPage($pageUid);
+        $page = $this->getPage($pageUid, $sysLanguageUid);
+
+        if (false === is_array($page)) {
+            return null;
+        }
 
         /** @var \TYPO3\CMS\Backend\Tree\View\PageTreeView $tree */
-        $tree = GeneralUtility::makeInstance(\TYPO3\CMS\Backend\Tree\View\PageTreeView::class);
+        $tree = GeneralUtility::makeInstance(PageTreeView::class);
         $tree->init();
-        $tree->clause = ' AND pages.deleted = 0 AND pages.sys_language_uid = ' . $sysLanguageUid;
+        $tree->clause = ' AND pages.deleted = 0 AND pages.sys_language_uid = 0';
 
         if (0 < count($allowedDoktypes)) {
             $tree->clause .= ' AND (pages.doktype = ' . implode(' OR pages.doktype = ', $allowedDoktypes) . ')';
@@ -502,12 +511,19 @@ class PageService implements SingletonInterface
                 $tree->tree[$key]['hasSub'] = false;
             }
 
-            $tree->tree[$key]['metadata'] = $this->getPageMetaData(
+            $metadata = $this->getPageMetaData(
                 $treeItem['row']['uid'],
-                0,
+                $sysLanguageUid,
                 $customUrl,
                 $useGoogleBreadcrumb
             );
+
+            if (false === is_array($metadata)) {
+                unset($tree->tree[$key]);
+                continue;
+            }
+
+            $tree->tree[$key]['metadata'] = $metadata;
         }
 
         $tree->tree[0]['hasSub'] = 1 < count($tree->tree);

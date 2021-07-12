@@ -99,12 +99,19 @@ class DomainService implements SingletonInterface
      * @param int $pageUid
      * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
      */
-    public function getPageDomainConfiguration($pageUid = null)
+    public function getPageDomainConfiguration($pageUid = null, $languageUid = null)
     {
         if (null !== $pageUid) {
             try {
                 $site = $this->siteFinder->getSiteByPageId($pageUid);
-                $configuration = $this->configurationRepository->findByDomain($site->getBase()->getHost());
+                $siteLanguage = 0 < $languageUid
+                    ? $site->getLanguageById($languageUid)
+                    : $site->getDefaultLanguage();
+                $configuration = $this->configurationRepository->findByDomain(
+                    $siteLanguage->getBase()->getHost(),
+                    false,
+                    $languageUid
+                );
 
                 if ($configuration instanceof Configuration) {
                     return $configuration;
@@ -114,7 +121,7 @@ class DomainService implements SingletonInterface
             }
         }
 
-        return $this->configurationRepository->findByDomain(Configuration::DEFAULT_DOMAIN);
+        return $this->configurationRepository->findByDomain(Configuration::DEFAULT_DOMAIN, false, $languageUid);
     }
 
     /**

@@ -169,6 +169,9 @@
             <trans-unit id="tx_mindshapeseo_label.preview.unsupportedDoktype">
                 <source>Pages with the pagetype of the current page are excluded, if you want to display pages with the current pagetype you can configure this via typoscript</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_label.preview.missing_translation">
+                <source>The selected page has no translation for the current selected language</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_label.preview.focus_keyword.not_available">
                 <source>n/a</source>
             </trans-unit>
