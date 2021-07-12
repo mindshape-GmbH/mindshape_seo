@@ -546,16 +546,8 @@ class BackendController extends ActionController
      */
     public function saveConfigurationAction(Configuration $configuration, int $languageUid)
     {
-        if (0 < $languageUid) {
-            $defaultLanguageConfiguration = $this->configurationRepository->findByDomain($configuration->getDomain());
-
-            $this->translationService->translate(
-                $configuration,
-                $languageUid,
-                $defaultLanguageConfiguration instanceof Configuration
-                    ? $defaultLanguageConfiguration->getUid()
-                    : 0
-            );
+        if (0 < $languageUid && true === $configuration->_isNew()) {
+            $this->translationService->translate($configuration, $languageUid);
         }
 
         $this->configurationRepository->save($configuration);
