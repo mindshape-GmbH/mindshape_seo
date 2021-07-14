@@ -10,6 +10,14 @@
 ChangeLog
 ---------
 
+v2.0.1
+  - Add cropping for too long titles in preview
+  - Solve translation issues with preview
+  - Create unreferenced translations to workaround FAL bugs
+  - Remove doktype restriction for page service frontend initialization
+  - Properly allow configured doktypes for preview module
+  - Make breadcrumb allowed doktypes configurable
+
 v2.0.0
   - Compatibility for TYPO3 v9.5 & v10.4
   - Add debug option to force analytics injection
