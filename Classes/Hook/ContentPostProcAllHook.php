@@ -26,6 +26,7 @@ namespace Mindshape\MindshapeSeo\Hook;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Service\HeaderDataService;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -43,7 +44,7 @@ class ContentPostProcAllHook
      */
     public function main(array &$params, TypoScriptFrontendController $typoScriptFrontendController)
     {
-        if ('FE' === TYPO3_MODE) {
+        if (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
             /** @var \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService */

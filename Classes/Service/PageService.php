@@ -100,10 +100,10 @@ class PageService implements SingletonInterface
             } catch (TypoScriptFrontendControllerBootException $exception) {
                 $this->typoScriptFrontendController = null;
             }
-        } elseif ('FE' === TYPO3_MODE) {
+        } elseif (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             $this->typoScriptFrontendController = $GLOBALS['TSFE'];
         } else {
-            throw new Exception('Illegal TYPO3_MODE');
+            throw new Exception('Illegal TYPO3 mode');
         }
 
         $configurationManager->setContentObject(

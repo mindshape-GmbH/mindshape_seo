@@ -25,6 +25,7 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -42,7 +43,9 @@ class SessionService implements SingletonInterface
 
     public function __construct()
     {
-        $this->userAuthentication = TYPO3_MODE === 'BE' ? $GLOBALS['BE_USER'] : $GLOBALS['TSFE']->fe_user;
+        $this->userAuthentication = true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()
+            ? $GLOBALS['BE_USER']
+            : $GLOBALS['TSFE']->fe_user;
     }
 
     /**
