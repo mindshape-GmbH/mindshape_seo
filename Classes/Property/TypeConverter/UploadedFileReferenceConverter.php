@@ -25,10 +25,8 @@ namespace Mindshape\MindshapeSeo\Property\TypeConverter;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Resource\DuplicationBehavior;
-use TYPO3\CMS\Core\Resource\Exception\ExistingTargetFileNameException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileReference as FalFileReference;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
@@ -117,25 +115,16 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
 
     /**
      * @param \TYPO3\CMS\Core\Resource\ResourceFactory $resourceFactory
-     */
-    public function injectResourceFactory(ResourceFactory $resourceFactory): void
-    {
-        $this->resourceFactory = $resourceFactory;
-    }
-
-    /**
      * @param \TYPO3\CMS\Extbase\Security\Cryptography\HashService $hashService
-     */
-    public function injectHashService(HashService $hashService): void
-    {
-        $this->hashService = $hashService;
-    }
-
-    /**
      * @param \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager
      */
-    public function injectPersistenceManager(PersistenceManager $persistenceManager): void
-    {
+    public function __construct(
+        ResourceFactory $resourceFactory,
+        HashService $hashService,
+        PersistenceManager $persistenceManager
+    ) {
+        $this->resourceFactory = $resourceFactory;
+        $this->hashService = $hashService;
         $this->persistenceManager = $persistenceManager;
     }
 
@@ -143,9 +132,12 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
      * @param array $source
      * @param string $targetType
      * @param array $convertedChildProperties
-     * @param \TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface $configuration
+     * @param \TYPO3\CMS\Extbase\Property\PropertyMappingConfigurationInterface|null $configuration
      * @return \TYPO3\CMS\Core\Resource\FileInterface|\TYPO3\CMS\Extbase\Domain\Model\AbstractFileFolder|\TYPO3\CMS\Extbase\Error\Error
-     * @throws \TYPO3\CMS\Extbase\Property\Exception
+     * @throws \TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException
+     * @throws \TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException
+     * @throws \TYPO3\CMS\Extbase\Security\Exception\InvalidArgumentForHashGenerationException
+     * @throws \TYPO3\CMS\Extbase\Security\Exception\InvalidHashException
      */
     public function convertFrom($source, $targetType, array $convertedChildProperties = [], PropertyMappingConfigurationInterface $configuration = null)
     {
@@ -219,17 +211,8 @@ class UploadedFileReferenceConverter extends AbstractTypeConverter
      */
     protected function importUploadedResource(array $uploadInfo, PropertyMappingConfigurationInterface $configuration)
     {
-        /** @var Typo3Version $typo3Version */
-        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-
-        if (version_compare($typo3Version->getMajorVersion(), '10', '>=')) {
-            if (!GeneralUtility::makeInstance(FileNameValidator::class)->isValid($uploadInfo['name'])) {
-                throw new TypeConverterException('Uploading files with PHP file extensions is not allowed!', 1399312430);
-            }
-        } else {
-            if (!GeneralUtility::verifyFilenameAgainstDenyPattern($uploadInfo['name'])) {
-                throw new TypeConverterException('Uploading files with PHP file extensions is not allowed!', 1399312430);
-            }
+        if (!GeneralUtility::makeInstance(FileNameValidator::class)->isValid($uploadInfo['name'])) {
+            throw new TypeConverterException('Uploading files with PHP file extensions is not allowed!', 1399312430);
         }
 
         $uploadInfo['name'] = $this->sanitizeFilename($uploadInfo['name']);

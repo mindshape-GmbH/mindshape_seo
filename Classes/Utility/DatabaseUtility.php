@@ -27,10 +27,11 @@ namespace Mindshape\MindshapeSeo\Utility;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @package Mindshape\MindshapeSeo\Utility
@@ -44,7 +45,6 @@ class DatabaseUtility
 
     /**
      * @return \TYPO3\CMS\Core\Database\Connection
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public static function databaseConnection(): Connection
     {
@@ -53,7 +53,7 @@ class DatabaseUtility
         }
 
         /** @var ConnectionPool $connectionPool */
-        $connectionPool = ObjectUtility::makeInstance(ConnectionPool::class);
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
         $connection = null;
 
         try {

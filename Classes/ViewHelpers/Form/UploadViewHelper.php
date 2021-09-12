@@ -25,6 +25,7 @@ namespace Mindshape\MindshapeSeo\ViewHelpers\Form;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Property\PropertyMapper;
 use TYPO3\CMS\Extbase\Security\Cryptography\HashService;
@@ -45,20 +46,12 @@ class UploadViewHelper extends \TYPO3\CMS\Fluid\ViewHelpers\Form\UploadViewHelpe
      */
     protected $propertyMapper;
 
-    /**
-     * @param \TYPO3\CMS\Extbase\Security\Cryptography\HashService $hashService
-     */
-    public function injectHashService(HashService $hashService): void
+    public function __construct()
     {
-        $this->hashService = $hashService;
-    }
+        parent::__construct();
 
-    /**
-     * @param \TYPO3\CMS\Extbase\Property\PropertyMapper $propertyMapper
-     */
-    public function injectPropertyMapper(PropertyMapper $propertyMapper): void
-    {
-        $this->propertyMapper = $propertyMapper;
+        $this->hashService = GeneralUtility::makeInstance(HashService::class);
+        $this->propertyMapper = GeneralUtility::makeInstance(PropertyMapper::class);
     }
 
     /**

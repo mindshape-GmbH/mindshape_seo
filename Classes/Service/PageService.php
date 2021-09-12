@@ -30,13 +30,14 @@ use Mindshape\MindshapeSeo\Utility\BackendUtility as MindshapeBackendUtility;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use Mindshape\MindshapeSeo\Utility\Exception\TypoScriptFrontendControllerBootException;
 use Mindshape\MindshapeSeo\Utility\LinkUtility;
-use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use Mindshape\MindshapeSeo\Utility\TypoScriptFrontendUtility;
 use PDO;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Database\QueryGenerator;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
@@ -47,7 +48,6 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
  * @package mindshape_seo
@@ -64,7 +64,7 @@ class PageService implements SingletonInterface
     protected $uriBuilder;
 
     /**
-     * @var \TYPO3\CMS\Frontend\Page\PageRepository
+     * @var \TYPO3\CMS\Core\Domain\Repository\PageRepository
      */
     protected $pageRepository;
 
@@ -87,13 +87,13 @@ class PageService implements SingletonInterface
      * @throws \Mindshape\MindshapeSeo\Service\Exception
      * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
-    public function __construct()
-    {
-        /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
-        $configurationManager = ObjectUtility::makeInstance(ConfigurationManager::class);
-        $this->pageRepository = ObjectUtility::makeInstance(PageRepository::class);
+    public function __construct(
+        ConfigurationManager $configurationManager,
+        PageRepository $pageRepository
+    ) {
+        $this->pageRepository = $pageRepository;
 
-        if ('BE' === TYPO3_MODE) {
+        if (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
             try {
                 TypoScriptFrontendUtility::bootTypoScriptFrontendController();
                 $this->typoScriptFrontendController = $GLOBALS['TSFE'];
@@ -107,10 +107,10 @@ class PageService implements SingletonInterface
         }
 
         $configurationManager->setContentObject(
-            ObjectUtility::makeInstance(ContentObjectRenderer::class)
+            GeneralUtility::makeInstance(ContentObjectRenderer::class)
         );
 
-        $this->uriBuilder = ObjectUtility::makeInstance(UriBuilder::class);
+        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
         $this->uriBuilder->injectConfigurationManager($configurationManager);
     }
 
@@ -129,6 +129,7 @@ class PageService implements SingletonInterface
     {
         /** @var \TYPO3\CMS\Core\Context\LanguageAspect $languageAspect */
         $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+
         return $languageAspect->getId();
     }
 
@@ -218,6 +219,7 @@ class PageService implements SingletonInterface
 
     /**
      * @return array
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public function getCurrentPage()
     {
@@ -282,18 +284,21 @@ class PageService implements SingletonInterface
         ];
     }
 
-    public function getSerpPreviewUrl($pageUid, $sysLanguageUid, $customUrl = "") {
+    public function getSerpPreviewUrl($pageUid, $sysLanguageUid, $customUrl = "")
+    {
         $baseUri = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
         $baseUri = str_replace('https://', "", rtrim($baseUri, '/'));
         $pageUrlNonAbsolute = parse_url($this->getPageLink($pageUid, false, $sysLanguageUid), PHP_URL_PATH);
         $uri = $baseUri . $pageUrlNonAbsolute;
 
-        if ($pageUrlNonAbsolute == "/") return $baseUri;
+        if ($pageUrlNonAbsolute == "/") {
+            return $baseUri;
+        }
 
         if ($this->uriIsTooLong($uri)) {
             if ($this->uriPathTooLong($uri)) {
                 $parts = explode("/", $pageUrlNonAbsolute);
-                $uri = $baseUri . "/.../" . $parts[count($parts) -1];
+                $uri = $baseUri . "/.../" . $parts[count($parts) - 1];
                 if ($this->uriIsTooLong($uri)) {
                     $uri = substr($uri, 0, 60) . "...";
                 }
@@ -305,22 +310,26 @@ class PageService implements SingletonInterface
         return $this->formatUriForPreview($uri);
     }
 
-    public function formatUriForPreview($uri) {
+    public function formatUriForPreview($uri)
+    {
         return str_replace("/", " › ", rtrim($uri, '/'));
     }
 
-    public function uriIsTooLong($uri) {
+    public function uriIsTooLong($uri)
+    {
         return (strlen($uri) >= 57);
     }
 
-    public function uriPathTooLong($uri) {
-       $parts = explode("/", $uri);
-       foreach ($parts as $part) {
-           if (strlen($part) > 28) {
-               return true;
-           }
-       }
-       return false;
+    public function uriPathTooLong($uri)
+    {
+        $parts = explode("/", $uri);
+        foreach ($parts as $part) {
+            if (strlen($part) > 28) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -376,7 +385,7 @@ class PageService implements SingletonInterface
             }
         }
 
-        foreach (ObjectUtility::makeInstance(RootlineUtility::class, $pageUid)->get() as $page) {
+        foreach (GeneralUtility::makeInstance(RootlineUtility::class, $pageUid)->get() as $page) {
             $pages[] = $this->getPage($page['uid'], $sysLanguageUid);
         }
 
@@ -453,9 +462,8 @@ class PageService implements SingletonInterface
         int $sysLanguageUid = 0,
         string $customUrl = '',
         bool $useGoogleBreadcrumb = false,
-        array $allowedDoktypes = [1,4]
-    )
-    {
+        array $allowedDoktypes = [1, 4]
+    ) {
         $page = $this->getPage($pageUid, $sysLanguageUid);
 
         if (false === is_array($page)) {

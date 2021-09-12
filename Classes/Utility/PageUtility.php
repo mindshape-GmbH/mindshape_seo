@@ -28,7 +28,6 @@ namespace Mindshape\MindshapeSeo\Utility;
 use Mindshape\MindshapeSeo\Service\PageService;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package mindshape_seo
@@ -37,25 +36,12 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class PageUtility
 {
     /**
-     * @return int
-     */
-    public static function getCurrentPageUid()
-    {
-        return 0 < (int) $GLOBALS['TSFE']->id
-            ? (int) $GLOBALS['TSFE']->id
-            : (int) GeneralUtility::_GET('id');
-    }
-
-    /**
      * @return array
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public static function getCurrentPage()
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var \Mindshape\MindshapeSeo\Service\PageService $pageService */
-        $pageService = $objectManager->get(PageService::class);
+        $pageService = GeneralUtility::makeInstance(PageService::class);
 
         return $pageService->getCurrentPage();
     }
@@ -63,21 +49,16 @@ class PageUtility
     /**
      * @param $pageUid
      * @return array
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public static function getPage($pageUid)
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var \Mindshape\MindshapeSeo\Service\PageService $pageService */
-        $pageService = $objectManager->get(PageService::class);
+        $pageService = GeneralUtility::makeInstance(PageService::class);
 
         return $pageService->getPage($pageUid);
     }
 
     /**
      * @return \TYPO3\CMS\Core\Page\PageRenderer
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public static function getPageRenderer()
     {
@@ -98,10 +79,6 @@ class PageUtility
             }
         } catch (\ReflectionException $exception) {}
 
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $pageRenderer = $objectManager->get(PageRenderer::class);
-
-        return $pageRenderer;
+        return GeneralUtility::makeInstance(PageRenderer::class);
     }
 }

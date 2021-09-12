@@ -56,29 +56,18 @@ class DomainService implements SingletonInterface
     protected $configurationRepository;
 
     /**
+     * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
      * @param \Mindshape\MindshapeSeo\Service\PageService $pageService
-     * @return void
-     */
-    public function injectPageService(PageService $pageService): void
-    {
-        $this->pageService = $pageService;
-    }
-
-    /**
      * @param \TYPO3\CMS\Core\Site\SiteFinder $siteFinder
      */
-    public function injectSiteFinder(SiteFinder $siteFinder): void
-    {
-        $this->siteFinder = $siteFinder;
-    }
-
-    /**
-     * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
-     * @return void
-     */
-    public function injectConfigurationRepository(ConfigurationRepository $configurationRepository): void
-    {
+    public function __construct(
+        ConfigurationRepository $configurationRepository,
+        PageService $pageService,
+        SiteFinder $siteFinder
+    ) {
         $this->configurationRepository = $configurationRepository;
+        $this->pageService = $pageService;
+        $this->siteFinder = $siteFinder;
     }
 
     /**

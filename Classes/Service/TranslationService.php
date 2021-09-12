@@ -31,6 +31,7 @@ use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\ColumnMap;
+use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMap;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 
 /**
@@ -45,9 +46,8 @@ class TranslationService implements SingletonInterface
 
     /**
      * @param \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper $dataMapper
-     * @return void
      */
-    public function injectDataMapper(DataMapper $dataMapper)
+    public function __construct(DataMapper $dataMapper)
     {
         $this->dataMapper = $dataMapper;
     }
@@ -55,6 +55,7 @@ class TranslationService implements SingletonInterface
     /**
      * @param \TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface $translation
      * @param int $languageUid
+     * @param int $translationOriginUid
      * @throws \Mindshape\MindshapeSeo\Service\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Generic\Exception
      */
