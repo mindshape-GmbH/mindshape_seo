@@ -28,9 +28,7 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
-use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use PDO;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
@@ -95,7 +93,6 @@ class ConfigurationRepository extends Repository
      * @param bool $returnDefaultIfNotFound
      * @param null $sysLanguageUid
      * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function findByDomainTranslation(string $domain, bool $returnDefaultIfNotFound = false, $sysLanguageUid = null): ?Configuration
     {
@@ -146,12 +143,11 @@ class ConfigurationRepository extends Repository
     /**
      * @param array $record
      * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     protected function mapRawConfiguration(array $record): ?Configuration
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper $dataMapper */
-        $dataMapper = ObjectUtility::makeInstance(DataMapper::class);
+        $dataMapper = GeneralUtility::makeInstance(DataMapper::class);
         $records = $dataMapper->map(Configuration::class, [$record]);
 
         if (count($records) > 0) {

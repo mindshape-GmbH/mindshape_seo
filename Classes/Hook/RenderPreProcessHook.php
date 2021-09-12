@@ -26,10 +26,8 @@ namespace Mindshape\MindshapeSeo\Hook;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Service\HeaderDataService;
-use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package mindshape_seo
@@ -40,13 +38,12 @@ class RenderPreProcessHook
     /**
      * @param array $params
      * @param PageRenderer $pageRenderer
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function main(array &$params, PageRenderer $pageRenderer)
     {
         if ('FE' === TYPO3_MODE) {
             /** @var \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService */
-            $headerDataService = ObjectUtility::makeInstance(HeaderDataService::class);
+            $headerDataService = GeneralUtility::makeInstance(HeaderDataService::class);
             $headerDataService->manipulateHeaderData();
         }
     }

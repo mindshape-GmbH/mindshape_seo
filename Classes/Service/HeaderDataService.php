@@ -27,7 +27,6 @@ namespace Mindshape\MindshapeSeo\Service;
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
-use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use Mindshape\MindshapeSeo\Utility\PageUtility;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\Core\Core\Environment;
@@ -95,15 +94,22 @@ class HeaderDataService implements SingletonInterface
     protected $currentDomainUrl;
 
     /**
+     * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
+     * @param \Mindshape\MindshapeSeo\Service\PageService $pageService
+     * @param \Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService $standaloneTemplateRendererService
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
+     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
-    public function __construct()
-    {
+    public function __construct(
+        ConfigurationRepository $configurationRepository,
+        PageService $pageService,
+        StandaloneTemplateRendererService $standaloneTemplateRendererService
+    ) {
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->pageService = $objectManager->get(PageService::class);
-        $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
-        $this->configurationRepository = $objectManager->get(ConfigurationRepository::class);
+        $this->pageService = $pageService;
+        $this->standaloneTemplateRendererService = $standaloneTemplateRendererService;
+        $this->configurationRepository = $configurationRepository;
 
         /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
@@ -270,7 +276,7 @@ class HeaderDataService implements SingletonInterface
             $noindex = false;
             $nofollow = false;
 
-            $robotsMetaTagManager = ObjectUtility::makeInstance(MetaTagManagerRegistry::class)->getManagerForProperty('robots');
+            $robotsMetaTagManager = GeneralUtility::makeInstance(MetaTagManagerRegistry::class)->getManagerForProperty('robots');
 
             $originalRobotsMetaTagValue = $robotsMetaTagManager->getProperty('robots');
 

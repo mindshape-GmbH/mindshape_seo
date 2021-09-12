@@ -29,6 +29,7 @@ namespace Mindshape\MindshapeSeo\Service;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
@@ -60,18 +61,13 @@ class StandaloneTemplateRendererService implements SingletonInterface
     }
 
     /**
+     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
-    public function __construct()
+    public function __construct(ConfigurationManager $configurationManager)
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
-        $configurationManager = $objectManager->get(ConfigurationManager::class);
-
         $config = GeneralUtility::removeDotsFromTS(
-            $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
+            $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
         );
 
 
@@ -86,7 +82,7 @@ class StandaloneTemplateRendererService implements SingletonInterface
      * @return string
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
      */
-    public function render($templateFolder = self::TEMPLATES_DEFAULT_FOLDER, $templateName, array $variables, $format = 'html')
+    public function render($templateFolder, $templateName, array $variables, $format = 'html')
     {
         if ('/' !== $templateFolder[-1]) {
             $templateFolder .= '/';
@@ -106,9 +102,8 @@ class StandaloneTemplateRendererService implements SingletonInterface
      * @param string $templateName
      * @param string $format
      * @return \TYPO3\CMS\Fluid\View\StandaloneView
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
      */
-    protected function getView($templateFolder = self::TEMPLATES_DEFAULT_FOLDER, $templateName, $format = 'html')
+    protected function getView($templateFolder, $templateName, $format = 'html')
     {
         /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
         $view = GeneralUtility::makeInstance(StandaloneView::class);

@@ -35,7 +35,6 @@ use Mindshape\MindshapeSeo\Service\SessionService;
 use Mindshape\MindshapeSeo\Service\TranslationService;
 use Mindshape\MindshapeSeo\Utility\BackendUtility;
 use Mindshape\MindshapeSeo\Service\PageService;
-use Mindshape\MindshapeSeo\Utility\ObjectUtility;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder as BackendUriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
@@ -118,64 +117,28 @@ class BackendController extends ActionController
 
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
-     * @return void
-     */
-    public function injectConfigurationRepository(ConfigurationRepository $configurationRepository)
-    {
-        $this->configurationRepository = $configurationRepository;
-    }
-
-    /**
      * @param \Mindshape\MindshapeSeo\Service\DomainService $domainService
-     * @return void
-     */
-    public function injectDomainService(DomainService $domainService)
-    {
-        $this->domainService = $domainService;
-    }
-
-    /**
-     * @param \Mindshape\MindshapeSeo\Service\LanguageService $languageService
-     * @return void
-     */
-    public function injectLanguageService(LanguageService $languageService)
-    {
-        $this->languageService = $languageService;
-    }
-
-    /**
      * @param \Mindshape\MindshapeSeo\Service\PageService $pageService
-     * @return void
-     */
-    public function injectPageService(PageService $pageService)
-    {
-        $this->pageService = $pageService;
-    }
-
-    /**
+     * @param \Mindshape\MindshapeSeo\Service\LanguageService $languageService
      * @param \Mindshape\MindshapeSeo\Service\SessionService $sessionService
-     * @return void
-     */
-    public function injectSessionService(SessionService $sessionService)
-    {
-        $this->sessionService = $sessionService;
-    }
-
-    /**
      * @param \Mindshape\MindshapeSeo\Service\TranslationService $translationService
-     * @return void
-     */
-    public function injectTranslationService(TranslationService $translationService)
-    {
-        $this->translationService = $translationService;
-    }
-
-    /**
      * @param \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory
-     * @®return void
      */
-    public function injectIconFactory(IconFactory $iconFactory)
-    {
+    public function __construct(
+        ConfigurationRepository $configurationRepository,
+        DomainService $domainService,
+        PageService $pageService,
+        LanguageService $languageService,
+        SessionService $sessionService,
+        TranslationService $translationService,
+        IconFactory $iconFactory
+    ) {
+        $this->configurationRepository = $configurationRepository;
+        $this->domainService = $domainService;
+        $this->pageService = $pageService;
+        $this->languageService = $languageService;
+        $this->sessionService = $sessionService;
+        $this->translationService = $translationService;
         $this->iconFactory = $iconFactory;
     }
 
@@ -294,7 +257,7 @@ class BackendController extends ActionController
         }
 
         if (array_key_exists('sysLanguageUid', $arguments)) {
-            $sysLanguageUid = (int)$arguments['sysLanguageUid'];
+            $sysLanguageUid = (int) $arguments['sysLanguageUid'];
         } else {
             $sysLanguageUid = $this->sessionService->hasKey('sysLanguageUid')
                 ? $this->sessionService->getKey('sysLanguageUid')
@@ -309,7 +272,10 @@ class BackendController extends ActionController
                             ? LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.domain.default', 'mindshape_seo')
                             : $domain
                     )
-                    ->setHref($uriBuilder->reset()->uriFor('settings', ['domain' => $domain, 'sysLanguageUid' => $sysLanguageUid], 'Backend'))
+                    ->setHref($uriBuilder->reset()->uriFor('settings', [
+                        'domain' => $domain,
+                        'sysLanguageUid' => $sysLanguageUid,
+                    ], 'Backend'))
                     ->setActive($currentDomain === $domain)
             );
         }
@@ -347,7 +313,7 @@ class BackendController extends ActionController
         $currentAction = $this->request->getControllerActionName();
 
         if (array_key_exists('sysLanguageUid', $arguments)) {
-            $sysLanguageUid = (int)$arguments['sysLanguageUid'];
+            $sysLanguageUid = (int) $arguments['sysLanguageUid'];
         } else {
             $sysLanguageUid = $this->sessionService->hasKey('sysLanguageUid')
                 ? $this->sessionService->getKey('sysLanguageUid')
@@ -378,7 +344,7 @@ class BackendController extends ActionController
                 $menu->makeMenuItem()
                     ->setTitle($language['title'])
                     ->setHref($uriBuilder->reset()->uriFor($currentAction, $menuItemParameters, 'Backend'))
-                    ->setActive($sysLanguageUid === (int)$language['uid'])
+                    ->setActive($sysLanguageUid === (int) $language['uid'])
             );
         }
 
@@ -445,12 +411,12 @@ class BackendController extends ActionController
         }
 
         if (false === $configuration->_isNew()) {
-            $uriBuilder = ObjectUtility::makeInstance(BackendUriBuilder::class);
+            $uriBuilder = GeneralUtility::makeInstance(BackendUriBuilder::class);
 
             try {
-                $redirectUrl = (string)$uriBuilder->buildUriFromRoute('mindshapeseo_MindshapeSeoSettings');
+                $redirectUrl = (string) $uriBuilder->buildUriFromRoute('mindshapeseo_MindshapeSeoSettings');
             } catch (RouteNotFoundException $exception) {
-                $redirectUrl = (string)$uriBuilder->buildUriFromRoutePath('mindshapeseo_MindshapeSeoSettings');
+                $redirectUrl = (string) $uriBuilder->buildUriFromRoutePath('mindshapeseo_MindshapeSeoSettings');
             }
 
             $deleteButton = $this->buttonBar->makeLinkButton()
@@ -571,15 +537,15 @@ class BackendController extends ActionController
     public function previewAction($depth = null, $sysLanguageUid = null)
     {
         $currentPage = $this->pageService->getCurrentPage();
-        $showHiddenPages = (bool)$this->settings['googlePreview']['showHiddenPages'];
+        $showHiddenPages = (bool) $this->settings['googlePreview']['showHiddenPages'];
         $respectDoktypes = GeneralUtility::intExplode(',', $this->settings['googlePreview']['respectDoktypes']);
 
         if (
             0 === $this->currentPageUid ||
             !in_array($currentPage['doktype'], $respectDoktypes) ||
-            ($showHiddenPages === false && (bool)$currentPage['hidden'] === true)
+            ($showHiddenPages === false && (bool) $currentPage['hidden'] === true)
         ) {
-            if ($showHiddenPages === false && (bool)$currentPage['hidden'] === true) {
+            if ($showHiddenPages === false && (bool) $currentPage['hidden'] === true) {
                 $this->view->assign('pageHidden', true);
             } elseif (!in_array($currentPage['doktype'], $respectDoktypes)) {
                 $this->view->assign('unsupportedDoktype', true);
