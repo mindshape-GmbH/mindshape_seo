@@ -1,4 +1,5 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Service;
 
 /***************************************************************
@@ -40,12 +41,11 @@ use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -70,11 +70,6 @@ class PageService implements SingletonInterface
     /**
      * @var int
      */
-    protected static $pageTreeRoot = 0;
-
-    /**
-     * @var int
-     */
     protected static $pageTreeDepth = 0;
 
     /**
@@ -87,10 +82,11 @@ class PageService implements SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function __construct(
-        ConfigurationManager $configurationManager,
-        PageRepository $pageRepository
+        PageRepository $pageRepository,
+        UriBuilder $uriBuilder
     ) {
         $this->pageRepository = $pageRepository;
+        $this->uriBuilder = $uriBuilder;
 
         if (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
             try {
@@ -104,13 +100,6 @@ class PageService implements SingletonInterface
         } else {
             throw new Exception('Illegal TYPO3 mode');
         }
-
-        $configurationManager->setContentObject(
-            GeneralUtility::makeInstance(ContentObjectRenderer::class)
-        );
-
-        $this->uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $this->uriBuilder->injectConfigurationManager($configurationManager);
     }
 
     /**
@@ -221,7 +210,7 @@ class PageService implements SingletonInterface
             $pageId = BackendUtility::getCurrentPageTreeSelectedPage();
         }
 
-        return $this->getPage((int) $pageId, $languageId ?? 0);
+        return $this->getPage((int)$pageId, $languageId ?? 0);
     }
 
     /**
@@ -250,7 +239,7 @@ class PageService implements SingletonInterface
         return [
             'uid' => $pageUid,
             'title' => $title,
-            'disableTitleAttachment' => (bool) $page['mindshapeseo_disable_title_attachment'],
+            'disableTitleAttachment' => (bool)$page['mindshapeseo_disable_title_attachment'],
             'url' => $pageUrl,
             'previewUrl' => $previewUrl,
             'canonicalUrl' => !empty($page['canonical_link'])
@@ -260,14 +249,14 @@ class PageService implements SingletonInterface
                 'description' => $page['description'],
                 'focusKeyword' => $page['mindshapeseo_focus_keyword'],
                 'robots' => [
-                    'noindex' => (bool) $page['no_index'],
-                    'nofollow' => (bool) $page['no_follow'],
+                    'noindex' => (bool)$page['no_index'],
+                    'nofollow' => (bool)$page['no_follow'],
                     'noindexInherited' => $this->pageInheritedProperty(
-                        (int) $page['uid'],
+                        (int)$page['uid'],
                         'mindshapeseo_no_index_recursive'
                     ),
                     'nofollowInherited' => $this->pageInheritedProperty(
-                        (int) $page['uid'],
+                        (int)$page['uid'],
                         'mindshapeseo_no_follow_recursive'
                     ),
                 ],
@@ -334,11 +323,11 @@ class PageService implements SingletonInterface
         $metadata = [];
 
         foreach ($this->getSubPagesFromPageUid($pageUid) as $subPage) {
-            if (1 !== (int) $subPage['doktype'] && 4 !== (int) $subPage['doktype']) {
+            if (1 !== (int)$subPage['doktype'] && 4 !== (int)$subPage['doktype']) {
                 continue;
             }
 
-            if ((int) $subPage['uid'] !== $pageUid) {
+            if ((int)$subPage['uid'] !== $pageUid) {
                 $metadata[] = $this->getPageMetaData($subPage['uid'], $sysLanguageUid, $customUrl);
             }
         }
@@ -369,8 +358,8 @@ class PageService implements SingletonInterface
         $currentPageUid = MindshapeBackendUtility::getCurrentPageTreeSelectedPage();
 
         if (null === $pageUid) {
-            if (0 < (int) $this->typoScriptFrontendController->id) {
-                $pageUid = (int) $this->typoScriptFrontendController->id;
+            if (0 < (int)$this->typoScriptFrontendController->id) {
+                $pageUid = (int)$this->typoScriptFrontendController->id;
             } elseif (0 < $currentPageUid) {
                 $pageUid = $currentPageUid;
             }
@@ -461,6 +450,9 @@ class PageService implements SingletonInterface
             return null;
         }
 
+        /** @var \TYPO3\CMS\Core\Information\Typo3Version $typo3Version */
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+
         /** @var \TYPO3\CMS\Backend\Tree\View\PageTreeView $tree */
         $tree = GeneralUtility::makeInstance(PageTreeView::class);
         $tree->init();
@@ -479,15 +471,15 @@ class PageService implements SingletonInterface
         /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
-        $html = $iconFactory->getIconForRecord(
-            'pages',
-            $page,
-            Icon::SIZE_SMALL
-        );
-
         $tree->tree[] = [
             'row' => $page,
-            'HTML' => $html,
+            'HTML' => true === version_compare('11.0', $typo3Version->getVersion(), '<=')
+                ? ''
+                : $iconFactory->getIconForRecord(
+                    'pages',
+                    $page,
+                    Icon::SIZE_SMALL
+                ),
         ];
 
         if (self::TREE_DEPTH_INFINITY === $depth) {
@@ -523,6 +515,16 @@ class PageService implements SingletonInterface
             }
 
             $tree->tree[$key]['metadata'] = $metadata;
+
+            $icon = $iconFactory->getIconForRecord(
+                'pages',
+                $treeItem['row'],
+                Icon::SIZE_SMALL
+            );
+
+            if (true === version_compare('11.0', $typo3Version->getVersion(), '<=')) {
+                $tree->tree[$key]['HTML'] .= $icon;
+            }
         }
 
         $tree->tree[0]['hasSub'] = 1 < count($tree->tree);
@@ -544,9 +546,9 @@ class PageService implements SingletonInterface
         $inheritedPageUid = false;
 
         foreach ($this->getRootlineReverse($pageUid) as $page) {
-            if ($pageUid !== (int) $page['uid']) {
-                $inherited = (bool) $page[$property] ? !$inherited : $inherited;
-                $inheritedPageUid = $inherited ? (int) $page['uid'] : false;
+            if ($pageUid !== (int)$page['uid']) {
+                $inherited = (bool)$page[$property] ? !$inherited : $inherited;
+                $inheritedPageUid = $inherited ? (int)$page['uid'] : false;
             }
         }
 

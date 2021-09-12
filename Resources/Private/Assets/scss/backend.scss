@@ -14,10 +14,19 @@ $darkgrey: #333;
 $lightgrey: #666;
 
 .mindshapeseo-preview {
+  .modal-header {
+    display: flex;
+
+    button.close {
+      margin-left: auto;
+      font-size: unset;
+    }
+  }
+
   .pagetree-info {
     overflow: hidden;
-    padding-bottom: 0;
     position: relative;
+    background-color: transparent;
 
     .depth-markup {
       bottom: 0;
@@ -53,9 +62,11 @@ $lightgrey: #666;
 
       .title {
         display: inline-block;
-        position: relative;
+        position: absolute;
         top: 50%;
         transform: translateY(-50%);
+        white-space: nowrap;
+        margin-left: .3em;
       }
 
       .title-wrapper {
@@ -212,6 +223,12 @@ $lightgrey: #666;
     padding: .8em;
     position: relative;
     width: 620px;
+    display: block;
+    line-height: 1.5;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    transition: border .2s ease-in-out
   }
 
   .preview-box {
@@ -420,6 +437,7 @@ form {
       .icon-provider-fontawesome-angle-down {
         display: inline-block;
       }
+
       .icon-provider-fontawesome-angle-up {
         display: none;
       }

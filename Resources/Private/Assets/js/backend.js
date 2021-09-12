@@ -15,11 +15,14 @@ require([
       googleTitleFontSize: '18px',
       googleFontFamily: 'arial,sans-serif',
       googleEllipsis: ' ...',
+      typo3version: '',
       $previewContainers: {},
       canvasRenderingContext: {},
       editing: true,
       init: function () {
         var that = this;
+
+        this.typo3version = document.querySelector('.mindshapeseo-preview').getAttribute('data-typo3-version');
 
         this.canvasRenderingContext = document.createElement('canvas').getContext('2d');
         this.$previewContainers = $('.google-preview');
@@ -294,7 +297,21 @@ require([
           var $modal = $('#msh-modal');
 
           $modal.find('.modal-body').html($parent.find('.google-preview .alerts-container').html());
-          $modal.modal();
+
+          if ('10' === that.typo3version) {
+            $modal.modal();
+          } else {
+            $modal.modal('show');
+          }
+        });
+
+        $(document).on('click', '#msh-modal .close', function (e) {
+          e.preventDefault();
+
+          if ('10' !== that.typo3version) {
+            var $modal = $('#msh-modal');
+            $modal.modal('hide');
+          }
         });
       },
       restorePreviewOriginalData: function ($previewContainer) {
