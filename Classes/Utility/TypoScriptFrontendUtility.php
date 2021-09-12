@@ -55,7 +55,7 @@ class TypoScriptFrontendUtility
      */
     public static function bootTypoScriptFrontendController(int $languageId = 0): void
     {
-        /** @var Typo3Version $typo3Version */
+        /** @var \TYPO3\CMS\Core\Information\Typo3Version $typo3Version */
         $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
 
         if (static::$typoScriptFrontendController instanceof TypoScriptFrontendController) {

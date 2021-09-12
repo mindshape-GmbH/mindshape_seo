@@ -40,7 +40,6 @@ use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
@@ -148,16 +147,8 @@ class PageService implements SingletonInterface
             ->reset()
             ->setTargetPageUid($pageId)
             ->setCreateAbsoluteUri($absolute)
+            ->setLanguage($sysLanguageUid)
             ->setLinkAccessRestrictedPages($linkAccessRestrictedPages);
-
-        /** @var Typo3Version $typo3Version */
-        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-
-        if (true === version_compare('10.4', $typo3Version->getVersion(), '<=')) {
-            $this->uriBuilder->setLanguage($sysLanguageUid);
-        } else {
-            $this->uriBuilder->setArguments(['L' => $sysLanguageUid]);
-        }
 
         return $this->uriBuilder->buildFrontendUri();
     }
