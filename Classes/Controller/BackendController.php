@@ -42,6 +42,9 @@ use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Pagination\ArrayPaginator;
+use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
 use TYPO3\CMS\Core\Resource\Folder;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
@@ -530,11 +533,13 @@ class BackendController extends ActionController
     }
 
     /**
+     * @param int $currentPaginationPage
      * @param int $depth
      * @param int $sysLanguageUid
      * @return void
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
-    public function previewAction($depth = null, $sysLanguageUid = null)
+    public function previewAction($currentPaginationPage = 1, $depth = null, $sysLanguageUid = null)
     {
         $currentPage = $this->pageService->getCurrentPage();
         $showHiddenPages = (bool) $this->settings['googlePreview']['showHiddenPages'];
@@ -572,34 +577,49 @@ class BackendController extends ActionController
             $configuration = $this->domainService->getPageDomainConfiguration(null, $sysLanguageUid);
 
             if ($configuration instanceof Configuration) {
+                $pageTree = $this->pageService->getPageMetadataTree(
+                    $this->currentPageUid,
+                    $depth,
+                    $sysLanguageUid,
+                    $configuration->getJsonldCustomUrl(),
+                    $configuration->getAddJsonldBreadcrumb(),
+                    $respectDoktypes
+                );
+
                 $this->view->assignMultiple([
-                    'pageTree' => $this->pageService->getPageMetadataTree(
-                        $this->currentPageUid,
-                        $depth,
-                        $sysLanguageUid,
-                        $configuration->getJsonldCustomUrl(),
-                        $configuration->getAddJsonldBreadcrumb(),
-                        $respectDoktypes
-                    ),
+                    'pageTree' => $pageTree,
                     'titleAttachment' => $configuration->getTitleAttachment(),
                     'titleAttachmentSeperator' => $configuration->getTitleAttachmentSeperator(),
                     'titleAttachmentPosition' => $configuration->getTitleAttachmentPosition(),
                 ]);
             } else {
-                $this->view->assign(
-                    'pageTree',
-                    $this->pageService->getPageMetadataTree(
-                        $this->currentPageUid,
-                        $depth,
-                        $sysLanguageUid,
-                        '',
-                        false,
-                        $respectDoktypes
-                    )
+                $pageTree = $this->pageService->getPageMetadataTree(
+                    $this->currentPageUid,
+                    $depth,
+                    $sysLanguageUid,
+                    '',
+                    false,
+                    $respectDoktypes
                 );
+
+                $this->view->assign('pageTree', $pageTree);
             }
 
+            if (true === (bool) $this->settings['pageTree']['usePagination']) {
+                $pageTreePaginator = new ArrayPaginator($pageTree, $currentPaginationPage, 10);
+                $pageTreePagination = new SimplePagination($pageTreePaginator);
+
+                $this->view->assignMultiple([
+                    'pageTreePaginator' => $pageTreePaginator,
+                    'pageTreePagination' => $pageTreePagination,
+                ]);
+            }
+
+            /** @var \TYPO3\CMS\Core\Information\Typo3Version $typo3Version */
+            $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+
             $this->view->assignMultiple([
+                'typo3Version' => $typo3Version->getMajorVersion(),
                 'sysLanguageUid' => $sysLanguageUid,
                 'depth' => $depth,
                 'levelOptions' => [
@@ -628,7 +648,8 @@ class BackendController extends ActionController
     {
         $uploadConfiguration = [UploadedFileReferenceConverter::CONFIGURATION_ALLOWED_FILE_EXTENSIONS => $GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext']];
 
-        $resourceFactory = ResourceFactory::getInstance();
+        /** @var \TYPO3\CMS\Core\Resource\ResourceFactory $resourceFactory */
+        $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
 
         try {
             $folder = $resourceFactory->getDefaultStorage()->getFolder('mindshape_seo');

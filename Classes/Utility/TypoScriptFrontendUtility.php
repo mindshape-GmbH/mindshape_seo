@@ -34,6 +34,7 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\FrontendSimulatorUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -77,10 +78,7 @@ class TypoScriptFrontendUtility
 
         $siteLanguage = $currentSite->getLanguageById($languageId);
 
-        if (
-            true === version_compare('10.4', $typo3Version->getBranch(), '==') ||
-            true === version_compare('11.4', $typo3Version->getBranch(), '==')
-        ) {
+        if (true === version_compare('10.4', $typo3Version->getBranch(), '==')) {
             /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController */
             $typoScriptFrontendController = GeneralUtility::makeInstance(
                 TypoScriptFrontendController::class,
@@ -88,6 +86,10 @@ class TypoScriptFrontendUtility
                 $currentSite,
                 $siteLanguage
             );
+        } elseif (true === version_compare('11.4', $typo3Version->getBranch(), '==')) {
+            // TODO: find this shit out
+            FrontendSimulatorUtility::simulateFrontendEnvironment();
+            $typoScriptFrontendController = $GLOBALS['TSFE'];
         } else {
             throw new Exception\TypoScriptFrontendControllerBootException(
                 'This Utility is not compatible with TYPO3 v' . $typo3Version->getBranch()

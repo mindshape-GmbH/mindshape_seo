@@ -21,7 +21,7 @@
       <f:else>
         <f:if condition="{pageTree}">
           <f:then>
-            <div class="mindshapeseo-preview">
+            <div class="mindshapeseo-preview" data-typo3-version="{typo3Version}">
               <f:render section="Preview" arguments="{_all}"/>
               <f:render partial="AlertModal"/>
             </div>
@@ -45,33 +45,22 @@
         <f:form id="depthselect-form" action="preview" controller="Backend">
           <div class="form-group">
             <label>{f:translate(key: 'tx_mindshapeseo_label.preview.levels')}</label>
-            <f:form.select id="depthselect" name="depth" options="{levelOptions}" value="{depth}" class="form-control"/>
+            <f:form.select id="depthselect" name="depth" options="{levelOptions}" value="{depth}" class="form-select form-control"/>
           </div>
         </f:form>
       </div>
     </div>
 
-    <f:if condition="{settings.pageTree.usePagination}">
-      <f:then>
-        <f:widget.paginate objects="{pageTree}" as="paginatedPages">
-          <f:render section="PageTreeTable" arguments="{
-            pageTree: paginatedPages,
-            titleAttachment: titleAttachment,
-            titleAttachmentSeperator: titleAttachmentSeperator,
-            titleAttachmentPosition: titleAttachmentPosition,
-            sysLanguageUid: sysLanguageUid
-          }"/>
-        </f:widget.paginate>
-      </f:then>
-      <f:else>
-        <f:render section="PageTreeTable" arguments="{
-          pageTree: pageTree,
-          titleAttachment: titleAttachment,
-          titleAttachmentSeperator: titleAttachmentSeperator,
-          titleAttachmentPosition: titleAttachmentPosition,
-          sysLanguageUid: sysLanguageUid
-        }"/>
-      </f:else>
+    <f:render section="PageTreeTable" arguments="{
+      pageTree: '{f:if(condition: settings.pageTree.usePagination, then: pageTreePaginator.paginatedItems, else: pageTree)}',
+      titleAttachment: titleAttachment,
+      titleAttachmentSeperator: titleAttachmentSeperator,
+      titleAttachmentPosition: titleAttachmentPosition,
+      sysLanguageUid: sysLanguageUid
+    }"/>
+
+    <f:if condition="{settings.pageTree.usePagination} && 1 < {pageTreePaginator.numberOfPages}">
+      <f:render partial="Utility/Pagination" arguments="{pagination: pageTreePagination, paginator: pageTreePaginator}"/>
     </f:if>
 
   </f:section>
