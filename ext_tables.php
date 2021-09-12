@@ -13,15 +13,13 @@ call_user_func(function () {
         $mainModuleKey,
         'preview',
         '',
-        array(
-            'Backend' => 'preview',
-        ),
-        array(
+        [\Mindshape\MindshapeSeo\Controller\BackendController::class => 'preview'],
+        [
             'access' => 'user,group',
             'icon' => 'EXT:mindshape_seo/Resources/Public/Icons/seo-preview.svg',
             'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf',
             'navigationComponentId' => 'TYPO3/CMS/Backend/PageTree/PageTreeElement',
-        )
+        ]
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
@@ -29,14 +27,12 @@ call_user_func(function () {
         $mainModuleKey,
         'settings',
         '',
-        array(
-            'Backend' => 'settings, saveConfiguration',
-        ),
-        array(
+        [\Mindshape\MindshapeSeo\Controller\BackendController::class => 'settings, saveConfiguration'],
+        [
             'access' => 'user,group',
             'icon' => 'EXT:mindshape_seo/Resources/Public/Icons/seo-settings.svg',
             'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_settings.xlf',
-        )
+        ]
     );
 
     $tempModules = array();
