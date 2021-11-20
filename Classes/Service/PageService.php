@@ -496,7 +496,7 @@ class PageService implements SingletonInterface
 
         foreach ($tree->tree as $key => $treeItem) {
             if (
-                $treeItem['hasSub'] &&
+                $treeItem['hasSub'] ?? null &&
                 self::$pageTreeDepth - $treeItem['invertedDepth'] === self::$pageTreeDepth - 1
             ) {
                 $tree->tree[$key]['hasSub'] = false;

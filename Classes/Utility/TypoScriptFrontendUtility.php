@@ -31,10 +31,12 @@ use Mindshape\MindshapeSeo\Utility\Exception;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\FrontendSimulatorUtility;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -86,10 +88,18 @@ class TypoScriptFrontendUtility
                 $currentSite,
                 $siteLanguage
             );
-        } elseif (true === version_compare('11.4', $typo3Version->getBranch(), '==')) {
-            // TODO: find this shit out
-            FrontendSimulatorUtility::simulateFrontendEnvironment();
-            $typoScriptFrontendController = $GLOBALS['TSFE'];
+        } elseif (true === version_compare('11.5', $typo3Version->getBranch(), '==')) {
+            $frontendAuthentication = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
+            $frontendAuthentication->start();
+
+            $typoScriptFrontendController = GeneralUtility::makeInstance(
+                TypoScriptFrontendController::class,
+                GeneralUtility::makeInstance(Context::class),
+                $site,
+                $site->getDefaultLanguage(),
+                GeneralUtility::makeInstance(PageArguments::class, $site->getRootPageId(), 1, []),
+                $frontendAuthentication
+            );
         } else {
             throw new Exception\TypoScriptFrontendControllerBootException(
                 'This Utility is not compatible with TYPO3 v' . $typo3Version->getBranch()
