@@ -456,7 +456,7 @@ class BackendController extends ActionController
             foreach ($allSites as $site) {
                 if ($site->getBase()->getHost() === $currentDomain) {
                     $siteConf = $site->getConfiguration();
-                    $routes = $siteConf['routes'];
+                    $routes = $siteConf['routes'] ?? null;
 
                     if (true === is_array($routes)) {
                         foreach ($routes as $route) {

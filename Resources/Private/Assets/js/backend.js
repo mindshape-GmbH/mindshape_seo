@@ -21,8 +21,11 @@ require([
       editing: true,
       init: function () {
         var that = this;
+        var versionDiv = document.querySelector('.mindshapeseo-preview');
 
-        this.typo3version = document.querySelector('.mindshapeseo-preview').getAttribute('data-typo3-version');
+        if (versionDiv instanceof HTMLElement) {
+          this.typo3version = versionDiv.getAttribute('data-typo3-version');
+        }
 
         this.canvasRenderingContext = document.createElement('canvas').getContext('2d');
         this.$previewContainers = $('.google-preview');

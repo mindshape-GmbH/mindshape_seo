@@ -375,7 +375,10 @@ class HeaderDataService implements SingletonInterface
      */
     protected function renderJsonLd()
     {
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'])) {
+        if (
+            true === array_key_exists('mindshape_seo', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']) &&
+            true === is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'] ?? null)
+        ) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'] as $userFunc) {
                 $params = ['jsonld' => &$this->jsonLd];
 
@@ -495,7 +498,10 @@ class HeaderDataService implements SingletonInterface
     {
         $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
 
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'])) {
+        if (
+            true === array_key_exists('mimdshape_seo', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']) &&
+            true === is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'] ?? null)
+        ) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'] as $userFunc) {
                 $params = ['jsonldBreadcrumb' => &$jsonLdbreadcrumb];
 

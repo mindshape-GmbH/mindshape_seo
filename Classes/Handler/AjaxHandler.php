@@ -68,11 +68,11 @@ class AjaxHandler implements SingletonInterface
 
                 $this->savePageData(
                     (int) $data['pageUid'],
-                    (int) $data['sysLanguageUid'],
+                    (int) ($data['sysLanguageUid'] ?? 0),
                     [
                         $titleField => $data['title'],
-                        'description' => $data['description'],
-                        'mindshapeseo_focus_keyword' => $data['focusKeyword'],
+                        'description' => $data['description'] ?? '',
+                        'mindshapeseo_focus_keyword' => $data['focusKeyword'] ?? '',
                         'no_index' => (bool) $data['noindex'] ? 1 : 0,
                         'no_follow' => (bool) $data['nofollow'] ? 1 : 0,
                     ]
