@@ -164,22 +164,17 @@ class BackendController extends ActionController
         /** @var \TYPO3\CMS\Backend\View\BackendTemplateView $view */
         parent::initializeView($view);
 
+        $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
         $currentAction = $this->request->getControllerActionName();
+        $this->buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
+        $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
 
         if (
             $currentAction === 'settings' ||
             $currentAction === 'preview'
         ) {
-            $this->buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
-            $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
-
-            $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Severity');
-            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
-
             if (\TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
                 $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
-                $pageRenderer->addJsFile('/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js');
             } else {
                 $pageRenderer->addCssFile(
                     '/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css',
@@ -191,18 +186,12 @@ class BackendController extends ActionController
                     '',
                     true
                 );
-                $pageRenderer->addJsFile(
-                    '/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js',
-                    'text/javascript',
-                    false,
-                    false,
-                    '',
-                    true
-                );
             }
         }
 
         if ($currentAction === 'settings') {
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/MindshapeSeo/SettingsModule', 'function(SettingsModule) {SettingsModule.init()}');
+
             $domains = $this->domainService->getAvailableDomains();
 
             if (2 <= count($domains)) {
@@ -226,6 +215,8 @@ class BackendController extends ActionController
         }
 
         if ($currentAction === 'preview') {
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/MindshapeSeo/PreviewModule', 'function(PreviewModule) {PreviewModule.init()}');
+
             $languages = $this->languageService->getPageLanguagesAvailable($this->currentPageUid);
 
             if (0 < count($languages)) {
