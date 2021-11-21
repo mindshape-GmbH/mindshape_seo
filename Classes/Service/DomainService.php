@@ -78,7 +78,9 @@ class DomainService implements SingletonInterface
         $domains = ['*'];
 
         foreach ($this->siteFinder->getAllSites() as $site) {
-            $domains[] = $site->getBase()->getHost();
+            if (strlen($site->getBase()->getHost()) > 0) {
+                $domains[] = $site->getBase()->getHost();
+            }
         }
 
         return $domains;

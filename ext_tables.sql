@@ -44,7 +44,7 @@ CREATE TABLE tx_mindshapeseo_domain_model_configuration
     jsonld_same_as_printerest              varchar(255) DEFAULT '' NOT NULL,
     jsonld_same_as_soundcloud              varchar(255) DEFAULT '' NOT NULL,
     jsonld_same_as_tumblr                  varchar(255) DEFAULT '' NOT NULL,
-    jsonld_logo                            int(11) unsigned NOT NULL DEFAULT '0',
+    jsonld_logo                            int(11) unsigned DEFAULT null,
     jsonld_address_locality                varchar(255) DEFAULT '' NOT NULL,
     jsonld_address_postalcode              varchar(255) DEFAULT '' NOT NULL,
     jsonld_address_street                  varchar(255) DEFAULT '' NOT NULL,

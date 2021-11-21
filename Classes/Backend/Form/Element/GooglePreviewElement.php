@@ -32,9 +32,9 @@ use Mindshape\MindshapeSeo\Service\PageService;
 use Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Backend\Form\NodeFactory;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package mindshape_seo
@@ -63,45 +63,9 @@ class GooglePreviewElement extends AbstractFormElement
     {
         parent::__construct($nodeFactory, $data);
 
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->pageService = $objectManager->get(PageService::class);
-        $this->domainService = $objectManager->get(DomainService::class);
-        $this->standaloneTemplateRendererService = $objectManager->get(StandaloneTemplateRendererService::class);
-        /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
-        $pageRenderer = $objectManager->get(PageRenderer::class);
-
-        $pageRenderer->addRequireJsConfiguration(
-            [
-                'paths' => [
-                    'jquery' => 'sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery.min',
-                ],
-            ]
-        );
-
-        if (\TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
-            $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
-            $pageRenderer->addJsFile('/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js');
-        } else {
-            $pageRenderer->addCssFile(
-                '/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css',
-                'stylesheet',
-                'all',
-                '',
-                false,
-                false,
-                '',
-                true
-            );
-            $pageRenderer->addJsFile(
-                '/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js',
-                'text/javascript',
-                false,
-                false,
-                '',
-                true
-            );
-        }
+        $this->pageService =  GeneralUtility::makeInstance(PageService::class);
+        $this->domainService =  GeneralUtility::makeInstance(DomainService::class);
+        $this->standaloneTemplateRendererService =  GeneralUtility::makeInstance(StandaloneTemplateRendererService::class);
     }
 
 
@@ -112,6 +76,19 @@ class GooglePreviewElement extends AbstractFormElement
     public function render()
     {
         $result = $this->initializeResultArray();
+
+        $result['stylesheetFiles'][]  = 'EXT:mindshape_seo/Resources/Public/css/backend.min.css';
+
+        /** @var \TYPO3\CMS\Core\Information\Typo3Version $typo3Version */
+        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+        if (version_compare( $typo3Version->getMajorVersion(), 11,'>=')) {
+            $result['requireJsModules'][]  = \TYPO3\CMS\Core\Page\JavaScriptModuleInstruction::forRequireJS(
+                'TYPO3/CMS/MindshapeSeo/PreviewModule'
+            )->invoke('init');
+        } else {
+            $result['requireJsModules'][]  = ['TYPO3/CMS/MindshapeSeo/PreviewModule' => 'function (PreviewModule) {PreviewModule.init()}'];
+        }
+
         $pageUid = $this->data['databaseRow']['uid'];
         $languageUid = (int)(true === is_array($this->data['databaseRow']['sys_language_uid'])
             ? reset($this->data['databaseRow']['sys_language_uid'])
@@ -143,6 +120,7 @@ class GooglePreviewElement extends AbstractFormElement
             }
 
             $result['html'] = $this->standaloneTemplateRendererService->render('TCA', 'GooglePreview', [
+                'typo3Version' => $typo3Version->getMajorVersion(),
                 'metadata' => $metadata,
                 'titleAttachment' => $titleAttachment,
                 'titleAttachmentSeperator' => $titleAttachmentSeperator,
