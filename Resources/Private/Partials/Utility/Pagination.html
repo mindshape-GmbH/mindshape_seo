@@ -6,12 +6,12 @@
     <f:if condition="{pagination.previousPageNumber} && {pagination.previousPageNumber} >= {pagination.firstPageNumber}">
       <f:then>
         <li class="page-item">
-          <a class="page-link" href="{f:uri.action(action: 'preview', arguments:{currentPaginationPage: 1})}" title="{f:translate(key:'pagination.first')}">
+          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: 1}')}" title="{f:translate(key: 'label.pagination.first')}">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="{f:uri.action(action: 'preview', arguments:{currentPaginationPage: pagination.previousPageNumber})}" title="{f:translate(key:'pagination.previous')}">
+          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: pagination.previousPageNumber}')}" title="{f:translate(key: 'label.pagination.previous')}">
             <span aria-hidden="true">&lt;</span>
           </a>
         </li>
@@ -28,19 +28,19 @@
 
     <f:for each="{pagination.allPageNumbers}" as="page">
       <li class="page-item {f:if(condition: '{page} == {paginator.currentPageNumber}', then:' active')}">
-        <a class="page-link" href="{f:uri.action(action: 'preview', arguments:{currentPaginationPage: page})}">{page}</a>
+        <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: page}')}">{page}</a>
       </li>
     </f:for>
 
     <f:if condition="{pagination.nextPageNumber} && {pagination.nextPageNumber} <= {pagination.lastPageNumber}">
       <f:then>
         <li class="page-item">
-          <a class="page-link" href="{f:uri.action(action: 'preview', arguments:{currentPaginationPage: pagination.nextPageNumber})}" title="{f:translate(key:'pagination.next')}">
+          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: pagination.nextPageNumber}')}" title="{f:translate(key: 'label.pagination.next')}">
             <span aria-hidden="true">&gt;</span>
           </a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="{f:uri.action(action: 'preview', arguments:{currentPaginationPage: pagination.lastPageNumber})}" title="{f:translate(key:'pagination.last')}">
+          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: pagination.lastPageNumber}')}" title="{f:translate(key: 'label.pagination.last')}">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
