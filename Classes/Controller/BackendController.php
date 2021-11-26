@@ -408,9 +408,9 @@ class BackendController extends ActionController
             $uriBuilder = GeneralUtility::makeInstance(BackendUriBuilder::class);
 
             try {
-                $redirectUrl = (string) $uriBuilder->buildUriFromRoute('mindshapeseo_MindshapeSeoSettings');
+                $redirectUrl = (string) $uriBuilder->buildUriFromRoute('MindshapeSeoMindshapeseo_MindshapeSeoSettings');
             } catch (RouteNotFoundException $exception) {
-                $redirectUrl = (string) $uriBuilder->buildUriFromRoutePath('mindshapeseo_MindshapeSeoSettings');
+                $redirectUrl = (string) $uriBuilder->buildUriFromRoutePath('/module/MindshapeSeoMindshapeseo/MindshapeSeoSettings');
             }
 
             $deleteButton = $this->buttonBar->makeLinkButton()
