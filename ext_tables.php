@@ -5,8 +5,6 @@ call_user_func(function () {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_mindshapeseo_domain_model_configuration', 'EXT:mindshape_seo/Resources/Private/Language/locallang.xlf');
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mindshapeseo_domain_model_configuration');
 
-    $mainModuleKey = 'mindshapeseo';
-
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'MindshapeSeo',
         'mindshapeseo',
@@ -22,7 +20,7 @@ call_user_func(function () {
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'MindshapeSeo',
-        $mainModuleKey,
+        'mindshapeseo',
         'preview',
         '',
         [\Mindshape\MindshapeSeo\Controller\BackendController::class => 'preview'],
@@ -36,7 +34,7 @@ call_user_func(function () {
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'MindshapeSeo',
-        $mainModuleKey,
+        'mindshapeseo',
         'settings',
         '',
         [\Mindshape\MindshapeSeo\Controller\BackendController::class => 'settings, saveConfiguration'],
