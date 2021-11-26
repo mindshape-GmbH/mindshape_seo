@@ -164,15 +164,17 @@ class BackendController extends ActionController
         /** @var \TYPO3\CMS\Backend\View\BackendTemplateView $view */
         parent::initializeView($view);
 
-        $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
         $currentAction = $this->request->getControllerActionName();
-        $this->buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
-        $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
 
         if (
             $currentAction === 'settings' ||
             $currentAction === 'preview'
         ) {
+
+            $pageRenderer = $this->view->getModuleTemplate()->getPageRenderer();
+            $this->buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
+            $view->getModuleTemplate()->getDocHeaderComponent()->setMetaInformation([]);
+
             if (\TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
                 $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
             } else {
