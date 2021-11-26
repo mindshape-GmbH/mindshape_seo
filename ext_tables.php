@@ -6,10 +6,22 @@ call_user_func(function () {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mindshapeseo_domain_model_configuration');
 
     $mainModuleKey = 'mindshapeseo';
-    $GLOBALS['TBE_MODULES'][$mainModuleKey] = '';
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'Mindshape.MindshapeSeo',
+        'MindshapeSeo',
+        'mindshapeseo',
+        '',
+        'after:web',
+        [],
+        [
+            'access' => 'user,group',
+            'iconIdentifier' => 'module-mindshapeseo',
+            'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_seo_mainmodule.xlf',
+        ]
+    );
+
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+        'MindshapeSeo',
         $mainModuleKey,
         'preview',
         '',
@@ -23,7 +35,7 @@ call_user_func(function () {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'Mindshape.MindshapeSeo',
+        'MindshapeSeo',
         $mainModuleKey,
         'settings',
         '',
@@ -34,33 +46,6 @@ call_user_func(function () {
             'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_settings.xlf',
         ]
     );
-
-    $tempModules = array();
-
-    foreach ($GLOBALS['TBE_MODULES'] as $key => $mainModule) {
-        switch ($key) {
-            case 'web';
-                $tempModules['web'] = $mainModule;
-                $tempModules[$mainModuleKey] = $GLOBALS['TBE_MODULES'][$mainModuleKey];
-                break;
-            case $mainModuleKey:
-                break;
-            case '_configuration':
-                $tempModules['_configuration'] = $mainModule;
-                $tempModules['_configuration'][$mainModuleKey] = array(
-                    'labels' => array(
-                        'll_ref' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_seo_mainmodule.xlf',
-                    ),
-                    'name' => $mainModuleKey,
-                    'iconIdentifier' => 'module-' . $mainModuleKey,
-                );
-                break;
-            default:
-                $tempModules[$key] = $mainModule;
-        };
-    }
-
-    $GLOBALS['TBE_MODULES'] = $tempModules;
 
     /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
