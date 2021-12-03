@@ -170,8 +170,11 @@ class HeaderDataService implements SingletonInterface
                         false === (bool) $this->settings['analytics']['disable'] &&
                         true === Environment::getContext()->isProduction() &&
                         (
-                            true === (bool) $this->settings['analytics']['disableOnBackendLogin'] &&
-                            !$GLOBALS['BE_USER'] instanceof FrontendBackendUserAuthentication
+                            false === (bool) $this->settings['analytics']['disableOnBackendLogin'] ||
+                            (
+                                true === (bool) $this->settings['analytics']['disableOnBackendLogin'] &&
+                                !$GLOBALS['BE_USER'] instanceof FrontendBackendUserAuthentication
+                            )
                         )
                     )
                 )
