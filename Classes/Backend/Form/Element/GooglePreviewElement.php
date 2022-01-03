@@ -32,6 +32,7 @@ use Mindshape\MindshapeSeo\Service\PageService;
 use Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService;
 use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
 use TYPO3\CMS\Backend\Form\NodeFactory;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -71,15 +72,7 @@ class GooglePreviewElement extends AbstractFormElement
         /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
         $pageRenderer = $objectManager->get(PageRenderer::class);
 
-        $pageRenderer->addRequireJsConfiguration(
-            [
-                'paths' => [
-                    'jquery' => 'sysext/core/Resources/Public/JavaScript/Contrib/jquery/jquery.min',
-                ],
-            ]
-        );
-
-        if (\TYPO3\CMS\Core\Core\Environment::getContext()->isProduction()) {
+        if (Environment::getContext()->isProduction()) {
             $pageRenderer->addCssFile('/typo3conf/ext/mindshape_seo/Resources/Public/css/backend.min.css');
             $pageRenderer->addJsFile('/typo3conf/ext/mindshape_seo/Resources/Public/js/backend.min.js');
         } else {
@@ -106,7 +99,7 @@ class GooglePreviewElement extends AbstractFormElement
 
 
     /**
-     * @return array|string
+     * @return array
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
      */
     public function render()
@@ -117,7 +110,7 @@ class GooglePreviewElement extends AbstractFormElement
             ? reset($this->data['databaseRow']['sys_language_uid'])
             : $this->data['databaseRow']['sys_language_uid']);
 
-        if ($pageUid > 0) {
+        if (is_int($pageUid) && $pageUid > 0) {
             $configuration = $this->domainService->getPageDomainConfiguration($pageUid, $languageUid);
 
             $metadata = null;
@@ -151,6 +144,7 @@ class GooglePreviewElement extends AbstractFormElement
                 'focusKeyword' => $this->data['parameterArray']['itemFormElValue'],
             ]);
         }
+
         return $result;
     }
 }
