@@ -502,7 +502,7 @@ class HeaderDataService implements SingletonInterface
         $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
 
         if (
-            true === array_key_exists('mimdshape_seo', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']) &&
+            true === array_key_exists('mindshape_seo', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']) &&
             true === is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'] ?? null)
         ) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'] as $userFunc) {
