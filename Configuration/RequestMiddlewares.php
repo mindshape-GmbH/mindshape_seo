@@ -7,10 +7,6 @@ if (
     return [];
 }
 
-$rearrangedMiddlewares = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-    TYPO3\CMS\Core\Configuration\Features::class
-)->isFeatureEnabled('rearrangedRedirectMiddlewares');
-
 return [
     'frontend' => [
         'mindshape/mindshape-customer/redirecthandler' => [
@@ -19,7 +15,7 @@ return [
                 'typo3/cms-redirects/redirecthandler',
             ],
             'after' => [
-                $rearrangedMiddlewares ? 'typo3/cms-frontend/authentication' : 'typo3/cms-frontend/static-route-resolver',
+               'typo3/cms-frontend/authentication',
             ],
         ],
     ],
