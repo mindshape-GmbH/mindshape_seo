@@ -514,8 +514,13 @@ define([
         }
 
         if (0 === focusKeyword.length) {
-            alertsContainer.querySelector('.focus-keyword').hideMe();
             alertsContainer.querySelector('.focus-keyword-missing').showMe();
+            alertsContainer.querySelector('.focus-keyword').hideMe();
+            alertsContainer.querySelector('.focus-keyword.missing-description').hideMe();
+            alertsContainer.querySelector('.focus-keyword.missing-url').hideMe();
+            alertsContainer.querySelector('.focus-keyword.found-title').hideMe();
+            alertsContainer.querySelector('.focus-keyword.found-description').hideMe();
+            alertsContainer.querySelector('.focus-keyword.found-url').hideMe();
             alertsCounter++;
         } else {
             alertsContainer.querySelector('.focus-keyword-missing').hideMe();
