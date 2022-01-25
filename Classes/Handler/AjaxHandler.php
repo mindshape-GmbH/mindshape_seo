@@ -51,7 +51,7 @@ class AjaxHandler implements SingletonInterface
      */
     public function savePage(ServerRequestInterface $request): ResponseInterface
     {
-        $data = $request->getParsedBody();
+        $data = json_decode($request->getBody()->getContents(), true);
 
         $response = ['saved' => false];
         $statusCode = 200;
@@ -97,14 +97,12 @@ class AjaxHandler implements SingletonInterface
      */
     public function deleteConfiguration(ServerRequestInterface $request): ResponseInterface
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository */
-        $configurationRepository = $objectManager->get(ConfigurationRepository::class);
+        $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager */
-        $persistenceManager = $objectManager->get(PersistenceManager::class);
+        $persistenceManager =  GeneralUtility::makeInstance(PersistenceManager::class);
 
-        $data = $request->getParsedBody();
+        $data = json_decode($request->getBody()->getContents(), true);
 
         $response = ['deleted' => false];
         $statusCode = 200;
