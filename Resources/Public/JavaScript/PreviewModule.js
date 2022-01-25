@@ -183,10 +183,10 @@ define([
             let tcaForm = document.querySelector('form');
             let currentPreview = document.querySelector('.google-preview');
             let currentPageUid = currentPreview.querySelector('input[name="pageUid"]').value;
-            let focusKeyword = document.querySelector('#focusKeyword').value.trim();
-
 
             tcaForm.querySelector('input[data-formengine-input-name="data[pages][' + currentPageUid + '][title]"], input[data-formengine-input-name="data[pages_language_overlay][' + currentPageUid + '][title]"]').addEventListener('keyup', function () {
+                const focusKeyword = document.querySelector('#focusKeyword').value.trim();
+
                 currentPreview.querySelector('.preview-box .title').innerHTML = (this.value);
 
                 if (0 < focusKeyword.length) {
@@ -197,6 +197,8 @@ define([
             });
 
             tcaForm.querySelector('textarea[name="data[pages][' + currentPageUid + '][description]"], textarea[name="data[pages_language_overlay][' + currentPageUid + '][description]"]').addEventListener('keyup', function () {
+                const focusKeyword = document.querySelector('#focusKeyword').value.trim();
+
                 currentPreview.querySelector('.preview-box .description').innerHTML = this.value;
                 PreviewModule.renderPreviewDescription(currentPreview);
 
