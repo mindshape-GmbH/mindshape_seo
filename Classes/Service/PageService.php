@@ -264,7 +264,7 @@ class PageService implements SingletonInterface
         ];
     }
 
-    public function getSerpPreviewUrl($pageUid, $sysLanguageUid, $customUrl = "")
+    public function getSerpPreviewUrl($pageUid, $sysLanguageUid, $customUrl = '')
     {
         $baseUri = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
         $baseUri = str_replace('https://', "", rtrim($baseUri, '/'));
@@ -292,7 +292,9 @@ class PageService implements SingletonInterface
 
     public function formatUriForPreview($uri)
     {
-        return str_replace("/", " › ", rtrim($uri, '/'));
+        $uri = str_replace("/", " › ", rtrim($uri, '/'));
+
+        return substr($uri, 0, strpos($uri, ' ')) . ' <span class="path">' . trim(substr($uri, strpos($uri, ' '))) . '</span>';
     }
 
     public function uriIsTooLong($uri)

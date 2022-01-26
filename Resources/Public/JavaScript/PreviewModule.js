@@ -629,11 +629,12 @@ define([
 
         let title = this.escapeHtml(previewContainer.querySelector('.preview-box .title').innerText);
         let description = this.escapeHtml(previewContainer.querySelector('.preview-box .description').innerText);
-        let url = previewContainer.querySelector('.preview-box .url').innerText;
+        let urlPathElement = previewContainer.querySelector('.preview-box .url .path');
+        let urlPath = urlPathElement.innerText;
         let regex = new RegExp('(^|\\.|\\,|\\?|\\!|\\/|\\#|\\+|\\s)(' + this.escapeHtml(focusKeyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/ig, '\\$&').trim()) + ')(\\s|\\.|\\,|\\?|\\!|\\/|\\#|\\+|$)', 'igm');
         let titleMatches = title.match(regex);
         let descriptionMatches = description.match(regex);
-        let urlMatches = url.match(regex);
+        let urlMatches = urlPath.match(regex);
 
         if (null === titleMatches) {
             previewContainer.setAttribute('data-keyword-title-matches', 0);
@@ -654,7 +655,9 @@ define([
         if (null === urlMatches) {
             previewContainer.setAttribute('data-keyword-url-matches', 0);
         } else {
-            previewContainer.querySelector('.preview-box .url cite').innerHTML = url.replace(regex, '$1<span class="focus-keyword">$2</span>$3');
+            if (urlPathElement instanceof HTMLElement) {
+                urlPathElement.innerHTML = urlPath.replace(regex, '$1<span class="focus-keyword">$2</span>$3');
+            }
 
             previewContainer.setAttribute('data-keyword-url-matches', urlMatches.length);
         }
@@ -665,7 +668,11 @@ define([
     }
 
     PreviewModule.clearUrlTitle = function (previewContainer) {
-        previewContainer.querySelector('.preview-box .url cite').innerHTML = previewContainer.querySelector('.preview-box .url').innerText.trim();
+        let urlPathElement = previewContainer.querySelector('.preview-box .url cite .path');
+
+        if (urlPathElement instanceof HTMLElement) {
+            urlPathElement.innerHTML = urlPathElement.innerText.trim();
+        }
 
     }
 
