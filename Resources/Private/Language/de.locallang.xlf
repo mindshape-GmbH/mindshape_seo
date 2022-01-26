@@ -344,7 +344,7 @@
                 <target>Angezeigte URL (Suchergebnis)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
-                <target>(Beispiel: 'www.%s' anstatt 'http://%s')</target>
+                <target>(Beispiel: '%s' anstatt 'https://%s')</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
                 <target>Typ</target>
