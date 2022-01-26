@@ -347,7 +347,7 @@
                 <source>Previewed URL (searchresult)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
-                <source>(example: 'www.%s' instead of 'http://%s')</source>
+                <source>(example: '%s' instead of 'https://%s')</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
                 <source>Type</source>
