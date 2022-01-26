@@ -630,7 +630,7 @@ define([
         let title = this.escapeHtml(previewContainer.querySelector('.preview-box .title').innerText);
         let description = this.escapeHtml(previewContainer.querySelector('.preview-box .description').innerText);
         let urlPathElement = previewContainer.querySelector('.preview-box .url .path');
-        let urlPath = urlPathElement.innerText;
+        let urlPath = urlPathElement instanceof HTMLElement ? urlPathElement.innerText : '';
         let regex = new RegExp('(^|\\.|\\,|\\?|\\!|\\/|\\#|\\+|\\s)(' + this.escapeHtml(focusKeyword.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/ig, '\\$&').trim()) + ')(\\s|\\.|\\,|\\?|\\!|\\/|\\#|\\+|$)', 'igm');
         let titleMatches = title.match(regex);
         let descriptionMatches = description.match(regex);
