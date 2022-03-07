@@ -463,10 +463,10 @@ class HeaderDataService implements SingletonInterface
             null !== $this->domainConfiguration->getJsonldLogo() &&
             Configuration::JSONLD_TYPE_PERSON !== $this->domainConfiguration->getJsonldType()
         ) {
-            $jsonld['logo'] = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . $this->domainConfiguration
+            $jsonld['logo'] = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . ltrim($this->domainConfiguration
                     ->getJsonldLogo()
                     ->getOriginalResource()
-                    ->getPublicUrl();
+                    ->getPublicUrl(), '/');
         }
 
         $socialMediaLinks = [
