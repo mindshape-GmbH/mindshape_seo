@@ -109,9 +109,9 @@ class StandaloneTemplateRendererService implements SingletonInterface
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setFormat($format);
         $view->getRequest()->setControllerExtensionName('MindshapeSeo');
-        $view->setTemplateRootPaths($this->settings['view']['templateRootPaths']);
-        $view->setLayoutRootPaths($this->settings['view']['layoutRootPaths']);
-        $view->setPartialRootPaths($this->settings['view']['partialRootPaths']);
+        $view->setTemplateRootPaths($this->settings['view']['templateRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Templates/']);
+        $view->setLayoutRootPaths($this->settings['view']['layoutRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Layouts/']);
+        $view->setPartialRootPaths($this->settings['view']['partialRootPaths'] ??  [0 => 'EXT:mindshape_seo/Resources/Private/Partials/']);
         $view->setTemplate($templateFolder . $templateName . '.' . $format);
 
         return $view;

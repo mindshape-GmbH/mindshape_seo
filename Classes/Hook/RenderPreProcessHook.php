@@ -42,10 +42,15 @@ class RenderPreProcessHook
      */
     public function main(array &$params, PageRenderer $pageRenderer)
     {
-        if (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
-            /** @var \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService */
-            $headerDataService = GeneralUtility::makeInstance(HeaderDataService::class);
-            $headerDataService->manipulateHeaderData();
+        try {
+            $applicationType = ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST']);
+            if ($applicationType->isFrontend()) {
+                /** @var \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService */
+                $headerDataService = GeneralUtility::makeInstance(HeaderDataService::class);
+                $headerDataService->manipulateHeaderData();
+            }
+
+        } catch (\RuntimeException $e) {
         }
     }
 }
