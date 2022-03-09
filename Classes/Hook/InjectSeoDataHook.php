@@ -27,8 +27,8 @@ namespace Mindshape\MindshapeSeo\Hook;
 
 use Mindshape\MindshapeSeo\Service\HeaderDataService;
 use TYPO3\CMS\Core\Http\ApplicationType;
-use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * @package mindshape_seo
