@@ -29,6 +29,8 @@ use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use Mindshape\MindshapeSeo\Utility\PageUtility;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -162,43 +164,68 @@ class HeaderDataService implements SingletonInterface
                 $this->addJsonLdBreadcrumb();
             }
 
+           if ($this->injectAnalyticsData()) {
+               if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
+                   $this->addGoogleAnalytics();
+               }
+
+               if ('' !== $this->domainConfiguration->getGoogleAnalyticsV4()) {
+                   $this->addGoogleAnalyticsV4();
+               }
+
+               if ('' !== $this->domainConfiguration->getGoogleTagmanager()) {
+                   $this->addGoogleTagmanager();
+               }
+
+               if (
+                   '' !== $this->domainConfiguration->getMatomoUrl() &&
+                   '' !== $this->domainConfiguration->getMatomoIdsite()
+               ) {
+                   $this->addMatomo();
+               }
+           }
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function injectAnalyticsData() {
+        $debug = false;
+        $analyticsDisabled = false;
+
+        if (isset($this->settings['analytics']['debug'])) {
+            $debug = (bool) $this->settings['analytics']['debug'];
+        }
+
+        if (isset($this->settings['analytics']['disable'])) {
+            $analyticsDisabled = (bool) $this->settings['analytics']['disable'];
+        }
+
+        if ($this->domainConfiguration->getAddAnalytics()) {
             if (
-                $this->domainConfiguration->getAddAnalytics() &&
-                (
-                    (bool) $this->settings['analytics']['debug'] === true ||
-                    (
-                        false === (bool) $this->settings['analytics']['disable'] &&
-                        true === Environment::getContext()->isProduction() &&
-                        (
-                            false === (bool) $this->settings['analytics']['disableOnBackendLogin'] ||
-                            (
-                                true === (bool) $this->settings['analytics']['disableOnBackendLogin'] &&
-                                !$GLOBALS['BE_USER'] instanceof FrontendBackendUserAuthentication
-                            )
-                        )
-                    )
-                )
+                (!$analyticsDisabled && (Environment::getContext()->isProduction() || Environment::getContext()->__toString() === '')) ||
+                $debug
             ) {
-                if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
-                    $this->addGoogleAnalytics();
+                $disableOnBackendLogin = false;
+                if (isset($this->settings['analytics']['disableOnBackendLogin'])) {
+                    $disableOnBackendLogin = (bool) $this->settings['analytics']['disableOnBackendLogin'];
                 }
 
-                if ('' !== $this->domainConfiguration->getGoogleAnalyticsV4()) {
-                    $this->addGoogleAnalyticsV4();
+                $context = GeneralUtility::makeInstance(Context::class);
+                try {
+                    $backendIsLoggedIn = $context->getPropertyFromAspect('backend.user', 'isLoggedIn');
+                } catch (AspectNotFoundException $e) {
+                    $backendIsLoggedIn = false;
                 }
 
-                if ('' !== $this->domainConfiguration->getGoogleTagmanager()) {
-                    $this->addGoogleTagmanager();
-                }
-
-                if (
-                    '' !== $this->domainConfiguration->getMatomoUrl() &&
-                    '' !== $this->domainConfiguration->getMatomoIdsite()
-                ) {
-                    $this->addMatomo();
+                if (!$disableOnBackendLogin || !$backendIsLoggedIn) {
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 
     protected function addTitle()
@@ -244,17 +271,11 @@ class HeaderDataService implements SingletonInterface
     /**
      * @param string $html
      * @return string
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
      */
-    public function addGoogleTagmanagerBodyToHtml($html)
+    public function addGoogleTagmanagerBodyToHtml(string $html)
     {
-        if (
-            $this->domainConfiguration instanceof Configuration &&
-            (false === (bool) $this->settings['analytics']['disable'] || (bool) $this->settings['analytics']['debug'] === true) &&
-            (true === Environment::getContext()->isProduction() || (bool) $this->settings['analytics']['debug'] === true) &&
-            false === empty($this->domainConfiguration->getGoogleTagmanager()) &&
-            true === $this->domainConfiguration->getAddAnalytics() &&
-            (false === $this->domainConfiguration->getTagmanagerUseCookieConsent() || (bool) $this->settings['analytics']['debug'] === true)
-        ) {
+        if ($this->injectAnalyticsData()) {
             $tagmanagerBody = $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerBody', [
                 'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
             ]);
