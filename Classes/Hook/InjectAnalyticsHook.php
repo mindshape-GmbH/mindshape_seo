@@ -77,10 +77,10 @@ class InjectAnalyticsHook
 
 
     /**
-     * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController
+     * @param string $html
      * @return void
      */
-    public function injectAnalyticsTags(TypoScriptFrontendController $typoScriptFrontendController)
+    public function injectAnalyticsTags(string &$html)
     {
         if (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             /** @var \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService */
