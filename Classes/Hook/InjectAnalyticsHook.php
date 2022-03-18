@@ -70,8 +70,8 @@ class InjectAnalyticsHook
      * @return void
      */
     public function pageLoadFromCache(array &$params, TypoScriptFrontendController $typoScriptFrontendController) {
-        if (isset($params['cache_pages_row'])) {
-            $this->injectAnalyticsTags($params['cache_pages_row']);
+        if (isset($params['cache_pages_row']['content']) && strlen($params['cache_pages_row']['content']) > 0) {
+            $this->injectAnalyticsTags($params['cache_pages_row']['content']);
         }
     }
 
