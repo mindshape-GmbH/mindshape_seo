@@ -163,28 +163,37 @@ class HeaderDataService implements SingletonInterface
             if ($this->domainConfiguration->getAddJsonldBreadcrumb()) {
                 $this->addJsonLdBreadcrumb();
             }
-
-           if ($this->injectAnalyticsData()) {
-               if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
-                   $this->addGoogleAnalytics();
-               }
-
-               if ('' !== $this->domainConfiguration->getGoogleAnalyticsV4()) {
-                   $this->addGoogleAnalyticsV4();
-               }
-
-               if ('' !== $this->domainConfiguration->getGoogleTagmanager()) {
-                   $this->addGoogleTagmanager();
-               }
-
-               if (
-                   '' !== $this->domainConfiguration->getMatomoUrl() &&
-                   '' !== $this->domainConfiguration->getMatomoIdsite()
-               ) {
-                   $this->addMatomo();
-               }
-           }
         }
+    }
+
+    /**
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
+     */
+    public function handleAnalytics(): array
+    {
+        $data = [];
+        if ($this->injectAnalyticsData()) {
+            if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
+                $data[] = $this->addGoogleAnalytics();
+            }
+
+            if ('' !== $this->domainConfiguration->getGoogleAnalyticsV4()) {
+                $data[] = $this->addGoogleAnalyticsV4();
+            }
+
+            if ('' !== $this->domainConfiguration->getGoogleTagmanager()) {
+                $data[] = $this->addGoogleTagmanager();
+            }
+
+            if (
+                '' !== $this->domainConfiguration->getMatomoUrl() &&
+                '' !== $this->domainConfiguration->getMatomoIdsite()
+            ) {
+                $data[] =  $this->addMatomo();
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -204,7 +213,7 @@ class HeaderDataService implements SingletonInterface
 
         if ($this->domainConfiguration->getAddAnalytics()) {
             if (
-                (!$analyticsDisabled && (Environment::getContext()->isProduction() || Environment::getContext()->__toString() === '')) ||
+                (!$analyticsDisabled && (Environment::getContext()->isProduction() || Environment::getContext()->__toString() === 'Production/Staging')) ||
                 $debug
             ) {
                 $disableOnBackendLogin = false;

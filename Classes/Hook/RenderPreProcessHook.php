@@ -27,47 +27,20 @@ namespace Mindshape\MindshapeSeo\Hook;
 
 use Mindshape\MindshapeSeo\Service\HeaderDataService;
 use TYPO3\CMS\Core\Http\ApplicationType;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * @package mindshape_seo
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class InjectSeoDataHook
+class RenderPreProcessHook
 {
-
     /**
      * @param array $params
-     * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController
+     * @param PageRenderer $pageRenderer
      */
-    public function all(array &$params, TypoScriptFrontendController $typoScriptFrontendController): void
-    {
-        $this->injecData();
-    }
-
-    /**
-     * @param array $params
-     * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController
-     */
-    public function cached(array &$params, TypoScriptFrontendController $typoScriptFrontendController): void
-    {
-        $this->injecData();
-    }
-
-    /**
-     * @param array $params
-     * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController
-     */
-    public function output(array &$params, TypoScriptFrontendController $typoScriptFrontendController): void
-    {
-        $this->injecData();
-    }
-
-    /**
-     * @return void
-     */
-    public function injecData()
+    public function main(array &$params, PageRenderer $pageRenderer)
     {
         if (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             /** @var \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService */
