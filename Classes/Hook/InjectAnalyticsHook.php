@@ -43,7 +43,7 @@ class InjectAnalyticsHook
      */
     public function all(array &$params, TypoScriptFrontendController $typoScriptFrontendController): void
     {
-        $this->injectAnalyticsTags($typoScriptFrontendController);
+        $this->injectAnalyticsTags($typoScriptFrontendController->content);
     }
 
     /**
@@ -52,7 +52,7 @@ class InjectAnalyticsHook
      */
     public function cached(array &$params, TypoScriptFrontendController $typoScriptFrontendController): void
     {
-        $this->injectAnalyticsTags($typoScriptFrontendController);
+        $this->injectAnalyticsTags($typoScriptFrontendController->content);
     }
 
     /**
@@ -61,7 +61,7 @@ class InjectAnalyticsHook
      */
     public function output(array &$params, TypoScriptFrontendController $typoScriptFrontendController): void
     {
-        $this->injectAnalyticsTags($typoScriptFrontendController);
+        $this->injectAnalyticsTags($typoScriptFrontendController->content);
     }
 
     /**
