@@ -1,4 +1,5 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Service;
 
 /***************************************************************
@@ -103,10 +104,11 @@ class HeaderDataService implements SingletonInterface
      * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function __construct(
-        ConfigurationRepository $configurationRepository,
-        PageService $pageService,
+        ConfigurationRepository           $configurationRepository,
+        PageService                       $pageService,
         StandaloneTemplateRendererService $standaloneTemplateRendererService
-    ) {
+    )
+    {
         /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->pageService = $pageService;
@@ -174,22 +176,22 @@ class HeaderDataService implements SingletonInterface
         $data = [];
         if ($this->injectAnalyticsData()) {
             if ('' !== $this->domainConfiguration->getGoogleAnalytics()) {
-                $data[] = $this->addGoogleAnalytics();
+                $data[] = $this->getGoogleAnalyticsTag();
             }
 
             if ('' !== $this->domainConfiguration->getGoogleAnalyticsV4()) {
-                $data[] = $this->addGoogleAnalyticsV4();
+                $data[] = $this->getGoogleAnalyticsV4Tag();
             }
 
             if ('' !== $this->domainConfiguration->getGoogleTagmanager()) {
-                $data[] = $this->addGoogleTagmanager();
+                $data[] = $this->getGoogleTagmanagerTag();
             }
 
             if (
                 '' !== $this->domainConfiguration->getMatomoUrl() &&
                 '' !== $this->domainConfiguration->getMatomoIdsite()
             ) {
-                $data[] =  $this->addMatomo();
+                $data[] = $this->getMatomoTag();
             }
         }
 
@@ -199,16 +201,17 @@ class HeaderDataService implements SingletonInterface
     /**
      * @return bool
      */
-    protected function injectAnalyticsData() {
+    protected function injectAnalyticsData()
+    {
         $debug = false;
         $analyticsDisabled = false;
 
         if (isset($this->settings['analytics']['debug'])) {
-            $debug = (bool) $this->settings['analytics']['debug'];
+            $debug = (bool)$this->settings['analytics']['debug'];
         }
 
         if (isset($this->settings['analytics']['disable'])) {
-            $analyticsDisabled = (bool) $this->settings['analytics']['disable'];
+            $analyticsDisabled = (bool)$this->settings['analytics']['disable'];
         }
 
         if ($this->domainConfiguration->getAddAnalytics()) {
@@ -218,7 +221,7 @@ class HeaderDataService implements SingletonInterface
             ) {
                 $disableOnBackendLogin = false;
                 if (isset($this->settings['analytics']['disableOnBackendLogin'])) {
-                    $disableOnBackendLogin = (bool) $this->settings['analytics']['disableOnBackendLogin'];
+                    $disableOnBackendLogin = (bool)$this->settings['analytics']['disableOnBackendLogin'];
                 }
 
                 $context = GeneralUtility::makeInstance(Context::class);
@@ -299,8 +302,8 @@ class HeaderDataService implements SingletonInterface
 
     protected function setRobotsMetaTag()
     {
-        $noindexInherited = (bool) $this->currentPageMetaData['meta']['robots']['noindexInherited'];
-        $nofollowInherited = (bool) $this->currentPageMetaData['meta']['robots']['nofollowInherited'];
+        $noindexInherited = (bool)$this->currentPageMetaData['meta']['robots']['noindexInherited'];
+        $nofollowInherited = (bool)$this->currentPageMetaData['meta']['robots']['nofollowInherited'];
 
         if (
             true === $noindexInherited ||
@@ -337,58 +340,62 @@ class HeaderDataService implements SingletonInterface
         }
     }
 
-    protected function addGoogleAnalytics()
+    /**
+     * @return string
+     */
+    protected function getGoogleAnalyticsTag(): string
     {
-        $this->pageRenderer->addHeaderData(
-            $this->standaloneTemplateRendererService->render(
-                'Analytics',
-                true === $this->domainConfiguration->getGoogleAnalyticsUseCookieConsent()
-                    ? 'GoogleAnalyticsCookieConsent'
-                    : 'GoogleAnalytics',
-                ['analyticsId' => $this->domainConfiguration->getGoogleAnalytics()])
+        return $this->standaloneTemplateRendererService->render(
+            'Analytics',
+            true === $this->domainConfiguration->getGoogleAnalyticsUseCookieConsent()
+                ? 'GoogleAnalyticsCookieConsent'
+                : 'GoogleAnalytics',
+            ['analyticsId' => $this->domainConfiguration->getGoogleAnalytics()]);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getGoogleAnalyticsV4Tag(): string
+    {
+        return $this->standaloneTemplateRendererService->render(
+            'Analytics',
+            true === $this->domainConfiguration->getGoogleAnalyticsV4UseCookieConsent()
+                ? 'GoogleAnalyticsV4CookieConsent'
+                : 'GoogleAnalyticsV4',
+            ['analyticsId' => $this->domainConfiguration->getGoogleAnalyticsV4()]);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getGoogleTagmanagerTag(): string
+    {
+        return $this->standaloneTemplateRendererService->render(
+            'Analytics',
+            true === $this->domainConfiguration->getTagmanagerUseCookieConsent()
+                ? 'GoogleTagmanagerHeadCookieConsent'
+                : 'GoogleTagmanagerHead',
+            [
+                'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
+            ]
         );
     }
 
-    protected function addGoogleAnalyticsV4()
+    /**
+     * @return string
+     */
+    protected function getMatomoTag(): string
     {
-        $this->pageRenderer->addHeaderData(
-            $this->standaloneTemplateRendererService->render(
-                'Analytics',
-                true === $this->domainConfiguration->getGoogleAnalyticsV4UseCookieConsent()
-                    ? 'GoogleAnalyticsV4CookieConsent'
-                    : 'GoogleAnalyticsV4',
-                ['analyticsId' => $this->domainConfiguration->getGoogleAnalyticsV4()])
-        );
-    }
-
-    protected function addGoogleTagmanager()
-    {
-        $this->pageRenderer->addHeaderData(
-            $this->standaloneTemplateRendererService->render(
-                'Analytics',
-                true === $this->domainConfiguration->getTagmanagerUseCookieConsent()
-                    ? 'GoogleTagmanagerHeadCookieConsent'
-                    : 'GoogleTagmanagerHead',
-                [
-                    'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
-                ]
-            )
-        );
-    }
-
-    protected function addMatomo()
-    {
-        $this->pageRenderer->addHeaderData(
-            $this->standaloneTemplateRendererService->render(
-                'Analytics',
-                true === $this->domainConfiguration->getMatomoUseCookieConsent()
-                    ? 'MatomoCookieConsent'
-                    : 'Matomo',
-                [
-                    'matomoUrl' => $this->domainConfiguration->getMatomoUrl(),
-                    'matomoIdSite' => $this->domainConfiguration->getMatomoIdsite(),
-                ]
-            )
+        return $this->standaloneTemplateRendererService->render(
+            'Analytics',
+            true === $this->domainConfiguration->getMatomoUseCookieConsent()
+                ? 'MatomoCookieConsent'
+                : 'Matomo',
+            [
+                'matomoUrl' => $this->domainConfiguration->getMatomoUrl(),
+                'matomoIdSite' => $this->domainConfiguration->getMatomoIdsite(),
+            ]
         );
     }
 
