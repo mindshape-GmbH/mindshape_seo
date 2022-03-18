@@ -11,11 +11,9 @@ call_user_func(function () {
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess'][] = \Mindshape\MindshapeSeo\Hook\RenderPreProcessHook::class . '->main';
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all'][] =  \Mindshape\MindshapeSeo\Hook\InjectAnalyticsHook::class . '->all';
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-cached'][] =  \Mindshape\MindshapeSeo\Hook\InjectAnalyticsHook::class . '->cached';
-    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-output'][] =  \Mindshape\MindshapeSeo\Hook\InjectAnalyticsHook::class . '->output';
-
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all'][] = \Mindshape\MindshapeSeo\Hook\ContentPostProcAllHook::class . '->main';
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPostProc-all'][] =  \Mindshape\MindshapeSeo\Hook\InjectAnalyticsHook::class . '->all';
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['pageLoadedFromCache'][] =  \Mindshape\MindshapeSeo\Hook\InjectAnalyticsHook::class . '->pageLoadFromCache';
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerTypeConverter(\Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter::class);
 

@@ -64,6 +64,17 @@ class InjectAnalyticsHook
         $this->injectAnalyticsTags($typoScriptFrontendController);
     }
 
+    /**
+     * @param array $params
+     * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController
+     * @return void
+     */
+    public function pageLoadFromCache(array &$params, TypoScriptFrontendController $typoScriptFrontendController) {
+        if (isset($params['cache_pages_row'])) {
+            $this->injectAnalyticsTags($params['cache_pages_row']);
+        }
+    }
+
 
     /**
      * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController
@@ -77,17 +88,10 @@ class InjectAnalyticsHook
             try {
                 $analyticsData = $headerDataService->handleAnalytics();
                 if (count($analyticsData) > 0) {
-                    $html = $typoScriptFrontendController->content;
-                    $hasChanged = false;
                     foreach ($analyticsData as $data) {
                         if ($data !== '' && mb_strpos($html, $data) === false) {
                             $html = str_ireplace("</head>", "$data</head>", $html);
-                            $hasChanged = true;
                         }
-                    }
-
-                    if ($hasChanged) {
-                        $typoScriptFrontendController->content = $html;
                     }
                 }
             } catch (InvalidExtensionNameException $e) {}
