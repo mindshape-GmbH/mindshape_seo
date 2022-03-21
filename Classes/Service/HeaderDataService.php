@@ -216,8 +216,7 @@ class HeaderDataService implements SingletonInterface
 
         if ($this->domainConfiguration->getAddAnalytics()) {
             if (
-                (!$analyticsDisabled && (Environment::getContext()->isProduction() || Environment::getContext()->__toString() === 'Production/Staging')) ||
-                $debug
+                (!$analyticsDisabled && Environment::getContext()->isProduction()) || $debug
             ) {
                 $disableOnBackendLogin = false;
                 if (isset($this->settings['analytics']['disableOnBackendLogin'])) {
