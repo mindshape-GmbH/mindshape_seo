@@ -203,36 +203,27 @@ class HeaderDataService implements SingletonInterface
      */
     protected function injectAnalyticsData()
     {
-        $debug = false;
         $analyticsDisabled = false;
-
-        if (isset($this->settings['analytics']['debug'])) {
-            $debug = (bool)$this->settings['analytics']['debug'];
-        }
 
         if (isset($this->settings['analytics']['disable'])) {
             $analyticsDisabled = (bool)$this->settings['analytics']['disable'];
         }
 
-        if ($this->domainConfiguration->getAddAnalytics()) {
-            if (
-                (!$analyticsDisabled && Environment::getContext()->isProduction()) || $debug
-            ) {
-                $disableOnBackendLogin = false;
-                if (isset($this->settings['analytics']['disableOnBackendLogin'])) {
-                    $disableOnBackendLogin = (bool)$this->settings['analytics']['disableOnBackendLogin'];
-                }
+        if ($this->domainConfiguration->getAddAnalytics() && !$analyticsDisabled) {
+            $disableOnBackendLogin = false;
+            if (isset($this->settings['analytics']['disableOnBackendLogin'])) {
+                $disableOnBackendLogin = (bool)$this->settings['analytics']['disableOnBackendLogin'];
+            }
 
-                $context = GeneralUtility::makeInstance(Context::class);
-                try {
-                    $backendIsLoggedIn = $context->getPropertyFromAspect('backend.user', 'isLoggedIn');
-                } catch (AspectNotFoundException $e) {
-                    $backendIsLoggedIn = false;
-                }
+            $context = GeneralUtility::makeInstance(Context::class);
+            try {
+                $backendIsLoggedIn = $context->getPropertyFromAspect('backend.user', 'isLoggedIn');
+            } catch (AspectNotFoundException $e) {
+                $backendIsLoggedIn = false;
+            }
 
-                if (!$disableOnBackendLogin || !$backendIsLoggedIn) {
-                    return true;
-                }
+            if (!$disableOnBackendLogin || !$backendIsLoggedIn) {
+                return true;
             }
         }
 

@@ -18,8 +18,6 @@ plugin.tx_mindshapeseo {
       disable = 0
       # cat=mindshapeseo/analytics; type=boolean; label=Disable analytics injection if user is logged into backend
       disableOnBackendLogin = 0
-      # cat=mindshapeseo/analytics; type=boolean; label=Enable analytics in dev environtment (also if analytics injection is disabled)
-      debug = 0
     }
 
     # customsubcategory=breadcrumb=JSON+LD Breadcrumb

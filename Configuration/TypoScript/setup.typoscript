@@ -10,7 +10,6 @@ plugin.tx_mindshapeseo {
     analytics {
       disable = {$plugin.tx_mindshapeseo.settings.analytics.disable}
       disableOnBackendLogin = {$plugin.tx_mindshapeseo.settings.analytics.disableOnBackendLogin}
-      debug = {$plugin.tx_mindshapeseo.settings.analytics.debug}
     }
 
     breadcrumb {
