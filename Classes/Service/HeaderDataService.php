@@ -209,7 +209,11 @@ class HeaderDataService implements SingletonInterface
             $analyticsDisabled = (bool)$this->settings['analytics']['disable'];
         }
 
-        if ($this->domainConfiguration->getAddAnalytics() && !$analyticsDisabled) {
+        if (
+            $this->domainConfiguration instanceof Configuration &&
+            $this->domainConfiguration->getAddAnalytics() &&
+            !$analyticsDisabled
+        ) {
             $disableOnBackendLogin = false;
             if (isset($this->settings['analytics']['disableOnBackendLogin'])) {
                 $disableOnBackendLogin = (bool)$this->settings['analytics']['disableOnBackendLogin'];
