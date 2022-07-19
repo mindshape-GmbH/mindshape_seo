@@ -42,23 +42,9 @@ class StandaloneTemplateRendererService implements SingletonInterface
     const TEMPLATES_DEFAULT_FOLDER = 'TemplateRenderer';
 
     /**
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
-     */
-    protected $configurationManager;
-
-    /**
      * @var array
      */
     protected $settings;
-
-    /**
-     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
-     * @return void
-     */
-    public function injectConfigurationManager(ConfigurationManager $configurationManager)
-    {
-        $this->configurationManager = $configurationManager;
-    }
 
     /**
      * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
@@ -66,12 +52,8 @@ class StandaloneTemplateRendererService implements SingletonInterface
      */
     public function __construct(ConfigurationManager $configurationManager)
     {
-        $config = GeneralUtility::removeDotsFromTS(
-            $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
-        );
-
-
-        $this->settings = $config['plugin']['tx_mindshapeseo'];
+        $config = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK, 'mindshapeseo');
+        $this->settings = $config;
     }
 
     /**
