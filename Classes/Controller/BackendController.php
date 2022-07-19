@@ -455,7 +455,7 @@ class BackendController extends ActionController
                         foreach ($routes as $route) {
                             if ($route['route'] === 'robots.txt') {
                                 $robotsTxtNotExists = false;
-                                $robotsContent = $route['content'];
+                                $robotsContent = $route['content'] ?? '';
                                 break;
                             }
                         }
