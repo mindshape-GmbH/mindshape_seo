@@ -4,369 +4,491 @@
       xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       xmlns:msh="http://typo3.org/ns/Mindshape/MindshapeSeo/ViewHelpers">
 
-  <f:layout name="Backend"/>
+<f:layout name="Backend"/>
 
-  <f:section name="Main">
+<f:section name="Main">
+<div class="mindshape-seo-settings">
+  <f:if condition="* == {configuration.domain}">
+    <f:then>
+      <h1>{f:translate(key: 'tx_mindshapeseo_label.seo_settings_for_all_pages')}</h1>
+    </f:then>
+    <f:else>
+      <h1>{f:translate(key: 'tx_mindshapeseo_label.seo_settings_for')} <b>{currentDomain}</b></h1>
+    </f:else>
+  </f:if>
 
-    <f:if condition="* == {configuration.domain}">
-      <f:then>
-        <h1>{f:translate(key: 'tx_mindshapeseo_label.seo_settings_for_all_pages')}</h1>
-      </f:then>
-      <f:else>
-        <h1>{f:translate(key: 'tx_mindshapeseo_label.seo_settings_for')} <b>{currentDomain}</b></h1>
-      </f:else>
-    </f:if>
-
-    <f:form.validationResults>
-      <f:for each="{validationResults.flattenedErrors}" as="errors" key="propertyPath">
-        <f:for each="{errors}" as="error">
-          <div class="alert alert-danger">{error}</div>
-        </f:for>
+  <f:form.validationResults>
+    <f:for each="{validationResults.flattenedErrors}" as="errors" key="propertyPath">
+      <f:for each="{errors}" as="error">
+        <div class="alert alert-danger">{error}</div>
       </f:for>
-    </f:form.validationResults>
+    </f:for>
+  </f:form.validationResults>
 
-    <f:form id="mindshape-seo-configuration" action="saveConfiguration" arguments="{languageUid: languageUid}" name="configuration" object="{configuration}" enctype="multipart/form-data">
-      <f:form.hidden property="domain"/>
-      <fieldset class="form-section">
-        <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.domainsettings')}</h2>
-        <p>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.sitename.subhead')}</p>
-        <div class="row">
-          <div class="col-sm-4">
-            <div class="form-group">
-              <label>{f:translate(key: 'tx_mindshapeseo_label.change_domain')}</label>
-              <f:form.textfield name="dummyDomain" value="{f:if(condition: '* == {configuration.domain}', then: '{f:translate(key: \'tx_mindshapeseo_domain_model_configuration.domain.default\')}', else: currentDomain)}" disabled="disabled" class="form-control"/>
-            </div>
-          </div>
-        </div>
-        <f:if condition="{defaultConfiguration}">
-          <div class="row">
-            <div class="col-sm-4">
-              <div class="checkbox">
-                <label>
-                  <f:form.checkbox value="1" property="mergeWithDefault"/>
-                  {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.merge_with_default')}
-                </label>
-              </div>
-            </div>
-          </div>
-        </f:if>
-      </fieldset>
-      <fieldset class="form-section">
-        <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment')}</h2>
-        <p>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment.subhead')}</p>
-        <div class="row">
-          <div class="col-sm-1">
-            <div class="form-group">
-              <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment_position')}</label>
-              <f:form.select property="titleAttachmentPosition" options="{titleAttachmentPositionOptions}" class="form-control"/>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-1">
-            <div class="form-group">
-              <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment_seperator')}</label>
-              <f:form.textfield property="titleAttachmentSeperator" class="form-control"/>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <div class="form-group">
-              <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment')}</label>
-              <f:form.textfield property="titleAttachment" placeholder="{defaultConfiguration.titleAttachment}" class="form-control"/>
-              <span class="help-block">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment.help')}</span>
-            </div>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset class="form-section">
-        <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.metadata')}</h2>
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.add_options')}</h3>
-              <div class="form-group">
-                <div class="checkbox">
-                  <label>
-                    <f:form.checkbox property="addJsonldBreadcrumb" value="1"/>
-                    {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_jsonld_breadcrumb')}
-                  </label>
-                </div>
-                <div class="checkbox">
-                  <label>
-                    <f:form.checkbox id="addJsonld" property="addJsonld" value="1"/>
-                    {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_jsonld')}
-                  </label>
-                </div>
-              </div>
-            </fieldset>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset id="jsonld" class="form-section">
-        <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld')}</h2>
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section">
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.custom_url')}</label>
-                <f:form.textfield property="jsonldCustomUrl" placeholder="{domainUrl}" class="form-control"/>
-                <span class="help-block">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example', arguments: '{0: currentDomain, 1: currentDomain}')}</span>
-              </div>
-              <div class="row">
-                <div class="col-md-6 col-sm-12">
-                  <div class="form-group">
-                    <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.type')}</label>
-                    <f:form.select property="jsonldType" options="{jsonldTypeOptions}" class="type-select form-control"/>
+  <f:form id="mindshape-seo-configuration" class="mindshape-seo-configuration" action="saveConfiguration"
+          arguments="{languageUid: languageUid}" name="configuration" object="{configuration}"
+          enctype="multipart/form-data">
+    <div role="tabpanel">
+      <ul class="nav nav-tabs t3js-tabs" role="tablist" id="tabs-tab" data-store-last-tab="1">
+        <li role="presentation" class="t3js-tabmenu-item">
+          <a href="#domainsettings" title="" aria-controls="domainsettings" role="tab" data-bs-toggle="tab"
+             aria-selected="true" class="active">
+            Domaineinstellungen
+          </a>
+        </li>
+        <li role="presentation" class="t3js-tabmenu-item ">
+          <a href="#metadata" title="" aria-controls="metadata" role="tab" data-bs-toggle="tab" aria-selected="false">
+            Metadaten
+          </a>
+        </li>
+        <li role="presentation" class="t3js-tabmenu-item ">
+          <a href="#analytics" title="" aria-controls="analytics" role="tab" data-bs-toggle="tab" aria-selected="false">
+            Analytics
+          </a>
+        </li>
+        <li role="presentation" class="t3js-tabmenu-item ">
+          <a href="#robots" title="" aria-controls="robots" role="tab" data-bs-toggle="tab" aria-selected="false">
+            Robots.txt
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="domainsettings">
+          <div class="panel panel-tab">
+            <div class="panel-body">
+              <fieldset class="form-section">
+                <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.change_domain')}</h2>
+                <p>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.sitename.subhead')}</p>
+                <div class="row">
+                  <div class="col-sm-4">
+                    <div class="form-group">
+                      <f:form.textfield name="dummyDomain"
+                                        value="{f:if(condition: '* == {configuration.domain}', then: '{f:translate(key: \'tx_mindshapeseo_domain_model_configuration.domain.default\')}', else: currentDomain)}"
+                                        disabled="disabled" class="form-control"/>
+                    </div>
                   </div>
                 </div>
-                <div class="col-md-6 col-sm-12">
-                  <div class="form-group">
-                    <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.name')}</label>
-                    <f:form.textfield property="jsonldName" placeholder="{defaultConfiguration.jsonldName}" class="form-control"/>
+                <f:if condition="{defaultConfiguration}">
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <div class="checkbox">
+                        <label>
+                          <f:form.checkbox value="1" property="mergeWithDefault"/>
+                          {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.merge_with_default')}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </f:if>
+              </fieldset>
+              <fieldset class="form-section">
+                <h2 class="form-section-headline">{f:translate(key:
+                  'tx_mindshapeseo_domain_model_configuration.title_attachment')}</h2>
+                <p>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment.subhead')}</p>
+                <div class="row">
+                  <div class="col-sm-1">
+                    <div class="form-group">
+                      <label>{f:translate(key:
+                        'tx_mindshapeseo_domain_model_configuration.title_attachment_position')}</label>
+                      <f:form.select property="titleAttachmentPosition" options="{titleAttachmentPositionOptions}"
+                                     class="form-control"/>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </fieldset>
+                <div class="row">
+                  <div class="col-sm-1">
+                    <div class="form-group">
+                      <label>{f:translate(key:
+                        'tx_mindshapeseo_domain_model_configuration.title_attachment_seperator')}</label>
+                      <f:form.textfield property="titleAttachmentSeperator" class="form-control"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                      <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment')}</label>
+                      <f:form.textfield property="titleAttachment" placeholder="{defaultConfiguration.titleAttachment}"
+                                        class="form-control"/>
+                      <span class="help-block">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment.help')}</span>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
           </div>
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section logo">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.logo')}</h3>
-              <div class="form-group mindshape-seo-upload">
-                <msh:form.upload property="jsonldLogo">
-                  <f:if condition="{resource}">
-                    <div class="image row">
-                      <div class="col-sm-12 col-md-6">
-                        <div class="thumbnail">
-                          <f:image image="{resource}" alt="" width="200"/>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="metadata">
+          <div class="panel panel-tab">
+            <div class="panel-body">
+              <fieldset class="form-section">
+                <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.metadata')}</h2>
+                <div class="row">
+                  <div class="col-md-6 col-sm-12">
+                    <fieldset class="form-section">
+                      <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.add_options')}</h3>
+                      <div class="form-group">
+                        <div class="checkbox">
+                          <f:form.checkbox property="addJsonldBreadcrumb" id="addJsonldBreadcrumb" value="1"/>
+                          <label for="addJsonldBreadcrumb">
+                            {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_jsonld_breadcrumb')}
+                          </label>
+                        </div>
+                        <div class="checkbox">
+                          <f:form.checkbox id="addJsonld" property="addJsonld" value="1"/>
+                          <label for="addJsonld">
+                            {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_jsonld')}
+                          </label>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="analytics">
+          <div class="panel panel-tab">
+            <div class="panel-body">
+              <fieldset id="jsonld" class="form-section">
+                <h2 class="form-section-headline">{f:translate(key:
+                  'tx_mindshapeseo_domain_model_configuration.jsonld')}</h2>
+                <div class="row">
+                  <div class="col-md-6 col-sm-12">
+                    <fieldset class="form-section">
+                      <div class="form-group">
+                        <label>{f:translate(key:
+                          'tx_mindshapeseo_domain_model_configuration.jsonld.custom_url')}</label>
+                        <f:form.textfield property="jsonldCustomUrl" placeholder="{domainUrl}" class="form-control"/>
+                        <span class="help-block">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example', arguments: '{0: currentDomain, 1: currentDomain}')}</span>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.type')}</label>
+                            <f:form.select property="jsonldType" options="{jsonldTypeOptions}"
+                                           class="type-select form-control"/>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                          <div class="form-group">
+                            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.name')}</label>
+                            <f:form.textfield property="jsonldName" placeholder="{defaultConfiguration.jsonldName}"
+                                              class="form-control"/>
+                          </div>
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div class="col-md-6 col-sm-12">
+                    <fieldset class="form-section logo">
+                      <h3 class="form-section-headline">{f:translate(key:
+                        'tx_mindshapeseo_domain_model_configuration.jsonld.logo')}</h3>
+                      <div class="form-group mindshape-seo-upload">
+                        <msh:form.upload property="jsonldLogo">
+                          <f:if condition="{resource}">
+                            <div class="image row">
+                              <div class="col-sm-12 col-md-6">
+                                <div class="thumbnail">
+                                  <f:image image="{resource}" alt="" width="200"/>
+                                </div>
+                              </div>
+                            </div>
+                            <button class="mindshape-seo-delete">{f:translate(key: 'tx_mindshapeseo_label.delete')}
+                            </button>
+                          </f:if>
+                        </msh:form.upload>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6 col-sm-12">
+                    <fieldset class="form-section">
+                      <h3 class="form-section-headline">{f:translate(key:
+                        'tx_mindshapeseo_domain_model_configuration.jsonld.address')}</h3>
+                      <div class="form-group">
+                        <label>{f:translate(key:
+                          'tx_mindshapeseo_domain_model_configuration.jsonld.address.locality')}</label>
+                        <f:form.textfield property="jsonldAddressLocality"
+                                          placeholder="{defaultConfiguration.jsonldAddressLocality}"
+                                          class="form-control"/>
+                      </div>
+                      <div class="form-group">
+                        <label>{f:translate(key:
+                          'tx_mindshapeseo_domain_model_configuration.jsonld.address.postalcode')}</label>
+                        <f:form.textfield property="jsonldAddressPostalcode"
+                                          placeholder="{defaultConfiguration.jsonldAddressPostalcode}"
+                                          class="form-control"/>
+                      </div>
+                      <div class="form-group">
+                        <label>{f:translate(key:
+                          'tx_mindshapeseo_domain_model_configuration.jsonld.address.street')}</label>
+                        <f:form.textfield property="jsonldAddressStreet"
+                                          placeholder="{defaultConfiguration.jsonldAddressStreet}"
+                                          class="form-control"/>
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div class="col-md-6 col-sm-12">
+                    <fieldset class="form-section">
+                      <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.contactdata')}</h3>
+                      <div class="form-group">
+                        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.telephone')}</label>
+                        <f:form.textfield property="jsonldTelephone"
+                                          placeholder="{defaultConfiguration.jsonldTelephone}" class="form-control"/>
+                      </div>
+                      <div class="form-group">
+                        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.fax')}</label>
+                        <f:form.textfield property="jsonldFax" placeholder="{defaultConfiguration.jsonldFax}"
+                                          class="form-control"/>
+                      </div>
+                      <div class="form-group">
+                        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.email')}</label>
+                        <f:form.textfield property="jsonldEmail" placeholder="{defaultConfiguration.jsonldEmail}"
+                                          class="form-control"/>
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+                <fieldset class="form-section">
+                  <h3 class="form-section-headline">
+                    <a href="#sameAs" class="collapsed" role="button" data-toggle="collapse" data-bs-toggle="collapse"
+                       data-bs-target="#sameAs" aria-expanded="false" aria-controls="sameAs">
+                      <core:icon identifier="provider-fontawesome-angle-up"/>
+                      <core:icon identifier="provider-fontawesome-angle-down"/>
+                      {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.same_as')}
+                    </a>
+                  </h3>
+                  <div id="sameAs" class="collapse">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="row">
+                          <div class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                              <label>{f:translate(key:
+                                'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook')}</label>
+                              <f:form.textfield property="jsonldSameAsFacebook"
+                                                placeholder="{defaultConfiguration.jsonldSameAsFacebook}"
+                                                class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                              <label>{f:translate(key:
+                                'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram')}</label>
+                              <f:form.textfield property="jsonldSameAsInstagram"
+                                                placeholder="{defaultConfiguration.jsonldSameAsInstagram}"
+                                                class="form-control"/>
+                            </div>
+                          </div>
+                          <div class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                              <label>{f:translate(key:
+                                'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.youtube')}</label>
+                              <f:form.textfield property="jsonldSameAsYoutube"
+                                                placeholder="{defaultConfiguration.jsonldSameAsYoutube}"
+                                                class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                              <label>{f:translate(key:
+                                'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.linkedin')}</label>
+                              <f:form.textfield property="jsonldSameAsLinkedin"
+                                                placeholder="{defaultConfiguration.jsonldSameAsLinkedin}"
+                                                class="form-control"/>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="row">
+                          <div class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                              <label>{f:translate(key:
+                                'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.xing')}</label>
+                              <f:form.textfield property="jsonldSameAsXing"
+                                                placeholder="{defaultConfiguration.jsonldSameAsXing}"
+                                                class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                              <label>{f:translate(key:
+                                'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.printerest')}</label>
+                              <f:form.textfield property="jsonldSameAsPrinterest"
+                                                placeholder="{defaultConfiguration.jsonldSameAsPrinterest}"
+                                                class="form-control"/>
+                            </div>
+                          </div>
+                          <div class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                              <label>{f:translate(key:
+                                'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.soundcloud')}</label>
+                              <f:form.textfield property="jsonldSameAsSoundcloud"
+                                                placeholder="{defaultConfiguration.jsonldSameAsSoundcloud}"
+                                                class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                              <label>{f:translate(key:
+                                'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr')}</label>
+                              <f:form.textfield property="jsonldSameAsTumblr"
+                                                placeholder="{defaultConfiguration.jsonldSameAsTumblr}"
+                                                class="form-control"/>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <button class="mindshape-seo-delete">{f:translate(key: 'tx_mindshapeseo_label.delete')}</button>
-                  </f:if>
-                </msh:form.upload>
-              </div>
-            </fieldset>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.address')}</h3>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.address.locality')}</label>
-                <f:form.textfield property="jsonldAddressLocality" placeholder="{defaultConfiguration.jsonldAddressLocality}" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.address.postalcode')}</label>
-                <f:form.textfield property="jsonldAddressPostalcode" placeholder="{defaultConfiguration.jsonldAddressPostalcode}" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.address.street')}</label>
-                <f:form.textfield property="jsonldAddressStreet" placeholder="{defaultConfiguration.jsonldAddressStreet}" class="form-control"/>
-              </div>
-            </fieldset>
-          </div>
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.contactdata')}</h3>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.telephone')}</label>
-                <f:form.textfield property="jsonldTelephone" placeholder="{defaultConfiguration.jsonldTelephone}" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.fax')}</label>
-                <f:form.textfield property="jsonldFax" placeholder="{defaultConfiguration.jsonldFax}" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.email')}</label>
-                <f:form.textfield property="jsonldEmail" placeholder="{defaultConfiguration.jsonldEmail}" class="form-control"/>
-              </div>
-            </fieldset>
-          </div>
-        </div>
-        <fieldset class="form-section">
-          <h3 class="form-section-headline">
-            <a href="#sameAs" class="collapsed" role="button" data-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#sameAs" aria-expanded="false" aria-controls="sameAs">
-              <core:icon identifier="provider-fontawesome-angle-up"/>
-              <core:icon identifier="provider-fontawesome-angle-down"/>
-              {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.same_as')}
-            </a>
-          </h3>
-          <div id="sameAs" class="collapse">
-            <div class="row">
-              <div class="col-sm-6">
-                <div class="row">
-                  <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                      <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.facebook')}</label>
-                      <f:form.textfield property="jsonldSameAsFacebook" placeholder="{defaultConfiguration.jsonldSameAsFacebook}" class="form-control"/>
-                    </div>
-                    <div class="form-group">
-                      <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.instagram')}</label>
-                      <f:form.textfield property="jsonldSameAsInstagram" placeholder="{defaultConfiguration.jsonldSameAsInstagram}" class="form-control"/>
-                    </div>
                   </div>
-                  <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                      <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.youtube')}</label>
-                      <f:form.textfield property="jsonldSameAsYoutube" placeholder="{defaultConfiguration.jsonldSameAsYoutube}" class="form-control"/>
-                    </div>
-                    <div class="form-group">
-                      <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.linkedin')}</label>
-                      <f:form.textfield property="jsonldSameAsLinkedin" placeholder="{defaultConfiguration.jsonldSameAsLinkedin}" class="form-control"/>
+                </fieldset>
+              </fieldset>
+              <fieldset class="form-section">
+                <h2 class="form-section-headline">{f:translate(key:
+                  'tx_mindshapeseo_domain_model_configuration.analytics')}</h2>
+                <div class="row">
+                  <div class="col-xs-12">
+                    <div class="checkbox">
+                      <f:form.checkbox property="addAnalytics" value="1" id="addAnalytics"/>
+                      <label for="addAnalytics">
+                        {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_analytics')}
+                      </label>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-sm-6">
                 <div class="row">
                   <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                      <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.xing')}</label>
-                      <f:form.textfield property="jsonldSameAsXing" placeholder="{defaultConfiguration.jsonldSameAsXing}" class="form-control"/>
-                    </div>
-                    <div class="form-group">
-                      <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.printerest')}</label>
-                      <f:form.textfield property="jsonldSameAsPrinterest" placeholder="{defaultConfiguration.jsonldSameAsPrinterest}" class="form-control"/>
-                    </div>
-                  </div>
-                  <div class="col-md-6 col-sm-12">
-                    <div class="form-group">
-                      <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.soundcloud')}</label>
-                      <f:form.textfield property="jsonldSameAsSoundcloud" placeholder="{defaultConfiguration.jsonldSameAsSoundcloud}" class="form-control"/>
-                    </div>
-                    <div class="form-group">
-                      <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.jsonld.same_as.tumblr')}</label>
-                      <f:form.textfield property="jsonldSameAsTumblr" placeholder="{defaultConfiguration.jsonldSameAsTumblr}" class="form-control"/>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </fieldset>
-      </fieldset>
-      <fieldset class="form-section">
-        <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.analytics')}</h2>
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="checkbox">
-              <label>
-                <f:form.checkbox property="addAnalytics" value="1"/>
-                {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_analytics')}
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics')}</h3>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_id')}</label>
-                <f:form.textfield property="googleAnalytics" class="form-control"/>
-                <span class="help-block">
+                    <fieldset class="form-section">
+                      <h3 class="form-section-headline">{f:translate(key:
+                        'tx_mindshapeseo_domain_model_configuration.google_analytics')}</h3>
+                      <div class="form-group">
+                        <label>{f:translate(key:
+                          'tx_mindshapeseo_domain_model_configuration.google_analytics_id')}</label>
+                        <f:form.textfield property="googleAnalytics" class="form-control"/>
+                        <span class="help-block">
                   ({f:translate(key: 'tx_mindshapeseo_label.example')}: 'UA-000000-01')
-                  <f:link.external uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.link')}" target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext')}</f:link.external>
+                  <f:link.external
+                    uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.link')}"
+                    target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext')}</f:link.external>
                 </span>
-              </div>
-              <f:if condition="{cookieExtensionIsActive}">
-                <div class="form-group checkbox">
-                  <label>
-                    <f:form.checkbox property="googleAnalyticsUseCookieConsent" value="1"/>
-                    {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent')}
-                  </label>
-                </div>
-              </f:if>
-            </fieldset>
-          </div>
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_v4')}</h3>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_v4_id')}</label>
-                <f:form.textfield property="googleAnalyticsV4" class="form-control"/>
-                <span class="help-block">
+                      </div>
+                      <f:if condition="{cookieExtensionIsActive}">
+                        <div class="form-group checkbox">
+                          <f:form.checkbox property="googleAnalyticsUseCookieConsent" id="gAnalyticsCookieConsent" value="1"/>
+                          <label for="gAnalyticsCookieConsent">
+                            {f:translate(key:
+                            'tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent')}
+                          </label>
+                        </div>
+                      </f:if>
+                    </fieldset>
+                  </div>
+                  <div class="col-md-6 col-sm-12">
+                    <fieldset class="form-section">
+                      <h3 class="form-section-headline">{f:translate(key:
+                        'tx_mindshapeseo_domain_model_configuration.google_analytics_v4')}</h3>
+                      <div class="form-group">
+                        <label>{f:translate(key:
+                          'tx_mindshapeseo_domain_model_configuration.google_analytics_v4_id')}</label>
+                        <f:form.textfield property="googleAnalyticsV4" class="form-control"/>
+                        <span class="help-block">
                   ({f:translate(key: 'tx_mindshapeseo_label.example')}: 'G-XXXXXXXXXX')
-                  <f:link.external uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_v4.help.link')}" target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext')}</f:link.external>
+                  <f:link.external
+                    uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_v4.help.link')}"
+                    target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext')}</f:link.external>
                 </span>
-              </div>
-              <f:if condition="{cookieExtensionIsActive}">
-                <div class="form-group checkbox">
-                  <label>
-                    <f:form.checkbox property="googleAnalyticsV4UseCookieConsent" value="1"/>
-                    {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent')}
-                  </label>
+                      </div>
+                      <f:if condition="{cookieExtensionIsActive}">
+                        <div class="form-group checkbox">
+                          <f:form.checkbox property="googleAnalyticsV4UseCookieConsent" id="gAnalyticsV4CookieConsent" value="1"/>
+                          <label for="gAnalyticsV4CookieConsent">
+                            {f:translate(key:
+                            'tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent')}
+                          </label>
+                        </div>
+                      </f:if>
+                    </fieldset>
+                  </div>
                 </div>
-              </f:if>
-            </fieldset>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager')}</h3>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager_id')}</label>
-                <f:form.textfield property="googleTagmanager" class="form-control"/>
-                <span class="help-block">
+                <div class="row">
+                  <div class="col-md-6 col-sm-12">
+                    <fieldset class="form-section">
+                      <h3 class="form-section-headline">{f:translate(key:
+                        'tx_mindshapeseo_domain_model_configuration.google_tagmanager')}</h3>
+                      <div class="form-group">
+                        <label>{f:translate(key:
+                          'tx_mindshapeseo_domain_model_configuration.google_tagmanager_id')}</label>
+                        <f:form.textfield property="googleTagmanager" class="form-control"/>
+                        <span class="help-block">
                   ({f:translate(key: 'tx_mindshapeseo_label.example')}: 'GTM-XXXX')
-                  <f:link.external uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.link')}" target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.linktext')}</f:link.external>
+                  <f:link.external
+                    uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.link')}"
+                    target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.linktext')}</f:link.external>
                 </span>
-              </div>
-              <f:if condition="{cookieExtensionIsActive}">
-                <div class="form-group checkbox">
-                  <label>
-                    <f:form.checkbox property="tagmanagerUseCookieConsent" value="1"/>
-                    {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.tagmanager_use_cookie_consent')}
-                  </label>
+                      </div>
+                      <f:if condition="{cookieExtensionIsActive}">
+                        <div class="form-group checkbox">
+                          <f:form.checkbox property="tagmanagerUseCookieConsent" id="tagmanagerCookieConsent" value="1"/>
+                          <label for="tagmanagerCookieConsent">
+                            {f:translate(key:
+                            'tx_mindshapeseo_domain_model_configuration.tagmanager_use_cookie_consent')}
+                          </label>
+                        </div>
+                      </f:if>
+                    </fieldset>
+                  </div>
+                  <div class="col-md-6 col-sm-12">
+                    <fieldset class="form-section matomo">
+                      <h3 class="form-section-headline">{f:translate(key:
+                        'tx_mindshapeseo_domain_model_configuration.matomo')}</h3>
+                      <div class="form-group">
+                        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_idsite')}</label>
+                        <f:form.textfield property="matomoIdsite" class="form-control"/>
+                      </div>
+                      <div class="form-group">
+                        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_url')}</label>
+                        <f:form.textfield property="matomoUrl" class="form-control"/>
+                      </div>
+                      <f:if condition="{cookieExtensionIsActive}">
+                        <div class="form-group checkbox">
+                          <f:form.checkbox property="matomoUseCookieConsent" id="matomoCookieConsent" value="1"/>
+                          <label for="matomoCookieConsent">
+                            {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_use_cookie_consent')}
+                          </label>
+                        </div>
+                      </f:if>
+                    </fieldset>
+                  </div>
                 </div>
-              </f:if>
-            </fieldset>
-          </div>
-          <div class="col-md-6 col-sm-12">
-            <fieldset class="form-section matomo">
-              <h3 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo')}</h3>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_idsite')}</label>
-                <f:form.textfield property="matomoIdsite" class="form-control"/>
-              </div>
-              <div class="form-group">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_url')}</label>
-                <f:form.textfield property="matomoUrl" class="form-control"/>
-              </div>
-              <f:if condition="{cookieExtensionIsActive}">
-                <div class="form-group checkbox">
-                  <label>
-                    <f:form.checkbox property="matomoUseCookieConsent" value="1"/>
-                    {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_use_cookie_consent')}
-                  </label>
-                </div>
-              </f:if>
-            </fieldset>
+              </fieldset>
+            </div>
           </div>
         </div>
-      </fieldset>
-      <fieldset class="form-section">
-        <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.robots_txt')}</h2>
-        <f:if condition="{robotsTxtNotExists}">
-          <f:then>
-            <p class="alert alert-warning">{f:translate(key: 'tx_mindshapeseo_text.robots_txt_not_exists')}</p>
-            <p>{f:translate(key: 'tx_mindshapeseo_text.robots_txt_example')}</p>
-            <pre>User-agent: *<br/>Allow: /<br/>Disallow: /typo3/&nbsp;&nbsp;&nbsp;&nbsp;# Nothing to see here<br/>Disallow: /*?id=*&nbsp;&nbsp;&nbsp;&nbsp;# Disallow non-realurl<br/>Disallow: *tx_news*&nbsp;&nbsp;# Disallow tx_news params<br/>Disallow: /*?eID=*&nbsp;&nbsp;&nbsp;# Disallow eID<br/><br/>#Page Sitemap<br/>Sitemap: {domainUrl}/sitemap.xml<br/>#Sitemap Index<br/>Sitemap: {domainUrl}/sitemap-index.xml<br/>#Image Sitemap<br/>Sitemap: {domainUrl}/sitemap-image.xml</pre>
-          </f:then>
-          <f:else>
-            <p class="alert alert-success">{f:translate(key: 'tx_mindshapeseo_text.robots_txt_exists')}</p>
-            <f:if condition="{robotsTxtContent}">
-              <p>{f:translate(key: 'tx_mindshapeseo_text.robots_txt_found')}</p>
-              <pre>{robotsTxtContent}</pre>
-            </f:if>
-          </f:else>
-        </f:if>
-      </fieldset>
-    </f:form>
-  </f:section>
+        <div role="tabpanel" class="tab-pane" id="robots">
+          <div class="panel panel-tab">
+            <div class="panel-body">
+              <fieldset class="form-section">
+                <h2 class="form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.robots_txt')}</h2>
+                <f:if condition="{robotsTxtNotExists}">
+                  <f:then>
+                    <p class="alert alert-warning">{f:translate(key: 'tx_mindshapeseo_text.robots_txt_not_exists')}</p>
+                    <p>{f:translate(key: 'tx_mindshapeseo_text.robots_txt_example')}</p>
+                    <pre>User-agent: *<br/>Allow: /<br/>Disallow: /typo3/&nbsp;&nbsp;&nbsp;&nbsp;# Nothing to see here<br/>Disallow: /*?id=*&nbsp;&nbsp;&nbsp;&nbsp;# Disallow non-realurl<br/>Disallow: *tx_news*&nbsp;&nbsp;# Disallow tx_news params<br/>Disallow: /*?eID=*&nbsp;&nbsp;&nbsp;# Disallow eID<br/><br/>#Page Sitemap<br/>Sitemap: {domainUrl}/sitemap.xml<br/>#Sitemap Index<br/>Sitemap: {domainUrl}/sitemap-index.xml<br/>#Image Sitemap<br/>Sitemap: {domainUrl}/sitemap-image.xml</pre>
+                  </f:then>
+                  <f:else>
+                    <p class="alert alert-success">{f:translate(key: 'tx_mindshapeseo_text.robots_txt_exists')}</p>
+                    <f:if condition="{robotsTxtContent}">
+                      <p>{f:translate(key: 'tx_mindshapeseo_text.robots_txt_found')}</p>
+                      <pre>{robotsTxtContent}</pre>
+                    </f:if>
+                  </f:else>
+                </f:if>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <f:form.hidden property="domain"/>
+  </f:form>
+</div>
+
+</f:section>
 
 </html>

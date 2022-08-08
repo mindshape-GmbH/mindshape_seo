@@ -7,32 +7,32 @@
   <f:layout name="Backend"/>
 
   <f:section name="Main">
+    <div class="mindshape-seo-preview">
+      <f:if condition="{noPageSelected}">
+        <f:then>
+          {f:translate(key: 'tx_mindshapeseo_label.preview.no_page_selected')}
+        </f:then>
+        <f:else if="{pageHidden}">
+          {f:translate(key: 'tx_mindshapeseo_label.preview.page_hidden')}
+        </f:else>
+        <f:else if="{unsupportedDoktype}">
+          {f:translate(key: 'tx_mindshapeseo_label.preview.unsupportedDoktype')}
+        </f:else>
+        <f:else>
+          <f:if condition="{pageTree}">
+            <f:then>
+              <div class="mindshapeseo-preview" data-typo3-version="{typo3Version}">
+                <f:render section="Preview" arguments="{_all}"/>
+                <f:render partial="AlertModal"/>
+              </div>
+            </f:then>
+            <f:else>
+              {f:translate(key: 'tx_mindshapeseo_label.preview.missing_translation')}
+            </f:else>
+          </f:if>
 
-    <f:if condition="{noPageSelected}">
-      <f:then>
-        {f:translate(key: 'tx_mindshapeseo_label.preview.no_page_selected')}
-      </f:then>
-      <f:else if="{pageHidden}">
-        {f:translate(key: 'tx_mindshapeseo_label.preview.page_hidden')}
-      </f:else>
-      <f:else if="{unsupportedDoktype}">
-        {f:translate(key: 'tx_mindshapeseo_label.preview.unsupportedDoktype')}
-      </f:else>
-      <f:else>
-        <f:if condition="{pageTree}">
-          <f:then>
-            <div class="mindshapeseo-preview" data-typo3-version="{typo3Version}">
-              <f:render section="Preview" arguments="{_all}"/>
-              <f:render partial="AlertModal"/>
-            </div>
-          </f:then>
-          <f:else>
-            {f:translate(key: 'tx_mindshapeseo_label.preview.missing_translation')}
-          </f:else>
-        </f:if>
-
-      </f:else>
-    </f:if>
+        </f:else>
+      </f:if>
 
   </f:section>
 
@@ -45,7 +45,9 @@
         <f:form id="depthselect-form" action="preview" controller="Backend">
           <div class="form-group">
             <label>{f:translate(key: 'tx_mindshapeseo_label.preview.levels')}</label>
-            <f:form.select id="depthselect" name="depth" options="{levelOptions}" value="{depth}" class="form-select form-control"/>
+            <div class="form-select-wrapper">
+              <f:form.select id="depthselect" name="depth" options="{levelOptions}" value="{depth}" class="form-select form-control"/>
+            </div>
           </div>
         </f:form>
       </div>
@@ -69,25 +71,25 @@
 
     <table class="table">
       <thead>
-        <tr>
-          <th>{f:translate(key: 'tx_mindshapeseo_label.preview.page')}</th>
-          <th>{f:translate(key: 'tx_mindshapeseo_label.preview')}</th>
-          <th>{f:translate(key: 'tx_mindshapeseo_label.metadata')}</th>
-        </tr>
+      <tr>
+        <th>{f:translate(key: 'tx_mindshapeseo_label.preview.page')}</th>
+        <th>{f:translate(key: 'tx_mindshapeseo_label.preview')}</th>
+        <th>{f:translate(key: 'tx_mindshapeseo_label.metadata')}</th>
+      </tr>
       </thead>
       <tbody>
-        <f:for each="{pageTree}" as="page" iteration="iterator">
-          <tr class="page{f:if(condition: page.row.uid, else: ' root')}">
-            <td class="pagetree-info" width="25%">
+      <f:for each="{pageTree}" as="page" iteration="iterator">
+        <tr class="page{f:if(condition: page.row.uid, else: ' root')}">
+          <td class="pagetree-info" width="25%">
               <span class="depth-markup{f:if(condition: iterator.isFirst, then: ' rootpage')}{f:if(condition: page.hasSub, then: ' subpages')}">
                   {page.depthData -> f:format.raw()}
                   <f:format.raw>{page.HTML}</f:format.raw>
                   <span class="title">{f:if(condition: page.row.nav_title, then: page.row.nav_title, else: page.row.title) -> f:format.crop(maxCharacters: 30)}</span>
               </span>
-            </td>
-            <td width="50%" class="google-preview-column">
-              <f:if condition="{page.row}">
-                <f:render partial="GoogleSearchPreview" section="Main" arguments="{
+          </td>
+          <td width="45%" class="google-preview-column">
+            <f:if condition="{page.row}">
+              <f:render partial="GoogleSearchPreview" section="Main" arguments="{
                   titleAttachment: titleAttachment,
                   titleAttachmentSeperator: titleAttachmentSeperator,
                   titleAttachmentPosition: titleAttachmentPosition,
@@ -103,77 +105,67 @@
                   sysLanguageUid: sysLanguageUid,
                   editing: 1
                 }"/>
+            </f:if>
+          </td>
+          <td width="30%" class="seo-check-column">
+            <div class="seo-check">
+              <a href="#" class="btn btn-default info error" style="display: none;">
+                <core:icon identifier="provider-fontawesome-warning"/>
+                <span class="alerts"></span>
+                {f:translate(key: 'tx_mindshapeseo_label.preview.seo_check.hint')}
+              </a>
+              <a href="#" class="btn btn-default info no-error" style="display: none;">
+                <core:icon identifier="provider-fontawesome-success"/>
+                {f:translate(key: 'tx_mindshapeseo_label.preview.seo_check.ok')}
+              </a>
+            </div>
+
+            <div class="robots">
+              <f:if condition="{page.metadata.meta.robots.noindexInherited}">
+                <f:then>
+                  <dfn class="msh-tooltip danger" title="{f:translate(key: 'tx_mindshapeseo_label.inherited_from_page')}: {page.metadata.meta.robots.noindexInherited}">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_inherited')},</dfn>
+                </f:then>
+                <f:else>
+                  <f:if condition="{page.metadata.meta.robots.noindex}">
+                    <f:then>
+                      <span class="noindex danger">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index')},</span>
+                    </f:then>
+                    <f:else>
+                      <span class="noindex">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_index')},</span>
+                    </f:else>
+                  </f:if>
+                </f:else>
               </f:if>
-            </td>
-            <td width="25%">
-              <div class="seo-check">
-                <a href="#" class="btn btn-default info error" style="display: none;">
-                  <core:icon identifier="provider-fontawesome-warning"/>
-                  <span class="alerts"></span>
-                  {f:translate(key: 'tx_mindshapeseo_label.preview.seo_check.hint')}
-                </a>
-                <a href="#" class="btn btn-default info no-error" style="display: none;">
-                  <core:icon identifier="provider-fontawesome-success"/>
-                  {f:translate(key: 'tx_mindshapeseo_label.preview.seo_check.ok')}
-                </a>
-              </div>
-              <div class="focus-keyword-container">
-                <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword_akronym')}:</label>
-                <f:if condition="{page.metadata.meta.focusKeyword}">
-                  <f:then>
-                    <span class="focus-keyword">{page.metadata.meta.focusKeyword}</span>
-                  </f:then>
-                  <f:else>
-                    <span class="focus-keyword focus-keyword-na">{f:translate(key: 'tx_mindshapeseo_label.preview.focus_keyword.not_available')}</span>
-                  </f:else>
-                </f:if>
-              </div>
-              <div class="robots">
-                <f:if condition="{page.metadata.meta.robots.noindexInherited}">
-                  <f:then>
-                    <dfn class="msh-tooltip danger" title="{f:translate(key: 'tx_mindshapeseo_label.inherited_from_page')}: {page.metadata.meta.robots.noindexInherited}">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_inherited')},</dfn>
-                  </f:then>
-                  <f:else>
-                    <f:if condition="{page.metadata.meta.robots.noindex}">
-                      <f:then>
-                        <span class="noindex danger">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index')},</span>
-                      </f:then>
-                      <f:else>
-                        <span class="noindex">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_index')},</span>
-                      </f:else>
-                    </f:if>
-                  </f:else>
-                </f:if>
-                <f:if condition="{page.metadata.meta.robots.nofollowInherited}">
-                  <f:then>
-                    <dfn class="msh-tooltip danger" title="{f:translate(key: 'tx_mindshapeseo_label.inherited_from_page')}: {page.metadata.meta.robots.nofollowInherited}">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_inherited')}</dfn>
-                  </f:then>
-                  <f:else>
-                    <f:if condition="{page.metadata.meta.robots.nofollow}">
-                      <f:then>
-                        <span class="nofollow danger">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow')}</span>
-                      </f:then>
-                      <f:else>
-                        <span class="nofollow">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_follow')}</span>
-                      </f:else>
-                    </f:if>
-                  </f:else>
-                </f:if>
-              </div>
-              <div class="canonical">
-                <f:if condition="{page.metadata.canonicalUrl}">
-                  <dfn class="msh-tooltip" title="{page.metadata.canonicalUrl}">
-                    <f:image src="{f:uri.resource(path: 'Icons/canonical.png', extensionName: 'mindshape_seo')}" class="canonical-icon"/>
-                    {f:translate(key: 'tx_mindshapeseo_label.canonical_url_is_set')}
-                  </dfn>
-                </f:if>
-              </div>
-            </td>
-          </tr>
-        </f:for>
+              <f:if condition="{page.metadata.meta.robots.nofollowInherited}">
+                <f:then>
+                  <dfn class="msh-tooltip danger" title="{f:translate(key: 'tx_mindshapeseo_label.inherited_from_page')}: {page.metadata.meta.robots.nofollowInherited}">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_inherited')}</dfn>
+                </f:then>
+                <f:else>
+                  <f:if condition="{page.metadata.meta.robots.nofollow}">
+                    <f:then>
+                      <span class="nofollow danger">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow')}</span>
+                    </f:then>
+                    <f:else>
+                      <span class="nofollow">{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_follow')}</span>
+                    </f:else>
+                  </f:if>
+                </f:else>
+              </f:if>
+            </div>
+            <div class="canonical">
+              <f:if condition="{page.metadata.canonicalUrl}">
+                <dfn class="msh-tooltip" title="{page.metadata.canonicalUrl}">
+                  <f:image src="{f:uri.resource(path: 'Icons/canonical.png', extensionName: 'mindshape_seo')}" class="canonical-icon"/>
+                  {f:translate(key: 'tx_mindshapeseo_label.canonical_url_is_set')}
+                </dfn>
+              </f:if>
+            </div>
+          </td>
+        </tr>
+      </f:for>
       </tbody>
     </table>
-
+    </div>
   </f:section>
 
 </html>

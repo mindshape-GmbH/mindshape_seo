@@ -100,21 +100,21 @@
           <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword')}</label>
           <f:form.textfield name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" placeholder="{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword')}" class="form-control"/>
         </div>
-        <div class="form-group">
+        <div class="form-group d-flex">
           <div class="checkbox noindex">
-            <label>
-              <f:form.checkbox name="noindex" value="1" checked="{noindex}"/>
+            <f:form.checkbox name="noindex" id="noindex" value="1" checked="{noindex}"/>
+            <label for="noindex">
               {f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_label')}
             </label>
           </div>
           <div class="checkbox nofollow">
+            <f:form.checkbox name="nofollow" id="nofollow" value="1" checked="{nofollow}"/>
             <label>
-              <f:form.checkbox name="nofollow" value="1" checked="{nofollow}"/>
               {f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_label')}
             </label>
           </div>
         </div>
-        <button class="save btn btn-default" disabled="disabled">{f:translate(key: 'tx_mindshapeseo_label.preview.button.save')}</button>
+        <button class="save button button-primary" disabled="disabled">{f:translate(key: 'tx_mindshapeseo_label.preview.button.save')}</button>
         <core:icon identifier="provider-fontawesome-error"/>
       </div>
     </f:if>
