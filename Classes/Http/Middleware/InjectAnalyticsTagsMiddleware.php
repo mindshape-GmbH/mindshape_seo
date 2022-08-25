@@ -46,7 +46,8 @@ class InjectAnalyticsTagsMiddleware implements MiddlewareInterface
     /**
      * @param \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService
      */
-    public function __construct(HeaderDataService $headerDataService) {
+    public function __construct(HeaderDataService $headerDataService)
+    {
         $this->headerDataService = $headerDataService;
     }
 
@@ -57,33 +58,32 @@ class InjectAnalyticsTagsMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        try {
-            $applicationType = ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST']);
-            if ($applicationType->isFrontend()) {
-                $response = $handler->handle($request);
-                $html = (string)$response->getBody();
-                try {
-                    $html = $this->headerDataService->addGoogleTagmanagerBodyToHtml($html);
-                    $analyticsData = $this->headerDataService->getAnalyticsTags();
-                    if (count($analyticsData) > 0) {
-                        foreach ($analyticsData as $data) {
-                            if ($data !== '' && mb_strpos($html, $data) === false) {
-                                $html = str_ireplace("</head>", "$data</head>", $html);
-                            }
-                        }
+        $applicationType = ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST']);
 
-                        $stream = GeneralUtility::makeInstance(StreamFactory::class)->createStream($html);
-                        $response = $response->withBody($stream);
-                        if ($response->hasHeader('Content-Length')) {
-                            $response = $response->withHeader('Content-Length', (string)$response->getBody()->getSize());
+        if ($applicationType->isFrontend()) {
+            $response = $handler->handle($request);
+            $html = (string)$response->getBody();
+            try {
+                $html = $this->headerDataService->addGoogleTagmanagerBodyToHtml($html);
+                $analyticsData = $this->headerDataService->getAnalyticsTags();
+                if (count($analyticsData) > 0) {
+                    foreach ($analyticsData as $data) {
+                        if ($data !== '' && mb_strpos($html, $data) === false) {
+                            $html = str_ireplace("</head>", "$data</head>", $html);
                         }
                     }
-                } catch (InvalidExtensionNameException $e) {
+
+                    $stream = GeneralUtility::makeInstance(StreamFactory::class)->createStream($html);
+                    $response = $response->withBody($stream);
+                    if ($response->hasHeader('Content-Length')) {
+                        $response = $response->withHeader('Content-Length', (string)$response->getBody()->getSize());
+                    }
                 }
-                return $response;
+            } catch (InvalidExtensionNameException $e) {
             }
-        } catch (\RuntimeException $e) {
+            return $response;
         }
-        return  $handler->handle($request);
+
+        return $handler->handle($request);
     }
 }
