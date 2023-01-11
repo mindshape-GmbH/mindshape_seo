@@ -158,7 +158,7 @@ class AjaxHandler implements SingletonInterface
                 ->from('pages', 'p')
                 ->where(
                     $queryBuilder->expr()->eq(
-                        'p.' . $GLOBALS['TCA']['ctrl']['transOrigPointerField'],
+                        'p.' . $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'],
                         $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
                     $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
                         $sysLanguageUid,
