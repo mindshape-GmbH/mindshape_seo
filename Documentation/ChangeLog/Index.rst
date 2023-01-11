@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v2.0.2
+  - Fix preview metadata edit saving for foreign languages
+
 v2.0.1
   - Add cropping for too long titles in preview
   - Solve translation issues with preview
