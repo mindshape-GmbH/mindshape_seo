@@ -129,7 +129,7 @@ define([
         });
 
         this.previewContainers.forEach(previewContainer => {
-            Event.delegate('click', 'input[type="checkbox"]', function (element, e) {
+            Event.delegate('click', 'input[type="checkbox"]', function (element) {
                 let currentPreview = element.parents('.google-preview');
 
                 PreviewModule.checkAndChangeIndexPreview(currentPreview);
@@ -139,11 +139,53 @@ define([
 
         // Change preview title when editing title
         this.previewContainers.forEach(previewContainer => {
-            Event.delegate('keyup', '.edit-panel .title', function (element, e) {
+            Event.delegate('keyup', '.edit-panel .title', function (element) {
                 let currentPreview = element.parents('.google-preview');
                 let focusKeyword = currentPreview.querySelector('.focus-keyword input').value.trim();
+                let seoTitleField = currentPreview.querySelector('.edit-panel .seo-title')
 
-                currentPreview.querySelector('.preview-box .title').innerHTML = PreviewModule.escapeHtml(element.value);
+                if (seoTitleField.value.trim().length === 0) {
+                    currentPreview.querySelector('.preview-box .title').innerHTML = PreviewModule.escapeHtml(element.value);
+                    PreviewModule.updatePreviewEditPanelProgressBar(currentPreview, 'title', PreviewModule.googleTitleLengthPixel);
+                    PreviewModule.updatePreviewAlerts(currentPreview);
+
+                    if (0 < focusKeyword.length) {
+                        PreviewModule.checkFocusKeyword(currentPreview, focusKeyword);
+                    }
+
+                    if (PreviewModule.editing) {
+                        PreviewModule.checkPreviewEditPanelSaveState(currentPreview);
+                    }
+                }
+            }, previewContainer)
+        });
+
+        // Change preview title when editing seo-title
+        this.previewContainers.forEach(previewContainer => {
+            Event.delegate('keyup', '.edit-panel .seo-title', function (element) {
+                let currentPreview = element.parents('.google-preview');
+                let focusKeyword = currentPreview.querySelector('.focus-keyword input').value.trim();
+                let title = '';
+                let titleContainer = previewContainer.querySelector('.edit-panel .title-container');
+                let titleProgressBar = titleContainer.querySelector('.progress-title');
+                let seoTitleContainer = previewContainer.querySelector('.edit-panel .seo-title-container');
+                let seoTitleProgressBar = seoTitleContainer.querySelector('.progress-title');
+
+                if (element.value.trim().length === 0) {
+                    title = element.closest('.google-preview').querySelector('.edit-panel .title').value.trim();
+
+                    if (titleProgressBar === null) {
+                        titleContainer.appendChild(seoTitleProgressBar);
+                    }
+                } else {
+                    title = element.value.trim();
+
+                    if (seoTitleProgressBar === null) {
+                        seoTitleContainer.appendChild(titleProgressBar);
+                    }
+                }
+
+                currentPreview.querySelector('.preview-box .title').innerHTML = PreviewModule.escapeHtml(title);
                 PreviewModule.updatePreviewEditPanelProgressBar(currentPreview, 'title', PreviewModule.googleTitleLengthPixel);
                 PreviewModule.updatePreviewAlerts(currentPreview);
 
@@ -183,20 +225,43 @@ define([
             let tcaForm = document.querySelector('form');
             let currentPreview = document.querySelector('.google-preview');
             let currentPageUid = currentPreview.querySelector('input[name="pageUid"]').value;
+            let titleField = tcaForm.querySelector('input[data-formengine-input-name="data[pages][' + currentPageUid + '][title]"], input[data-formengine-input-name="data[pages_language_overlay][' + currentPageUid + '][title]"]');
+            let seoTitleField = tcaForm.querySelector('input[data-formengine-input-name="data[pages][' + currentPageUid + '][seo_title]"], input[data-formengine-input-name="data[pages_language_overlay][' + currentPageUid + '][seo_title]"]');
+            let descriptionField = tcaForm.querySelector('textarea[name="data[pages][' + currentPageUid + '][description]"], textarea[name="data[pages_language_overlay][' + currentPageUid + '][description]"]');
 
-            tcaForm.querySelector('input[data-formengine-input-name="data[pages][' + currentPageUid + '][title]"], input[data-formengine-input-name="data[pages_language_overlay][' + currentPageUid + '][title]"]').addEventListener('keyup', function () {
+            titleField.addEventListener('keyup', function () {
                 const focusKeyword = document.querySelector('#focusKeyword').value.trim();
 
-                currentPreview.querySelector('.preview-box .title').innerHTML = (this.value);
+                // Only update preview title with page title if no explicit seo title is set
+                if (seoTitleField.value.trim().length === 0) {
+                    currentPreview.querySelector('.preview-box .title').innerHTML = (this.value);
+
+                    if (0 < focusKeyword.length) {
+                        PreviewModule.checkFocusKeyword(currentPreview, focusKeyword);
+                    }
+
+                    PreviewModule.updatePreviewAlerts(currentPreview, document.querySelector('#focusKeyword'), descriptionField);
+                }
+            });
+
+            seoTitleField.addEventListener('keyup', function () {
+                const focusKeyword = document.querySelector('#focusKeyword').value.trim();
+                let title = this.value.trim();
+
+                if (this.value.trim().length === 0) {
+                    title = titleField.value.trim();
+                }
+
+                currentPreview.querySelector('.preview-box .title').innerHTML = title;
 
                 if (0 < focusKeyword.length) {
                     PreviewModule.checkFocusKeyword(currentPreview, focusKeyword);
                 }
 
-                PreviewModule.updatePreviewAlerts(currentPreview);
+                PreviewModule.updatePreviewAlerts(currentPreview, document.querySelector('#focusKeyword'), descriptionField);
             });
 
-            tcaForm.querySelector('textarea[name="data[pages][' + currentPageUid + '][description]"], textarea[name="data[pages_language_overlay][' + currentPageUid + '][description]"]').addEventListener('keyup', function () {
+            descriptionField.addEventListener('keyup', function () {
                 const focusKeyword = document.querySelector('#focusKeyword').value.trim();
 
                 currentPreview.querySelector('.preview-box .description').innerHTML = this.value;
@@ -304,6 +369,7 @@ define([
                 previewContainer.querySelector('.icon-provider-fontawesome-error').showMe();
             } else {
                 previewContainer.setAttribute('data-original-title', previewContainer.querySelector('.edit-panel .title').value.trim());
+                previewContainer.setAttribute('data-original-seo-title', previewContainer.querySelector('.edit-panel .seo-title').value.trim());
                 previewContainer.setAttribute('data-original-description', previewContainer.querySelector('.edit-panel .description').value.trim());
                 previewContainer.setAttribute('data-original-focuskeyword', previewContainer.querySelector('.edit-panel .focus-keyword input').value.trim());
 
@@ -320,6 +386,7 @@ define([
 
     PreviewModule.checkPreviewEditPanelSaveState = function (previewContainer) {
         let title = previewContainer.querySelector('.edit-panel .title').value;
+        let seoTitle = previewContainer.querySelector('.edit-panel .seo-title').value;
         let description = previewContainer.querySelector('.edit-panel .description').value;
         let focusKeyword = previewContainer.querySelector('.focus-keyword input').value;
         let noindex = previewContainer.querySelector('.noindex input[type="checkbox"]').checked;
@@ -329,6 +396,7 @@ define([
             0 < title.length &&
             (
                 previewContainer.getAttribute('data-original-title') !== title.trim() ||
+                previewContainer.getAttribute('data-original-seo-title') !== seoTitle.trim() ||
                 previewContainer.getAttribute('data-original-description') !== description.trim() ||
                 previewContainer.getAttribute('data-original-focuskeyword') !== focusKeyword.trim() ||
                 0 < parseInt(previewContainer.getAttribute('data-original-noindex')) !== noindex ||
@@ -392,10 +460,15 @@ define([
     }
 
     PreviewModule.restorePreviewOriginalData = function (previewContainer) {
-        previewContainer.querySelector('.preview-box .title').innerHTML = previewContainer.getAttribute('data-original-title');
+        const originalTitle = previewContainer.getAttribute('data-original-title');
+        const originalSeoTitle = previewContainer.getAttribute('data-original-seo-title');
+        const originalDescription = previewContainer.getAttribute('data-original-description');
+
+        previewContainer.querySelector('.preview-box .title').innerHTML = originalSeoTitle.length > 0 ? originalSeoTitle : originalTitle;
         previewContainer.querySelector('.preview-box .description').innerHTML = previewContainer.getAttribute('data-original-description');
-        previewContainer.querySelector('.edit-panel .title').value = previewContainer.getAttribute('data-original-title');
-        previewContainer.querySelector('.edit-panel .description').value = previewContainer.getAttribute('data-original-description');
+        previewContainer.querySelector('.edit-panel .title').value = originalTitle;
+        previewContainer.querySelector('.edit-panel .seo-title').value = originalSeoTitle;
+        previewContainer.querySelector('.edit-panel .description').value = originalDescription;
 
         this.renderPreviewDescription(previewContainer);
 

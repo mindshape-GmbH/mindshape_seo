@@ -6,6 +6,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_title">
                 <source>Title</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_seo-title">
+                <source>SEO Title</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_description">
                 <source>Descripition</source>
             </trans-unit>

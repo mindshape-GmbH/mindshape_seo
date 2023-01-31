@@ -232,13 +232,10 @@ class PageService implements SingletonInterface
 
         $previewUrl = $this->getSerpPreviewUrl($pageUid, $sysLanguageUid, $customUrl);
 
-        $title = false === empty($page['seo_title'])
-            ? $page['seo_title']
-            : $page['title'];
-
         return [
             'uid' => $pageUid,
-            'title' => $title,
+            'title' => $page['title'],
+            'seoTitle' => $page['seo_title'],
             'disableTitleAttachment' => (bool)$page['mindshapeseo_disable_title_attachment'],
             'url' => $pageUrl,
             'previewUrl' => $previewUrl,

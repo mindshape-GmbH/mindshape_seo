@@ -58,23 +58,18 @@ class AjaxHandler implements SingletonInterface
 
         if (is_array($data)) {
             if (0 < $data['pageUid'] && !empty($data['title'])) {
-                $page = PageUtility::getPage((int) $data['pageUid']);
-
-                $titleField = 'title';
-
-                if (false === empty($page['seo_title'])) {
-                    $titleField = 'seo_title';
-                }
+                $page = PageUtility::getPage((int)$data['pageUid']);
 
                 $this->savePageData(
-                    (int) $data['pageUid'],
-                    (int) ($data['sysLanguageUid'] ?? 0),
+                    (int)$data['pageUid'],
+                    (int)($data['sysLanguageUid'] ?? 0),
                     [
-                        $titleField => $data['title'],
+                        'title' => $data['title'],
+                        'seo_title' => $data['seoTitle'],
                         'description' => $data['description'] ?? '',
                         'mindshapeseo_focus_keyword' => $data['focusKeyword'] ?? '',
-                        'no_index' => (bool) $data['noindex'] ? 1 : 0,
-                        'no_follow' => (bool) $data['nofollow'] ? 1 : 0,
+                        'no_index' => (bool)$data['noindex'] ? 1 : 0,
+                        'no_follow' => (bool)$data['nofollow'] ? 1 : 0,
                     ]
                 );
 
@@ -100,7 +95,7 @@ class AjaxHandler implements SingletonInterface
         /** @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository */
         $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager */
-        $persistenceManager =  GeneralUtility::makeInstance(PersistenceManager::class);
+        $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
 
         $data = json_decode($request->getBody()->getContents(), true);
 
@@ -108,7 +103,7 @@ class AjaxHandler implements SingletonInterface
         $statusCode = 200;
 
         if (is_array($data)) {
-            if (0 < (int) $data['configurationUid']) {
+            if (0 < (int)$data['configurationUid']) {
                 $configuration = $configurationRepository->findByUid($data['configurationUid']);
                 $configurationRepository->remove($configuration);
                 $persistenceManager->persistAll();
@@ -141,9 +136,9 @@ class AjaxHandler implements SingletonInterface
                     'p.uid',
                     $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)
                 ),
-                $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
-                    $sysLanguageUid,
-                    PDO::PARAM_INT)
+                $queryBuilder->expr()->eq(
+                    'p.sys_language_uid',
+                    $queryBuilder->createNamedParameter($sysLanguageUid, PDO::PARAM_INT)
                 )
             )
             ->execute();
@@ -157,10 +152,11 @@ class AjaxHandler implements SingletonInterface
                 ->where(
                     $queryBuilder->expr()->eq(
                         'p.' . $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'],
-                        $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
-                    $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
-                        $sysLanguageUid,
-                        PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'p.sys_language_uid',
+                        $queryBuilder->createNamedParameter($sysLanguageUid, PDO::PARAM_INT)
                     )
                 )
                 ->execute()
