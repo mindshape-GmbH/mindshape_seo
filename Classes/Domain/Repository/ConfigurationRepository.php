@@ -147,7 +147,7 @@ class ConfigurationRepository extends Repository
     protected function mapRawConfiguration(array $record): ?Configuration
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper $dataMapper */
-        $dataMapper = GeneralUtility::makeInstance(DataMapper::class);
+        $dataMapper = $this->objectManager->get(DataMapper::class);
         $records = $dataMapper->map(Configuration::class, [$record]);
 
         if (count($records) > 0) {
