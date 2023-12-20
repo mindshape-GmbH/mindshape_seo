@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -27,6 +27,7 @@ namespace Mindshape\MindshapeSeo\Service;
  ***************************************************************/
 
 use TYPO3\CMS\Core\DataHandling\TableColumnType;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\DomainObjectInterface;
@@ -42,7 +43,7 @@ class TranslationService implements SingletonInterface
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper
      */
-    protected $dataMapper;
+    protected DataMapper $dataMapper;
 
     /**
      * @param \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper $dataMapper
@@ -71,8 +72,15 @@ class TranslationService implements SingletonInterface
 
         if (false === $translation->_setProperty($translationOriginPropertyName, $translationOriginUid)) {
             $columnMap = $dataMap->getColumnMap($translationOriginPropertyName);
-            $columnMap->setTypeOfRelation(ColumnMap::RELATION_HAS_ONE);
-            $columnMap->setType(TableColumnType::cast('select'));
+
+            if ((new Typo3Version())->getMajorVersion() < 12) {
+                $columnMap->setTypeOfRelation(ColumnMap::RELATION_HAS_ONE);
+                $columnMap->setType(TableColumnType::cast('select'));
+            } else {
+                $columnMap->setTypeOfRelation(ColumnMap\Relation::HAS_ONE);
+                $columnMap->setType(TableColumnType::SELECT);
+            }
+
             $columnMap->setChildTableName($dataMap->getTableName());
 
             $translation->{$translationOriginPropertyName} = $translationOriginUid;

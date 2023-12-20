@@ -1,104 +1,120 @@
 <?php
-defined('TYPO3_MODE') || die('Access denied.');
+
+use Mindshape\MindshapeSeo\Controller\BackendController;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+
+defined('TYPO3') or die();
 
 call_user_func(function () {
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_mindshapeseo_domain_model_configuration', 'EXT:mindshape_seo/Resources/Private/Language/locallang.xlf');
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_mindshapeseo_domain_model_configuration');
+    ExtensionManagementUtility::addLLrefForTCAdescr('tx_mindshapeseo_domain_model_configuration', 'EXT:mindshape_seo/Resources/Private/Language/locallang.xlf');
 
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'MindshapeSeo',
-        'mindshapeseo',
-        '',
-        'after:web',
-        [],
-        [
-            'access' => 'user,group',
-            'iconIdentifier' => 'module-mindshapeseo',
-            'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_seo_mainmodule.xlf',
-        ]
-    );
+    if ((new Typo3Version())->getMajorVersion() < 12) {
+        ExtensionUtility::registerModule(
+            'MindshapeSeo',
+            'mindshapeseo',
+            '',
+            'after:web',
+            [],
+            [
+                'access' => 'user,group',
+                'iconIdentifier' => 'module-mindshapeseo',
+                'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_seo_mainmodule.xlf',
+            ]
+        );
 
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'MindshapeSeo',
-        'mindshapeseo',
-        'preview',
-        '',
-        [\Mindshape\MindshapeSeo\Controller\BackendController::class => 'preview'],
-        [
-            'access' => 'user,group',
-            'icon' => 'EXT:mindshape_seo/Resources/Public/Icons/seo-preview.svg',
-            'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf',
-            'navigationComponentId' => 'TYPO3/CMS/Backend/PageTree/PageTreeElement',
-        ]
-    );
+        ExtensionUtility::registerModule(
+            'MindshapeSeo',
+            'mindshapeseo',
+            'preview',
+            '',
+            [BackendController::class => 'preview'],
+            [
+                'access' => 'user,group',
+                'iconIdentifier' => 'module-mindshapeseo-preview',
+                'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf',
+                'navigationComponentId' => 'TYPO3/CMS/Backend/PageTree/PageTreeElement',
+            ]
+        );
 
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'MindshapeSeo',
-        'mindshapeseo',
-        'settings',
-        '',
-        [\Mindshape\MindshapeSeo\Controller\BackendController::class => 'settings, saveConfiguration'],
-        [
-            'access' => 'user,group',
-            'icon' => 'EXT:mindshape_seo/Resources/Public/Icons/seo-settings.svg',
-            'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_settings.xlf',
-        ]
-    );
+        ExtensionUtility::registerModule(
+            'MindshapeSeo',
+            'mindshapeseo',
+            'settings',
+            '',
+            [BackendController::class => 'settings, saveConfiguration'],
+            [
+                'access' => 'user,group',
+                'iconIdentifier' => 'module-mindshapeseo-settings',
+                'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_settings.xlf',
+            ]
+        );
+    }
 
     /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
-    $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+    $iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
+
+    $iconRegistry->registerIcon(
+        'module-mindshapeseo-preview',
+        SvgIconProvider::class,
+        ['source' => 'EXT:mindshape_seo/Resources/Public/Icons/seo-preview.svg']
+    );
+
+    $iconRegistry->registerIcon(
+        'module-mindshapeseo-settings',
+        SvgIconProvider::class,
+        ['source' => 'EXT:mindshape_seo/Resources/Public/Icons/seo-settings.svg']
+    );
 
     $iconRegistry->registerIcon(
         'module-mindshapeseo',
-        \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-        ['name' => 'pie-chart']
-    );
-
-    $iconRegistry->registerIcon(
-        'provider-fontawesome-info',
-        \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-        ['name' => 'info-circle']
+        SvgIconProvider::class,
+        ['source' => 'EXT:mindshape_seo/Resources/Public/Icons/FontAwesome/pie-chart.svg']
     );
 
     $iconRegistry->registerIcon(
         'provider-fontawesome-warning',
-        \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-        ['name' => 'exclamation-circle']
+        SvgIconProvider::class,
+        ['source' => 'EXT:mindshape_seo/Resources/Public/Icons/FontAwesome/exclamation-circle.svg']
     );
 
     $iconRegistry->registerIcon(
         'provider-fontawesome-error',
-        \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-        ['name' => 'exclamation-triangle']
+        SvgIconProvider::class,
+        ['source' => 'EXT:mindshape_seo/Resources/Public/Icons/FontAwesome/exclamation-triangle.svg']
     );
 
     $iconRegistry->registerIcon(
         'provider-fontawesome-success',
-        \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-        ['name' => 'check-circle']
+        SvgIconProvider::class,
+        ['source' => 'EXT:mindshape_seo/Resources/Public/Icons/FontAwesome/check-circle.svg']
     );
 
     $iconRegistry->registerIcon(
         'provider-fontawesome-caret-up',
-        \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-        ['name' => 'caret-up']
+        SvgIconProvider::class,
+        ['source' => 'EXT:mindshape_seo/Resources/Public/Icons/FontAwesome/caret-up.svg']
     );
 
     $iconRegistry->registerIcon(
         'provider-fontawesome-caret-down',
-        \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-        ['name' => 'caret-down']
+        SvgIconProvider::class,
+        ['source' => 'EXT:mindshape_seo/Resources/Public/Icons/FontAwesome/caret-down.svg']
     );
 
     $iconRegistry->registerIcon(
         'provider-fontawesome-angle-up',
-        \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-        ['name' => 'angle-up']
+        SvgIconProvider::class,
+        ['source' => 'EXT:mindshape_seo/Resources/Public/Icons/FontAwesome/angle-up.svg']
     );
 
     $iconRegistry->registerIcon(
         'provider-fontawesome-angle-down',
-        \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-        ['name' => 'angle-down']
+        SvgIconProvider::class,
+        ['source' => 'EXT:mindshape_seo/Resources/Public/Icons/FontAwesome/angle-down.svg']
     );
 });

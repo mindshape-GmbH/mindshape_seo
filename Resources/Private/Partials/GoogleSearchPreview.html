@@ -12,11 +12,11 @@
             <f:render section="Form" arguments="{_all}"/>
             <button class="edit">
               <span class="edit-text">
-                  {f:translate(key: 'tx_mindshapeseo_label.preview.button.edit')}
+                  {f:translate(key: 'tx_mindshapeseo_label.preview.button.edit', extensionName: 'mindshape_seo')}
                   <core:icon identifier="provider-fontawesome-caret-down"/>
               </span>
               <span class="abort-text">
-                  {f:translate(key: 'tx_mindshapeseo_label.preview.button.abort')}
+                  {f:translate(key: 'tx_mindshapeseo_label.preview.button.abort', extensionName: 'mindshape_seo')}
                   <core:icon identifier="provider-fontawesome-caret-up"/>
               </span>
             </button>
@@ -40,9 +40,9 @@
 
   <f:section name="PreviewAndFields">
 
-    <f:form.hidden name="pageUid" value="{pageUid}"/>
+    <input type="hidden" name="pageUid" value="{pageUid}">
     <f:if condition="{sysLanguageUid}">
-      <f:form.hidden name="sysLanguageUid" value="{sysLanguageUid}"/>
+      <input type="hidden" name="sysLanguageUid" value="{sysLanguageUid}">
     </f:if>
     <div class="preview-box">
         <div class="url">
@@ -83,7 +83,7 @@
       <div class="edit-panel">
         <hr/>
         <div class="form-group title-container">
-          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_title')}</label>
+          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_title', extensionName: 'mindshape_seo')}</label>
           <f:form.textfield name="title" value="{title}" class="title form-control"/>
           <f:if condition="!{seoTitle}">
             <div class="progress progress-title">
@@ -92,7 +92,7 @@
           </f:if>
         </div>
         <div class="form-group seo-title-container">
-          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_seo-title')}</label>
+          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_seo-title', extensionName: 'mindshape_seo')}</label>
           <f:form.textfield name="seoTitle" value="{seoTitle}" class="seo-title form-control"/>
           <f:if condition="{seoTitle}">
             <div class="progress progress-title">
@@ -101,31 +101,31 @@
           </f:if>
         </div>
         <div class="form-group description-container">
-            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_description')}</label>
+            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_description', extensionName: 'mindshape_seo')}</label>
             <f:form.textarea name="description" value="{description}" class="description form-control"/>
           <div class="progress progress-description">
             <div class="progress-bar" role="progressbar"></div>
           </div>
         </div>
         <div class="form-group focus-keyword">
-          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword')}</label>
-          <f:form.textfield name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" placeholder="{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword')}" class="form-control"/>
+          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword', extensionName: 'mindshape_seo')}</label>
+          <f:form.textfield name="{f:if(condition: editing, then: 'focusKeyword', else: focusKeywordFieldName)}" value="{focusKeyword}" placeholder="{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword', extensionName: 'mindshape_seo')}" class="form-control"/>
         </div>
         <div class="form-group">
           <div class="checkbox noindex">
             <label>
               <f:form.checkbox name="noindex" value="1" checked="{noindex}"/>
-              {f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_label')}
+              {f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_label', extensionName: 'mindshape_seo')}
             </label>
           </div>
           <div class="checkbox nofollow">
             <label>
               <f:form.checkbox name="nofollow" value="1" checked="{nofollow}"/>
-              {f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_label')}
+              {f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_label', extensionName: 'mindshape_seo')}
             </label>
           </div>
         </div>
-        <button class="save btn btn-default" disabled="disabled">{f:translate(key: 'tx_mindshapeseo_label.preview.button.save')}</button>
+        <button class="save btn btn-default" disabled="disabled">{f:translate(key: 'tx_mindshapeseo_label.preview.button.save', extensionName: 'mindshape_seo')}</button>
         <core:icon identifier="provider-fontawesome-error"/>
       </div>
     </f:if>
@@ -136,67 +136,67 @@
           <span class="badge">
               <core:icon identifier="provider-fontawesome-error"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.title_length')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.title_length', extensionName: 'mindshape_seo')}
         </li>
         <li class="list-group-item list-group-item-danger description-length">
           <span class="badge">
               <core:icon identifier="provider-fontawesome-error"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.description_length')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.description_length', extensionName: 'mindshape_seo')}
         </li>
         <li class="list-group-item list-group-item-danger description-min-length">
           <span class="badge">
               <core:icon identifier="provider-fontawesome-error"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.description_min_length')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.description_min_length', extensionName: 'mindshape_seo')}
         </li>
         <li class="list-group-item list-group-item-danger description-empty">
           <span class="badge">
               <core:icon identifier="provider-fontawesome-error"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.description_empty')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.description_empty', extensionName: 'mindshape_seo')}
         </li>
         <li class="list-group-item list-group-item-danger focus-keyword-missing">
           <span class="badge">
               <core:icon identifier="provider-fontawesome-error"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_missing')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_missing', extensionName: 'mindshape_seo')}
         </li>
         <li class="list-group-item list-group-item-danger focus-keyword missing-title">
           <span class="badge">
               <core:icon identifier="provider-fontawesome-error"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_missing_title')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_missing_title', extensionName: 'mindshape_seo')}
         </li>
         <li class="list-group-item list-group-item-danger focus-keyword missing-description">
           <span class="badge">
               <core:icon identifier="provider-fontawesome-error"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_missing_description')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_missing_description', extensionName: 'mindshape_seo')}
         </li>
         <li class="list-group-item list-group-item-danger focus-keyword missing-url">
           <span class="badge">
               <core:icon identifier="provider-fontawesome-error"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_missing_url')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_missing_url', extensionName: 'mindshape_seo')}
         </li>
         <li class="list-group-item list-group-item-success focus-keyword found-title">
           <span class="badge">
               <core:icon identifier="provider-fontawesome-success"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_found_title')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_found_title', extensionName: 'mindshape_seo')}
         </li>
         <li class="list-group-item list-group-item-success focus-keyword found-description">
           <span class="badge">
               <core:icon identifier="provider-fontawesome-success"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_found_description')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_found_description', extensionName: 'mindshape_seo')}
         </li>
         <li class="list-group-item list-group-item-success focus-keyword found-url">
           <span class="badge">
               <core:icon identifier="provider-fontawesome-success"/>
           </span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_found_url')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.alert.focus_keyword_found_url', extensionName: 'mindshape_seo')}
         </li>
       </ul>
     </div>

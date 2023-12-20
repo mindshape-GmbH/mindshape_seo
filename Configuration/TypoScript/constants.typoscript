@@ -20,6 +20,9 @@ plugin.tx_mindshapeseo {
       disableOnBackendLogin = 0
     }
 
+    # cat=mindshapeseo/settings; type=string; label=Combined identifier file path for the JSON+LD logo
+    jsonLdLogo =
+
     # customsubcategory=breadcrumb=JSON+LD Breadcrumb
     breadcrumb {
       # cat=mindshapeseo/breadcrumb; type=string; label=doktypes allowed to render a JSON+LD breadcrumb

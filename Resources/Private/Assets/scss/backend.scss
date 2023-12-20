@@ -116,6 +116,20 @@ $lightgrey: #666;
     }
   }
 
+  &[data-typo3-version="12"] {
+    .depth-markup {
+      .icon {
+        top: unset;
+        transform: unset;
+      }
+
+      &.rootpage .icon {
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+
   .icon-provider-fontawesome-error {
     display: none;
 
@@ -376,6 +390,7 @@ form {
   .modal-sm {
     max-width: 500px;
   }
+
   .list-group {
     margin-bottom: 0;
 

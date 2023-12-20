@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -43,17 +43,17 @@ class DomainService implements SingletonInterface
     /**
      * @var \Mindshape\MindshapeSeo\Service\PageService
      */
-    protected $pageService;
+    protected PageService $pageService;
 
     /**
      * @var \TYPO3\CMS\Core\Site\SiteFinder
      */
-    protected $siteFinder;
+    protected SiteFinder $siteFinder;
 
     /**
      * @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository
      */
-    protected $configurationRepository;
+    protected ConfigurationRepository $configurationRepository;
 
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
@@ -73,7 +73,7 @@ class DomainService implements SingletonInterface
     /**
      * @return array
      */
-    public function getAvailableDomains()
+    public function getAvailableDomains(): array
     {
         $domains = ['*'];
 
@@ -87,10 +87,11 @@ class DomainService implements SingletonInterface
     }
 
     /**
-     * @param int $pageUid
+     * @param int|null $pageUid
+     * @param int|null $languageUid
      * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
      */
-    public function getPageDomainConfiguration($pageUid = null, $languageUid = null)
+    public function getPageDomainConfiguration(int $pageUid = null, int $languageUid = null): ?Configuration
     {
         if (null !== $pageUid) {
             try {
@@ -107,7 +108,7 @@ class DomainService implements SingletonInterface
                 if ($configuration instanceof Configuration) {
                     return $configuration;
                 }
-            } catch (SiteNotFoundException $exception) {
+            } catch (SiteNotFoundException) {
                 // nothing
             }
         }
@@ -119,7 +120,7 @@ class DomainService implements SingletonInterface
      * @param string $currentDomain
      * @return array
      */
-    public function getConfigurationDomainSelectOptions($currentDomain)
+    public function getConfigurationDomainSelectOptions(string $currentDomain): array
     {
         $domains = $this->getAvailableDomains();
         $domainSelectOptions = [];
@@ -143,9 +144,8 @@ class DomainService implements SingletonInterface
 
     /**
      * @param array $domains
-     * @return void
      */
-    protected function renameDomains(array &$domains)
+    protected function renameDomains(array &$domains): void
     {
         foreach ($domains as &$domain) {
             $domain = Configuration::DEFAULT_DOMAIN === $domain

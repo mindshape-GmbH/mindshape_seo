@@ -6,7 +6,7 @@ namespace Mindshape\MindshapeSeo\Http\Middleware;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Can Karadag <karadag@mindshape.de>
+ *  (c) 2023 Can Karadag <karadag@mindshape.de>
  *
  *  All rights reserved
  *
@@ -41,7 +41,7 @@ use TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException;
 class InjectAnalyticsTagsMiddleware implements MiddlewareInterface
 {
 
-    protected $headerDataService;
+    protected HeaderDataService $headerDataService;
 
     /**
      * @param \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService
@@ -62,25 +62,25 @@ class InjectAnalyticsTagsMiddleware implements MiddlewareInterface
 
         if ($applicationType->isFrontend()) {
             $response = $handler->handle($request);
-            $html = (string)$response->getBody();
-            try {
-                $html = $this->headerDataService->addGoogleTagmanagerBodyToHtml($html);
-                $analyticsData = $this->headerDataService->getAnalyticsTags();
-                if (count($analyticsData) > 0) {
-                    foreach ($analyticsData as $data) {
-                        if ($data !== '' && mb_strpos($html, $data) === false) {
-                            $html = str_ireplace("</head>", "$data</head>", $html);
-                        }
-                    }
+            $html = (string) $response->getBody();
+            $html = $this->headerDataService->addGoogleTagmanagerBodyToHtml($html);
+            $analyticsData = $this->headerDataService->getAnalyticsTags();
 
-                    $stream = GeneralUtility::makeInstance(StreamFactory::class)->createStream($html);
-                    $response = $response->withBody($stream);
-                    if ($response->hasHeader('Content-Length')) {
-                        $response = $response->withHeader('Content-Length', (string)$response->getBody()->getSize());
+            if (count($analyticsData) > 0) {
+                foreach ($analyticsData as $data) {
+                    if ($data !== '' && mb_strpos($html, $data) === false) {
+                        $html = str_ireplace("</head>", "$data</head>", $html);
                     }
                 }
-            } catch (InvalidExtensionNameException $e) {
+
+                $stream = GeneralUtility::makeInstance(StreamFactory::class)->createStream($html);
+                $response = $response->withBody($stream);
+
+                if ($response->hasHeader('Content-Length')) {
+                    $response = $response->withHeader('Content-Length', (string) $response->getBody()->getSize());
+                }
             }
+
             return $response;
         }
 

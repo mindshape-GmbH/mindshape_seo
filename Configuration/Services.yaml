@@ -7,3 +7,6 @@ services:
   Mindshape\MindshapeSeo\:
     resource: '../Classes/*'
     exclude: '../Classes/{Domain/Model,Utility}'
+
+  Mindshape\MindshapeSeo\Controller\BackendController:
+    tags: [ 'backend.controller' ]

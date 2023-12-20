@@ -10,7 +10,7 @@ namespace Mindshape\MindshapeSeo\Http\Middleware;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  ***/
 
@@ -30,7 +30,7 @@ class RedirectHandler implements MiddlewareInterface
     /**
      * @var \TYPO3\CMS\Redirects\Service\RedirectService
      */
-    protected $redirectService;
+    protected RedirectService $redirectService;
 
     /**
      * @param \TYPO3\CMS\Redirects\Service\RedirectService $redirectService
@@ -59,7 +59,10 @@ class RedirectHandler implements MiddlewareInterface
             true === is_array($matchedRedirect) &&
             410 === $matchedRedirect['target_statuscode']
         ) {
-            return GeneralUtility::makeInstance(ErrorController::class)->pageGoneAction($request, 'The requested page is gone');
+            /** @var \Mindshape\MindshapeSeo\Controller\ErrorController $errorController */
+            $errorController = GeneralUtility::makeInstance(ErrorController::class);
+
+            return $errorController->pageGoneAction($request, 'The requested page is gone');
         }
 
         return $handler->handle($request);

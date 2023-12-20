@@ -6,7 +6,7 @@ namespace Mindshape\MindshapeSeo\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -41,14 +41,14 @@ class DatabaseUtility
     /**
      * @var \TYPO3\CMS\Core\Database\Connection
      */
-    private static $databaseConnection;
+    private static Connection $databaseConnection;
 
     /**
      * @return \TYPO3\CMS\Core\Database\Connection
      */
     public static function databaseConnection(): Connection
     {
-        if (static::$databaseConnection instanceof Connection) {
+        if (static::$databaseConnection ?? null instanceof Connection) {
             return static::$databaseConnection;
         }
 

@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Backend\Form\Element;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *

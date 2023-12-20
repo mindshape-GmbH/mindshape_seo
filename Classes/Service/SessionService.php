@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -25,8 +25,10 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 /**
  * @package mindshape_seo
@@ -37,9 +39,9 @@ class SessionService implements SingletonInterface
     const SESSION_KEY_PREFIX = 'mindshape_seo_';
 
     /**
-     * @var \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication|\TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     * @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication|\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
      */
-    protected $userAuthentication;
+    protected BackendUserAuthentication|FrontendUserAuthentication $userAuthentication;
 
     public function __construct()
     {
@@ -51,9 +53,8 @@ class SessionService implements SingletonInterface
     /**
      * @param string $key
      * @param mixed $data
-     * @return void
      */
-    public function setKey($key, $data)
+    public function setKey(string $key, mixed $data): void
     {
         $this->userAuthentication->setAndSaveSessionData(
             self::SESSION_KEY_PREFIX . $key,
@@ -63,9 +64,8 @@ class SessionService implements SingletonInterface
 
     /**
      * @param string $key
-     * @return void
      */
-    public function deleteKey($key)
+    public function deleteKey(string $key): void
     {
         $this->setKey($key, null);
     }
@@ -74,7 +74,7 @@ class SessionService implements SingletonInterface
      * @param string $key
      * @return mixed
      */
-    public function getKey($key)
+    public function getKey(string $key): mixed
     {
         return $this->userAuthentication->getSessionData(self::SESSION_KEY_PREFIX . $key);
     }
@@ -83,7 +83,7 @@ class SessionService implements SingletonInterface
      * @param string $key
      * @return bool
      */
-    public function hasKey($key)
+    public function hasKey(string $key): bool
     {
         return null !== $this->userAuthentication->getSessionData(self::SESSION_KEY_PREFIX . $key);
     }

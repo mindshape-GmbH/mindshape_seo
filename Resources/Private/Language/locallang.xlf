@@ -443,6 +443,14 @@
             <trans-unit id="label.pagination.next">
                 <source>Next page</source>
             </trans-unit>
+
+
+            <trans-unit id="validation.file_upload.file_size">
+                <source>The choosen file is to big</source>
+            </trans-unit>
+            <trans-unit id="validation.file_upload.file_type">
+                <target>The choosen filetype (%s) is not allowed</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

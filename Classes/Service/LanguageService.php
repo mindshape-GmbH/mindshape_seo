@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -28,6 +28,7 @@ namespace Mindshape\MindshapeSeo\Service;
 
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use PDO;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
 
 /**
@@ -38,50 +39,70 @@ class LanguageService implements SingletonInterface
 {
     /**
      * @return array
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getLanguagesAvailable(): array
     {
-        $result = DatabaseUtility::queryBuilder()
-            ->select('*')
-            ->from('sys_language')
-            ->execute()
-            ->fetchAll();
-
-        if (true === is_array($result)) {
-            return $result;
+        if ((new Typo3Version())->getMajorVersion() < 12) {
+            return DatabaseUtility::queryBuilder()
+                ->select('*')
+                ->from('sys_language')
+                ->executeQuery()
+                ->fetchAllAssociative();
         }
 
-        return [];
+        // TODO: update languages getter
+
+        /** @var \TYPO3\CMS\Core\Site\Entity\SiteInterface $currentSite */
+        $currentSite = $GLOBALS['TYPO3_REQUEST']->getAttribute('site');
+
+        $siteLanguages = $currentSite->getAvailableLanguages(
+            $GLOBALS['BE_USER'],
+            false,
+            (int) ($GLOBALS['TYPO3_REQUEST']->getParsedBody()['id'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['id'] ?? 0)
+        );
+
+        $languages = [];
+
+        foreach ($siteLanguages as $siteLanguage) {
+            $languages[] = [
+                'uid' => $siteLanguage->getLanguageId(),
+                'title' => $siteLanguage->getTitle(),
+            ];
+        }
+
+        return $languages;
     }
 
     /**
      * @param int $pageUid
      * @return array
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getPageLanguagesAvailable(int $pageUid): array
     {
-        $queryBuilder = DatabaseUtility::queryBuilder();
+        if ((new Typo3Version())->getMajorVersion() < 12) {
+            $queryBuilder = DatabaseUtility::queryBuilder();
 
-        $result = $queryBuilder
-            ->select('l.uid', 'l.title')
-            ->from('sys_language', 'l')
-            ->innerJoin(
-                'l',
-                'pages',
-                'p',
-                $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->quoteIdentifier('l.uid'))
-            )
-            ->where(
-                $queryBuilder->expr()->eq('p.' . $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'], $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
-                $queryBuilder->expr()->neq('p.sys_language_uid', 0)
-            )
-            ->execute()
-            ->fetchAll();
-
-        if (is_array($result)) {
-            return $result;
-        } else {
-            return [];
+            return $queryBuilder
+                ->select('l.uid', 'l.title')
+                ->from('sys_language', 'l')
+                ->innerJoin(
+                    'l',
+                    'pages',
+                    'p',
+                    $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->quoteIdentifier('l.uid'))
+                )
+                ->where(
+                    $queryBuilder->expr()->eq('p.' . $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'], $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
+                    $queryBuilder->expr()->neq('p.sys_language_uid', 0)
+                )
+                ->executeQuery()
+                ->fetchAllAssociative();
         }
+
+
+        // TODO: update languages getter
+        return [];
     }
 }

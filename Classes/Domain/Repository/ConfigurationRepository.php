@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *
@@ -26,11 +26,14 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Doctrine\DBAL\Exception as DBALException;
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use PDO;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -49,13 +52,10 @@ class ConfigurationRepository extends Repository
         'domain' => QueryInterface::ORDER_DESCENDING,
     ];
 
-    /**
-     * @return void
-     */
-    public function initializeObject()
+    public function initializeObject(): void
     {
-        /** @var Typo3QuerySettings $querySettings */
-        $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings $querySettings */
+        $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
         $querySettings->setRespectStoragePage(false);
 
         $this->setDefaultQuerySettings($querySettings);
@@ -65,10 +65,13 @@ class ConfigurationRepository extends Repository
      * @param string $domain
      * @param bool $returnDefaultIfNotFound
      * @param int|null $sysLanguageUid
-     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration
+     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
      */
-    public function findByDomain(string $domain, bool $returnDefaultIfNotFound = false, int $sysLanguageUid = null)
-    {
+    public function findByDomain(
+        string $domain,
+        bool $returnDefaultIfNotFound = false,
+        int $sysLanguageUid = null
+    ): ?Configuration {
         if (0 < $sysLanguageUid) {
             return $this->findByDomainTranslation($domain, $returnDefaultIfNotFound, $sysLanguageUid);
         }
@@ -82,7 +85,7 @@ class ConfigurationRepository extends Repository
         }
 
         $query->matching(
-            $query->logicalOr($constraint)
+            $query->logicalOr(...$constraint)
         );
 
         return $query->execute()->getFirst();
@@ -92,10 +95,14 @@ class ConfigurationRepository extends Repository
      * @param string $domain
      * @param bool $returnDefaultIfNotFound
      * @param null $sysLanguageUid
-     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration
+     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function findByDomainTranslation(string $domain, bool $returnDefaultIfNotFound = false, $sysLanguageUid = null): ?Configuration
-    {
+    public function findByDomainTranslation(
+        string $domain,
+        bool $returnDefaultIfNotFound = false,
+        $sysLanguageUid = null
+    ): ?Configuration {
         $queryBuilder = DatabaseUtility::queryBuilder();
 
         $queryBuilder->getRestrictions()->removeAll();
@@ -121,19 +128,16 @@ class ConfigurationRepository extends Repository
             $queryBuilder->andWhere($domainQueryExpression);
         } else {
             $queryBuilder->orWhere(
-                $queryBuilder->expr()->orX(
+                $queryBuilder->expr()->or(
                     $domainQueryExpression,
                     $queryBuilder->expr()->eq('domain', '*')
                 )
             );
         }
 
-        $rawConfiguration = $queryBuilder->execute()->fetch();
+        $rawConfiguration = $queryBuilder->executeQuery()->fetchAssociative();
 
-        if (
-            true === is_array($rawConfiguration) &&
-            0 < count($rawConfiguration)
-        ) {
+        if (true === is_array($rawConfiguration)) {
             return $this->mapRawConfiguration($rawConfiguration);
         }
 
@@ -147,7 +151,7 @@ class ConfigurationRepository extends Repository
     protected function mapRawConfiguration(array $record): ?Configuration
     {
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper $dataMapper */
-        $dataMapper = $this->objectManager->get(DataMapper::class);
+        $dataMapper = GeneralUtility::makeInstance(DataMapper::class);
         $records = $dataMapper->map(Configuration::class, [$record]);
 
         if (count($records) > 0) {
@@ -162,30 +166,20 @@ class ConfigurationRepository extends Repository
 
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
-     * @return void
+     * @throws \Doctrine\DBAL\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
-    public function save(Configuration $configuration)
+    public function save(Configuration $configuration): void
     {
         if ($configuration->_isNew()) {
             $this->add($configuration);
         } else {
-            $this->update($configuration);
+            try {
+                $this->update($configuration);
+            } catch (UnknownObjectException|IllegalObjectTypeException) {
+                // should be prevented due to argument forced type above
+            }
         }
-    }
-
-    /**
-     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
-     * @return void
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     */
-    public function update($configuration)
-    {
-        $this->checkFileReferences($configuration);
-
-        parent::update($configuration);
     }
 
     /**
@@ -198,63 +192,6 @@ class ConfigurationRepository extends Repository
 
             if ($defaultConfiguration instanceof Configuration) {
                 $configuration->mergeConfiguration($defaultConfiguration);
-            }
-        }
-    }
-
-    /**
-     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
-     * @return void
-     */
-    protected function checkFileReferences(Configuration $configuration)
-    {
-        if (null === $configuration->getJsonldLogo()) {
-            $queryBuilder = DatabaseUtility::queryBuilder();
-
-            $fileReference = $queryBuilder
-                ->select('f.uid')
-                ->from('sys_file_reference', 'f')
-                ->where(
-                    $queryBuilder->expr()->eq(
-                        'f.tablenames',
-                        $queryBuilder->createNamedParameter(Configuration::TABLE, PDO::PARAM_STR)
-                    ),
-                    $queryBuilder->expr()->eq(
-                        'f.fieldname',
-                        $queryBuilder->createNamedParameter('jsonld_logo', PDO::PARAM_STR)
-                    ),
-                    $queryBuilder->expr()->eq(
-                        'f.uid_foreign',
-                        $queryBuilder->createNamedParameter($configuration->getUid(), PDO::PARAM_INT)
-                    )
-                )
-                ->execute()
-                ->fetch();
-
-            if (is_array($fileReference)) {
-                $queryBuilder = DatabaseUtility::queryBuilder();
-                $queryBuilder
-                    ->update('sys_file_reference', 'f')
-                    ->where(
-                        $queryBuilder->expr()->eq(
-                            'f.uid',
-                            $queryBuilder->createNamedParameter($fileReference['uid'], PDO::PARAM_INT)
-                        )
-                    )
-                    ->set('deleted', 1, true, PDO::PARAM_INT)
-                    ->execute();
-
-                $queryBuilder = DatabaseUtility::queryBuilder();
-                $queryBuilder
-                    ->update(Configuration::TABLE, 'c')
-                    ->where(
-                        $queryBuilder->expr()->eq(
-                            'c.uid',
-                            $queryBuilder->createNamedParameter($configuration->getUid(), PDO::PARAM_INT)
-                        )
-                    )
-                    ->set('jsonld_logo', 0, true, PDO::PARAM_INT)
-                    ->execute();
             }
         }
     }

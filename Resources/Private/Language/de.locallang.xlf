@@ -440,6 +440,14 @@
             <trans-unit id="label.pagination.next">
                 <target>Nächste Seite</target>
             </trans-unit>
+
+
+            <trans-unit id="validation.file_upload.file_size">
+                <target>Die ausgewählte Datei ist zu groß</target>
+            </trans-unit>
+            <trans-unit id="validation.file_upload.file_type">
+                <target>Der ausgewählte Dateityp (%s) ist nicht erlaubt</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

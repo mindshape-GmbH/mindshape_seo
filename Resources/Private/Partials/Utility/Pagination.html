@@ -6,12 +6,12 @@
     <f:if condition="{pagination.previousPageNumber} && {pagination.previousPageNumber} >= {pagination.firstPageNumber}">
       <f:then>
         <li class="page-item">
-          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: 1}')}" title="{f:translate(key: 'label.pagination.first')}">
+          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: 1}')}" title="{f:translate(key: 'label.pagination.first', extensionName: 'mindshape_seo')}">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: pagination.previousPageNumber}')}" title="{f:translate(key: 'label.pagination.previous')}">
+          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: pagination.previousPageNumber}')}" title="{f:translate(key: 'label.pagination.previous', extensionName: 'mindshape_seo')}">
             <span aria-hidden="true">&lt;</span>
           </a>
         </li>
@@ -35,12 +35,12 @@
     <f:if condition="{pagination.nextPageNumber} && {pagination.nextPageNumber} <= {pagination.lastPageNumber}">
       <f:then>
         <li class="page-item">
-          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: pagination.nextPageNumber}')}" title="{f:translate(key: 'label.pagination.next')}">
+          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: pagination.nextPageNumber}')}" title="{f:translate(key: 'label.pagination.next', extensionName: 'mindshape_seo')}">
             <span aria-hidden="true">&gt;</span>
           </a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: pagination.lastPageNumber}')}" title="{f:translate(key: 'label.pagination.last')}">
+          <a class="page-link" href="{f:uri.action(action: 'preview', arguments: '{currentPaginationPage: pagination.lastPageNumber}')}" title="{f:translate(key: 'label.pagination.last', extensionName: 'mindshape_seo')}">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>

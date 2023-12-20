@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Hook;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *
@@ -28,7 +28,6 @@ namespace Mindshape\MindshapeSeo\Hook;
 use Mindshape\MindshapeSeo\Service\HeaderDataService;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
@@ -65,36 +64,22 @@ class InjectAnalyticsHook
     }
 
     /**
-     * @param array $params
-     * @param \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController
-     * @return void
-     */
-    public function pageLoadFromCache(array &$params, TypoScriptFrontendController $typoScriptFrontendController) {
-        if (isset($params['cache_pages_row']['content']) && strlen($params['cache_pages_row']['content']) > 0) {
-            $this->injectAnalyticsTags($params['cache_pages_row']['content']);
-        }
-    }
-
-
-    /**
      * @param string $html
-     * @return void
      */
-    public function injectAnalyticsTags(string &$html)
+    public function injectAnalyticsTags(string &$html): void
     {
-        if (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
+        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             /** @var \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService */
             $headerDataService = GeneralUtility::makeInstance(HeaderDataService::class);
-            try {
-                $analyticsData = $headerDataService->getAnalyticsTags();
-                if (count($analyticsData) > 0) {
-                    foreach ($analyticsData as $data) {
-                        if ($data !== '' && mb_strpos($html, $data) === false) {
-                            $html = str_ireplace("</head>", "$data</head>", $html);
-                        }
+            $analyticsData = $headerDataService->getAnalyticsTags();
+
+            if (count($analyticsData) > 0) {
+                foreach ($analyticsData as $data) {
+                    if ($data !== '' && mb_strpos($html, $data) === false) {
+                        $html = str_ireplace("</head>", "$data</head>", $html);
                     }
                 }
-            } catch (InvalidExtensionNameException $e) {}
+            }
         }
     }
 }

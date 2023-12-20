@@ -1,4 +1,9 @@
 <?php
+
+use Mindshape\MindshapeSeo\Domain\Model\Configuration;
+use TYPO3\CMS\Core\Resource\AbstractFile;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 return [
     'ctrl' => [
         'title' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration',
@@ -13,6 +18,9 @@ return [
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'translationSource' => 'l10n_source',
+        'security' => [
+            'ignorePageTypeRestriction' => true,
+        ],
         'delete' => 'deleted',
         'enablecolumns' => [],
         'searchFields' => 'domain,google_analytics,title_attachment,add_analytics,add_jsonld,add_jsonld_breadcrumb,jsonld_custom_url,jsonld_type,jsonld_telephone,jsonld_fax,jsonld_email,jsonld_same_as_facebook,jsonld_same_as_twitter,jsonld_same_as_instagram,jsonld_same_as_youtube,jsonld_same_as_linkedin,jsonld_same_as_xing,jsonld_same_as_printerest,jsonld_same_as_soundcloud,jsonld_same_as_tumblr,jsonld_logo,jsonld_address_locality,jsonld_address_postalcode,jsonld_address_street,',
@@ -212,11 +220,11 @@ return [
                 'items' => [
                     [
                         'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.type.organization',
-                        \Mindshape\MindshapeSeo\Domain\Model\Configuration::JSONLD_TYPE_ORGANIZATION,
+                        Configuration::JSONLD_TYPE_ORGANIZATION,
                     ],
                     [
                         'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.type.person',
-                        \Mindshape\MindshapeSeo\Domain\Model\Configuration::JSONLD_TYPE_PERSON,
+                        Configuration::JSONLD_TYPE_PERSON,
                     ],
                 ],
             ],
@@ -341,19 +349,14 @@ return [
         'jsonld_logo' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.logo',
-            'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
+            'config' => ExtensionManagementUtility::getFileFieldTCAConfig(
                 'jsonld_logo',
                 [
                     'appearance' => [
                         'createNewRelationLinkTitle' => 'LLL:EXT:cms/locallang_ttc.xlf:images.addFileReference',
                     ],
-                    'foreign_match_fields' => [
-                        'fieldname' => 'jsonld_logo',
-                        'tablenames' => 'tx_mindshapeseo_domain_model_configuration',
-                        'table_local' => 'sys_file',
-                    ],
                     'foreign_types' => [
-                        \TYPO3\CMS\Core\Resource\File::FILETYPE_IMAGE => [
+                        AbstractFile::FILETYPE_IMAGE => [
                             'showitem' => '
 							--palette--;LLL:EXT:lang/locallang_tca.xlf:sys_file_reference.imageoverlayPalette;imageoverlayPalette,
 							--palette--;;filePalette',

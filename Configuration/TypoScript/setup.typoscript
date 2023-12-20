@@ -12,6 +12,8 @@ plugin.tx_mindshapeseo {
       disableOnBackendLogin = {$plugin.tx_mindshapeseo.settings.analytics.disableOnBackendLogin}
     }
 
+    jsonLdLogo = {$plugin.tx_mindshapeseo.settings.jsonLdLogo}
+
     breadcrumb {
       respectDoktypes = {$plugin.tx_mindshapeseo.settings.breadcrumb.respectDoktypes}
     }

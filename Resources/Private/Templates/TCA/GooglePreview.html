@@ -5,7 +5,7 @@
 
   <f:if condition="{metadata}">
     <f:then>
-      <label>{f:translate(key: 'tx_mindshapeseo_label.google_search_preview')}</label>
+      <label>{f:translate(key: 'tx_mindshapeseo_label.google_search_preview', extensionName: 'mindshape_seo')}</label>
 
       <span class="mindshapeseo-preview" data-typo3-version="{typo3Version}"></span>
       <f:render partial="GoogleSearchPreview" section="Main" arguments="{
@@ -30,11 +30,11 @@
         <a href="#" class="btn btn-default info error">
           <core:icon identifier="provider-fontawesome-warning"/>
           <span class="alerts"></span>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.seo_check.hint')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.seo_check.hint', extensionName: 'mindshape_seo')}
         </a>
         <a href="#" class="btn btn-default info no-error">
           <core:icon identifier="provider-fontawesome-success"/>
-          {f:translate(key: 'tx_mindshapeseo_label.preview.seo_check.ok')}
+          {f:translate(key: 'tx_mindshapeseo_label.preview.seo_check.ok', extensionName: 'mindshape_seo')}
         </a>
       </div>
     </f:then>
@@ -43,8 +43,8 @@
   <div class="row">
     <div class="col-sm-12 col-md-6">
       <div class="form-group">
-        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword')}</label>
-        <f:form.textfield id="focusKeyword" name="{f:if(condition: editing, then: 'focusKeyword', else: tcaName)}" value="{focusKeyword}" class="form-control"/>
+        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_focus_keyword', extensionName: 'mindshape_seo')}</label>
+        <input id="focusKeyword" name="{f:if(condition: editing, then: 'focusKeyword', else: tcaName)}" value="{focusKeyword}" class="form-control"/>
       </div>
     </div>
   </div>

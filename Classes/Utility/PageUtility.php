@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -26,8 +26,11 @@ namespace Mindshape\MindshapeSeo\Utility;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Service\PageService;
+use ReflectionClass;
+use ReflectionException;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * @package mindshape_seo
@@ -36,48 +39,30 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class PageUtility
 {
     /**
-     * @return array
-     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
-     */
-    public static function getCurrentPage()
-    {
-        $pageService = GeneralUtility::makeInstance(PageService::class);
-
-        return $pageService->getCurrentPage();
-    }
-
-    /**
-     * @param $pageUid
-     * @return array
-     */
-    public static function getPage($pageUid)
-    {
-        $pageService = GeneralUtility::makeInstance(PageService::class);
-
-        return $pageService->getPage($pageUid);
-    }
-
-    /**
      * @return \TYPO3\CMS\Core\Page\PageRenderer
      */
-    public static function getPageRenderer()
+    public static function getPageRenderer(): PageRenderer
     {
         /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController */
-        $typoScriptFrontendController = $GLOBALS['TSFE'];
+        $typoScriptFrontendController = $GLOBALS['TSFE'] ?? null;
 
-        try {
-            $typoScriptFrontendControllerReflectionClass = new \ReflectionClass($typoScriptFrontendController);
+        if ($typoScriptFrontendController instanceof TypoScriptFrontendController) {
+            try {
+                $typoScriptFrontendControllerReflectionClass = new ReflectionClass($typoScriptFrontendController);
 
-            $pageRendererPropertyReflection = $typoScriptFrontendControllerReflectionClass->getProperty('pageRenderer');
-            $pageRendererPropertyReflection->setAccessible(true);
+                $pageRendererPropertyReflection = $typoScriptFrontendControllerReflectionClass->getProperty('pageRenderer');
+                $pageRendererPropertyReflection->setAccessible(true);
 
-            /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
-            $pageRenderer = $pageRendererPropertyReflection->getValue($typoScriptFrontendController);
+                /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
+                $pageRenderer = $pageRendererPropertyReflection->getValue($typoScriptFrontendController);
 
-            if ($pageRenderer instanceof PageRenderer) {
-                return $pageRenderer;
+                if ($pageRenderer instanceof PageRenderer) {
+                    return $pageRenderer;
+                }
+            } catch (ReflectionException) {
+                // ignore
             }
-        } catch (\ReflectionException $exception) {}
+        }
 
         return GeneralUtility::makeInstance(PageRenderer::class);
     }

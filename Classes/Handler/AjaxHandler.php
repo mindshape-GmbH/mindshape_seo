@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Handler;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -35,7 +35,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 /**
@@ -47,7 +46,6 @@ class AjaxHandler implements SingletonInterface
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \Psr\Http\Message\ResponseInterface
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function savePage(ServerRequestInterface $request): ResponseInterface
     {
@@ -58,8 +56,6 @@ class AjaxHandler implements SingletonInterface
 
         if (is_array($data)) {
             if (0 < $data['pageUid'] && !empty($data['title'])) {
-                $page = PageUtility::getPage((int)$data['pageUid']);
-
                 $this->savePageData(
                     (int)$data['pageUid'],
                     (int)($data['sysLanguageUid'] ?? 0),
@@ -68,8 +64,8 @@ class AjaxHandler implements SingletonInterface
                         'seo_title' => $data['seoTitle'],
                         'description' => $data['description'] ?? '',
                         'mindshapeseo_focus_keyword' => $data['focusKeyword'] ?? '',
-                        'no_index' => (bool)$data['noindex'] ? 1 : 0,
-                        'no_follow' => (bool)$data['nofollow'] ? 1 : 0,
+                        'no_index' => $data['noindex'] ? 1 : 0,
+                        'no_follow' => $data['nofollow'] ? 1 : 0,
                     ]
                 );
 

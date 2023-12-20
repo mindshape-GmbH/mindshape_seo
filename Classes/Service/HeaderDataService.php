@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -26,19 +26,20 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use InvalidArgumentException;
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
+use Mindshape\MindshapeSeo\Utility\LinkUtility;
 use Mindshape\MindshapeSeo\Utility\PageUtility;
-use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry;
+use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package mindshape_seo
@@ -47,78 +48,57 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class HeaderDataService implements SingletonInterface
 {
     /**
-     * @var \TYPO3\CMS\Core\Page\PageRenderer
+     * @var \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
      */
-    protected $pageRenderer;
-
-    /**
-     * @var \Mindshape\MindshapeSeo\Service\PageService
-     */
-    protected $pageService;
-
-    /**
-     * @var \Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService
-     */
-    protected $standaloneTemplateRendererService;
-
-    /**
-     * @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository
-     */
-    protected $configurationRepository;
-
-    /**
-     * @var \Mindshape\MindshapeSeo\Domain\Model\Configuration
-     */
-    protected $domainConfiguration;
+    protected ?Configuration $domainConfiguration;
 
     /**
      * @var array
      */
-    protected $params = [];
+    protected array $params = [];
 
     /**
      * @var array
      */
-    protected $jsonLd = [];
+    protected array $jsonLd = [];
 
     /**
      * @var array
      */
-    protected $settings = [];
+    protected array $settings = [];
 
     /**
-     * @var array
+     * @var array|null
      */
-    protected $currentPageMetaData;
+    protected ?array $currentPageMetaData;
 
     /**
      * @var string
      */
-    protected $currentDomainUrl;
+    protected string $currentDomainUrl;
 
     /**
      * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
      * @param \Mindshape\MindshapeSeo\Service\PageService $pageService
      * @param \Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService $standaloneTemplateRendererService
+     * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
+     * @throws \Doctrine\DBAL\Exception
+     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function __construct(
-        ConfigurationRepository           $configurationRepository,
-        PageService                       $pageService,
-        StandaloneTemplateRendererService $standaloneTemplateRendererService
-    )
-    {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->pageService = $pageService;
-        $this->standaloneTemplateRendererService = $standaloneTemplateRendererService;
-        $this->configurationRepository = $configurationRepository;
-
+        protected ConfigurationRepository $configurationRepository,
+        protected PageService $pageService,
+        protected StandaloneTemplateRendererService $standaloneTemplateRendererService,
+        protected PageRenderer $pageRenderer
+    ) {
         /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
-        $configurationManager = $objectManager->get(ConfigurationManager::class);
+        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
 
-        $this->settings = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'mindshapeseo');
+        $this->settings = $configurationManager->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+            'mindshapeseo'
+        );
 
         $page = $this->pageService->getCurrentPage();
 
@@ -148,10 +128,7 @@ class HeaderDataService implements SingletonInterface
         $this->pageRenderer = PageUtility::getPageRenderer();
     }
 
-    /**
-     * @return void
-     */
-    public function manipulateHeaderData()
+    public function manipulateHeaderData(): void
     {
         $this->setRobotsMetaTag();
 
@@ -169,7 +146,7 @@ class HeaderDataService implements SingletonInterface
     }
 
     /**
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
+     * @return array
      */
     public function getAnalyticsTags(): array
     {
@@ -201,12 +178,12 @@ class HeaderDataService implements SingletonInterface
     /**
      * @return bool
      */
-    protected function injectAnalyticsData()
+    protected function injectAnalyticsData(): bool
     {
         $analyticsDisabled = false;
 
         if (isset($this->settings['analytics']['disable'])) {
-            $analyticsDisabled = (bool)$this->settings['analytics']['disable'];
+            $analyticsDisabled = (bool) $this->settings['analytics']['disable'];
         }
 
         if (
@@ -215,11 +192,14 @@ class HeaderDataService implements SingletonInterface
             !$analyticsDisabled
         ) {
             $disableOnBackendLogin = false;
+
             if (isset($this->settings['analytics']['disableOnBackendLogin'])) {
-                $disableOnBackendLogin = (bool)$this->settings['analytics']['disableOnBackendLogin'];
+                $disableOnBackendLogin = (bool) $this->settings['analytics']['disableOnBackendLogin'];
             }
 
+            /** @var \TYPO3\CMS\Core\Context\Context $context */
             $context = GeneralUtility::makeInstance(Context::class);
+
             try {
                 $backendIsLoggedIn = $context->getPropertyFromAspect('backend.user', 'isLoggedIn');
             } catch (AspectNotFoundException $e) {
@@ -234,7 +214,7 @@ class HeaderDataService implements SingletonInterface
         return false;
     }
 
-    protected function addTitle()
+    protected function addTitle(): void
     {
         $title = $this->pageRenderer->getTitle();
 
@@ -260,16 +240,15 @@ class HeaderDataService implements SingletonInterface
     /**
      * @return array
      */
-    public function getJsonLd()
+    public function getJsonLd(): array
     {
         return $this->jsonLd;
     }
 
     /**
      * @param array $jsonLd
-     * @return void
      */
-    public function setJsonLd(array $jsonLd)
+    public function setJsonLd(array $jsonLd): void
     {
         $this->jsonLd = $jsonLd;
     }
@@ -277,16 +256,15 @@ class HeaderDataService implements SingletonInterface
     /**
      * @param string $html
      * @return string
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
      */
-    public function addGoogleTagmanagerBodyToHtml(string $html)
+    public function addGoogleTagmanagerBodyToHtml(string $html): string
     {
         if ($this->injectAnalyticsData()) {
             $tagmanagerBody = $this->standaloneTemplateRendererService->render('Analytics', 'GoogleTagmanagerBody', [
                 'tagmanagerId' => $this->domainConfiguration->getGoogleTagmanager(),
             ]);
 
-            $tagmanagerBody = trim(preg_replace('/\\>\\s+\\</', '><', $tagmanagerBody));
+            $tagmanagerBody = trim(preg_replace('/>\\s+</', '><', $tagmanagerBody));
 
             return preg_replace('/<body(.*?)>/', '<body$1>' . $tagmanagerBody, $html, 1);
         }
@@ -294,10 +272,10 @@ class HeaderDataService implements SingletonInterface
         return $html;
     }
 
-    protected function setRobotsMetaTag()
+    protected function setRobotsMetaTag(): void
     {
-        $noindexInherited = (bool)$this->currentPageMetaData['meta']['robots']['noindexInherited'];
-        $nofollowInherited = (bool)$this->currentPageMetaData['meta']['robots']['nofollowInherited'];
+        $noindexInherited = (bool) $this->currentPageMetaData['meta']['robots']['noindexInherited'];
+        $nofollowInherited = (bool) $this->currentPageMetaData['meta']['robots']['nofollowInherited'];
 
         if (
             true === $noindexInherited ||
@@ -306,12 +284,17 @@ class HeaderDataService implements SingletonInterface
             $noindex = false;
             $nofollow = false;
 
-            $robotsMetaTagManager = GeneralUtility::makeInstance(MetaTagManagerRegistry::class)->getManagerForProperty('robots');
+            /** @var \TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry $metaTagManagerRegistry */
+            $metaTagManagerRegistry = GeneralUtility::makeInstance(MetaTagManagerRegistry::class);
+            $robotsMetaTagManager = $metaTagManagerRegistry->getManagerForProperty('robots');
 
             $originalRobotsMetaTagValue = $robotsMetaTagManager->getProperty('robots');
 
             if (0 < count($originalRobotsMetaTagValue)) {
-                $originalRobotsMetaTagValue = GeneralUtility::trimExplode(',', $originalRobotsMetaTagValue[0]['content']);
+                $originalRobotsMetaTagValue = GeneralUtility::trimExplode(
+                    ',',
+                    $originalRobotsMetaTagValue[0]['content']
+                );
 
                 $noindex = true === in_array('noindex', $originalRobotsMetaTagValue, true);
                 $nofollow = true === in_array('nofollow', $originalRobotsMetaTagValue, true);
@@ -393,10 +376,7 @@ class HeaderDataService implements SingletonInterface
         );
     }
 
-    /**
-     * @return void
-     */
-    protected function addJsonLd()
+    protected function addJsonLd(): void
     {
         if ($this->domainConfiguration->getAddJsonld()) {
             $this->jsonLd[] = $this->renderJsonWebsiteName();
@@ -404,11 +384,10 @@ class HeaderDataService implements SingletonInterface
         }
     }
 
-    /**
-     * @return void
-     */
-    protected function renderJsonLd()
+    protected function renderJsonLd(): void
     {
+        // TODO: remove old hooks and replace with custom event
+
         if (
             true === array_key_exists('mindshape_seo', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']) &&
             true === is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'] ?? null)
@@ -430,7 +409,7 @@ class HeaderDataService implements SingletonInterface
     /**
      * @return array
      */
-    protected function renderJsonWebsiteName()
+    protected function renderJsonWebsiteName(): array
     {
         return [
             '@context' => 'http://schema.org',
@@ -444,8 +423,10 @@ class HeaderDataService implements SingletonInterface
     /**
      * @return array
      */
-    protected function renderJsonLdInformation()
+    protected function renderJsonLdInformation(): array
     {
+        $jsonLdLogo = $this->settings['jsonLdLogo'] ?? null;
+
         $jsonld = [
             '@context' => 'http://schema.org',
             '@type' => $this->domainConfiguration->getJsonldType(),
@@ -473,31 +454,30 @@ class HeaderDataService implements SingletonInterface
             false === empty($this->domainConfiguration->getJsonldAddressPostalcode()) &&
             false === empty($this->domainConfiguration->getJsonldAddressStreet())
         ) {
-            $jsonld['address'] = ['@type' => 'PostalAddress',];
-
-            if (false === empty($this->domainConfiguration->getJsonldAddressLocality())) {
-                $jsonld['address']['addressLocality'] = $this->domainConfiguration->getJsonldAddressLocality();
-            }
-
-
-            if (false === empty($this->domainConfiguration->getJsonldAddressPostalcode())) {
-                $jsonld['address']['postalcode'] = $this->domainConfiguration->getJsonldAddressPostalcode();
-            }
-
-
-            if (false === empty($this->domainConfiguration->getJsonldAddressStreet())) {
-                $jsonld['address']['streetAddress'] = $this->domainConfiguration->getJsonldAddressStreet();
-            }
+            $jsonld['address'] = [
+                '@type' => 'PostalAddress',
+                'addressLocality' => $this->domainConfiguration->getJsonldAddressLocality(),
+                'postalcode' => $this->domainConfiguration->getJsonldAddressPostalcode(),
+                'streetAddress' => $this->domainConfiguration->getJsonldAddressStreet(),
+            ];
         }
 
         if (
-            null !== $this->domainConfiguration->getJsonldLogo() &&
-            Configuration::JSONLD_TYPE_PERSON !== $this->domainConfiguration->getJsonldType()
+            !empty($jsonLdLogo) &&
+            Configuration::JSONLD_TYPE_ORGANIZATION === $this->domainConfiguration->getJsonldType()
         ) {
-            $jsonld['logo'] = GeneralUtility::getIndpEnv('TYPO3_SITE_URL') . ltrim($this->domainConfiguration
-                    ->getJsonldLogo()
-                    ->getOriginalResource()
-                    ->getPublicUrl(), '/');
+            /** @var \TYPO3\CMS\Core\Resource\ResourceFactory $resourceFactory */
+            $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+
+            try {
+                $jsonLdLogoFile = $resourceFactory->getFileObjectFromCombinedIdentifier($jsonLdLogo);
+                $jsonld['logo'] = LinkUtility::renderTypoLink(
+                    sprintf('t3://file?uid=%d', $jsonLdLogoFile->getUid()),
+                    true
+                );
+            } catch (InvalidArgumentException) {
+                // ignore
+            }
         }
 
         $socialMediaLinks = [
@@ -525,12 +505,11 @@ class HeaderDataService implements SingletonInterface
         return $jsonld;
     }
 
-    /**
-     * @return void
-     */
-    protected function addJsonLdBreadcrumb()
+    protected function addJsonLdBreadcrumb(): void
     {
         $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
+
+        // TODO: remove old hooks and replace with custom event
 
         if (
             true === array_key_exists('mindshape_seo', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']) &&
@@ -552,8 +531,9 @@ class HeaderDataService implements SingletonInterface
 
     /**
      * @return array
+     * @throws \Doctrine\DBAL\Exception
      */
-    protected function renderJsonLdBreadcrum()
+    protected function renderJsonLdBreadcrum(): array
     {
         $respectDoktypes = GeneralUtility::trimExplode(',', $this->settings['breadcrumb']['respectDoktypes']);
         $breadcrumb = [

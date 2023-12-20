@@ -20,10 +20,7 @@ define([
             deleteButton: '.mindshape-seo-deletebutton',
             jsonldCheckbox: '#addJsonld',
             jsonld: '#jsonld',
-            jsonldTypeSelect: '.type-select',
-            jsonldLogo: 'fieldset.logo',
-            jsonldLogoDelete: '.mindshape-seo-delete',
-            jsonldLogoContainer: '.mindshape-seo-upload'
+            jsonldTypeSelect: '.type-select'
         }
     };
 
@@ -46,34 +43,8 @@ define([
         let jsonld = document.querySelector(SettingsModule.selectors.jsonld);
         let addJsonldCheckbox = document.querySelector(SettingsModule.selectors.jsonldCheckbox);
         let jsonldTypeSelect = document.querySelector(SettingsModule.selectors.jsonldTypeSelect);
-        let jsonldLogo = document.querySelector(SettingsModule.selectors.jsonldLogo);
-        let jsonldLogoDelete = document.querySelector(SettingsModule.selectors.jsonldLogoDelete);
-
-        if (jsonldLogoDelete !== null) {
-            jsonldLogoDelete.addEventListener('click', function (e) {
-                e.preventDefault();
-
-                let uploadContainer =jsonld.querySelector(SettingsModule.selectors.jsonldLogoContainer);
-                if (uploadContainer !== null) {
-                    uploadContainer.querySelector('input[type="hidden"]').remove();
-                    uploadContainer.querySelector('.image').remove();
-                }
-            });
-        }
 
         if (jsonld !== null && addJsonldCheckbox !== null && jsonldTypeSelect !== null) {
-            if (jsonldTypeSelect.value === 'Organization') {
-                jsonldLogo.style.display = 'block';
-            }
-
-            jsonldTypeSelect.addEventListener('change', function (e) {
-                if (jsonldTypeSelect.value === 'Organization') {
-                    Utils.slideDown(jsonldLogo);
-                } else {
-                    Utils.slideUp(jsonldLogo);
-                }
-            });
-
             if (addJsonldCheckbox.checked) {
                 jsonld.style.display = 'block';
             }
