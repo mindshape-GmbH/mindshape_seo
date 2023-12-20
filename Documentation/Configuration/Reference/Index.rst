@@ -24,3 +24,7 @@ plugin.tx_mindshapeseo.settings:
 +---------------------------------+------------------------------------------------------------+---------+
 | googlePreview.respectDoktypes   | The doktypes allowed to be shown in SEO preview            | 1,4     |
 +---------------------------------+------------------------------------------------------------+---------+
+| breadcrumb.respectDoktypes      | The doktypes allowed to render the JSON+LD breadcrumb      | 1,4     |
++---------------------------------+------------------------------------------------------------+---------+
+| jsonLdLogo                      | Combined identifier file path for the JSON+LD logo         |         |
++---------------------------------+------------------------------------------------------------+---------+
