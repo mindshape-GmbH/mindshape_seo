@@ -401,7 +401,7 @@ class HeaderDataService implements SingletonInterface
 
         if (0 < count($this->jsonLd)) {
             $this->pageRenderer->addHeaderData(
-                '<script type="application/ld+json" data-ignore="1">' . json_encode($this->jsonLd) . '</script>'
+                '<script type="application/ld+json" data-ignore="1">' . json_encode($this->jsonLd, JSON_HEX_TAG) . '</script>'
             );
         }
     }
