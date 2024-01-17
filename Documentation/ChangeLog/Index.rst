@@ -10,6 +10,9 @@
 ChangeLog
 ---------
 
+v3.0.1
+  * Add missing increase of max TYPO3 version in emconf
+
 v3.0.0
   * Compatibility for TYPO3 v11 & v12
   * Multiple bugfixes & refactorings
