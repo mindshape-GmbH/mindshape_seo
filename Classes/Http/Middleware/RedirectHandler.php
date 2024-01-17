@@ -10,7 +10,7 @@ namespace Mindshape\MindshapeSeo\Http\Middleware;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  ***/
 
@@ -19,11 +19,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use TYPO3\CMS\Core\Information\Typo3Version;
-use TYPO3\CMS\Core\LinkHandling\LinkService;
-use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Redirects\Service\RedirectCacheService;
 use TYPO3\CMS\Redirects\Service\RedirectService;
 
 /**
@@ -34,20 +30,14 @@ class RedirectHandler implements MiddlewareInterface
     /**
      * @var \TYPO3\CMS\Redirects\Service\RedirectService
      */
-    protected $redirectService;
+    protected RedirectService $redirectService;
 
-    public function __construct()
+    /**
+     * @param \TYPO3\CMS\Redirects\Service\RedirectService $redirectService
+     */
+    public function __construct(RedirectService $redirectService)
     {
-        if (true === version_compare('10.4', GeneralUtility::makeInstance(Typo3Version::class)->getVersion(), '<=')) {
-            $this->redirectService = GeneralUtility::makeInstance(
-                RedirectService::class,
-                GeneralUtility::makeInstance(RedirectCacheService::class),
-                GeneralUtility::makeInstance(LinkService::class),
-                GeneralUtility::makeInstance(SiteFinder::class)
-            );
-        } else {
-            $this->redirectService = GeneralUtility::makeInstance(RedirectService::class);
-        }
+        $this->redirectService = $redirectService;
     }
 
     /**
@@ -69,7 +59,10 @@ class RedirectHandler implements MiddlewareInterface
             true === is_array($matchedRedirect) &&
             410 === $matchedRedirect['target_statuscode']
         ) {
-            return GeneralUtility::makeInstance(ErrorController::class)->pageGoneAction($request, 'The requested page is gone');
+            /** @var \Mindshape\MindshapeSeo\Controller\ErrorController $errorController */
+            $errorController = GeneralUtility::makeInstance(ErrorController::class);
+
+            return $errorController->pageGoneAction($request, 'The requested page is gone');
         }
 
         return $handler->handle($request);

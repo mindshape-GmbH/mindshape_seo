@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -36,7 +36,7 @@ class BackendUtility
     /**
      * @return int
      */
-    public static function getCurrentPageTreeSelectedPage()
+    public static function getCurrentPageTreeSelectedPage(): int
     {
         return (int) GeneralUtility::_GET('id');
     }

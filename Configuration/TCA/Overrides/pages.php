@@ -1,11 +1,12 @@
 <?php
-if (!defined('TYPO3_MODE')) {
-    die('Access denied.');
-}
+
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+defined('TYPO3') or die();
 
 $GLOBALS['TCA']['pages']['columns']['description']['label'] = 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.page_description';
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
+ExtensionManagementUtility::addTCAcolumns(
     'pages',
     [
         'lastUpdated' => [
@@ -66,19 +67,19 @@ $GLOBALS['TCA']['pages']['palettes']['mindshape_seo_jsonld_pallette'] = [
     'showitem' => 'mindshapeseo_jsonld_breadcrumb_title',
 ];
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
+ExtensionManagementUtility::addFieldsToPalette(
     'pages',
     'seo',
     '--linebreak--, mindshapeseo_focus_keyword,--linebreak--,mindshapeseo_disable_title_attachment'
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
+ExtensionManagementUtility::addFieldsToPalette(
     'pages',
     'robots',
     '--linebreak--, mindshapeseo_no_index_recursive, mindshapeseo_no_follow_recursive'
 );
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
     '--palette--;LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_label.jsonld;mindshape_seo_jsonld_pallette',
     '1,4',

@@ -3,15 +3,13 @@
       xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
 
   <div id="msh-modal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-sm" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <div class="modal-title">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <h4>{f:translate(key: 'tx_mindshapeseo_label.preview.seo_check')}</h4>
+            <h4>{f:translate(key: 'tx_mindshapeseo_label.preview.seo_check', extensionName: 'mindshape_seo')}</h4>
           </div>
+          <button type="button" class="btn btn-secondary close" data-dismiss="modal" data-bs-dismiss="modal">&#10005;</button>
         </div>
         <div class="modal-body"></div>
       </div>

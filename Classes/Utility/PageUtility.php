@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -26,9 +26,11 @@ namespace Mindshape\MindshapeSeo\Utility;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Service\PageService;
+use ReflectionClass;
+use ReflectionException;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * @package mindshape_seo
@@ -37,71 +39,31 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 class PageUtility
 {
     /**
-     * @return int
-     */
-    public static function getCurrentPageUid()
-    {
-        return 0 < (int) $GLOBALS['TSFE']->id
-            ? (int) $GLOBALS['TSFE']->id
-            : (int) GeneralUtility::_GET('id');
-    }
-
-    /**
-     * @return array
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
-     */
-    public static function getCurrentPage()
-    {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var \Mindshape\MindshapeSeo\Service\PageService $pageService */
-        $pageService = $objectManager->get(PageService::class);
-
-        return $pageService->getCurrentPage();
-    }
-
-    /**
-     * @param $pageUid
-     * @return array
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
-     */
-    public static function getPage($pageUid)
-    {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var \Mindshape\MindshapeSeo\Service\PageService $pageService */
-        $pageService = $objectManager->get(PageService::class);
-
-        return $pageService->getPage($pageUid);
-    }
-
-    /**
      * @return \TYPO3\CMS\Core\Page\PageRenderer
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
-    public static function getPageRenderer()
+    public static function getPageRenderer(): PageRenderer
     {
         /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController */
-        $typoScriptFrontendController = $GLOBALS['TSFE'];
+        $typoScriptFrontendController = $GLOBALS['TSFE'] ?? null;
 
-        try {
-            $typoScriptFrontendControllerReflectionClass = new \ReflectionClass($typoScriptFrontendController);
+        if ($typoScriptFrontendController instanceof TypoScriptFrontendController) {
+            try {
+                $typoScriptFrontendControllerReflectionClass = new ReflectionClass($typoScriptFrontendController);
 
-            $pageRendererPropertyReflection = $typoScriptFrontendControllerReflectionClass->getProperty('pageRenderer');
-            $pageRendererPropertyReflection->setAccessible(true);
+                $pageRendererPropertyReflection = $typoScriptFrontendControllerReflectionClass->getProperty('pageRenderer');
+                $pageRendererPropertyReflection->setAccessible(true);
 
-            /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
-            $pageRenderer = $pageRendererPropertyReflection->getValue($typoScriptFrontendController);
+                /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
+                $pageRenderer = $pageRendererPropertyReflection->getValue($typoScriptFrontendController);
 
-            if ($pageRenderer instanceof PageRenderer) {
-                return $pageRenderer;
+                if ($pageRenderer instanceof PageRenderer) {
+                    return $pageRenderer;
+                }
+            } catch (ReflectionException) {
+                // ignore
             }
-        } catch (\ReflectionException $exception) {}
+        }
 
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $pageRenderer = $objectManager->get(PageRenderer::class);
-
-        return $pageRenderer;
+        return GeneralUtility::makeInstance(PageRenderer::class);
     }
 }

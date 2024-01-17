@@ -6,6 +6,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_title">
                 <source>Title</source>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_seo-title">
+                <source>SEO Title</source>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_description">
                 <source>Descripition</source>
             </trans-unit>
@@ -347,7 +350,7 @@
                 <source>Previewed URL (searchresult)</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
-                <source>(example: 'www.%s' instead of 'http://%s')</source>
+                <source>(example: '%s' instead of 'https://%s')</source>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
                 <source>Type</source>
@@ -425,6 +428,28 @@
 
             <trans-unit id="extension_settings.enable_gone_redirects">
                 <source>Enable 410 Gone redirects for the redirect module</source>
+            </trans-unit>
+
+
+            <trans-unit id="label.pagination.first">
+                <source>First page</source>
+            </trans-unit>
+            <trans-unit id="label.pagination.last">
+                <source>Last page</source>
+            </trans-unit>
+            <trans-unit id="label.pagination.previous">
+                <source>Previous page</source>
+            </trans-unit>
+            <trans-unit id="label.pagination.next">
+                <source>Next page</source>
+            </trans-unit>
+
+
+            <trans-unit id="validation.file_upload.file_size">
+                <source>The choosen file is to big</source>
+            </trans-unit>
+            <trans-unit id="validation.file_upload.file_type">
+                <target>The choosen filetype (%s) is not allowed</target>
             </trans-unit>
         </body>
     </file>

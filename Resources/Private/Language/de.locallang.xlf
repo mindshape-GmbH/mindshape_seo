@@ -6,6 +6,9 @@
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_title">
                 <target>Titel</target>
             </trans-unit>
+            <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_seo-title">
+                <target>SEO Titel</target>
+            </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_pages.mindshapeseo_description">
                 <target>Beschreibung</target>
             </trans-unit>
@@ -344,7 +347,7 @@
                 <target>Angezeigte URL (Suchergebnis)</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.custom_url.example">
-                <target>(Beispiel: 'www.%s' anstatt 'http://%s')</target>
+                <target>(Beispiel: '%s' anstatt 'https://%s')</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.jsonld.type">
                 <target>Typ</target>
@@ -422,6 +425,28 @@
 
             <trans-unit id="extension_settings.enable_gone_redirects">
                 <target>Aktiviere 410 Gone Weiterleitungen für das Weiterleitungsmodul</target>
+            </trans-unit>
+
+
+            <trans-unit id="label.pagination.first">
+                <target>Erste Seite</target>
+            </trans-unit>
+            <trans-unit id="label.pagination.last">
+                <target>Letzte Seite</target>
+            </trans-unit>
+            <trans-unit id="label.pagination.previous">
+                <target>Vorherige Seite</target>
+            </trans-unit>
+            <trans-unit id="label.pagination.next">
+                <target>Nächste Seite</target>
+            </trans-unit>
+
+
+            <trans-unit id="validation.file_upload.file_size">
+                <target>Die ausgewählte Datei ist zu groß</target>
+            </trans-unit>
+            <trans-unit id="validation.file_upload.file_type">
+                <target>Der ausgewählte Dateityp (%s) ist nicht erlaubt</target>
             </trans-unit>
         </body>
     </file>

@@ -10,7 +10,7 @@ namespace Mindshape\MindshapeSeo\Controller;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  ***/
 
@@ -47,7 +47,7 @@ class ErrorController extends CoreErrorController
 
         try {
             return $this->handleDefaultError($request, 410, $message);
-        } catch (RuntimeException $exception) {
+        } catch (RuntimeException) {
             throw new PageNotFoundException($message, 1603365931);
         }
     }

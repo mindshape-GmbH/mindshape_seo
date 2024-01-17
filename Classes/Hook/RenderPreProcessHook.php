@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Hook;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *
@@ -26,10 +26,9 @@ namespace Mindshape\MindshapeSeo\Hook;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Service\HeaderDataService;
-use Mindshape\MindshapeSeo\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package mindshape_seo
@@ -40,13 +39,12 @@ class RenderPreProcessHook
     /**
      * @param array $params
      * @param PageRenderer $pageRenderer
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
-    public function main(array &$params, PageRenderer $pageRenderer)
+    public function main(array &$params, PageRenderer $pageRenderer): void
     {
-        if ('FE' === TYPO3_MODE) {
+        if (ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
             /** @var \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService */
-            $headerDataService = ObjectUtility::makeInstance(HeaderDataService::class);
+            $headerDataService = GeneralUtility::makeInstance(HeaderDataService::class);
             $headerDataService->manipulateHeaderData();
         }
     }

@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Handler;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -35,7 +35,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 /**
@@ -47,34 +46,26 @@ class AjaxHandler implements SingletonInterface
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \Psr\Http\Message\ResponseInterface
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
     public function savePage(ServerRequestInterface $request): ResponseInterface
     {
-        $data = $request->getParsedBody();
+        $data = json_decode($request->getBody()->getContents(), true);
 
         $response = ['saved' => false];
         $statusCode = 200;
 
         if (is_array($data)) {
             if (0 < $data['pageUid'] && !empty($data['title'])) {
-                $page = PageUtility::getPage((int) $data['pageUid']);
-
-                $titleField = 'title';
-
-                if (false === empty($page['seo_title'])) {
-                    $titleField = 'seo_title';
-                }
-
                 $this->savePageData(
-                    (int) $data['pageUid'],
-                    (int) $data['sysLanguageUid'],
+                    (int)$data['pageUid'],
+                    (int)($data['sysLanguageUid'] ?? 0),
                     [
-                        $titleField => $data['title'],
-                        'description' => $data['description'],
-                        'mindshapeseo_focus_keyword' => $data['focusKeyword'],
-                        'no_index' => (bool) $data['noindex'] ? 1 : 0,
-                        'no_follow' => (bool) $data['nofollow'] ? 1 : 0,
+                        'title' => $data['title'],
+                        'seo_title' => $data['seoTitle'],
+                        'description' => $data['description'] ?? '',
+                        'mindshapeseo_focus_keyword' => $data['focusKeyword'] ?? '',
+                        'no_index' => $data['noindex'] ? 1 : 0,
+                        'no_follow' => $data['nofollow'] ? 1 : 0,
                     ]
                 );
 
@@ -97,20 +88,18 @@ class AjaxHandler implements SingletonInterface
      */
     public function deleteConfiguration(ServerRequestInterface $request): ResponseInterface
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         /** @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository */
-        $configurationRepository = $objectManager->get(ConfigurationRepository::class);
+        $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
         /** @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager */
-        $persistenceManager = $objectManager->get(PersistenceManager::class);
+        $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
 
-        $data = $request->getParsedBody();
+        $data = json_decode($request->getBody()->getContents(), true);
 
         $response = ['deleted' => false];
         $statusCode = 200;
 
         if (is_array($data)) {
-            if (0 < (int) $data['configurationUid']) {
+            if (0 < (int)$data['configurationUid']) {
                 $configuration = $configurationRepository->findByUid($data['configurationUid']);
                 $configurationRepository->remove($configuration);
                 $persistenceManager->persistAll();
@@ -143,9 +132,9 @@ class AjaxHandler implements SingletonInterface
                     'p.uid',
                     $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)
                 ),
-                $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
-                    $sysLanguageUid,
-                    PDO::PARAM_INT)
+                $queryBuilder->expr()->eq(
+                    'p.sys_language_uid',
+                    $queryBuilder->createNamedParameter($sysLanguageUid, PDO::PARAM_INT)
                 )
             )
             ->execute();
@@ -159,10 +148,11 @@ class AjaxHandler implements SingletonInterface
                 ->where(
                     $queryBuilder->expr()->eq(
                         'p.' . $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'],
-                        $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
-                    $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
-                        $sysLanguageUid,
-                        PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'p.sys_language_uid',
+                        $queryBuilder->createNamedParameter($sysLanguageUid, PDO::PARAM_INT)
                     )
                 )
                 ->execute()

@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Domain\Model;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -26,7 +26,7 @@ namespace Mindshape\MindshapeSeo\Domain\Model;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Extbase\Domain\Model\FileReference as ExtbaseFileReference;
+use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
@@ -49,196 +49,195 @@ class Configuration extends AbstractEntity
     /**
      * @var string
      */
-    protected $domain = '';
+    protected string $domain = '';
 
     /**
      * @var bool
      */
-    protected $mergeWithDefault = true;
+    protected bool $mergeWithDefault = true;
 
     /**
      * @var string
      */
-    protected $googleAnalytics = '';
+    protected string $googleAnalytics = '';
 
     /**
      * @var string
      */
-    protected $googleAnalyticsV4 = '';
+    protected string $googleAnalyticsV4 = '';
 
     /**
      * @var string
      */
-    protected $googleTagmanager = '';
+    protected string $googleTagmanager = '';
 
     /**
      * @var string
      */
-    protected $titleAttachment = '';
+    protected string $titleAttachment = '';
 
     /**
      * @var string
      */
-    protected $titleAttachmentSeperator = '';
+    protected string $titleAttachmentSeperator = '';
 
     /**
      * @var string
      */
-    protected $titleAttachmentPosition = '';
+    protected string $titleAttachmentPosition = '';
 
     /**
      * @var bool
      */
-    protected $addAnalytics = false;
+    protected bool $addAnalytics = false;
 
     /**
      * @var bool
      */
-    protected $googleAnalyticsUseCookieConsent = false;
+    protected bool $googleAnalyticsUseCookieConsent = false;
 
     /**
      * @var bool
      */
-    protected $googleAnalyticsV4UseCookieConsent = false;
+    protected bool $googleAnalyticsV4UseCookieConsent = false;
 
     /**
      * @var bool
      */
-    protected $tagmanagerUseCookieConsent = false;
+    protected bool $tagmanagerUseCookieConsent = false;
 
     /**
      * @var bool
      */
-    protected $matomoUseCookieConsent = false;
+    protected bool $matomoUseCookieConsent = false;
 
     /**
      * @var bool
      */
-    protected $addJsonld = false;
+    protected bool $addJsonld = false;
 
     /**
      * @var bool
      */
-    protected $addJsonldBreadcrumb = false;
+    protected bool $addJsonldBreadcrumb = false;
 
     /**
      * @var string
      */
-    protected $jsonldCustomUrl = '';
+    protected string $jsonldCustomUrl = '';
 
     /**
      * @var string
      */
-    protected $jsonldType = '';
+    protected string $jsonldType = '';
 
     /**
      * @var string
      */
-    protected $jsonldName = '';
+    protected string $jsonldName = '';
 
     /**
      * @var string
      */
-    protected $jsonldTelephone = '';
+    protected string $jsonldTelephone = '';
 
     /**
      * @var string
      */
-    protected $jsonldFax = '';
+    protected string $jsonldFax = '';
 
     /**
      * @var string
      */
-    protected $jsonldEmail = '';
+    protected string $jsonldEmail = '';
 
     /**
      * @var string
      */
-    protected $jsonldSameAsFacebook = '';
+    protected string $jsonldSameAsFacebook = '';
 
     /**
      * @var string
      */
-    protected $jsonldSameAsTwitter = '';
+    protected string $jsonldSameAsTwitter = '';
 
     /**
      * @var string
      */
-    protected $jsonldSameAsInstagram = '';
+    protected string $jsonldSameAsInstagram = '';
 
     /**
      * @var string
      */
-    protected $jsonldSameAsYoutube = '';
+    protected string $jsonldSameAsYoutube = '';
 
     /**
      * @var string
      */
-    protected $jsonldSameAsLinkedin = '';
+    protected string $jsonldSameAsLinkedin = '';
 
     /**
      * @var string
      */
-    protected $jsonldSameAsXing = '';
+    protected string $jsonldSameAsXing = '';
 
     /**
      * @var string
      */
-    protected $jsonldSameAsPrinterest = '';
+    protected string $jsonldSameAsPrinterest = '';
 
     /**
      * @var string
      */
-    protected $jsonldSameAsSoundcloud = '';
+    protected string $jsonldSameAsSoundcloud = '';
 
     /**
      * @var string
      */
-    protected $jsonldSameAsTumblr = '';
+    protected string $jsonldSameAsTumblr = '';
 
     /**
-     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
+     * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference|null
      */
-    protected $jsonldLogo;
-
-    /**
-     * @var string
-     */
-    protected $jsonldAddressLocality = '';
+    protected ?FileReference $jsonldLogo;
 
     /**
      * @var string
      */
-    protected $jsonldAddressPostalcode = '';
+    protected string $jsonldAddressLocality = '';
 
     /**
      * @var string
      */
-    protected $jsonldAddressStreet = '';
+    protected string $jsonldAddressPostalcode = '';
 
     /**
      * @var string
      */
-    protected $matomoUrl = '';
+    protected string $jsonldAddressStreet = '';
 
     /**
      * @var string
      */
-    protected $matomoIdsite = '';
+    protected string $matomoUrl = '';
+
+    /**
+     * @var string
+     */
+    protected string $matomoIdsite = '';
 
     /**
      * @return string $domain
      */
-    public function getDomain()
+    public function getDomain(): string
     {
         return $this->domain;
     }
 
     /**
      * @param string $domain
-     * @return void
      */
-    public function setDomain($domain)
+    public function setDomain(string $domain): void
     {
         $this->domain = $domain;
     }
@@ -246,7 +245,7 @@ class Configuration extends AbstractEntity
     /**
      * @return bool
      */
-    public function isMergeWithDefault()
+    public function isMergeWithDefault(): bool
     {
         return $this->mergeWithDefault;
     }
@@ -254,7 +253,7 @@ class Configuration extends AbstractEntity
     /**
      * @param bool $mergeWithDefault
      */
-    public function setMergeWithDefault($mergeWithDefault)
+    public function setMergeWithDefault(bool $mergeWithDefault): void
     {
         $this->mergeWithDefault = $mergeWithDefault;
     }
@@ -262,16 +261,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $googleAnalytics
      */
-    public function getGoogleAnalytics()
+    public function getGoogleAnalytics(): string
     {
         return $this->googleAnalytics;
     }
 
     /**
      * @param string $googleAnalytics
-     * @return void
      */
-    public function setGoogleAnalytics($googleAnalytics)
+    public function setGoogleAnalytics(string $googleAnalytics): void
     {
         $this->googleAnalytics = $googleAnalytics;
     }
@@ -279,7 +277,7 @@ class Configuration extends AbstractEntity
     /**
      * @return string
      */
-    public function getGoogleAnalyticsV4()
+    public function getGoogleAnalyticsV4(): string
     {
         return $this->googleAnalyticsV4;
     }
@@ -287,7 +285,7 @@ class Configuration extends AbstractEntity
     /**
      * @param string $googleAnalyticsV4
      */
-    public function setGoogleAnalyticsV4($googleAnalyticsV4)
+    public function setGoogleAnalyticsV4(string $googleAnalyticsV4): void
     {
         $this->googleAnalyticsV4 = $googleAnalyticsV4;
     }
@@ -295,16 +293,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string
      */
-    public function getGoogleTagmanager()
+    public function getGoogleTagmanager(): string
     {
         return $this->googleTagmanager;
     }
 
     /**
      * @param string $googleTagmanager
-     * @return void
      */
-    public function setGoogleTagmanager($googleTagmanager)
+    public function setGoogleTagmanager(string $googleTagmanager): void
     {
         $this->googleTagmanager = $googleTagmanager;
     }
@@ -312,16 +309,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $titleAttachment
      */
-    public function getTitleAttachment()
+    public function getTitleAttachment(): string
     {
         return $this->titleAttachment;
     }
 
     /**
      * @param string $titleAttachment
-     * @return void
      */
-    public function setTitleAttachment($titleAttachment)
+    public function setTitleAttachment(string $titleAttachment): void
     {
         $this->titleAttachment = $titleAttachment;
     }
@@ -329,16 +325,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $titleAttachmentSeperator
      */
-    public function getTitleAttachmentSeperator()
+    public function getTitleAttachmentSeperator(): string
     {
         return $this->titleAttachmentSeperator;
     }
 
     /**
      * @param string $titleAttachmentSeperator
-     * @return void
      */
-    public function setTitleAttachmentSeperator($titleAttachmentSeperator)
+    public function setTitleAttachmentSeperator(string $titleAttachmentSeperator): void
     {
         $this->titleAttachmentSeperator = $titleAttachmentSeperator;
     }
@@ -346,16 +341,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $titleAttachmentPosition
      */
-    public function getTitleAttachmentPosition()
+    public function getTitleAttachmentPosition(): string
     {
         return $this->titleAttachmentPosition;
     }
 
     /**
      * @param string $titleAttachmentPosition
-     * @return void
      */
-    public function setTitleAttachmentPosition($titleAttachmentPosition)
+    public function setTitleAttachmentPosition(string $titleAttachmentPosition): void
     {
         $this->titleAttachmentPosition = $titleAttachmentPosition;
     }
@@ -363,16 +357,15 @@ class Configuration extends AbstractEntity
     /**
      * @return bool $addAnalytics
      */
-    public function getAddAnalytics()
+    public function getAddAnalytics(): bool
     {
         return $this->addAnalytics;
     }
 
     /**
      * @param bool $addAnalytics
-     * @return void
      */
-    public function setAddAnalytics($addAnalytics)
+    public function setAddAnalytics(bool $addAnalytics): void
     {
         $this->addAnalytics = $addAnalytics;
     }
@@ -380,7 +373,7 @@ class Configuration extends AbstractEntity
     /**
      * @return bool
      */
-    public function isAddAnalytics()
+    public function isAddAnalytics(): bool
     {
         return $this->addAnalytics;
     }
@@ -388,7 +381,7 @@ class Configuration extends AbstractEntity
     /**
      * @return bool
      */
-    public function getGoogleAnalyticsUseCookieConsent()
+    public function getGoogleAnalyticsUseCookieConsent(): bool
     {
         return $this->googleAnalyticsUseCookieConsent;
     }
@@ -396,7 +389,7 @@ class Configuration extends AbstractEntity
     /**
      * @param bool $googleAnalyticsUseCookieConsent
      */
-    public function setGoogleAnalyticsUseCookieConsent($googleAnalyticsUseCookieConsent)
+    public function setGoogleAnalyticsUseCookieConsent(bool $googleAnalyticsUseCookieConsent): void
     {
         $this->googleAnalyticsUseCookieConsent = $googleAnalyticsUseCookieConsent;
     }
@@ -404,7 +397,7 @@ class Configuration extends AbstractEntity
     /**
      * @return bool
      */
-    public function getGoogleAnalyticsV4UseCookieConsent()
+    public function getGoogleAnalyticsV4UseCookieConsent(): bool
     {
         return $this->googleAnalyticsV4UseCookieConsent;
     }
@@ -412,7 +405,7 @@ class Configuration extends AbstractEntity
     /**
      * @param bool $googleAnalyticsV4UseCookieConsent
      */
-    public function setGoogleAnalyticsV4UseCookieConsent($googleAnalyticsV4UseCookieConsent)
+    public function setGoogleAnalyticsV4UseCookieConsent(bool $googleAnalyticsV4UseCookieConsent): void
     {
         $this->googleAnalyticsV4UseCookieConsent = $googleAnalyticsV4UseCookieConsent;
     }
@@ -420,7 +413,7 @@ class Configuration extends AbstractEntity
     /**
      * @return bool
      */
-    public function getTagmanagerUseCookieConsent()
+    public function getTagmanagerUseCookieConsent(): bool
     {
         return $this->tagmanagerUseCookieConsent;
     }
@@ -428,7 +421,7 @@ class Configuration extends AbstractEntity
     /**
      * @param bool $tagmanagerUseCookieConsent
      */
-    public function setTagmanagerUseCookieConsent($tagmanagerUseCookieConsent)
+    public function setTagmanagerUseCookieConsent(bool $tagmanagerUseCookieConsent): void
     {
         $this->tagmanagerUseCookieConsent = $tagmanagerUseCookieConsent;
     }
@@ -436,7 +429,7 @@ class Configuration extends AbstractEntity
     /**
      * @return bool
      */
-    public function getMatomoUseCookieConsent()
+    public function getMatomoUseCookieConsent(): bool
     {
         return $this->matomoUseCookieConsent;
     }
@@ -444,7 +437,7 @@ class Configuration extends AbstractEntity
     /**
      * @param bool $matomoUseCookieConsent
      */
-    public function setMatomoUseCookieConsent($matomoUseCookieConsent)
+    public function setMatomoUseCookieConsent(bool $matomoUseCookieConsent): void
     {
         $this->matomoUseCookieConsent = $matomoUseCookieConsent;
     }
@@ -452,16 +445,15 @@ class Configuration extends AbstractEntity
     /**
      * @return bool $addJsonld
      */
-    public function getAddJsonld()
+    public function getAddJsonld(): bool
     {
         return $this->addJsonld;
     }
 
     /**
      * @param bool $addJsonld
-     * @return void
      */
-    public function setAddJsonld($addJsonld)
+    public function setAddJsonld(bool $addJsonld): void
     {
         $this->addJsonld = $addJsonld;
     }
@@ -469,7 +461,7 @@ class Configuration extends AbstractEntity
     /**
      * @return bool
      */
-    public function isAddJsonld()
+    public function isAddJsonld(): bool
     {
         return $this->addJsonld;
     }
@@ -477,16 +469,15 @@ class Configuration extends AbstractEntity
     /**
      * @return bool $addJsonldBreadcrumb
      */
-    public function getAddJsonldBreadcrumb()
+    public function getAddJsonldBreadcrumb(): bool
     {
         return $this->addJsonldBreadcrumb;
     }
 
     /**
      * @param bool $addJsonldBreadcrumb
-     * @return void
      */
-    public function setAddJsonldBreadcrumb($addJsonldBreadcrumb)
+    public function setAddJsonldBreadcrumb(bool $addJsonldBreadcrumb): void
     {
         $this->addJsonldBreadcrumb = $addJsonldBreadcrumb;
     }
@@ -494,7 +485,7 @@ class Configuration extends AbstractEntity
     /**
      * @return bool
      */
-    public function isAddJsonldBreadcrumb()
+    public function isAddJsonldBreadcrumb(): bool
     {
         return $this->addJsonldBreadcrumb;
     }
@@ -502,16 +493,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldCustomUrl
      */
-    public function getJsonldCustomUrl()
+    public function getJsonldCustomUrl(): string
     {
         return $this->jsonldCustomUrl;
     }
 
     /**
      * @param string $jsonldCustomUrl
-     * @return void
      */
-    public function setJsonldCustomUrl($jsonldCustomUrl)
+    public function setJsonldCustomUrl(string $jsonldCustomUrl): void
     {
         $this->jsonldCustomUrl = $jsonldCustomUrl;
     }
@@ -519,16 +509,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldType
      */
-    public function getJsonldType()
+    public function getJsonldType(): string
     {
         return $this->jsonldType;
     }
 
     /**
      * @param string $jsonldType
-     * @return void
      */
-    public function setJsonldType($jsonldType)
+    public function setJsonldType(string $jsonldType): void
     {
         $this->jsonldType = $jsonldType;
     }
@@ -536,16 +525,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldName
      */
-    public function getJsonldName()
+    public function getJsonldName(): string
     {
         return $this->jsonldName;
     }
 
     /**
      * @param string $jsonldName
-     * @return void
      */
-    public function setJsonldName($jsonldName)
+    public function setJsonldName(string $jsonldName): void
     {
         $this->jsonldName = $jsonldName;
     }
@@ -553,16 +541,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldTelephone
      */
-    public function getJsonldTelephone()
+    public function getJsonldTelephone(): string
     {
         return $this->jsonldTelephone;
     }
 
     /**
      * @param string $jsonldTelephone
-     * @return void
      */
-    public function setJsonldTelephone($jsonldTelephone)
+    public function setJsonldTelephone(string $jsonldTelephone): void
     {
         $this->jsonldTelephone = $jsonldTelephone;
     }
@@ -570,16 +557,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldFax
      */
-    public function getJsonldFax()
+    public function getJsonldFax(): string
     {
         return $this->jsonldFax;
     }
 
     /**
      * @param string $jsonldFax
-     * @return void
      */
-    public function setJsonldFax($jsonldFax)
+    public function setJsonldFax(string $jsonldFax): void
     {
         $this->jsonldFax = $jsonldFax;
     }
@@ -587,16 +573,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldEmail
      */
-    public function getJsonldEmail()
+    public function getJsonldEmail(): string
     {
         return $this->jsonldEmail;
     }
 
     /**
      * @param string $jsonldEmail
-     * @return void
      */
-    public function setJsonldEmail($jsonldEmail)
+    public function setJsonldEmail(string $jsonldEmail): void
     {
         $this->jsonldEmail = $jsonldEmail;
     }
@@ -604,16 +589,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldSameAs
      */
-    public function getJsonldSameAsFacebook()
+    public function getJsonldSameAsFacebook(): string
     {
         return $this->jsonldSameAsFacebook;
     }
 
     /**
      * @param string $jsonldSameAsFacebook
-     * @return void
      */
-    public function setJsonldSameAsFacebook($jsonldSameAsFacebook)
+    public function setJsonldSameAsFacebook(string $jsonldSameAsFacebook): void
     {
         $this->jsonldSameAsFacebook = $jsonldSameAsFacebook;
     }
@@ -621,16 +605,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldSameAs
      */
-    public function getJsonldSameAsTwitter()
+    public function getJsonldSameAsTwitter(): string
     {
         return $this->jsonldSameAsTwitter;
     }
 
     /**
      * @param string $jsonldSameAsTwitter
-     * @return void
      */
-    public function setJsonldSameAsTwitter($jsonldSameAsTwitter)
+    public function setJsonldSameAsTwitter(string $jsonldSameAsTwitter): void
     {
         $this->jsonldSameAsTwitter = $jsonldSameAsTwitter;
     }
@@ -638,16 +621,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldSameAs
      */
-    public function getJsonldSameAsInstagram()
+    public function getJsonldSameAsInstagram(): string
     {
         return $this->jsonldSameAsInstagram;
     }
 
     /**
      * @param string $jsonldSameAsInstagram
-     * @return void
      */
-    public function setJsonldSameAsInstagram($jsonldSameAsInstagram)
+    public function setJsonldSameAsInstagram(string $jsonldSameAsInstagram): void
     {
         $this->jsonldSameAsInstagram = $jsonldSameAsInstagram;
     }
@@ -655,16 +637,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldSameAs
      */
-    public function getJsonldSameAsYoutube()
+    public function getJsonldSameAsYoutube(): string
     {
         return $this->jsonldSameAsYoutube;
     }
 
     /**
      * @param string $jsonldSameAsYoutube
-     * @return void
      */
-    public function setJsonldSameAsYoutube($jsonldSameAsYoutube)
+    public function setJsonldSameAsYoutube(string $jsonldSameAsYoutube): void
     {
         $this->jsonldSameAsYoutube = $jsonldSameAsYoutube;
     }
@@ -672,16 +653,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldSameAs
      */
-    public function getJsonldSameAsLinkedin()
+    public function getJsonldSameAsLinkedin(): string
     {
         return $this->jsonldSameAsLinkedin;
     }
 
     /**
      * @param string $jsonldSameAsLinkedin
-     * @return void
      */
-    public function setJsonldSameAsLinkedin($jsonldSameAsLinkedin)
+    public function setJsonldSameAsLinkedin(string $jsonldSameAsLinkedin): void
     {
         $this->jsonldSameAsLinkedin = $jsonldSameAsLinkedin;
     }
@@ -689,16 +669,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string
      */
-    public function getJsonldSameAsXing()
+    public function getJsonldSameAsXing(): string
     {
         return $this->jsonldSameAsXing;
     }
 
     /**
      * @param string $jsonldSameAsXing
-     * @return void
      */
-    public function setJsonldSameAsXing($jsonldSameAsXing)
+    public function setJsonldSameAsXing(string $jsonldSameAsXing): void
     {
         $this->jsonldSameAsXing = $jsonldSameAsXing;
     }
@@ -706,16 +685,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldSameAs
      */
-    public function getJsonldSameAsPrinterest()
+    public function getJsonldSameAsPrinterest(): string
     {
         return $this->jsonldSameAsPrinterest;
     }
 
     /**
      * @param string $jsonldSameAsPrinterest
-     * @return void
      */
-    public function setJsonldSameAsPrinterest($jsonldSameAsPrinterest)
+    public function setJsonldSameAsPrinterest(string $jsonldSameAsPrinterest): void
     {
         $this->jsonldSameAsPrinterest = $jsonldSameAsPrinterest;
     }
@@ -723,16 +701,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldSameAs
      */
-    public function getJsonldSameAsSoundcloud()
+    public function getJsonldSameAsSoundcloud(): string
     {
         return $this->jsonldSameAsSoundcloud;
     }
 
     /**
      * @param string $jsonldSameAsSoundcloud
-     * @return void
      */
-    public function setJsonldSameAsSoundcloud($jsonldSameAsSoundcloud)
+    public function setJsonldSameAsSoundcloud(string $jsonldSameAsSoundcloud): void
     {
         $this->jsonldSameAsSoundcloud = $jsonldSameAsSoundcloud;
     }
@@ -740,33 +717,31 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldSameAs
      */
-    public function getJsonldSameAsTumblr()
+    public function getJsonldSameAsTumblr(): string
     {
         return $this->jsonldSameAsTumblr;
     }
 
     /**
      * @param string $jsonldSameAsTumblr
-     * @return void
      */
-    public function setJsonldSameAsTumblr($jsonldSameAsTumblr)
+    public function setJsonldSameAsTumblr(string $jsonldSameAsTumblr): void
     {
         $this->jsonldSameAsTumblr = $jsonldSameAsTumblr;
     }
 
     /**
-     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference $jsonldLogo
+     * @return \TYPO3\CMS\Extbase\Domain\Model\FileReference|null $jsonldLogo
      */
-    public function getJsonldLogo()
+    public function getJsonldLogo(): ?FileReference
     {
         return $this->jsonldLogo;
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference $jsonldLogo
-     * @return void
+     * @param \TYPO3\CMS\Extbase\Domain\Model\FileReference|null $jsonldLogo
      */
-    public function setJsonldLogo(ExtbaseFileReference $jsonldLogo = null)
+    public function setJsonldLogo(?FileReference $jsonldLogo): void
     {
         $this->jsonldLogo = $jsonldLogo;
     }
@@ -774,16 +749,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldAddressLocality
      */
-    public function getJsonldAddressLocality()
+    public function getJsonldAddressLocality(): string
     {
         return $this->jsonldAddressLocality;
     }
 
     /**
      * @param string $jsonldAddressLocality
-     * @return void
      */
-    public function setJsonldAddressLocality($jsonldAddressLocality)
+    public function setJsonldAddressLocality(string $jsonldAddressLocality): void
     {
         $this->jsonldAddressLocality = $jsonldAddressLocality;
     }
@@ -791,16 +765,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldAddressPostalcode
      */
-    public function getJsonldAddressPostalcode()
+    public function getJsonldAddressPostalcode(): string
     {
         return $this->jsonldAddressPostalcode;
     }
 
     /**
      * @param string $jsonldAddressPostalcode
-     * @return void
      */
-    public function setJsonldAddressPostalcode($jsonldAddressPostalcode)
+    public function setJsonldAddressPostalcode(string $jsonldAddressPostalcode): void
     {
         $this->jsonldAddressPostalcode = $jsonldAddressPostalcode;
     }
@@ -808,16 +781,15 @@ class Configuration extends AbstractEntity
     /**
      * @return string $jsonldAddressStreet
      */
-    public function getJsonldAddressStreet()
+    public function getJsonldAddressStreet(): string
     {
         return $this->jsonldAddressStreet;
     }
 
     /**
      * @param string $jsonldAddressStreet
-     * @return void
      */
-    public function setJsonldAddressStreet($jsonldAddressStreet)
+    public function setJsonldAddressStreet(string $jsonldAddressStreet): void
     {
         $this->jsonldAddressStreet = $jsonldAddressStreet;
     }
@@ -947,7 +919,7 @@ class Configuration extends AbstractEntity
             ? $configuration->getJsonldSameAsTumblr()
             : $this->jsonldSameAsTumblr;
 
-        $this->jsonldLogo = !$this->jsonldLogo instanceof ExtbaseFileReference
+        $this->jsonldLogo = !$this->jsonldLogo instanceof FileReference
             ? $configuration->getJsonldLogo()
             : $this->jsonldLogo;
 

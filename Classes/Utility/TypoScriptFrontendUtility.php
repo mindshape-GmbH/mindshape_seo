@@ -6,7 +6,7 @@ namespace Mindshape\MindshapeSeo\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -29,44 +29,39 @@ namespace Mindshape\MindshapeSeo\Utility;
 
 use Mindshape\MindshapeSeo\Utility\Exception;
 use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\RootlineUtility;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
  * @package Mindshape\MindshapeSeo\Utility
  */
 class TypoScriptFrontendUtility
 {
-    public const DEFAULT_PAGETYPE = 1;
-
     /**
      * @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
      */
-    protected static $typoScriptFrontendController;
+    protected static TypoScriptFrontendController $typoScriptFrontendController;
 
     /**
      * @param int $languageId
      * @throws \Mindshape\MindshapeSeo\Utility\Exception\TypoScriptFrontendControllerBootException
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
+     * @throws \TYPO3\CMS\Core\Authentication\Mfa\MfaRequiredException
      */
     public static function bootTypoScriptFrontendController(int $languageId = 0): void
     {
-        /** @var Typo3Version $typo3Version */
-        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-
-        if (static::$typoScriptFrontendController instanceof TypoScriptFrontendController) {
+        if (static::$typoScriptFrontendController ?? null instanceof TypoScriptFrontendController) {
             return;
         }
 
         $currentSite = null;
 
         /** @var \TYPO3\CMS\Core\Site\Entity\Site $site */
-        foreach (ObjectUtility::makeInstance(SiteFinder::class)->getAllSites() as $site) {
+        foreach (GeneralUtility::makeInstance(SiteFinder::class)->getAllSites() as $site) {
             if (GeneralUtility::getIndpEnv('TYPO3_HOST_ONLY') === $site->getBase()->getHost()) {
                 $currentSite = $site;
             }
@@ -76,41 +71,24 @@ class TypoScriptFrontendUtility
             throw new Exception\TypoScriptFrontendControllerBootException('Can\'t determine the site to use');
         }
 
-        $siteLanguage = $currentSite->getLanguageById($languageId);
+        $frontendAuthentication = GeneralUtility::makeInstance(FrontendUserAuthentication::class);
+        $frontendAuthentication->start($GLOBALS['TYPO3_REQUEST']);
 
-        if (true === version_compare('9.5', $typo3Version->getBranch(), '==')) {
-            /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController */
-            $typoScriptFrontendController = ObjectUtility::makeInstance(
-                TypoScriptFrontendController::class,
-                null,
-                $currentSite->getRootPageId(),
-                static::DEFAULT_PAGETYPE
-            );
-        } elseif (true === version_compare('10.4', $typo3Version->getBranch(), '==')) {
-            /** @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController $typoScriptFrontendController */
-            $typoScriptFrontendController = ObjectUtility::makeInstance(
-                TypoScriptFrontendController::class,
-                ObjectUtility::makeInstance(Context::class),
-                $currentSite,
-                $siteLanguage
-            );
-        } else {
-            throw new Exception\TypoScriptFrontendControllerBootException(
-                'This Utility is not compatible with TYPO3 v' . $typo3Version->getBranch()
-            );
-        }
+        $typoScriptFrontendController = GeneralUtility::makeInstance(
+            TypoScriptFrontendController::class,
+            GeneralUtility::makeInstance(Context::class),
+            $site,
+            $site->getDefaultLanguage(),
+            GeneralUtility::makeInstance(PageArguments::class, $site->getRootPageId(), '1', []),
+            $frontendAuthentication
+        );
 
-//        /** @var array $rootline */
-//        $rootline = ObjectUtility::makeInstance(RootlineUtility::class, $site->getRootPageId())->get();
-//
-//        $typoScriptFrontendController->rootLine = $rootline;
-        $typoScriptFrontendController->sys_page = ObjectUtility::makeInstance(PageRepository::class);
-        #$typoScriptFrontendController->getPageAndRootlineWithDomain($site->getRootPageId());
+        $typoScriptFrontendController->sys_page = GeneralUtility::makeInstance(PageRepository::class);
 
         $GLOBALS['TSFE'] = $typoScriptFrontendController;
 
         /** @var \TYPO3\CMS\Core\TypoScript\TemplateService $templateService */
-        $templateService = ObjectUtility::makeInstance(TemplateService::class);
+        $templateService = GeneralUtility::makeInstance(TemplateService::class);
         $templateService->start($typoScriptFrontendController->rootLine);
 
         $GLOBALS['TSFE']->tmpl = $templateService;

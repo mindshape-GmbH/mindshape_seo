@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Service;
  *
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -29,7 +29,7 @@ namespace Mindshape\MindshapeSeo\Service;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -38,44 +38,19 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class StandaloneTemplateRendererService implements SingletonInterface
 {
-    const TEMPLATES_DEFAULT_FOLDER = 'TemplateRenderer';
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface
-     */
-    protected $configurationManager;
-
     /**
      * @var array
      */
-    protected $settings;
+    protected array $settings;
 
     /**
      * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
-     * @return void
-     */
-    public function injectConfigurationManager(ConfigurationManager $configurationManager)
-    {
-        $this->configurationManager = $configurationManager;
-    }
-
-    /**
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      */
-    public function __construct()
+    public function __construct(ConfigurationManager $configurationManager)
     {
-        /** @var \TYPO3\CMS\Extbase\Object\ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
-        $configurationManager = $objectManager->get(ConfigurationManager::class);
-
-        $config = GeneralUtility::removeDotsFromTS(
-            $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_FULL_TYPOSCRIPT)
-        );
-
-
-        $this->settings = $config['plugin']['tx_mindshapeseo'];
+        $config = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK, 'mindshapeseo');
+        $this->settings = $config;
     }
 
     /**
@@ -84,10 +59,13 @@ class StandaloneTemplateRendererService implements SingletonInterface
      * @param array $variables
      * @param string $format
      * @return string
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
      */
-    public function render($templateFolder = self::TEMPLATES_DEFAULT_FOLDER, $templateName, array $variables, $format = 'html')
-    {
+    public function render(
+        string $templateFolder,
+        string $templateName,
+        array $variables,
+        string $format = 'html'
+    ): string {
         if ('/' !== $templateFolder[-1]) {
             $templateFolder .= '/';
         }
@@ -106,17 +84,15 @@ class StandaloneTemplateRendererService implements SingletonInterface
      * @param string $templateName
      * @param string $format
      * @return \TYPO3\CMS\Fluid\View\StandaloneView
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException
      */
-    protected function getView($templateFolder = self::TEMPLATES_DEFAULT_FOLDER, $templateName, $format = 'html')
+    protected function getView(string $templateFolder, string $templateName, string $format = 'html'): StandaloneView
     {
         /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
         $view = GeneralUtility::makeInstance(StandaloneView::class);
         $view->setFormat($format);
-        $view->getRequest()->setControllerExtensionName('MindshapeSeo');
-        $view->setTemplateRootPaths($this->settings['view']['templateRootPaths']);
-        $view->setLayoutRootPaths($this->settings['view']['layoutRootPaths']);
-        $view->setPartialRootPaths($this->settings['view']['partialRootPaths']);
+        $view->setTemplateRootPaths($this->settings['view']['templateRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Templates/']);
+        $view->setLayoutRootPaths($this->settings['view']['layoutRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Layouts/']);
+        $view->setPartialRootPaths($this->settings['view']['partialRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Partials/']);
         $view->setTemplate($templateFolder . $templateName . '.' . $format);
 
         return $view;

@@ -1,11 +1,20 @@
 <?php
-defined('TYPO3_MODE') || die();
+
+use Mindshape\MindshapeSeo\Utility\SettingsUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
+defined('TYPO3') or die();
 
 call_user_func(function () {
     if (
-        true === \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('redirects') &&
-        true === (bool)\Mindshape\MindshapeSeo\Utility\SettingsUtility::extensionConfigurationValue('enableGoneRedirects')
+        true === ExtensionManagementUtility::isLoaded('redirects') &&
+        true === (bool) SettingsUtility::extensionConfigurationValue('enableGoneRedirects')
     ) {
-        $GLOBALS['TCA']['sys_redirect']['columns']['target_statuscode']['config']['items'][] = ['LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:sys_redirect.target_statuscode.410', 410];
+        $GLOBALS['TCA']['sys_redirect']['columns']['target_statuscode']['config']['items'][] = [
+            'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:sys_redirect.target_statuscode.410',
+            410,
+        ];
+        $GLOBALS['TCA']['sys_redirect']['columns']['target_statuscode']['onChange'] = 'reload';
+        $GLOBALS['TCA']['sys_redirect']['columns']['target']['displayCond'] = 'FIELD:target_statuscode:!=:410';
     }
 });

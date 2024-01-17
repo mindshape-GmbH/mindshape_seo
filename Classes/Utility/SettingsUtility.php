@@ -6,7 +6,7 @@ namespace Mindshape\MindshapeSeo\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -40,7 +40,6 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 class SettingsUtility
 {
-    public const EXTENSION_NAME = 'mindshapeseo';
     public const EXTENSION_KEY = 'mindshape_seo';
 
     /**
@@ -53,14 +52,14 @@ class SettingsUtility
 
         try {
             return $extensionConfiguration->get(self::EXTENSION_KEY);
-        } catch (Exception $exception) {
+        } catch (Exception) {
             return [];
         }
     }
 
     /**
      * @param string $configurationKey
-     * @return string
+     * @return string|null
      */
     public static function extensionConfigurationValue(string $configurationKey): ?string
     {
