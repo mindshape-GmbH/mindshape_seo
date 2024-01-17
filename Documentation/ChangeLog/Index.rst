@@ -10,6 +10,11 @@
 ChangeLog
 ---------
 
+v3.0.0
+  * Compatibility for TYPO3 v11 & v12
+  * Multiple bugfixes & refactorings
+  * JSON+LD Logo image moved from settings module to TypoScript due to a breaking change in TYPO3
+
 v2.0.2
   * Fix preview metadata edit saving for foreign languages
 
