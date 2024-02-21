@@ -10,7 +10,7 @@ return [
     ],
     'mindshapeseo_preview' => [
         'parent' => 'mindshapeseo',
-        'access' => 'user,group',
+        'access' => 'user',
         'iconIdentifier' => 'module-mindshapeseo-preview',
         'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf',
         'navigationComponent' => '@typo3/backend/page-tree/page-tree-element',
@@ -21,7 +21,7 @@ return [
     ],
     'mindshapeseo_settings' => [
         'parent' => 'mindshapeseo',
-        'access' => 'user,group',
+        'access' => 'user',
         'iconIdentifier' => 'module-mindshapeseo-settings',
         'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_settings.xlf',
         'extensionName' => 'MindshapeSeo',
