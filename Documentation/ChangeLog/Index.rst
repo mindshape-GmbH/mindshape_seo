@@ -10,6 +10,10 @@
 ChangeLog
 ---------
 
+v3.0.2
+  * Use proper access value for new module registration
+  * Update max PHP required version to 8.3
+
 v3.0.1
   * Add missing increase of max TYPO3 version in emconf
 
