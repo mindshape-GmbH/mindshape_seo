@@ -119,6 +119,11 @@ $seo-error: hsla(2, 64%, 58%, 1);
         font-weight: normal;
         line-height: 1;
         border: none;
+        padding: 0.7rem 0.5rem;
+
+        &:first-child {
+          padding-inline-start: 1.6rem;
+        }
       }
     }
     // Table Body
@@ -132,54 +137,86 @@ $seo-error: hsla(2, 64%, 58%, 1);
         //Hierachy Styling
         &.pagetree-info {
           padding-inline-start: 0;
+          background-color: transparent;
+          position: relative;
 
-          .depth-markup {
-            background-color: $primary;
+          .depth-markup,
+          .depth-markup.rootpage.subpages {
+            display: flex;
+            position: absolute;
+            height: 100%;
+            width: fit-content;
 
             &:before {
               display: none;
             }
 
-            .icon {
+            .depth-indicator {
+              display: flex;
               width: 0.75rem;
-
-              span{
-                display: none;
-              }
+              height: 100%;
+              background-color: $primary;
             }
 
-            .treeline-icon {
-              background-color: $white;
-              width: 0.75rem;
-
-              &:before,
-              &:after {
-                opacity: 0;
-              }
-            }
-
-            .title {
-              margin-inline-start: 0.85rem;
-              font-family: "NunitoRegular", Verdana, Arial, Sans-Serif;
-              font-size: 0.75rem;
-              // Stop it from moving when it is expanded
-              // transform: none;
-              // top: 3rem;
-            }
-
-            &:has(.treeline-icon) {
+            &:has(.depth-1) .depth-indicator {
               background-color: $primary-darker;
             }
-
-            &:has(.treeline-icon:not(:first-child)) {
+            &:has(.depth-2) .depth-indicator {
               background-color: $secondary;
             }
-
-            &:has(.treeline-icon:not(:first-child) + .treeline-icon) {
+            &:has(.depth-3) .depth-indicator {
               background-color: $tertiary;
             }
+
+            .depth {
+
+              &-1 {
+                width: 0.75rem;
+              }
+
+              &-2 {
+                width: 1.5rem;
+              }
+
+              &-3 {
+                width: 2.25rem;
+              }
+            }
+            }
+
+          .content {
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            left: 0.75rem;
+            background-color: $seo-offwhite;
+
+            .title {
+              margin-inline-start: 1.6rem;
+              font-family: "NunitoRegular", Verdana, Arial, Sans-Serif;
+              font-size: 0.75rem;
+              position: relative;
+              margin-block-start: 4rem;
+              top: 0;
+              transform: none;
+            }
+          }
+
+          &:has(.depth-1) .content {
+            left: 1.5rem;
+          }
+
+          &:has(.depth-2) .content {
+            left: 2.25rem;
+          }
+
+          &:has(.depth-3) .content {
+            left: 3rem;
           }
         }
+
+        //Vorschau Styling
 
         &.google-preview-column {
           .thumbnail {
@@ -202,7 +239,7 @@ $seo-error: hsla(2, 64%, 58%, 1);
             }
 
             .edit-panel {
-              margin-top: 1rem;
+              margin-top: 2rem;
 
               hr {
                 display: none;
@@ -244,9 +281,10 @@ $seo-error: hsla(2, 64%, 58%, 1);
                 &:has(.checkbox) {
                   display: flex;
                   flex-direction: row;
+                  height: 1.1rem;
                   gap: 3rem;
 
-                  .checkbox label {
+                  .checkbox {
                     font-family: "NunitoRegular", Verdana, Arial, Sans-Serif;
                     font-size: 0.75rem;
                     line-height: 1;
@@ -254,10 +292,62 @@ $seo-error: hsla(2, 64%, 58%, 1);
                     align-items: center;
                     gap: 0.5rem;
 
-                    input {
-                      appearance: unset;
-                      height: 1.1rem;
-                      border-radius: 4px;
+                    .checkbox-wrapper {
+                      display: block;
+                      position: relative;
+                      cursor: pointer;
+                      font-size: 22px;
+                      height: 100%;
+                      width: 1.1rem;
+
+                      input {
+                        position: absolute;
+                        opacity: 0;
+                        cursor: pointer;
+                        top: 0;
+                        left: 0;
+                        height: 1.1rem;
+                        width: 1.1rem;
+                        z-index: 2;
+                      }
+
+                      .checkmark {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 1.1rem;
+                        width: 1.1rem;
+                        background-color: $white;
+                        border-radius: 2px;
+                      }
+
+                      .container:hover input ~ .checkmark {
+                        background-color: $seo-offwhite;
+                      }
+
+                      & input:checked ~ .checkmark {
+                        background-color: $primary;
+                      }
+
+                      .checkmark:after {
+                        content: "";
+                        position: absolute;
+                        display: none;
+                      }
+
+                      & input:checked ~ .checkmark:after {
+                        display: block;
+                      }
+
+                      & .checkmark:after {
+                        left: 6px;
+                        top: 2px;
+                        width: 6px;
+                        height: 12px;
+                        border: solid $white;
+                        border-width: 0 2px 2px 0;
+                        transform: rotate(45deg);
+                      }
                     }
                   }
                 }
@@ -293,6 +383,45 @@ $seo-error: hsla(2, 64%, 58%, 1);
               line-height: 1em;
             }
           }
+        }
+
+        //Metadaten Styling
+
+        .seo-check {
+          .btn {
+            background-color: $white;
+            border: none;
+            box-shadow: none;
+            font-family: "NunitoRegular", Verdana, Arial, Sans-Serif;
+            padding: 0.4rem 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            line-height: 1;
+            width: fit-content;
+
+            &:first-child {
+              display: flex !important;
+            }
+
+            .icon {
+              color: $seo-error;
+              height: 1.3rem;
+              width: 1.3rem;
+            }
+          }
+        }
+
+        .focus-keyword-container {
+          font-family: "NunitoRegular", Verdana, Arial, Sans-Serif;
+
+          .label {
+            font-family: "NunitoBold", Verdana, Arial, Sans-Serif;
+          }
+        }
+
+        .robots {
+          font-family: "NunitoBold", Verdana, Arial, Sans-Serif;
         }
       }
     }
