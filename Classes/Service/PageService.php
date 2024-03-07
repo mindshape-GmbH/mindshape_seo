@@ -445,6 +445,12 @@ class PageService implements SingletonInterface
                 $tree->tree[$key]['hasSub'] = false;
             }
 
+            $tree->tree[$key]['depth'] = 0;
+
+            if ($treeItem['invertedDepth'] ?? null) {
+                $tree->tree[$key]['depth'] = self::$pageTreeDepth - $treeItem['invertedDepth'] + 1;
+            }
+
             $metadata = $this->getPageMetaData(
                 $treeItem['row']['uid'],
                 $sysLanguageUid,

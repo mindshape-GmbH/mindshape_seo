@@ -10,16 +10,6 @@
         <f:if condition="{editing}">
           <f:then>
             <f:render section="Form" arguments="{_all}"/>
-            <button class="edit">
-              <span class="edit-text">
-                  {f:translate(key: 'tx_mindshapeseo_label.preview.button.edit', extensionName: 'mindshape_seo')}
-                  <core:icon identifier="provider-fontawesome-caret-down"/>
-              </span>
-              <span class="abort-text">
-                  {f:translate(key: 'tx_mindshapeseo_label.preview.button.abort', extensionName: 'mindshape_seo')}
-                  <core:icon identifier="provider-fontawesome-caret-up"/>
-              </span>
-            </button>
           </f:then>
           <f:else>
             <f:render section="PreviewAndFields" arguments="{_all}"/>
@@ -79,6 +69,16 @@
       </h3>
       <div class="description">{description -> f:format.raw()}</div>
     </div>
+    <button class="edit">
+      <span class="edit-text">
+        {f:translate(key: 'tx_mindshapeseo_label.preview.button.edit', extensionName: 'mindshape_seo')}
+        <core:icon identifier="provider-fontawesome-caret-down"/>
+      </span>
+      <span class="abort-text">
+        {f:translate(key: 'tx_mindshapeseo_label.preview.button.abort', extensionName: 'mindshape_seo')}
+        <core:icon identifier="provider-fontawesome-caret-up"/>
+      </span>
+    </button>
     <f:if condition="{editing}">
       <div class="edit-panel">
         <hr/>
@@ -113,14 +113,20 @@
         </div>
         <div class="form-group">
           <div class="checkbox noindex">
-            <label>
+            <div class="checkbox-wrapper">
               <f:form.checkbox name="noindex" value="1" checked="{noindex}"/>
+              <span class="checkmark"></span>
+            </div>
+            <label>
               {f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_label', extensionName: 'mindshape_seo')}
             </label>
           </div>
           <div class="checkbox nofollow">
-            <label>
+            <div class="checkbox-wrapper">
               <f:form.checkbox name="nofollow" value="1" checked="{nofollow}"/>
+              <span class="checkmark"></span>
+            </div>
+            <label>
               {f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_label', extensionName: 'mindshape_seo')}
             </label>
           </div>

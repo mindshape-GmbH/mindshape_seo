@@ -77,11 +77,13 @@
         <f:for each="{pageTree}" as="page" iteration="iterator">
           <tr class="page{f:if(condition: page.row.uid, else: ' root')}">
             <td class="pagetree-info" width="25%">
-              <span class="depth-markup{f:if(condition: iterator.isFirst, then: ' rootpage')}{f:if(condition: page.hasSub, then: ' subpages')}">
-                  {page.depthData -> f:format.raw()}
-                  <f:format.raw>{page.HTML}</f:format.raw>
-                  <span class="title">{f:if(condition: page.row.nav_title, then: page.row.nav_title, else: page.row.title) -> f:format.crop(maxCharacters: 30)}</span>
-              </span>
+              <div class="depth-markup{f:if(condition: iterator.isFirst, then: ' rootpage')}{f:if(condition: page.hasSub, then: ' subpages')}">
+                  <div class="depth depth-{page.depth}"></div>
+                  <div class="depth-indicator"></div>
+              </div>
+              <div class="content">
+                <div class="title">{f:if(condition: page.row.nav_title, then: page.row.nav_title, else: page.row.title) -> f:format.crop(maxCharacters: 30)}</div>
+              </div>
             </td>
             <td width="50%" class="google-preview-column">
               <f:if condition="{page.row}">
