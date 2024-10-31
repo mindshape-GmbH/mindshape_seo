@@ -39,6 +39,7 @@ class RenderPreProcessHook
     /**
      * @param array $params
      * @param PageRenderer $pageRenderer
+     * @throws \Doctrine\DBAL\Exception
      */
     public function main(array &$params, PageRenderer $pageRenderer): void
     {

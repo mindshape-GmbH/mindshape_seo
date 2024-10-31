@@ -84,7 +84,6 @@ class HeaderDataService implements SingletonInterface
      * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
      * @throws \Doctrine\DBAL\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function __construct(
         protected ConfigurationRepository $configurationRepository,
@@ -128,6 +127,9 @@ class HeaderDataService implements SingletonInterface
         $this->pageRenderer = PageUtility::getPageRenderer();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function manipulateHeaderData(): void
     {
         $this->setRobotsMetaTag();
@@ -505,6 +507,9 @@ class HeaderDataService implements SingletonInterface
         return $jsonld;
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     protected function addJsonLdBreadcrumb(): void
     {
         $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
@@ -542,7 +547,12 @@ class HeaderDataService implements SingletonInterface
             'itemListElement' => [],
         ];
 
-        foreach ($this->pageService->getRootlineReverse(null, true) as $index => $page) {
+        /** @var \TYPO3\CMS\Core\Http\ServerRequest $request */
+        $request = $GLOBALS['TYPO3_REQUEST'];
+        /** @var \TYPO3\CMS\Core\Routing\PageArguments $pageArguments */
+        $pageArguments = $request->getAttribute('routing');
+
+        foreach ($this->pageService->getRootlineReverse($pageArguments->getPageId(), true) as $index => $page) {
             if (false === in_array($page['doktype'], $respectDoktypes)) {
                 continue;
             }

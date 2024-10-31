@@ -77,31 +77,9 @@ class LanguageService implements SingletonInterface
     /**
      * @param int $pageUid
      * @return array
-     * @throws \Doctrine\DBAL\Exception
      */
     public function getPageLanguagesAvailable(int $pageUid): array
     {
-        if ((new Typo3Version())->getMajorVersion() < 12) {
-            $queryBuilder = DatabaseUtility::queryBuilder();
-
-            return $queryBuilder
-                ->select('l.uid', 'l.title')
-                ->from('sys_language', 'l')
-                ->innerJoin(
-                    'l',
-                    'pages',
-                    'p',
-                    $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->quoteIdentifier('l.uid'))
-                )
-                ->where(
-                    $queryBuilder->expr()->eq('p.' . $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'], $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
-                    $queryBuilder->expr()->neq('p.sys_language_uid', 0)
-                )
-                ->executeQuery()
-                ->fetchAllAssociative();
-        }
-
-
         // TODO: update languages getter
         return [];
     }

@@ -8,5 +8,8 @@ services:
     resource: '../Classes/*'
     exclude: '../Classes/{Domain/Model,Utility}'
 
+  Mindshape\MindshapeSeo\Backend\Form\Element\GooglePreviewElementV12:
+    autowire: false
+
   Mindshape\MindshapeSeo\Controller\BackendController:
     tags: [ 'backend.controller' ]

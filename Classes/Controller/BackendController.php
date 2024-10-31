@@ -28,13 +28,10 @@ namespace Mindshape\MindshapeSeo\Controller;
 
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
-use Mindshape\MindshapeSeo\Property\TypeConverter\UploadedFileReferenceConverter;
-use Mindshape\MindshapeSeo\Property\TypeConverter\UploadFileReferenceConverter;
 use Mindshape\MindshapeSeo\Service\DomainService;
 use Mindshape\MindshapeSeo\Service\LanguageService;
 use Mindshape\MindshapeSeo\Service\SessionService;
 use Mindshape\MindshapeSeo\Service\TranslationService;
-use Mindshape\MindshapeSeo\Utility\BackendUtility;
 use Mindshape\MindshapeSeo\Service\PageService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
@@ -46,12 +43,10 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
-use TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException;
-use TYPO3\CMS\Core\Resource\Folder;
-use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -75,11 +70,6 @@ class BackendController extends ActionController
      * @var \TYPO3\CMS\Backend\Template\Components\ButtonBar
      */
     protected ButtonBar $buttonBar;
-
-    /**
-     * @var int
-     */
-    protected int $currentPageUid;
 
     /**
      * @param \TYPO3\CMS\Backend\Template\ModuleTemplateFactory $moduleTemplateFactory
@@ -108,7 +98,6 @@ class BackendController extends ActionController
     protected function initializeAction(): void
     {
         $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-        $this->currentPageUid = BackendUtility::getCurrentPageTreeSelectedPage();
         $this->settings = $this->configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS, 'mindshapeseo');
 
         $this->buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
@@ -263,7 +252,9 @@ class BackendController extends ActionController
      */
     public function settingsAction(string $domain = null, int $sysLanguageUid = null): ResponseInterface
     {
-        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/MindshapeSeo/SettingsModule', 'function(SettingsModule) {SettingsModule.init()}');
+        $this->pageRenderer->getJavaScriptRenderer()->addJavaScriptModuleInstruction(
+            JavaScriptModuleInstruction::create('@mindshape/mindshape-seo/SettingsModule.js')
+        );
 
         $domains = $this->domainService->getAvailableDomains();
 
@@ -383,7 +374,7 @@ class BackendController extends ActionController
             }
         }
 
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'domains' => $domains,
             'domainsSelectOptions' => $this->domainService->getConfigurationDomainSelectOptions($domain),
             'currentDomain' => $currentDomain,
@@ -405,9 +396,8 @@ class BackendController extends ActionController
         ]);
 
         $this->moduleTemplate->setTitle(LocalizationUtility::translate('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_settings.xlf:mlang_tabs_tab'));
-        $this->moduleTemplate->setContent($this->view->render());
 
-        return $this->htmlResponse($this->moduleTemplate->renderContent());
+        return $this->moduleTemplate->renderResponse('Backend/Settings');
     }
 
     /**
@@ -448,9 +438,16 @@ class BackendController extends ActionController
      */
     public function previewAction(int $currentPaginationPage = 1, ?int $depth = null, ?int $sysLanguageUid = null): ResponseInterface
     {
-        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/MindshapeSeo/PreviewModule', 'function(PreviewModule) {PreviewModule.init()}');
+        $currentPageUid = (int)($this->request->getQueryParams()['id'] ?? 0);
+        $this->pageRenderer->getJavaScriptRenderer()->addJavaScriptModuleInstruction(
+            JavaScriptModuleInstruction::create('@mindshape/mindshape-seo/PreviewModule.js')
+        );
 
-        $languages = $this->languageService->getPageLanguagesAvailable($this->currentPageUid);
+        if ($currentPageUid === 0) {
+            return $this->moduleTemplate->renderResponse('Backend/NoPageSelected');
+        }
+
+        $languages = $this->languageService->getPageLanguagesAvailable($currentPageUid);
 
         if (0 < count($languages)) {
             $this->buildLanguageMenu($languages);
@@ -463,16 +460,16 @@ class BackendController extends ActionController
         $respectDoktypes = GeneralUtility::intExplode(',', $this->settings['googlePreview']['respectDoktypes']);
 
         if (
-            0 === $this->currentPageUid ||
+            0 === $currentPageUid ||
             !in_array($currentPage['doktype'], $respectDoktypes) ||
             ($showHiddenPages === false && (bool) $currentPage['hidden'] === true)
         ) {
             if ($showHiddenPages === false && (bool) $currentPage['hidden'] === true) {
-                $this->view->assign('pageHidden', true);
+                $this->moduleTemplate->assign('pageHidden', true);
             } elseif (!in_array($currentPage['doktype'], $respectDoktypes)) {
-                $this->view->assign('unsupportedDoktype', true);
+                $this->moduleTemplate->assign('unsupportedDoktype', true);
             } else {
-                $this->view->assign('noPageSelected', true);
+                $this->moduleTemplate->assign('noPageSelected', true);
             }
         } else {
             if (null === $depth) {
@@ -495,14 +492,14 @@ class BackendController extends ActionController
 
             if ($configuration instanceof Configuration) {
                 $pageTree = $this->pageService->getPageMetadataTree(
-                    $this->currentPageUid,
+                    $currentPageUid,
                     $depth,
                     $sysLanguageUid,
                     $configuration->getJsonldCustomUrl(),
                     $respectDoktypes
                 );
 
-                $this->view->assignMultiple([
+                $this->moduleTemplate->assignMultiple([
                     'pageTree' => $pageTree,
                     'titleAttachment' => $configuration->getTitleAttachment(),
                     'titleAttachmentSeperator' => $configuration->getTitleAttachmentSeperator(),
@@ -510,21 +507,21 @@ class BackendController extends ActionController
                 ]);
             } else {
                 $pageTree = $this->pageService->getPageMetadataTree(
-                    $this->currentPageUid,
+                    $currentPageUid,
                     $depth,
                     $sysLanguageUid,
                     '',
                     $respectDoktypes
                 );
 
-                $this->view->assign('pageTree', $pageTree);
+                $this->moduleTemplate->assign('pageTree', $pageTree);
             }
 
             if (true === (bool) $this->settings['pageTree']['usePagination']) {
                 $pageTreePaginator = new ArrayPaginator($pageTree, $currentPaginationPage, 10);
                 $pageTreePagination = new SimplePagination($pageTreePaginator);
 
-                $this->view->assignMultiple([
+                $this->moduleTemplate->assignMultiple([
                     'pageTreePaginator' => $pageTreePaginator,
                     'pageTreePagination' => $pageTreePagination,
                 ]);
@@ -533,31 +530,20 @@ class BackendController extends ActionController
             /** @var \TYPO3\CMS\Core\Information\Typo3Version $typo3Version */
             $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
 
-            $this->view->assignMultiple([
+            $this->moduleTemplate->assignMultiple([
                 'typo3Version' => $typo3Version->getMajorVersion(),
                 'sysLanguageUid' => $sysLanguageUid,
                 'depth' => $depth,
                 'levelOptions' => [
                     PageService::TREE_DEPTH_INFINITY => LocalizationUtility::translate('tx_mindshapeseo_label.preview.levels.infinity', 'mindshape_seo'),
-                    0 => '0',
-                    1 => '1',
-                    2 => '2',
-                    3 => '3',
-                    4 => '4',
-                    5 => '5',
-                    6 => '6',
-                    7 => '7',
-                    8 => '8',
-                    9 => '9',
-                    10 => '10',
+                    ...range(0, 10)
                 ],
             ]);
         }
 
         $this->moduleTemplate->setTitle(LocalizationUtility::translate('LLL:EXT:mindshape_seo/Resources/Private/Language/de.locallang_backend_preview.xlf:mlang_tabs_tab'));
-        $this->moduleTemplate->setContent($this->view->render());
 
-        return $this->htmlResponse($this->moduleTemplate->renderContent());
+        return $this->moduleTemplate->renderResponse('Backend/Preview');
     }
 
     /**

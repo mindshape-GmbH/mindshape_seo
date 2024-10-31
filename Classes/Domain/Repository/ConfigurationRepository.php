@@ -27,6 +27,7 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
  ***************************************************************/
 
 use Doctrine\DBAL\Exception as DBALException;
+use Doctrine\DBAL\ParameterType;
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use PDO;
@@ -114,7 +115,7 @@ class ConfigurationRepository extends Repository
             ->where(
                 $queryBuilder->expr()->eq(
                     'sys_language_uid',
-                    $queryBuilder->createNamedParameter($sysLanguageUid, PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($sysLanguageUid, ParameterType::INTEGER)
                 )
             );
 
