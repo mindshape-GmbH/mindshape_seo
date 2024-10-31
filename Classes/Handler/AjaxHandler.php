@@ -26,6 +26,7 @@ namespace Mindshape\MindshapeSeo\Handler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Doctrine\DBAL\ParameterType;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use Mindshape\MindshapeSeo\Utility\PageUtility;
@@ -83,7 +84,6 @@ class AjaxHandler implements SingletonInterface
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \Psr\Http\Message\ResponseInterface
-     * @throws \TYPO3\CMS\Extbase\Object\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function deleteConfiguration(ServerRequestInterface $request): ResponseInterface
@@ -119,6 +119,7 @@ class AjaxHandler implements SingletonInterface
      * @param int $pageUid
      * @param int $sysLanguageUid
      * @param array $data
+     * @throws \Doctrine\DBAL\Exception
      */
     protected function savePageData(int $pageUid, int $sysLanguageUid, array $data): void
     {
@@ -130,35 +131,33 @@ class AjaxHandler implements SingletonInterface
             ->where(
                 $queryBuilder->expr()->eq(
                     'p.uid',
-                    $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($pageUid, ParameterType::INTEGER)
                 ),
                 $queryBuilder->expr()->eq(
                     'p.sys_language_uid',
-                    $queryBuilder->createNamedParameter($sysLanguageUid, PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($sysLanguageUid, ParameterType::INTEGER)
                 )
             )
-            ->execute();
+            ->executeQuery();
 
         if (0 === $result->rowCount()) {
             $queryBuilder = DatabaseUtility::queryBuilder();
 
-            $page = $queryBuilder
+            $pageUid = $queryBuilder
                 ->select('p.uid')
                 ->from('pages', 'p')
                 ->where(
                     $queryBuilder->expr()->eq(
                         'p.' . $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'],
-                        $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($pageUid, ParameterType::INTEGER)
                     ),
                     $queryBuilder->expr()->eq(
                         'p.sys_language_uid',
-                        $queryBuilder->createNamedParameter($sysLanguageUid, PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($sysLanguageUid, ParameterType::INTEGER)
                     )
                 )
-                ->execute()
-                ->fetch();
-
-            $pageUid = $page['uid'];
+                ->executeQuery()
+                ->fetchOne();
         }
 
         $queryBuilder = DatabaseUtility::queryBuilder();
@@ -166,13 +165,13 @@ class AjaxHandler implements SingletonInterface
         $queryBuilder
             ->update('pages')
             ->where(
-                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT))
+                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($pageUid, ParameterType::INTEGER))
             );
 
         foreach ($data as $column => $value) {
             $queryBuilder->set($column, $value);
         }
 
-        $queryBuilder->execute();
+        $queryBuilder->executeStatement();
     }
 }

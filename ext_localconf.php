@@ -2,10 +2,7 @@
 
 use Mindshape\MindshapeSeo\Backend\Form\Element\GooglePreviewElement;
 use Mindshape\MindshapeSeo\Hook\RenderPreProcessHook;
-use Mindshape\MindshapeSeo\Property\TypeConverter\UploadFileReferenceConverter;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
 defined('TYPO3') or die();
 
