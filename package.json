@@ -1,0 +1,33 @@
+{
+  "name": "mindshape_seo",
+  "version": "4.0",
+  "private": true,
+  "engines": {
+    "node": "^22.11"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26",
+    "@babel/preset-env": "^7.26",
+    "@babel/register": "^7.25",
+    "cross-env": "^7.0",
+    "css-loader": "^7.1",
+    "mini-css-extract-plugin": "^2.9",
+    "sass": "^1.81",
+    "sass-loader": "^16.0",
+    "webpack": "^5.96",
+    "webpack-cli": "^5.1",
+    "webpack-remove-empty-scripts": "^1.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "browserslist": [
+    "defaults"
+  ],
+  "scripts": {
+    "build:production": "cross-env NODE_ENV=production webpack --config ./Build/webpack.config.babel.js --progress",
+    "build:development": "cross-env NODE_ENV=development webpack --config ./Build/webpack.config.babel.js --progress"
+  }
+}
