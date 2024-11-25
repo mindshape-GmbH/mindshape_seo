@@ -104,10 +104,10 @@ class BackendController extends ActionController
         $this->moduleTemplate->getDocHeaderComponent()->setMetaInformation([]);
 
         if (Environment::getContext()->isProduction()) {
-            $this->pageRenderer->addCssFile('EXT:mindshape_seo/Resources/Public/css/backend.min.css');
+            $this->pageRenderer->addCssFile('EXT:mindshape_seo/Resources/Public/StyleSheets/backend.css');
         } else {
             $this->pageRenderer->addCssFile(
-                'EXT:mindshape_seo/Resources/Public/css/backend.min.css',
+                'EXT:mindshape_seo/Resources/Public/StyleSheets/backend.css',
                 'stylesheet',
                 'all',
                 '',
@@ -252,9 +252,7 @@ class BackendController extends ActionController
      */
     public function settingsAction(string $domain = null, int $sysLanguageUid = null): ResponseInterface
     {
-        $this->pageRenderer->getJavaScriptRenderer()->addJavaScriptModuleInstruction(
-            JavaScriptModuleInstruction::create('@mindshape/mindshape-seo/SettingsModule.js')
-        );
+        $this->pageRenderer->loadJavaScriptModule('@mindshape/mindshape-seo/SettingsModule.js');
 
         $domains = $this->domainService->getAvailableDomains();
 
@@ -439,9 +437,7 @@ class BackendController extends ActionController
     public function previewAction(int $currentPaginationPage = 1, ?int $depth = null, ?int $sysLanguageUid = null): ResponseInterface
     {
         $currentPageUid = (int)($this->request->getQueryParams()['id'] ?? 0);
-        $this->pageRenderer->getJavaScriptRenderer()->addJavaScriptModuleInstruction(
-            JavaScriptModuleInstruction::create('@mindshape/mindshape-seo/PreviewModule.js')
-        );
+        $this->pageRenderer->loadJavaScriptModule('@mindshape/mindshape-seo/PreviewModule.js');
 
         if ($currentPageUid === 0) {
             return $this->moduleTemplate->renderResponse('Backend/NoPageSelected');
