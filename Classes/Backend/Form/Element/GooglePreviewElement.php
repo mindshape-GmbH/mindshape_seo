@@ -76,7 +76,7 @@ class GooglePreviewElement extends AbstractFormElement
     public function render(): array
     {
         $result = $this->initializeResultArray();
-        $result['stylesheetFiles'][] = 'EXT:mindshape_seo/Resources/Public/css/backend.min.css';
+        $result['stylesheetFiles'][] = 'EXT:mindshape_seo/Resources/Public/StyleSheets/backend.css';
         $result['javaScriptModules'][] = JavaScriptModuleInstruction::create('@mindshape/mindshape-seo/PreviewModule.js');
 
         $pageUid = $this->data['databaseRow']['uid'];
