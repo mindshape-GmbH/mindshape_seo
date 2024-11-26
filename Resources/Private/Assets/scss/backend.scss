@@ -14,6 +14,8 @@ $darkgrey: #333;
 $lightgrey: #666;
 
 .mindshapeseo-preview {
+  --treelist-border-color: #ddd;
+
   .modal-header {
     display: flex;
 
@@ -116,7 +118,8 @@ $lightgrey: #666;
     }
   }
 
-  &[data-typo3-version="12"] {
+  &[data-typo3-version="12"],
+  &[data-typo3-version="13"] {
     .depth-markup {
       .icon {
         top: unset;
@@ -182,6 +185,7 @@ $lightgrey: #666;
 
   .google-preview-column {
     vertical-align: top;
+    color: #1A1A1A;
   }
 
   .seo-check {
@@ -346,6 +350,7 @@ $lightgrey: #666;
     }
 
     &.edit {
+      color: #000;
       background-color: $bootstrap-border-gray;
       border: solid 1px $bootstrap-border-gray;
       border-bottom-left-radius: .5em;
@@ -467,6 +472,14 @@ form {
 
     &.logo {
       display: none;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .seo-check {
+    .btn .icon .icon-markup img {
+      filter: invert(1);
     }
   }
 }
