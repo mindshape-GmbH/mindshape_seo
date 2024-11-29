@@ -1,12 +1,4 @@
-﻿.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
-.. include:: ../Includes.txt
-
-
-.. _seo-manual:
+﻿.. _seo-manual:
 
 ==========
 SEO Manual
