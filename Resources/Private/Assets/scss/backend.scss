@@ -16,7 +16,6 @@ $darkgrey: #333;
 $lightgrey: #666;
 
 //Seo Extension Colors
-
 $primary: hsla(76, 72%, 41%, 1);
 $primary-darker: hsla(90, 38%, 41%, 1);
 $secondary: hsla(127, 28%, 38%, 1);
@@ -32,7 +31,6 @@ $seo-light-grey: hsla(0, 0%, 75%, 1);
 $seo-error: hsla(2, 64%, 58%, 1);
 
 //Importing SEO Extension Fonts
-
 @font-face {
   font-family: 'Montserrat';
   font-style: normal;
@@ -69,10 +67,8 @@ $seo-error: hsla(2, 64%, 58%, 1);
 }
 
 // SEO Extension Styling
-
 .mindshapeseo-preview {
   --treelist-border-color: #ddd;
-
 
   // Styling Headings
   h1{
@@ -124,8 +120,19 @@ $seo-error: hsla(2, 64%, 58%, 1);
         &:first-child {
           padding-inline-start: 1.6rem;
         }
+
+        &:last-child {
+          display: flex;
+          justify-content: space-between;
+          gap: 1rem;
+
+          img {
+            margin-right: 0.25rem;
+          }
+        }
       }
     }
+
     // Table Body
     tbody {
       tr td {
@@ -133,6 +140,7 @@ $seo-error: hsla(2, 64%, 58%, 1);
         border: none;
         border-bottom: solid 3px $white;
         padding-block: 1.9rem;
+        vertical-align: top;
 
         //Hierachy Styling
         &.pagetree-info {
@@ -169,7 +177,6 @@ $seo-error: hsla(2, 64%, 58%, 1);
             }
 
             .depth {
-
               &-1 {
                 width: 0.75rem;
               }
@@ -182,7 +189,7 @@ $seo-error: hsla(2, 64%, 58%, 1);
                 width: 2.25rem;
               }
             }
-            }
+          }
 
           .content {
             position: absolute;
@@ -217,7 +224,6 @@ $seo-error: hsla(2, 64%, 58%, 1);
         }
 
         //Vorschau Styling
-
         &.google-preview-column {
           .thumbnail {
             border: none;
@@ -319,6 +325,7 @@ $seo-error: hsla(2, 64%, 58%, 1);
                         width: 1.1rem;
                         background-color: $white;
                         border-radius: 2px;
+                        transition: background-color 150ms ease;
                       }
 
                       .container:hover input ~ .checkmark {
@@ -371,22 +378,38 @@ $seo-error: hsla(2, 64%, 58%, 1);
             }
 
             .edit {
+              --_dropdown-icon-size: 16px;
+
+              position: relative;
               margin-top: 0;
-              padding: 0.3rem 0.6rem 0.4rem;
-              background-color: $primary;
+              padding: 0.35rem calc(0.6rem + var(--_dropdown-icon-size) + 9px) 0.35rem 0.6rem;
               color: $white;
-              text-transform: uppercase;
-              font-family: "NunitoSemiBold", Verdana, Arial, Sans-Serif;
-              letter-spacing: 0.8px;
+              background-color: $primary;
               border-bottom-right-radius: 7px;
               border-bottom-left-radius: 7px;
+              font-family: "NunitoSemiBold", Verdana, Arial, Sans-Serif;
               line-height: 1em;
+              text-transform: uppercase;
+              letter-spacing: 0.8px;
+              transition: background-color 150ms ease;
+
+              img {
+                position: absolute;
+                inset: 50% 9px auto auto;
+                translate: 0 -50%;
+                width: var(--_dropdown-icon-size);
+                height: var(--_dropdown-icon-size);
+                transition: rotate 150ms ease;
+              }
+
+              .abort-text[style="display: block;"] ~ img {
+                rotate: 180deg;
+              }
             }
           }
         }
 
         //Metadaten Styling
-
         .seo-check {
           .btn {
             background-color: $white;
@@ -408,6 +431,20 @@ $seo-error: hsla(2, 64%, 58%, 1);
               color: $seo-error;
               height: 1.3rem;
               width: 1.3rem;
+            }
+
+            &.error {
+              position: relative;
+
+              &::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                border: 1px solid $seo-error;
+                border-radius: 4px;
+                opacity: 0;
+                transition: opacity 150ms ease;
+              }
             }
           }
         }
@@ -887,10 +924,26 @@ form {
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  .seo-check {
-    .btn .icon .icon-markup img {
-      filter: invert(1);
+@media (hover: hover) {
+  .mindshapeseo-preview .table tbody tr td {
+    &.google-preview-column .thumbnail {
+      .edit:is(button):hover {
+        background-color: $primary-darker;
+      }
+
+      .edit-panel {
+        .form-group:has(.checkbox) .checkbox .checkbox-wrapper input:hover ~ .checkmark {
+          background-color: $primary-darker;
+        }
+
+        button.save:not(:disabled):hover {
+          background-color: $primary-darker;
+        }
+      }
+    }
+
+    .seo-check .btn.error:hover::before {
+      opacity: 1;
     }
   }
 }

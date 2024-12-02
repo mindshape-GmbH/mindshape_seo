@@ -72,12 +72,13 @@
     <button class="edit">
       <span class="edit-text">
         {f:translate(key: 'tx_mindshapeseo_label.preview.button.edit', extensionName: 'mindshape_seo')}
-        <core:icon identifier="provider-fontawesome-caret-down"/>
       </span>
       <span class="abort-text">
         {f:translate(key: 'tx_mindshapeseo_label.preview.button.abort', extensionName: 'mindshape_seo')}
-        <core:icon identifier="provider-fontawesome-caret-up"/>
       </span>
+
+      <f:image src="{f:uri.resource(path: 'Icons/FontAwesome/angle-down_white.svg', extensionName: 'mindshape_seo')}"
+               alt="Dropdown-Icon" width="16" />
     </button>
     <f:if condition="{editing}">
       <div class="edit-panel">
