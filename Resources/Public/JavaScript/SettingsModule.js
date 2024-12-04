@@ -10,7 +10,8 @@ class SettingsModule {
     deleteButton: '.mindshape-seo-deletebutton',
     jsonldCheckbox: '#addJsonld',
     jsonld: '#jsonld',
-    jsonldTypeSelect: '.type-select'
+    jsonldTypeSelect: '.type-select',
+    tabs: '[data-tabs] [data-tab]'
   }
 
   constructor () {
@@ -26,6 +27,7 @@ class SettingsModule {
     }
 
     this.initJsonldLogic();
+    this.initSettingsTabs();
   };
 
   initJsonldLogic = () => {
@@ -109,6 +111,26 @@ class SettingsModule {
         }
       ]
     });
+  }
+
+  initSettingsTabs = () => {
+    const tabs = document.querySelectorAll(this.selectors.tabs);
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        this.resetAllTabs(tabs);
+
+        tab.classList.add('show');
+        document.getElementById(tab.dataset.tab).classList.add('show');
+      });
+    });
+  }
+
+  resetAllTabs = (tabs) => {
+    tabs.forEach(tab => {
+      tab.classList.remove('show');
+      document.getElementById(tab.dataset.tab).classList.remove('show');
+    })
   }
 }
 
