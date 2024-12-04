@@ -1,0 +1,77 @@
+<html data-namespace-typo3-fluid="true" lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+>
+
+<div id="domain" class="tabs-item show">
+  <f:form.hidden property="domain"/>
+
+  <fieldset class="form-section">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+          <label class="form-label">{f:translate(key: 'tx_mindshapeseo_label.change_domain', extensionName: 'mindshape_seo')}</label>
+
+          <f:form.textfield name="dummyDomain" value="{f:if(condition: '* == {configuration.domain}', then: '{f:translate(key: \'tx_mindshapeseo_domain_model_configuration.domain.default\', extensionName: \'mindshape_seo\')}', else: currentDomain)}" disabled="disabled" class="form-control"/>
+        </div>
+      </div>
+    </div>
+
+    <f:if condition="{defaultConfiguration}">
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="checkbox">
+            <label class="form-label">
+              <f:form.checkbox value="1" property="mergeWithDefault"/>
+              {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.merge_with_default', extensionName:
+              'mindshape_seo')}
+            </label>
+          </div>
+        </div>
+      </div>
+    </f:if>
+  </fieldset>
+
+  <fieldset class="form-section">
+    <h2 class="form-section-headline">
+      {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment', extensionName: 'mindshape_seo')}
+    </h2>
+
+    <p>
+      {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment.subhead', extensionName: 'mindshape_seo')}
+    </p>
+
+    <div class="row">
+      <div class="col-sm-1">
+        <div class="form-group">
+          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment_position',
+            extensionName: 'mindshape_seo')}</label>
+          <f:form.select property="titleAttachmentPosition" options="{titleAttachmentPositionOptions}"
+                         class="form-control"/>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-1">
+        <div class="form-group">
+          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment_seperator',
+            extensionName: 'mindshape_seo')}</label>
+          <f:form.textfield property="titleAttachmentSeperator" class="form-control"/>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-sm-12">
+        <div class="form-group">
+          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment', extensionName:
+            'mindshape_seo')}</label>
+          <f:form.textfield property="titleAttachment" placeholder="{defaultConfiguration.titleAttachment}"
+                            class="form-control"/>
+          <span class="help-block">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment.help', extensionName: 'mindshape_seo')}</span>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
+
+</html>

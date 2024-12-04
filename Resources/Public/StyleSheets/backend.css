@@ -1,47 +1,89 @@
 /*!*********************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[0].use[1]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[0].use[2]!./Resources/Private/Assets/Scss/backend.scss ***!
   \*********************************************************************************************************************************************************************************************/
-@font-face {
-  font-family: "Montserrat";
-  font-style: normal;
-  font-weight: normal;
-  src: url(../812dd4640aaa4e4db7b8.woff2) format("woff2");
+form .seo-check {
+  margin-bottom: 1.5em;
 }
-@font-face {
-  font-family: "NunitoRegular";
-  font-style: normal;
-  font-weight: normal;
-  src: url(../05dfd8e29964fa7e47e3.woff2) format("woff2");
+form .seo-check .fa-exclamation-circle {
+  color: #d9534f;
 }
-@font-face {
-  font-family: "NunitoBold";
-  font-style: normal;
-  font-weight: normal;
-  src: url(../7ea360d41eb7a9a43088.woff2) format("woff2");
+form .seo-check .fa-check-circle {
+  color: #5cb85c;
 }
-@font-face {
-  font-family: "NunitoSemiBold";
-  font-style: normal;
-  font-weight: normal;
-  src: url(../bc0f73589708cdc8e73e.woff2) format("woff2");
+
+#msh-modal .modal-sm {
+  max-width: 500px;
 }
-@font-face {
-  font-family: "NunitoBlack";
-  font-style: normal;
-  font-weight: normal;
-  src: url(../23fa681dfe2c732ff9a8.woff2) format("woff2");
+#msh-modal .list-group {
+  margin-bottom: 0;
 }
+#msh-modal .list-group li.list-group-item {
+  border-color: #bdbcbc;
+  list-style: none;
+}
+#msh-modal .list-group li.list-group-item.first-visible {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+#msh-modal .list-group li.list-group-item.last-visible {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+#msh-modal .list-group li.list-group-item .badge {
+  background-color: inherit;
+  color: inherit;
+}
+#msh-modal .list-group li.list-group-item .badge .icon-provider-fontawesome-error {
+  display: inline-block;
+}
+#msh-modal .list-group li.list-group-item .badge .icon-provider-fontawesome-error i {
+  color: inherit;
+}
+
+#mindshape-seo-configuration .mindshape-seo-delete {
+  margin-bottom: 1em;
+}
+#mindshape-seo-configuration #jsonld {
+  display: none;
+}
+#mindshape-seo-configuration .thumbnail {
+  padding: 1em;
+}
+#mindshape-seo-configuration .form-section-headline .icon-provider-fontawesome-angle-up,
+#mindshape-seo-configuration .form-section-headline .icon-provider-fontawesome-angle-down {
+  vertical-align: middle;
+}
+#mindshape-seo-configuration .form-section-headline .icon-provider-fontawesome-angle-up {
+  display: inline-block;
+}
+#mindshape-seo-configuration .form-section-headline .icon-provider-fontawesome-angle-down {
+  display: none;
+}
+#mindshape-seo-configuration .form-section-headline .collapsed .icon-provider-fontawesome-angle-down {
+  display: inline-block;
+}
+#mindshape-seo-configuration .form-section-headline .collapsed .icon-provider-fontawesome-angle-up {
+  display: none;
+}
+#mindshape-seo-configuration fieldset {
+  margin-bottom: 1em;
+}
+#mindshape-seo-configuration fieldset.logo {
+  display: none;
+}
+
 .mindshapeseo-preview {
   --treelist-border-color: #ddd;
 }
 .mindshapeseo-preview h1 {
   font-family: "Montserrat", Verdana, Arial, Sans-Serif;
-  font-weight: normal;
+  font-weight: 400;
   font-size: 1.25rem;
   margin-block-end: 1.3rem;
 }
 .mindshapeseo-preview .row .col-sm-2 .form-group label {
-  font-family: "NunitoBold", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
+  font-weight: 700;
   font-size: 0.75rem;
   margin-block-end: 0.1rem;
 }
@@ -50,7 +92,8 @@
   height: 1.2rem;
   min-width: 0;
   color: hsl(0, 0%, 29%);
-  font-family: "NunitoRegular", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
+  font-weight: 400;
   font-size: 0.6rem;
   line-height: 1;
   padding: 0.1rem 0.3rem;
@@ -61,9 +104,9 @@
 .mindshapeseo-preview .table thead tr th {
   background-color: hsl(0, 0%, 75%);
   color: #fff;
-  font-family: "NunitoBold", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
+  font-weight: 600;
   font-size: 0.75rem;
-  font-weight: normal;
   line-height: 1;
   border: none;
   padding: 0.7rem 0.5rem;
@@ -143,7 +186,7 @@
 }
 .mindshapeseo-preview .table tbody tr td.pagetree-info .content .title {
   margin-inline-start: 1.6rem;
-  font-family: "NunitoRegular", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
   font-size: 0.75rem;
   position: relative;
   margin-block-start: 4rem;
@@ -183,7 +226,8 @@
   display: none;
 }
 .mindshapeseo-preview .table tbody tr td.google-preview-column .thumbnail .edit-panel label {
-  font-family: "NunitoBold", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
+  font-weight: 700;
   font-size: 0.88rem;
   border-radius: 4px;
 }
@@ -218,7 +262,7 @@
   gap: 3rem;
 }
 .mindshapeseo-preview .table tbody tr td.google-preview-column .thumbnail .edit-panel .form-group:has(.checkbox) .checkbox {
-  font-family: "NunitoRegular", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
   font-size: 0.75rem;
   line-height: 1;
   display: flex;
@@ -282,7 +326,8 @@
   border-radius: 4px;
   background-color: hsl(0, 0%, 75%);
   text-transform: uppercase;
-  font-family: "NunitoSemiBold", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
+  font-weight: 600;
   letter-spacing: 0.8px;
   padding: 0.3rem 1rem;
 }
@@ -299,7 +344,8 @@
   background-color: hsl(76, 72%, 41%);
   border-bottom-right-radius: 7px;
   border-bottom-left-radius: 7px;
-  font-family: "NunitoSemiBold", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
+  font-weight: 600;
   line-height: 1em;
   text-transform: uppercase;
   letter-spacing: 0.8px;
@@ -320,7 +366,7 @@
   background-color: #fff;
   border: none;
   box-shadow: none;
-  font-family: "NunitoRegular", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
   padding: 0.4rem 0.6rem;
   display: flex;
   align-items: center;
@@ -349,13 +395,15 @@
   transition: opacity 150ms ease;
 }
 .mindshapeseo-preview .table tbody tr td .focus-keyword-container {
-  font-family: "NunitoRegular", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
 }
 .mindshapeseo-preview .table tbody tr td .focus-keyword-container .label {
-  font-family: "NunitoBold", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
+  font-weight: 700;
 }
 .mindshapeseo-preview .table tbody tr td .robots {
-  font-family: "NunitoBold", Verdana, Arial, Sans-Serif;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
+  font-weight: 700;
 }
 .mindshapeseo-preview .modal-header {
   display: flex;
@@ -592,7 +640,7 @@
   display: none;
 }
 .google-preview .preview-box .focus-keyword {
-  font-weight: bold;
+  font-weight: 700;
 }
 .google-preview .edit-panel {
   display: none;
@@ -641,77 +689,6 @@
   display: none;
 }
 
-form .seo-check {
-  margin-bottom: 1.5em;
-}
-form .seo-check .fa-exclamation-circle {
-  color: #d9534f;
-}
-form .seo-check .fa-check-circle {
-  color: #5cb85c;
-}
-
-#msh-modal .modal-sm {
-  max-width: 500px;
-}
-#msh-modal .list-group {
-  margin-bottom: 0;
-}
-#msh-modal .list-group li.list-group-item {
-  border-color: #bdbcbc;
-  list-style: none;
-}
-#msh-modal .list-group li.list-group-item.first-visible {
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-}
-#msh-modal .list-group li.list-group-item.last-visible {
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-#msh-modal .list-group li.list-group-item .badge {
-  background-color: inherit;
-  color: inherit;
-}
-#msh-modal .list-group li.list-group-item .badge .icon-provider-fontawesome-error {
-  display: inline-block;
-}
-#msh-modal .list-group li.list-group-item .badge .icon-provider-fontawesome-error i {
-  color: inherit;
-}
-
-#mindshape-seo-configuration .mindshape-seo-delete {
-  margin-bottom: 1em;
-}
-#mindshape-seo-configuration #jsonld {
-  display: none;
-}
-#mindshape-seo-configuration .thumbnail {
-  padding: 1em;
-}
-#mindshape-seo-configuration .form-section-headline .icon-provider-fontawesome-angle-up,
-#mindshape-seo-configuration .form-section-headline .icon-provider-fontawesome-angle-down {
-  vertical-align: middle;
-}
-#mindshape-seo-configuration .form-section-headline .icon-provider-fontawesome-angle-up {
-  display: inline-block;
-}
-#mindshape-seo-configuration .form-section-headline .icon-provider-fontawesome-angle-down {
-  display: none;
-}
-#mindshape-seo-configuration .form-section-headline .collapsed .icon-provider-fontawesome-angle-down {
-  display: inline-block;
-}
-#mindshape-seo-configuration .form-section-headline .collapsed .icon-provider-fontawesome-angle-up {
-  display: none;
-}
-#mindshape-seo-configuration fieldset {
-  margin-bottom: 1em;
-}
-#mindshape-seo-configuration fieldset.logo {
-  display: none;
-}
-
 @media (hover: hover) {
   .mindshapeseo-preview .table tbody tr td.google-preview-column .thumbnail .edit:is(button):hover {
     background-color: hsl(90, 38%, 41%);
@@ -725,6 +702,83 @@ form .seo-check .fa-check-circle {
   .mindshapeseo-preview .table tbody tr td .seo-check .btn.error:hover::before {
     opacity: 1;
   }
+}
+.seo-settings .tabs-nav {
+  display: flex;
+  gap: 0.325rem;
+}
+.seo-settings .tabs-nav-item {
+  padding: 0.5rem 1rem;
+  color: hsl(76, 72%, 41%);
+  background-color: transparent;
+  border: 1px solid hsl(76, 72%, 41%);
+  border-radius: 5px 5px 0 0;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
+  font-weight: 700;
+  font-size: 0.625rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: background-color 350ms ease, color 350ms ease;
+}
+.seo-settings .tabs-nav-item.show {
+  color: #fff;
+  background-color: hsl(76, 72%, 41%);
+}
+.seo-settings .tabs-item {
+  grid-row: 1/-1;
+  grid-column: 1/-1;
+  transition: opacity 350ms ease;
+}
+.seo-settings .tabs-item:not(.show) {
+  opacity: 0;
+  pointer-events: none;
+}
+.seo-settings .tabs-item:not(.show) > * {
+  visibility: hidden;
+}
+.seo-settings .form-section {
+  margin-bottom: 0.25rem;
+  padding: 3rem 2rem;
+  border: none;
+}
+.seo-settings input[type=text] {
+  background-color: #fff;
+  border: none;
+  border-radius: 2px;
+}
+.seo-settings .form-group {
+  margin-bottom: 0;
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  src: url(../812dd4640aaa4e4db7b8.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400;
+  src: url(../05dfd8e29964fa7e47e3.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 600;
+  src: url(../bc0f73589708cdc8e73e.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 700;
+  src: url(../7ea360d41eb7a9a43088.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 900;
+  src: url(../23fa681dfe2c732ff9a8.woff2) format("woff2");
 }
 
 /*# sourceMappingURL=backend.css.map*/

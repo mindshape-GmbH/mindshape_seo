@@ -1,0 +1,25 @@
+<html data-namespace-typo3-fluid="true" lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+>
+
+<div id="robots_txt" class="tabs-item">
+  <fieldset class="form-section">
+    <f:if condition="{robotsTxtNotExists}">
+      <f:then>
+        <p class="alert alert-warning">{f:translate(key: 'tx_mindshapeseo_text.robots_txt_not_exists')}</p>
+        <p>{f:translate(key: 'tx_mindshapeseo_text.robots_txt_example')}</p>
+        <pre>User-agent: *<br/>Allow: /<br/>Disallow: /typo3/&nbsp;&nbsp;&nbsp;&nbsp;# Nothing to see here<br/>Disallow: /*?id=*&nbsp;&nbsp;&nbsp;&nbsp;# Disallow non-realurl<br/>Disallow: *tx_news*&nbsp;&nbsp;# Disallow tx_news params<br/>Disallow: /*?eID=*&nbsp;&nbsp;&nbsp;# Disallow eID<br/><br/>#Page Sitemap<br/>Sitemap: {domainUrl}/sitemap.xml<br/>#Sitemap Index<br/>Sitemap: {domainUrl}/sitemap-index.xml<br/>#Image Sitemap<br/>Sitemap: {domainUrl}/sitemap-image.xml</pre>
+      </f:then>
+      <f:else>
+        <p class="alert alert-success">{f:translate(key: 'tx_mindshapeseo_text.robots_txt_exists')}</p>
+        <f:if condition="{robotsTxtContent}">
+          <p>{f:translate(key: 'tx_mindshapeseo_text.robots_txt_found')}</p>
+          <pre>{robotsTxtContent}</pre>
+        </f:if>
+      </f:else>
+    </f:if>
+  </fieldset>
+</div>
+
+</html>

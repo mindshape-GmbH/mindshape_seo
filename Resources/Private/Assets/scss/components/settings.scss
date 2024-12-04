@@ -1,0 +1,60 @@
+@use "../abstracts/variables" as *;
+
+.seo-settings {
+  .tabs {
+    &-nav {
+      display: flex;
+      gap: 0.325rem;
+
+      &-item {
+        padding: 0.5rem 1rem;
+        color: $primary;
+        background-color: transparent;
+        border: 1px solid $primary;
+        border-radius: 5px 5px 0 0;
+        font-family: $ff-primary;
+        font-weight: $fw-bold;
+        font-size: 0.625rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: background-color 350ms ease, color 350ms ease;
+
+        &.show {
+          color: $white;
+          background-color: $primary;
+        }
+      }
+    }
+
+    &-item {
+      grid-row: 1 / -1;
+      grid-column: 1 / -1;
+      transition: opacity 350ms ease;
+
+      &:not(.show) {
+        opacity: 0;
+        pointer-events: none;
+
+        > * {
+          visibility: hidden;
+        }
+      }
+    }
+  }
+
+  .form-section {
+    margin-bottom: 0.25rem;
+    padding: 3rem 2rem;
+    border: none;
+  }
+
+  input[type="text"] {
+    background-color: $white;
+    border: none;
+    border-radius: 2px;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+}
