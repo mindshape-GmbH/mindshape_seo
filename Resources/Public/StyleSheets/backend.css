@@ -121,9 +121,8 @@ form .seo-check .fa-check-circle {
 }
 .mindshapeseo-preview h1 {
   font-family: "Montserrat", Verdana, Arial, Sans-Serif;
-  font-weight: 400;
-  font-size: 1.25rem;
-  margin-block-end: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
 }
 .mindshapeseo-preview .row .col-sm-2 .form-group label {
   font-family: "Nunito", Verdana, Arial, Sans-Serif;
@@ -755,7 +754,10 @@ form .seo-check .fa-check-circle {
 .seo-settings-title {
   font-family: "Montserrat", Verdana, Arial, Sans-Serif;
   font-weight: 600;
-  margin-bottom: 1.875rem;
+  margin-bottom: 0;
+}
+.seo-settings-title-wrapper img {
+  margin-top: 1.25rem;
 }
 .seo-settings .tabs-nav {
   display: flex;
