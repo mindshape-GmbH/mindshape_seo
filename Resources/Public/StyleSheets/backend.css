@@ -72,6 +72,50 @@ form .seo-check .fa-check-circle {
   display: none;
 }
 
+.checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: max-content;
+  max-width: 100%;
+}
+.checkbox:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+.checkbox .checkmark {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 2px;
+  transition: background-color 350ms ease;
+}
+.checkbox .checkmark::after {
+  content: "";
+  width: 6px;
+  height: 12px;
+  border-style: solid;
+  border-color: #fff;
+  border-width: 0 2px 2px 0;
+  rotate: 45deg;
+  translate: 0 -2px;
+}
+.checkbox input[type=checkbox] {
+  display: none;
+}
+.checkbox input[type=checkbox]:checked ~ .checkmark {
+  background-color: hsl(76, 72%, 41%);
+}
+
+@media (hover: hover) {
+  .checkbox label:hover {
+    cursor: pointer;
+  }
+  .checkbox label:hover .checkmark {
+    background-color: hsla(76, 72%, 41%, 0.4);
+  }
+}
 .mindshapeseo-preview {
   --treelist-border-color: #ddd;
 }
@@ -774,39 +818,6 @@ form .seo-check .fa-check-circle {
 .seo-settings input[type=text]:focus {
   outline-color: hsl(76, 72%, 41%);
 }
-.seo-settings label:has(input[type=checkbox]) {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-.seo-settings .checkbox:not(:last-child) {
-  margin-bottom: 0.5rem;
-}
-.seo-settings .checkbox .checkmark {
-  display: grid;
-  place-items: center;
-  width: 20px;
-  height: 20px;
-  background-color: #fff;
-  border-radius: 2px;
-  transition: background-color 350ms ease;
-}
-.seo-settings .checkbox .checkmark::after {
-  content: "";
-  width: 6px;
-  height: 12px;
-  border-style: solid;
-  border-color: #fff;
-  border-width: 0 2px 2px 0;
-  rotate: 45deg;
-  translate: 0 -2px;
-}
-.seo-settings .checkbox input[type=checkbox] {
-  display: none;
-}
-.seo-settings .checkbox input[type=checkbox]:checked ~ .checkmark {
-  background-color: hsl(76, 72%, 41%);
-}
 .seo-settings .form-group {
   margin-bottom: 0;
 }
@@ -826,8 +837,8 @@ form .seo-check .fa-check-circle {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.25rem;
-  border: none;
-  border-radius: 0;
+  border: none !important;
+  border-radius: 0 !important;
 }
 .seo-settings .analytics-first-checkbox {
   margin-bottom: 0;
@@ -843,6 +854,12 @@ form .seo-check .fa-check-circle {
   margin-bottom: 1rem;
 }
 
+@media (hover: hover) {
+  .seo-settings .tabs-nav-item:hover {
+    color: #fff;
+    background-color: hsla(76, 72%, 41%, 0.4);
+  }
+}
 @font-face {
   font-family: "Montserrat";
   font-style: normal;
