@@ -477,6 +477,7 @@ form .seo-check .fa-check-circle {
   background-color: var(--primary);
   border-bottom-right-radius: 7px;
   border-bottom-left-radius: 7px;
+  border-color: transparent;
   font-family: var(--ff-primary);
   font-weight: var(--fw-semibold);
   line-height: 1em;
