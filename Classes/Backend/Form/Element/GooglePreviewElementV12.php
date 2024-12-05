@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Backend\Form\Element;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2024 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -26,19 +26,31 @@ namespace Mindshape\MindshapeSeo\Backend\Form\Element;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Service\DomainService;
 use Mindshape\MindshapeSeo\Service\PageService;
 use Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService;
+use TYPO3\CMS\Backend\Form\Element\AbstractFormElement;
+use TYPO3\CMS\Backend\Form\NodeFactory;
+use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
+use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @package mindshape_seo
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  */
-class GooglePreviewElement extends AbstractGooglePreviewElement
+class GooglePreviewElementV12 extends AbstractGooglePreviewElement
 {
-    public function __construct()
+    /**
+     * @param \TYPO3\CMS\Backend\Form\NodeFactory $nodeFactory
+     * @param array $data
+     */
+    public function __construct(NodeFactory $nodeFactory, array $data)
     {
+        parent::__construct($nodeFactory, $data);
+
         $this->pageService = GeneralUtility::makeInstance(PageService::class);
         $this->domainService = GeneralUtility::makeInstance(DomainService::class);
         $this->standaloneTemplateRendererService = GeneralUtility::makeInstance(StandaloneTemplateRendererService::class);
