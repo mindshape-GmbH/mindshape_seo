@@ -9,7 +9,11 @@
   &-title {
     font-family: $ff-secondary;
     font-weight: $fw-semibold;
-    margin-bottom: 1.875rem;
+    margin-bottom: 0;
+
+    &-wrapper img {
+      margin-top: 1.25rem;
+    }
   }
 
   .tabs {

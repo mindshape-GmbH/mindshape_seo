@@ -5,11 +5,10 @@
   --treelist-border-color: #ddd;
 
   // Styling Headings
-  h1{
+  h1 {
     font-family: $ff-secondary;
-    font-weight: $fw-regular;
-    font-size: 1.25rem;
-    margin-block-end: 1.3rem;
+    font-weight: $fw-semibold;
+    margin-bottom: 1.25rem;
   }
 
   // Styling Dropdown

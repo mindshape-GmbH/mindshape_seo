@@ -8,18 +8,23 @@
 <f:layout name="Module"/>
 
 <f:section name="Content">
-  <f:if condition="* == {configuration.domain}">
-    <f:then>
-      <h1 class="seo-settings-title">
-        {f:translate(key: 'tx_mindshapeseo_label.seo_settings_for_all_pages', extensionName: 'mindshape_seo')}
-      </h1>
-    </f:then>
-    <f:else>
-      <h1 class="seo-settings-title">
-        {f:translate(key: 'tx_mindshapeseo_label.seo_settings_for', extensionName: 'mindshape_seo')} <b>{currentDomain}</b>
-      </h1>
-    </f:else>
-  </f:if>
+  <div class="seo-settings-title-wrapper d-flex justify-content-between gap-2">
+    <f:if condition="* == {configuration.domain}">
+      <f:then>
+        <h1 class="seo-settings-title">
+          {f:translate(key: 'tx_mindshapeseo_label.seo_settings_for_all_pages', extensionName: 'mindshape_seo')}
+        </h1>
+      </f:then>
+      <f:else>
+        <h1 class="seo-settings-title">
+          {f:translate(key: 'tx_mindshapeseo_label.seo_settings_for', extensionName: 'mindshape_seo')} <b>{currentDomain}</b>
+        </h1>
+      </f:else>
+    </f:if>
+
+    <f:image src="{f:uri.resource(path: 'Icons/mindshape_logo_dark.svg', extensionName: 'mindshape_seo')}"
+             class="mindshape-icon" alt="mindshape logo_dark" width="175" />
+  </div>
 
   <f:form.validationResults>
     <f:for each="{validationResults.flattenedErrors}" as="errors" key="propertyPath">
