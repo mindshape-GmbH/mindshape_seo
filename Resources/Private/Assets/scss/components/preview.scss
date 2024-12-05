@@ -6,8 +6,8 @@
 
   // Styling Headings
   h1 {
-    font-family: $ff-secondary;
-    font-weight: $fw-semibold;
+    font-family: var(--ff-secondary);
+    font-weight: var(--fw-semibold);
     margin-bottom: 1.25rem;
   }
 
@@ -15,8 +15,8 @@
   .row {
     .col-sm-2 .form-group {
       label {
-        font-family: $ff-primary;
-        font-weight: $fw-bold;
+        font-family: var(--ff-primary);
+        font-weight: var(--fw-bold);
         font-size: 0.75rem;
         margin-block-end: 0.1rem;
       }
@@ -25,14 +25,14 @@
         width: 6.2rem;
         height: 1.2rem;
         min-width: 0;
-        color: $seo-mid-grey;
-        font-family: $ff-primary;
-        font-weight: $fw-regular;
+        color: var(--seo-mid-grey);
+        font-family: var(--ff-primary);
+        font-weight: var(--fw-regular);
         font-size: 0.6rem;
         line-height: 1;
         padding: 0.1rem 0.3rem;
         border: none;
-        background-color: $seo-offwhite;
+        background-color: var(--seo-offwhite);
         box-shadow: none;
       }
     }
@@ -43,10 +43,10 @@
     // Table Header
     thead {
       tr th {
-        background-color: $seo-light-grey;
-        color: $white;
-        font-family: $ff-primary;
-        font-weight: $fw-semibold;
+        background-color: var(--seo-light-grey);
+        color: var(--white);
+        font-family: var(--ff-primary);
+        font-weight: var(--fw-semibold);
         font-size: 0.75rem;
         line-height: 1;
         border: none;
@@ -71,9 +71,9 @@
     // Table Body
     tbody {
       tr td {
-        background-color: $seo-offwhite;
+        background-color: var(--seo-offwhite);
         border: none;
-        border-bottom: solid 3px $white;
+        border-bottom: solid 3px var(--white);
         padding-block: 1.9rem;
         vertical-align: top;
 
@@ -98,17 +98,17 @@
               display: flex;
               width: 0.75rem;
               height: 100%;
-              background-color: $primary;
+              background-color: var(--primary);
             }
 
             &:has(.depth-1) .depth-indicator {
-              background-color: $primary-darker;
+              background-color: var(--primary-darker);
             }
             &:has(.depth-2) .depth-indicator {
-              background-color: $secondary;
+              background-color: var(--secondary);
             }
             &:has(.depth-3) .depth-indicator {
-              background-color: $tertiary;
+              background-color: var(--tertiary);
             }
 
             .depth {
@@ -132,11 +132,11 @@
             top: 0;
             bottom: 0;
             left: 0.75rem;
-            background-color: $seo-offwhite;
+            background-color: var(--seo-offwhite);
 
             .title {
               margin-inline-start: 1.6rem;
-              font-family: $ff-primary;
+              font-family: var(--ff-primary);
               font-size: 0.75rem;
               position: relative;
               margin-block-start: 4rem;
@@ -172,7 +172,7 @@
               max-height: 100%;
               padding: 0.8rem;
               border-radius: 4px;
-              background-color: $white;
+              background-color: var(--white);
 
               .description {
                 height: auto;
@@ -187,8 +187,8 @@
               }
 
               label {
-                font-family: $ff-primary;
-                font-weight: $fw-bold;
+                font-family: var(--ff-primary);
+                font-weight: var(--fw-bold);
                 font-size: 0.88rem;
                 border-radius: 4px;
               }
@@ -196,7 +196,7 @@
               input,
               textarea {
                 border: none;
-                background-color: $white;
+                background-color: var(--white);
                 padding: 0.75rem;
               }
 
@@ -216,7 +216,7 @@
                   background-color: transparent;
 
                   .progress-bar {
-                    background-color: $primary;
+                    background-color: var(--primary);
                   }
                 }
 
@@ -227,7 +227,7 @@
                   gap: 3rem;
 
                   .checkbox {
-                    font-family: $ff-primary;
+                    font-family: var(--ff-primary);
                     font-size: 0.75rem;
                     line-height: 1;
                     display: flex;
@@ -259,17 +259,17 @@
                         left: 0;
                         height: 1.1rem;
                         width: 1.1rem;
-                        background-color: $white;
+                        background-color: var(--white);
                         border-radius: 2px;
                         transition: background-color 150ms ease;
                       }
 
                       .container:hover input ~ .checkmark {
-                        background-color: $seo-offwhite;
+                        background-color: var(--seo-offwhite);
                       }
 
                       & input:checked ~ .checkmark {
-                        background-color: $primary;
+                        background-color: var(--primary);
                       }
 
                       .checkmark:after {
@@ -287,7 +287,7 @@
                         top: 2px;
                         width: 6px;
                         height: 12px;
-                        border: solid $white;
+                        border: solid var(--white);
                         border-width: 0 2px 2px 0;
                         transform: rotate(45deg);
                       }
@@ -300,16 +300,16 @@
                 margin-top: 1.5rem;
                 border: none;
                 border-radius: 4px;
-                background-color: $seo-light-grey;
+                background-color: var(--seo-light-grey);
                 text-transform: uppercase;
-                font-family: $ff-primary;
-                font-weight: $fw-semibold;
+                font-family: var(--ff-primary);
+                font-weight: var(--fw-semibold);
                 letter-spacing: 0.8px;
                 padding: 0.3rem 1rem;
 
                 &:not(:disabled) {
-                  background-color: $primary;
-                  color: $white;
+                  background-color: var(--primary);
+                  color: var(--white);
                 }
               }
             }
@@ -320,12 +320,12 @@
               position: relative;
               margin-top: 0;
               padding: 0.35rem calc(0.6rem + var(--_dropdown-icon-size) + 9px) 0.35rem 0.6rem;
-              color: $white;
-              background-color: $primary;
+              color: var(--white);
+              background-color: var(--primary);
               border-bottom-right-radius: 7px;
               border-bottom-left-radius: 7px;
-              font-family: $ff-primary;
-              font-weight: $fw-semibold;
+              font-family: var(--ff-primary);
+              font-weight: var(--fw-semibold);
               line-height: 1em;
               text-transform: uppercase;
               letter-spacing: 0.8px;
@@ -350,10 +350,10 @@
         //Metadaten Styling
         .seo-check {
           .btn {
-            background-color: $white;
+            background-color: var(--white);
             border: none;
             box-shadow: none;
-            font-family: $ff-primary;
+            font-family: var(--ff-primary);
             padding: 0.4rem 0.6rem;
             display: flex;
             align-items: center;
@@ -366,7 +366,7 @@
             }
 
             .icon {
-              color: $seo-error;
+              color: var(--seo-error);
               height: 1.3rem;
               width: 1.3rem;
             }
@@ -378,7 +378,7 @@
                 content: "";
                 position: absolute;
                 inset: 0;
-                border: 1px solid $seo-error;
+                border: 1px solid var(--seo-error);
                 border-radius: 4px;
                 opacity: 0;
                 transition: opacity 150ms ease;
@@ -388,17 +388,17 @@
         }
 
         .focus-keyword-container {
-          font-family: $ff-primary;
+          font-family: var(--ff-primary);
 
           .label {
-            font-family: $ff-primary;
-            font-weight: $fw-bold;
+            font-family: var(--ff-primary);
+            font-weight: var(--fw-bold);
           }
         }
 
         .robots {
-          font-family: $ff-primary;
-          font-weight: $fw-bold;
+          font-family: var(--ff-primary);
+          font-weight: var(--fw-bold);
         }
       }
     }
@@ -478,7 +478,7 @@
         position: relative;
 
         &:before {
-          border-left: 1px dotted $lightgrey;
+          border-left: 1px dotted var(--lightgrey);
           bottom: 0;
           content: '';
           left: 50%;
@@ -495,7 +495,7 @@
       height: 100%;
 
       &:before {
-        border-left: 1px dotted $lightgrey;
+        border-left: 1px dotted var(--lightgrey);
         bottom: 0;
         content: '';
         left: 8px;
@@ -540,10 +540,10 @@
 
     &:hover {
       &:after {
-        background: rgba($darkgrey, .8);
+        background: rgba(var(--darkgrey), .8);
         border-radius: 5px;
         bottom: 26px;
-        color: $white;
+        color: var(--white);
         content: attr(title);
         left: -80%;
         padding: 5px 15px;
@@ -554,7 +554,7 @@
 
       &:before {
         border: solid;
-        border-color: $darkgrey transparent;
+        border-color: var(--darkgrey) transparent;
         border-width: 6px 6px 0;
         bottom: 20px;
         content: '';
@@ -582,13 +582,13 @@
     }
 
     .fa-exclamation-circle {
-      color: $bootstrap-danger-red;
+      color: var(--bootstrap-danger-red);
       font-size: 16px;
       line-height: .9;
     }
 
     .fa-check-circle {
-      color: $bootstrap-success-green;
+      color: var(--bootstrap-success-green);
       font-size: 16px;
       line-height: .9;
     }
@@ -612,7 +612,7 @@
     margin-bottom: .4em;
 
     .danger {
-      color: $bootstrap-danger-red;
+      color: var(--bootstrap-danger-red);
     }
   }
 
@@ -655,7 +655,7 @@
       width: 580px;
 
       a {
-        color: $google-link-blue;
+        color: var(--google-link-blue);
       }
     }
 
@@ -672,7 +672,7 @@
       margin-bottom: 3px;
 
       cite {
-        color: $google-url-grey;
+        color: var(--google-url-grey);
         font-style: normal;
       }
 
@@ -689,7 +689,7 @@
     }
 
     .description {
-      color: $google-description-grey;
+      color: var(--google-description-grey);
       font-size: 13px;
       height: 34px;
       overflow-y: hidden;
@@ -701,7 +701,7 @@
     }
 
     .focus-keyword {
-      font-weight: $fw-bold;
+      font-weight: var(--fw-bold);
     }
   }
 
@@ -739,8 +739,8 @@
 
     &.edit {
       color: #000;
-      background-color: $bootstrap-border-gray;
-      border: solid 1px $bootstrap-border-gray;
+      background-color: var(--bootstrap-border-gray);
+      border: solid 1px var(--bootstrap-border-gray);
       border-bottom-left-radius: .5em;
       border-bottom-right-radius: .5em;
       font-size: .8em;
@@ -751,7 +751,7 @@
       transform: translateX(-50%);
 
       &:hover {
-        background-color: $grey
+        background-color: var(--grey)
       }
 
       .abort-text {
@@ -769,16 +769,16 @@
   .mindshapeseo-preview .table tbody tr td {
     &.google-preview-column .thumbnail {
       .edit:is(button):hover {
-        background-color: $primary-darker;
+        background-color: var(--primary-darker);
       }
 
       .edit-panel {
         .form-group:has(.checkbox) .checkbox .checkbox-wrapper input:hover ~ .checkmark {
-          background-color: $primary-darker;
+          background-color: var(--primary-darker);
         }
 
         button.save:not(:disabled):hover {
-          background-color: $primary-darker;
+          background-color: var(--primary-darker);
         }
       }
     }

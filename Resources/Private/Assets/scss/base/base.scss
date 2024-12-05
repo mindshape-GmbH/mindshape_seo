@@ -5,11 +5,11 @@ form {
     margin-bottom: 1.5em;
 
     .fa-exclamation-circle {
-      color: $bootstrap-danger-red;
+      color: var(--bootstrap-danger-red);
     }
 
     .fa-check-circle {
-      color: $bootstrap-success-green;
+      color: var(--bootstrap-success-green);
     }
   }
 }
@@ -23,7 +23,7 @@ form {
     margin-bottom: 0;
 
     li.list-group-item {
-      border-color: $whitegrey;
+      border-color: var(--whitegrey);
       list-style: none;
 
       &.first-visible {

@@ -18,7 +18,7 @@
     place-items: center;
     width: 20px;
     height: 20px;
-    background-color: $white;
+    background-color: var(--white);
     border-radius: 2px;
     transition: background-color 350ms ease;
 
@@ -27,7 +27,7 @@
       width: 6px;
       height: 12px;
       border-style: solid;
-      border-color: $white;
+      border-color: var(--white);
       border-width: 0 2px 2px 0;
       rotate: 45deg;
       translate: 0 -2px
@@ -38,7 +38,7 @@
     display: none;
 
     &:checked ~ .checkmark {
-      background-color: $primary;
+      background-color: var(--primary);
     }
   }
 }
@@ -48,7 +48,7 @@
     cursor: pointer;
 
     .checkmark {
-      background-color: $hsla-primary-40;
+      background-color: var(--hsla-primary-40);
     }
   }
 }

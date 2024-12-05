@@ -3,12 +3,12 @@
 .seo-settings {
   --typo3-spacing: 1.25rem;
 
-  font-family: $ff-primary;
-  font-weight: $fw-regular;
+  font-family: var(--ff-primary);
+  font-weight: var(--fw-regular);
 
   &-title {
-    font-family: $ff-secondary;
-    font-weight: $fw-semibold;
+    font-family: var(--ff-secondary);
+    font-weight: var(--fw-semibold);
     margin-bottom: 0;
 
     &-wrapper img {
@@ -23,20 +23,20 @@
 
       &-item {
         padding: 0.5rem 1rem;
-        color: $primary;
+        color: var(--primary);
         background-color: transparent;
-        border: 1px solid $primary;
+        border: 1px solid var(--primary);
         border-radius: 5px 5px 0 0;
-        font-family: $ff-primary;
-        font-weight: $fw-bold;
+        font-family: var(--ff-primary);
+        font-weight: var(--fw-bold);
         font-size: 0.625rem;
         letter-spacing: 1px;
         text-transform: uppercase;
         transition: background-color 350ms ease, color 350ms ease;
 
         &.show {
-          color: $white;
-          background-color: $primary;
+          color: var(--white);
+          background-color: var(--primary);
         }
       }
     }
@@ -65,12 +65,12 @@
     margin-bottom: 0.25rem;
     padding: 2.5rem 2rem;
     border: none;
-    background-color: $seo-light-grey-100;
+    background-color: var(--seo-light-grey-100);
 
     &-headline {
       margin-bottom: 0.325rem;
       font-size: 0.875rem;
-      font-weight: $fw-bold;
+      font-weight: var(--fw-bold);
     }
 
     .form-section {
@@ -80,14 +80,14 @@
 
   input[type="text"] {
     padding-inline: 0.5rem;
-    background-color: $white;
+    background-color: var(--white);
     border: none;
     border-radius: 2px;
     outline: 1px solid transparent;
     transition: outline 200ms ease;
 
     &:focus {
-      outline-color: $primary;
+      outline-color: var(--primary);
     }
   }
 
@@ -100,7 +100,7 @@
   }
 
   .form-control {
-    background-color: $white;
+    background-color: var(--white);
     border: none;
     border-radius: 2px;
     box-shadow: none;
@@ -127,7 +127,7 @@
     .form-section {
       padding: 1.25rem;
       margin-bottom: 0 !important;
-      border: 1px solid $seo-light-grey;
+      border: 1px solid var(--seo-light-grey);
       border-radius: 5px;
     }
 
@@ -139,7 +139,7 @@
 
 @media (hover: hover) {
   .seo-settings .tabs-nav-item:hover {
-    color: $white;
-    background-color: $hsla-primary-40;
+    color: var(--white);
+    background-color: var(--hsla-primary-40);
   }
 }
