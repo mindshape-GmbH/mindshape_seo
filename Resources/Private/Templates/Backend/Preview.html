@@ -42,8 +42,12 @@
       {f:translate(key: 'tx_mindshapeseo_label.seo_preview_for_page', extensionName: 'mindshape_seo')}
       {currentPageMetaData.title}
     </h1>
-    <f:image src="{f:uri.resource(path: 'Icons/mindshape_logo_dark.svg', extensionName: 'mindshape_seo')}"
-             class="mindshape-icon" alt="mindshape logo_dark" width="175" />
+    <div class="logo">
+      <f:image src="{f:uri.resource(path: 'Icons/mindshape_logo.svg', extensionName: 'mindshape_seo')}"
+               class="mindshape-icon light" alt="mindshape logo" width="175" height="47"/>
+      <f:image src="{f:uri.resource(path: 'Icons/mindshape_logo_dark.svg', extensionName: 'mindshape_seo')}"
+               class="mindshape-icon dark" alt="mindshape logo dark" width="175" height="47"/>
+    </div>
   </div>
 
   <div class="row">

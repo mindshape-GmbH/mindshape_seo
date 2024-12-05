@@ -27,7 +27,6 @@
         background-color: transparent;
         border: 1px solid var(--primary);
         border-radius: 5px 5px 0 0;
-        font-family: var(--ff-primary);
         font-weight: var(--fw-bold);
         font-size: 0.625rem;
         letter-spacing: 1px;
@@ -37,6 +36,7 @@
         &.show {
           color: var(--white);
           background-color: var(--primary);
+          pointer-events: none;
         }
       }
     }
@@ -65,7 +65,7 @@
     margin-bottom: 0.25rem;
     padding: 2.5rem 2rem;
     border: none;
-    background-color: var(--seo-light-grey-100);
+    background-color: var(--seo-offwhite);
 
     &-headline {
       margin-bottom: 0.325rem;
@@ -80,7 +80,6 @@
 
   input[type="text"] {
     padding-inline: 0.5rem;
-    background-color: var(--white);
     border: none;
     border-radius: 2px;
     outline: 1px solid transparent;
@@ -89,6 +88,12 @@
     &:focus {
       outline-color: var(--primary);
     }
+  }
+
+  select.form-control,
+  input[type="text"] {
+    color: var(--typo3-form-control-color, var(--black));
+    background-color: var(--typo3-form-control-bg, var(--white));
   }
 
   .form-group {
@@ -138,7 +143,7 @@
 }
 
 @media (hover: hover) {
-  .seo-settings .tabs-nav-item:hover {
+  .seo-settings .tabs-nav-item:not(.show):hover {
     color: var(--white);
     background-color: var(--hsla-primary-40);
   }

@@ -1,27 +1,49 @@
-:root {
-  --google-link-blue: #1a0dab;
-  --google-url-grey: #5f6368;
-  --google-description-grey: #4d5156;
-  --bootstrap-border-gray: #ddd;
-  --bootstrap-link-blue: #337ab7;
-  --bootstrap-success-green: #5cb85c;
-  --bootstrap-success-green-hover: #449d44;
-  --bootstrap-danger-red: #d9534f;
-  --bootstrap-danger-red-hover: #c9302c;
+@mixin dark-variables {
+  --google-link-blue: hsl(215, 100%, 80%);
+  --google-url-grey: hsl(0, 0%, 91%);
+  --google-description-grey: hsl(0, 0%, 75%);
+  --google-bg: hsl(0, 0%, 12%);
 
-  --white: #fff;
-  --black: #000;
-  --whitegrey: #bdbcbc;
-  --grey: #ededed;
-  --darkgrey: #333;
-  --lightgrey: #666;
+  --form-label-color: hsl(0, 0%, 100%);
+  --select-bg: hsla(0, 0%, 35%, 1);
+  --checkbox-bg: hsla(0, 0%, 35%, 1);
+
+  --seo-check-bg: hsla(0, 0%, 5%, 1);
+  --seo-offwhite: hsla(0, 0%, 16%, 1);
+  --seo-light-grey: hsla(0, 0%, 35%, 1);
+  --seo-light-grey-100: hsla(0, 0%, 25%, 1);
+}
+
+:root {
+  --white: hsl(0, 0%, 100%);
+  --black: hsl(0, 0%, 0%);
+  --whitegrey: hsl(0, 1%, 74%);
+  --grey: hsl(0, 0%, 93%);
+  --darkgrey: hsl(0, 0%, 20%);
+  --lightgrey: hsl(0, 0%, 40%);
 
   --primary: hsla(76, 72%, 41%, 1);
   --primary-darker: hsla(90, 38%, 41%, 1);
   --secondary: hsla(127, 28%, 38%, 1);
   --tertiary: hsla(182, 85%, 15%, 1);
 
-  --seo-offwhite: hsla(0, 0%, 95%, 1);
+  --google-link-blue: hsl(245, 86%, 36%);
+  --google-url-grey: hsl(213, 5%, 39%);
+  --google-description-grey: hsl(213, 6%, 32%);
+  --google-bg: var(--white);
+  --bootstrap-border-gray: hsl(0, 0%, 87%);
+  --bootstrap-link-blue: hsl(208, 56%, 46%);
+  --bootstrap-success-green: hsl(120, 39%, 54%);
+  --bootstrap-success-green-hover: hsl(120, 40%, 44%);
+  --bootstrap-danger-red: hsl(2, 64%, 58%);
+  --bootstrap-danger-red-hover: hsl(2, 64%, 48%);
+
+  --select-bg: hsla(0, 0%, 92%, 1);
+  --checkbox-bg: var(--white);
+  --seo-check-bg: var(--white);
+  --form-label-color: var(--black);
+
+  --seo-offwhite: hsla(0, 0%, 92%, 1);
   --seo-offblack: hsla(0, 0%, 8%, 1);
   --seo-grey: hsla(0, 0%, 44%, 1);
   --seo-dark-grey: hsla(0, 0%, 16%, 1);
@@ -41,12 +63,12 @@
   --fw-black: 900;
 
   &[data-color-scheme="dark"] {
-    --seo-light-grey-100: hsla(0, 0%, 25%, 1);
+    @include dark-variables;
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --seo-light-grey-100: hsla(0, 0%, 25%, 1);
+  :root[data-theme="auto"] {
+    @include dark-variables;
   }
 }

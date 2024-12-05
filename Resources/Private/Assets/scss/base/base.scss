@@ -1,5 +1,18 @@
 @use "../abstracts/variables" as *;
 
+body {
+  background-color: var(--scaffold-bg, var(--white));
+}
+
+:root .logo {
+  display: flex;
+  align-items: flex-end;
+
+  .light {
+    display: none;
+  }
+}
+
 form {
   .seo-check {
     margin-bottom: 1.5em;
@@ -94,6 +107,18 @@ form {
     margin-bottom: 1em;
 
     &.logo {
+      display: none;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme] .logo {
+    .light {
+      display: block;
+    }
+
+    .dark {
       display: none;
     }
   }

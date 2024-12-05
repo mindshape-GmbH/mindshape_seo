@@ -18,7 +18,7 @@
     place-items: center;
     width: 20px;
     height: 20px;
-    background-color: var(--white);
+    background-color: var(--checkbox-bg);
     border-radius: 2px;
     transition: background-color 350ms ease;
 
@@ -27,7 +27,7 @@
       width: 6px;
       height: 12px;
       border-style: solid;
-      border-color: var(--white);
+      border-color: var(--checkbox-bg);
       border-width: 0 2px 2px 0;
       rotate: 45deg;
       translate: 0 -2px
