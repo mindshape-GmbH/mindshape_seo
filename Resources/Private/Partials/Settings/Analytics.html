@@ -3,121 +3,111 @@
       xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
 >
 
-<div id="analytics" class="tabs-item">
-  <fieldset class="form-section">
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="checkbox">
-          <label>
-            <f:form.checkbox property="addAnalytics" value="1"/>
-            {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_analytics', extensionName:
-            'mindshape_seo')}
-          </label>
-        </div>
+<div id="analytics" class="tabs-item analytics">
+  <fieldset class="form-section analytics-grid">
+    <div class="analytics-first-checkbox">
+      <div class="checkbox">
+        <label>
+          <f:form.checkbox property="addAnalytics" value="1"/>
+          <span class="checkmark"></span>
+          {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.add_analytics', extensionName:
+          'mindshape_seo')}
+        </label>
       </div>
     </div>
-
-    <div class="row">
-      <div class="col-md-6 col-sm-12">
-        <fieldset class="form-section">
-          <h3 class="form-section-headline">{f:translate(key:
-            'tx_mindshapeseo_domain_model_configuration.google_analytics', extensionName: 'mindshape_seo')}</h3>
-          <div class="form-group">
-            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_id', extensionName:
-              'mindshape_seo')}</label>
-            <f:form.textfield property="googleAnalytics" class="form-control"/>
-            <span class="help-block">
+    <fieldset class="form-section">
+      <h3 class="form-section-headline">{f:translate(key:
+        'tx_mindshapeseo_domain_model_configuration.google_analytics', extensionName: 'mindshape_seo')}</h3>
+      <div class="form-group">
+        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_id', extensionName:
+          'mindshape_seo')}</label>
+        <f:form.textfield property="googleAnalytics" class="form-control"/>
+        <span class="help-block mt-1 d-block">
                   ({f:translate(key: 'tx_mindshapeseo_label.example')}: 'UA-000000-01', extensionName: 'mindshape_seo'
                   <f:link.external
                       uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.link')}"
                       target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext', extensionName: 'mindshape_seo')}</f:link.external>
                 </span>
-          </div>
-          <f:if condition="{cookieExtensionIsActive}">
-            <div class="form-group checkbox">
-              <label>
-                <f:form.checkbox property="googleAnalyticsUseCookieConsent" value="1"/>
-                {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent',
-                extensionName: 'mindshape_seo')}
-              </label>
-            </div>
-          </f:if>
-        </fieldset>
       </div>
-      <div class="col-md-6 col-sm-12">
-        <fieldset class="form-section">
-          <h3 class="form-section-headline">{f:translate(key:
-            'tx_mindshapeseo_domain_model_configuration.google_analytics_v4', extensionName: 'mindshape_seo')}</h3>
-          <div class="form-group">
-            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_v4_id',
-              extensionName: 'mindshape_seo')}</label>
-            <f:form.textfield property="googleAnalyticsV4" class="form-control"/>
-            <span class="help-block">
+      <f:if condition="{cookieExtensionIsActive}">
+        <div class="form-group checkbox mt-2">
+          <label>
+            <f:form.checkbox property="googleAnalyticsUseCookieConsent" value="1"/>
+            <span class="checkmark"></span>
+            {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent',
+            extensionName: 'mindshape_seo')}
+          </label>
+        </div>
+      </f:if>
+    </fieldset>
+    <fieldset class="form-section">
+      <h3 class="form-section-headline">{f:translate(key:
+        'tx_mindshapeseo_domain_model_configuration.google_analytics_v4', extensionName: 'mindshape_seo')}</h3>
+      <div class="form-group">
+        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_v4_id',
+          extensionName: 'mindshape_seo')}</label>
+        <f:form.textfield property="googleAnalyticsV4" class="form-control"/>
+        <span class="help-block mt-1 d-block">
                   ({f:translate(key: 'tx_mindshapeseo_label.example')}: 'G-XXXXXXXXXX')
                   <f:link.external
                       uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_v4.help.link')}"
                       target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics.help.linktext')}</f:link.external>
                 </span>
-          </div>
-          <f:if condition="{cookieExtensionIsActive}">
-            <div class="form-group checkbox">
-              <label>
-                <f:form.checkbox property="googleAnalyticsV4UseCookieConsent" value="1"/>
-                {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent')}
-              </label>
-            </div>
-          </f:if>
-        </fieldset>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6 col-sm-12">
-        <fieldset class="form-section">
-          <h3 class="form-section-headline">{f:translate(key:
-            'tx_mindshapeseo_domain_model_configuration.google_tagmanager')}</h3>
-          <div class="form-group">
-            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager_id')}</label>
-            <f:form.textfield property="googleTagmanager" class="form-control"/>
-            <span class="help-block">
+      <f:if condition="{cookieExtensionIsActive}">
+        <div class="form-group checkbox mt-2">
+          <label>
+            <f:form.checkbox property="googleAnalyticsV4UseCookieConsent" value="1"/>
+            <span class="checkmark"></span>
+            {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_analytics_use_cookie_consent')}
+          </label>
+        </div>
+      </f:if>
+    </fieldset>
+    <fieldset class="form-section">
+      <h3 class="form-section-headline">{f:translate(key:
+        'tx_mindshapeseo_domain_model_configuration.google_tagmanager')}</h3>
+      <div class="form-group">
+        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager_id')}</label>
+        <f:form.textfield property="googleTagmanager" class="form-control"/>
+        <span class="help-block mt-1 d-block">
                   ({f:translate(key: 'tx_mindshapeseo_label.example')}: 'GTM-XXXX')
                   <f:link.external
                       uri="{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.link')}"
                       target="_blank">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.google_tagmanager.help.linktext')}</f:link.external>
                 </span>
-          </div>
-          <f:if condition="{cookieExtensionIsActive}">
-            <div class="form-group checkbox">
-              <label>
-                <f:form.checkbox property="tagmanagerUseCookieConsent" value="1"/>
-                {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.tagmanager_use_cookie_consent')}
-              </label>
-            </div>
-          </f:if>
-        </fieldset>
       </div>
-      <div class="col-md-6 col-sm-12">
-        <fieldset class="form-section matomo">
-          <h3 class="form-section-headline">{f:translate(key:
-            'tx_mindshapeseo_domain_model_configuration.matomo')}</h3>
-          <div class="form-group">
-            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_idsite')}</label>
-            <f:form.textfield property="matomoIdsite" class="form-control"/>
-          </div>
-          <div class="form-group">
-            <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_url')}</label>
-            <f:form.textfield property="matomoUrl" class="form-control"/>
-          </div>
-          <f:if condition="{cookieExtensionIsActive}">
-            <div class="form-group checkbox">
-              <label>
-                <f:form.checkbox property="matomoUseCookieConsent" value="1"/>
-                {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_use_cookie_consent')}
-              </label>
-            </div>
-          </f:if>
-        </fieldset>
+      <f:if condition="{cookieExtensionIsActive}">
+        <div class="form-group checkbox mt-2">
+          <label>
+            <f:form.checkbox property="tagmanagerUseCookieConsent" value="1"/>
+            <span class="checkmark"></span>
+            {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.tagmanager_use_cookie_consent')}
+          </label>
+        </div>
+      </f:if>
+    </fieldset>
+    <fieldset class="form-section matomo">
+      <h3 class="form-section-headline">{f:translate(key:
+        'tx_mindshapeseo_domain_model_configuration.matomo')}</h3>
+      <div class="form-group">
+        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_idsite')}</label>
+        <f:form.textfield property="matomoIdsite" class="form-control"/>
       </div>
-    </div>
+      <div class="form-group">
+        <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_url')}</label>
+        <f:form.textfield property="matomoUrl" class="form-control"/>
+      </div>
+      <f:if condition="{cookieExtensionIsActive}">
+        <div class="form-group checkbox mt-2">
+          <label>
+            <f:form.checkbox property="matomoUseCookieConsent" value="1"/>
+            <span class="checkmark"></span>
+            {f:translate(key: 'tx_mindshapeseo_domain_model_configuration.matomo_use_cookie_consent')}
+          </label>
+        </div>
+      </f:if>
+    </fieldset>
   </fieldset>
 </div>
 
