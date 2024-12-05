@@ -10,7 +10,7 @@
     <div class="row">
       <div class="col-sm-4">
         <div class="form-group">
-          <label class="form-label">{f:translate(key: 'tx_mindshapeseo_label.change_domain', extensionName: 'mindshape_seo')}</label>
+          <label class="form-label form-section-headline">{f:translate(key: 'tx_mindshapeseo_label.change_domain', extensionName: 'mindshape_seo')}</label>
 
           <f:form.textfield name="dummyDomain" value="{f:if(condition: '* == {configuration.domain}', then: '{f:translate(key: \'tx_mindshapeseo_domain_model_configuration.domain.default\', extensionName: \'mindshape_seo\')}', else: currentDomain)}" disabled="disabled" class="form-control"/>
         </div>
@@ -42,9 +42,9 @@
     </p>
 
     <div class="row">
-      <div class="col-sm-1">
+      <div class="col-12 col-lg-4">
         <div class="form-group">
-          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment_position',
+          <label class="form-label">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment_position',
             extensionName: 'mindshape_seo')}</label>
           <f:form.select property="titleAttachmentPosition" options="{titleAttachmentPositionOptions}"
                          class="form-control"/>
@@ -52,22 +52,22 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-1">
+      <div class="col-12 col-lg-4">
         <div class="form-group">
-          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment_seperator',
+          <label class="form-label">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment_seperator',
             extensionName: 'mindshape_seo')}</label>
           <f:form.textfield property="titleAttachmentSeperator" class="form-control"/>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6 col-sm-12">
+      <div class="col-12 col-lg-4">
         <div class="form-group">
-          <label>{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment', extensionName:
+          <label class="form-label">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment', extensionName:
             'mindshape_seo')}</label>
           <f:form.textfield property="titleAttachment" placeholder="{defaultConfiguration.titleAttachment}"
                             class="form-control"/>
-          <span class="help-block">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment.help', extensionName: 'mindshape_seo')}</span>
+          <span class="help-block mt-1 d-block">{f:translate(key: 'tx_mindshapeseo_domain_model_configuration.title_attachment.help', extensionName: 'mindshape_seo')}</span>
         </div>
       </div>
     </div>

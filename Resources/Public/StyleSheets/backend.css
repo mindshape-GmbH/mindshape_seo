@@ -283,8 +283,8 @@ form .seo-check .fa-check-circle {
   cursor: pointer;
   top: 0;
   left: 0;
-  height: 1.1rem;
-  width: 1.1rem;
+  height: 20px;
+  width: 20px;
   z-index: 2;
 }
 .mindshapeseo-preview .table tbody tr td.google-preview-column .thumbnail .edit-panel .form-group:has(.checkbox) .checkbox .checkbox-wrapper .checkmark {
@@ -703,6 +703,16 @@ form .seo-check .fa-check-circle {
     opacity: 1;
   }
 }
+.seo-settings {
+  --typo3-spacing: 1.25rem;
+  font-family: "Nunito", Verdana, Arial, Sans-Serif;
+  font-weight: 400;
+}
+.seo-settings-title {
+  font-family: "Montserrat", Verdana, Arial, Sans-Serif;
+  font-weight: 600;
+  margin-bottom: 1.875rem;
+}
 .seo-settings .tabs-nav {
   display: flex;
   gap: 0.325rem;
@@ -736,18 +746,101 @@ form .seo-check .fa-check-circle {
 .seo-settings .tabs-item:not(.show) > * {
   visibility: hidden;
 }
+.seo-settings .form-label {
+  margin-bottom: 0;
+}
 .seo-settings .form-section {
   margin-bottom: 0.25rem;
-  padding: 3rem 2rem;
+  padding: 2.5rem 2rem;
   border: none;
+  background-color: hsl(0, 0%, 95%);
+}
+.seo-settings .form-section-headline {
+  margin-bottom: 0.325rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+.seo-settings .form-section .form-section {
+  padding: 0;
 }
 .seo-settings input[type=text] {
+  padding-inline: 0.5rem;
   background-color: #fff;
   border: none;
   border-radius: 2px;
+  outline: 1px solid transparent;
+  transition: outline 200ms ease;
+}
+.seo-settings input[type=text]:focus {
+  outline-color: hsl(76, 72%, 41%);
+}
+.seo-settings label:has(input[type=checkbox]) {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.seo-settings .checkbox:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+.seo-settings .checkbox .checkmark {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 2px;
+  transition: background-color 350ms ease;
+}
+.seo-settings .checkbox .checkmark::after {
+  content: "";
+  width: 6px;
+  height: 12px;
+  border-style: solid;
+  border-color: #fff;
+  border-width: 0 2px 2px 0;
+  rotate: 45deg;
+  translate: 0 -2px;
+}
+.seo-settings .checkbox input[type=checkbox] {
+  display: none;
+}
+.seo-settings .checkbox input[type=checkbox]:checked ~ .checkmark {
+  background-color: hsl(76, 72%, 41%);
 }
 .seo-settings .form-group {
   margin-bottom: 0;
+}
+.seo-settings .row:not(:last-child) .form-group {
+  margin-bottom: 1.25rem;
+}
+.seo-settings .form-control {
+  background-color: #fff;
+  border: none;
+  border-radius: 2px;
+  box-shadow: none;
+}
+.seo-settings .form-same-as .form-group:not(:last-child) {
+  margin-bottom: 0.75rem;
+}
+.seo-settings .analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+  border: none;
+  border-radius: 0;
+}
+.seo-settings .analytics-first-checkbox {
+  margin-bottom: 0;
+  grid-column: auto/span 2;
+}
+.seo-settings .analytics .form-section {
+  padding: 1.25rem;
+  margin-bottom: 0 !important;
+  border: 1px solid hsl(0, 0%, 75%);
+  border-radius: 5px;
+}
+.seo-settings .analytics .form-group {
+  margin-bottom: 1rem;
 }
 
 @font-face {

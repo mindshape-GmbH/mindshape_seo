@@ -1,6 +1,17 @@
 @use "../abstracts/variables" as *;
 
 .seo-settings {
+  --typo3-spacing: 1.25rem;
+
+  font-family: $ff-primary;
+  font-weight: $fw-regular;
+
+  &-title {
+    font-family: $ff-secondary;
+    font-weight: $fw-semibold;
+    margin-bottom: 1.875rem;
+  }
+
   .tabs {
     &-nav {
       display: flex;
@@ -42,19 +53,123 @@
     }
   }
 
+  .form-label {
+    margin-bottom: 0;
+  }
+
   .form-section {
     margin-bottom: 0.25rem;
-    padding: 3rem 2rem;
+    padding: 2.5rem 2rem;
     border: none;
+    background-color: $seo-light-grey-100;
+
+    &-headline {
+      margin-bottom: 0.325rem;
+      font-size: 0.875rem;
+      font-weight: $fw-bold;
+    }
+
+    .form-section {
+      padding: 0;
+    }
   }
 
   input[type="text"] {
+    padding-inline: 0.5rem;
     background-color: $white;
     border: none;
     border-radius: 2px;
+    outline: 1px solid transparent;
+    transition: outline 200ms ease;
+
+    &:focus {
+      outline-color: $primary;
+    }
+  }
+
+  label:has(input[type="checkbox"]) {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .checkbox {
+    &:not(:last-child) {
+      margin-bottom: 0.5rem;
+    }
+
+    .checkmark {
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      background-color: $white;
+      border-radius: 2px;
+      transition: background-color 350ms ease;
+
+      &::after {
+        content: "";
+        width: 6px;
+        height: 12px;
+        border-style: solid;
+        border-color: $white;
+        border-width: 0 2px 2px 0;
+        rotate: 45deg;
+        translate: 0 -2px
+      }
+    }
+
+    input[type="checkbox"] {
+      display: none;
+
+      &:checked ~ .checkmark {
+        background-color: $primary;
+      }
+    }
   }
 
   .form-group {
     margin-bottom: 0;
+  }
+
+  .row:not(:last-child) .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-control {
+    background-color: $white;
+    border: none;
+    border-radius: 2px;
+    box-shadow: none;
+  }
+
+  .form-same-as .form-group:not(:last-child) {
+    margin-bottom: 0.75rem;
+  }
+
+  .analytics {
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      border: none;
+      border-radius: 0;
+    }
+
+    &-first-checkbox {
+      margin-bottom: 0;
+      grid-column: auto / span 2;
+    }
+
+    .form-section {
+      padding: 1.25rem;
+      margin-bottom: 0 !important;
+      border: 1px solid $seo-light-grey;
+      border-radius: 5px;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
   }
 }
