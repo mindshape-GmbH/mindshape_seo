@@ -36,6 +36,13 @@ module.exports = {
             }
           },
         ],
+      },
+      {
+        test: /\.(ttf|otf|eot|woff(2)?)$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'Fonts/[name].[contenthash][ext][query]'
+        }
       }
     ]
   }

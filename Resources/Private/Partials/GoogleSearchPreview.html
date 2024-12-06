@@ -10,16 +10,6 @@
         <f:if condition="{editing}">
           <f:then>
             <f:render section="Form" arguments="{_all}"/>
-            <button class="edit">
-              <span class="edit-text">
-                  {f:translate(key: 'tx_mindshapeseo_label.preview.button.edit', extensionName: 'mindshape_seo')}
-                  <core:icon identifier="provider-fontawesome-caret-down"/>
-              </span>
-              <span class="abort-text">
-                  {f:translate(key: 'tx_mindshapeseo_label.preview.button.abort', extensionName: 'mindshape_seo')}
-                  <core:icon identifier="provider-fontawesome-caret-up"/>
-              </span>
-            </button>
           </f:then>
           <f:else>
             <f:render section="PreviewAndFields" arguments="{_all}"/>
@@ -80,6 +70,11 @@
       <div class="description">{description -> f:format.raw()}</div>
     </div>
     <f:if condition="{editing}">
+      <button class="edit">
+        <span class="edit-text">{f:translate(key: 'tx_mindshapeseo_label.preview.button.edit', extensionName: 'mindshape_seo')}</span>
+        <span class="abort-text">{f:translate(key: 'tx_mindshapeseo_label.preview.button.abort', extensionName: 'mindshape_seo')}</span>
+        <f:image src="{f:uri.resource(path: 'Icons/FontAwesome/angle-down_white.svg', extensionName: 'mindshape_seo')}" alt="Dropdown-Icon" width="16" />
+      </button>
       <div class="edit-panel">
         <hr/>
         <div class="form-group title-container">
@@ -115,12 +110,14 @@
           <div class="checkbox noindex">
             <label>
               <f:form.checkbox name="noindex" value="1" checked="{noindex}"/>
+              <span class="checkmark"></span>
               {f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_index_label', extensionName: 'mindshape_seo')}
             </label>
           </div>
           <div class="checkbox nofollow">
             <label>
               <f:form.checkbox name="nofollow" value="1" checked="{nofollow}"/>
+              <span class="checkmark"></span>
               {f:translate(key: 'tx_mindshapeseo_domain_model_pages.mindshapeseo_no_follow_label', extensionName: 'mindshape_seo')}
             </label>
           </div>
