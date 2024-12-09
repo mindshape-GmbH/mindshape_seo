@@ -373,6 +373,7 @@ class BackendController extends ActionController
         }
 
         $this->moduleTemplate->assignMultiple([
+            'typo3Version' => GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion(),
             'domains' => $domains,
             'domainsSelectOptions' => $this->domainService->getConfigurationDomainSelectOptions($domain),
             'currentDomain' => $currentDomain,
@@ -523,11 +524,8 @@ class BackendController extends ActionController
                 ]);
             }
 
-            /** @var \TYPO3\CMS\Core\Information\Typo3Version $typo3Version */
-            $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-
             $this->moduleTemplate->assignMultiple([
-                'typo3Version' => $typo3Version->getMajorVersion(),
+                'typo3Version' => GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion(),
                 'sysLanguageUid' => $sysLanguageUid,
                 'depth' => $depth,
                 'levelOptions' => [
