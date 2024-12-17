@@ -537,7 +537,7 @@ class BackendController extends ActionController
             ]);
         }
 
-        $this->moduleTemplate->setTitle(LocalizationUtility::translate('LLL:EXT:mindshape_seo/Resources/Private/Language/de.locallang_backend_preview.xlf:mlang_tabs_tab'));
+        $this->moduleTemplate->setTitle(LocalizationUtility::translate('LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf:mlang_tabs_tab'));
 
         return $this->moduleTemplate->renderResponse('Backend/Preview');
     }
