@@ -184,7 +184,7 @@ class HeaderDataService implements SingletonInterface
     {
         $analyticsDisabled = false;
 
-        if (isset($this->settings['analytics']['disable'])) {
+        if ($this->settings['analytics']['disable'] ?? false) {
             $analyticsDisabled = (bool) $this->settings['analytics']['disable'];
         }
 
@@ -195,7 +195,7 @@ class HeaderDataService implements SingletonInterface
         ) {
             $disableOnBackendLogin = false;
 
-            if (isset($this->settings['analytics']['disableOnBackendLogin'])) {
+            if ($this->settings['analytics']['disableOnBackendLogin'] ?? false) {
                 $disableOnBackendLogin = (bool) $this->settings['analytics']['disableOnBackendLogin'];
             }
 
@@ -496,7 +496,7 @@ class HeaderDataService implements SingletonInterface
 
         foreach ($socialMediaLinks as $socialMediaLink) {
             if (!empty($socialMediaLink)) {
-                if (!is_array($jsonld['sameAs'])) {
+                if (empty($jsonld['sameAs'])) {
                     $jsonld['sameAs'] = [];
                 }
 
