@@ -70,7 +70,7 @@ class HeaderDataService implements SingletonInterface
     /**
      * @var array|null
      */
-    protected ?array $currentPageMetaData;
+    protected ?array $currentPageMetaData = null;
 
     /**
      * @var string
@@ -101,10 +101,12 @@ class HeaderDataService implements SingletonInterface
 
         $page = $this->pageService->getCurrentPage();
 
-        $this->currentPageMetaData = $this->pageService->getPageMetaData(
-            $page['uid'],
-            $this->pageService->getCurrentSysLanguageUid()
-        );
+        if (is_array($page) && array_key_exists('uid', $page)) {
+            $this->currentPageMetaData = $this->pageService->getPageMetaData(
+                $page['uid'],
+                $this->pageService->getCurrentSysLanguageUid()
+            );
+        }
 
         $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
 
@@ -276,6 +278,11 @@ class HeaderDataService implements SingletonInterface
 
     protected function setRobotsMetaTag(): void
     {
+        if (!is_array($this->currentPageMetaData)) {
+
+            return;
+        }
+
         $noindexInherited = (bool) $this->currentPageMetaData['meta']['robots']['noindexInherited'];
         $nofollowInherited = (bool) $this->currentPageMetaData['meta']['robots']['nofollowInherited'];
 
