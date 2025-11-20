@@ -8,7 +8,6 @@ return [
         'label' => 'domain',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'dividers2tabs' => true,
         'versioningWS' => false,
         'hideTable' => true,
@@ -24,9 +23,6 @@ return [
         'searchFields' => 'domain,google_analytics,title_attachment,add_analytics,add_jsonld,add_jsonld_breadcrumb,jsonld_custom_url,jsonld_type,jsonld_telephone,jsonld_fax,jsonld_email,jsonld_same_as_facebook,jsonld_same_as_twitter,jsonld_same_as_instagram,jsonld_same_as_youtube,jsonld_same_as_linkedin,jsonld_same_as_xing,jsonld_same_as_printerest,jsonld_same_as_soundcloud,jsonld_same_as_tumblr,jsonld_logo,jsonld_address_locality,jsonld_address_postalcode,jsonld_address_street,',
         'iconfile' => 'EXT:mindshape_seo/Resources/Public/Icons/tx_mindshapeseo_domain_model_configuration.gif',
     ],
-    'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, domain, merge_with_default, google_analytics, google_tagmanager, matomo_url, matomo_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, google_analytics_use_cookie_consent, tagmanager_use_cookie_consent, matomo_use_cookie_consent, add_jsonld, add_jsonld_breadcrumb, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street',
-    ],
     'types' => [
         '1' => ['showitem' => 'sys_language_uid, domain, merge_with_default, google_analytics, google_tagmanager, matomo_url, matomo_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, google_analytics_use_cookie_consent, tagmanager_use_cookie_consent, matomo_use_cookie_consent, add_jsonld, add_jsonld_breadcrumb, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '],
     ],
@@ -38,17 +34,7 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'special' => 'languages',
-                'items' => [
-                    [
-                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
-                        -1,
-                        'flags-multiple',
-                    ],
-                ],
-                'default' => 0,
+                'type' => 'language',
             ],
         ],
         'l10n_parent' => [
@@ -59,7 +45,10 @@ return [
                 'renderType' => 'selectSingle',
                 'default' => 0,
                 'items' => [
-                    ['', 0],
+                    [
+                        'label' => '',
+                        'value' => 0
+                    ],
                 ],
                 'foreign_table' => 'tx_mindshapeseo_domain_model_configuration',
                 'foreign_table_where' => 'AND tx_mindshapeseo_domain_model_configuration.pid=###CURRENT_PID### AND tx_mindshapeseo_domain_model_configuration.sys_language_uid IN (-1,0)',
@@ -217,12 +206,12 @@ return [
                 'minitems' => 1,
                 'items' => [
                     [
-                        'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.type.organization',
-                        Configuration::JSONLD_TYPE_ORGANIZATION,
+                        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.type.organization',
+                        'value' => Configuration::JSONLD_TYPE_ORGANIZATION,
                     ],
                     [
-                        'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.type.person',
-                        Configuration::JSONLD_TYPE_PERSON,
+                        'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.type.person',
+                        'value' => Configuration::JSONLD_TYPE_PERSON,
                     ],
                 ],
             ],
