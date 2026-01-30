@@ -204,19 +204,6 @@ class BackendController extends ActionController
                 : 0;
         }
 
-        $defaultMenuItemParameters = ['sysLanguageUid' => 0];
-
-        if (true === is_string($domain)) {
-            $defaultMenuItemParameters['domain'] = $domain;
-        }
-
-        $defaultMenuItem = $menu->makeMenuItem()
-            ->setTitle(LocalizationUtility::translate('tx_mindshapeseo_label.default_language', 'mindshape_seo'))
-            ->setHref($uriBuilder->reset()->uriFor($currentAction, $defaultMenuItemParameters, 'Backend'))
-            ->setActive(0 === $sysLanguageUid);
-
-        $menu->addMenuItem($defaultMenuItem);
-
         foreach ($languages as $language) {
             $menuItemParameters = ['sysLanguageUid' => $language['uid']];
 
@@ -260,7 +247,9 @@ class BackendController extends ActionController
             $this->buildDomainMenu($domains);
         }
 
-        $languages = $this->languageService->getLanguagesAvailable();
+        $domain = $this->getCurrentDomain($domain);
+
+        $languages = $this->languageService->getLanguagesAvailable($domain);
 
         if (0 < count($languages)) {
             $this->buildLanguageMenu(
@@ -274,8 +263,6 @@ class BackendController extends ActionController
         }
 
         $this->buildButtons();
-
-        $domain = $this->getCurrentDomain($domain);
 
         if (null === $sysLanguageUid) {
             $sysLanguageUid = $this->sessionService->hasKey('sysLanguageUid')

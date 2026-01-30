@@ -30,6 +30,7 @@ use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use PDO;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Site\SiteFinder;
 
 /**
  * @package mindshape_seo
@@ -38,31 +39,36 @@ use TYPO3\CMS\Core\SingletonInterface;
 class LanguageService implements SingletonInterface
 {
     /**
+     * @var \TYPO3\CMS\Core\Site\SiteFinder
+     */
+    protected SiteFinder $siteFinder;
+
+    /**
+     * @param \TYPO3\CMS\Core\Site\SiteFinder $siteFinder
+     */
+    public function __construct(SiteFinder $siteFinder)
+    {
+        $this->siteFinder = $siteFinder;
+    }
+
+    /**
      * @return array
      * @throws \Doctrine\DBAL\Exception
      */
-    public function getLanguagesAvailable(): array
+    public function getLanguagesAvailable(?string $domain = null): array
     {
-        if ((new Typo3Version())->getMajorVersion() < 12) {
-            return DatabaseUtility::queryBuilder()
-                ->select('*')
-                ->from('sys_language')
-                ->executeQuery()
-                ->fetchAllAssociative();
-        }
-
-        // TODO: update languages getter
-
-        /** @var \TYPO3\CMS\Core\Site\Entity\SiteInterface $currentSite */
-        $currentSite = $GLOBALS['TYPO3_REQUEST']->getAttribute('site');
-
-        $siteLanguages = $currentSite->getAvailableLanguages(
-            $GLOBALS['BE_USER'],
-            false,
-            (int) ($GLOBALS['TYPO3_REQUEST']->getParsedBody()['id'] ?? $GLOBALS['TYPO3_REQUEST']->getQueryParams()['id'] ?? 0)
-        );
-
+        $sites = $this->siteFinder->getAllSites();
+        $siteLanguages = [];
         $languages = [];
+
+        foreach ($sites as $site) {
+            if ($domain && $site->getBase()->getHost() !== $domain) {
+                continue;
+            }
+
+            $siteLanguages = $site->getAllLanguages();
+            break;
+        }
 
         foreach ($siteLanguages as $siteLanguage) {
             $languages[] = [
@@ -80,7 +86,13 @@ class LanguageService implements SingletonInterface
      */
     public function getPageLanguagesAvailable(int $pageUid): array
     {
-        // TODO: update languages getter
-        return [];
+        foreach ($this->siteFinder->getSiteByPageId($pageUid)->getAllLanguages() as $siteLanguage) {
+            $languages[] = [
+                'uid' => $siteLanguage->getLanguageId(),
+                'title' => $siteLanguage->getTitle(),
+            ];
+        }
+
+        return $languages;
     }
 }
