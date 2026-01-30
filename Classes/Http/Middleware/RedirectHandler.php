@@ -32,12 +32,9 @@ class RedirectHandler implements MiddlewareInterface
      */
     protected RedirectService $redirectService;
 
-    /**
-     * @param \TYPO3\CMS\Redirects\Service\RedirectService $redirectService
-     */
-    public function __construct(RedirectService $redirectService)
+    public function __construct()
     {
-        $this->redirectService = $redirectService;
+        $this->redirectService = GeneralUtility::makeInstance(RedirectService::class);
     }
 
     /**

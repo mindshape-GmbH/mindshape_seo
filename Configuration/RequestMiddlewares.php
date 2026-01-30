@@ -6,8 +6,8 @@ use Mindshape\MindshapeSeo\Utility\SettingsUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 if (
-    false === ExtensionManagementUtility::isLoaded('redirects') ||
-    false === (bool) SettingsUtility::extensionConfigurationValue('enableGoneRedirects')
+    ExtensionManagementUtility::isLoaded('redirects') &&
+    SettingsUtility::extensionConfigurationValue('enableGoneRedirects')
 ) {
     return [
         'frontend' => [
