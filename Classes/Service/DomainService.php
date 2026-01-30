@@ -91,7 +91,7 @@ class DomainService implements SingletonInterface
      * @param int|null $languageUid
      * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
      */
-    public function getPageDomainConfiguration(int $pageUid = null, int $languageUid = null): ?Configuration
+    public function getPageDomainConfiguration(?int $pageUid = null, ?int $languageUid = null): ?Configuration
     {
         if (null !== $pageUid) {
             try {

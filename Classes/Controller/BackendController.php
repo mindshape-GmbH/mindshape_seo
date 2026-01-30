@@ -184,7 +184,7 @@ class BackendController extends ActionController
      * @param array $languages
      * @param string|null $domain
      */
-    protected function buildLanguageMenu(array $languages, string $domain = null): void
+    protected function buildLanguageMenu(array $languages, ?string $domain = null): void
     {
         /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
@@ -250,7 +250,7 @@ class BackendController extends ActionController
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      */
-    public function settingsAction(string $domain = null, int $sysLanguageUid = null): ResponseInterface
+    public function settingsAction(?string $domain = null, ?int $sysLanguageUid = null): ResponseInterface
     {
         $this->pageRenderer->loadJavaScriptModule('@mindshape/mindshape-seo/SettingsModule.js');
 
@@ -546,7 +546,7 @@ class BackendController extends ActionController
      * @param string|null $domain
      * @return string
      */
-    protected function getCurrentDomain(string $domain = null): string
+    protected function getCurrentDomain(?string $domain = null): string
     {
         if (null === $domain) {
             $domain = $this->sessionService->hasKey('domain') ?
