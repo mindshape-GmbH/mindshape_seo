@@ -27,6 +27,7 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
  ***************************************************************/
 
 use Doctrine\DBAL\Exception as DBALException;
+use Doctrine\DBAL\ParameterType;
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use PDO;
@@ -70,7 +71,7 @@ class ConfigurationRepository extends Repository
     public function findByDomain(
         string $domain,
         bool $returnDefaultIfNotFound = false,
-        int $sysLanguageUid = null
+        ?int $sysLanguageUid = null
     ): ?Configuration {
         if (0 < $sysLanguageUid) {
             return $this->findByDomainTranslation($domain, $returnDefaultIfNotFound, $sysLanguageUid);
@@ -94,14 +95,14 @@ class ConfigurationRepository extends Repository
     /**
      * @param string $domain
      * @param bool $returnDefaultIfNotFound
-     * @param null $sysLanguageUid
+     * @param int|null $sysLanguageUid
      * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
      * @throws \Doctrine\DBAL\Exception
      */
     public function findByDomainTranslation(
         string $domain,
         bool $returnDefaultIfNotFound = false,
-        $sysLanguageUid = null
+        ?int $sysLanguageUid = null
     ): ?Configuration {
         $queryBuilder = DatabaseUtility::queryBuilder();
 
@@ -114,7 +115,7 @@ class ConfigurationRepository extends Repository
             ->where(
                 $queryBuilder->expr()->eq(
                     'sys_language_uid',
-                    $queryBuilder->createNamedParameter($sysLanguageUid, PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($sysLanguageUid, ParameterType::INTEGER)
                 )
             );
 

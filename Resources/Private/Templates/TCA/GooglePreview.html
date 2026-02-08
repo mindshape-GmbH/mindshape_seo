@@ -7,7 +7,7 @@
     <f:then>
       <label>{f:translate(key: 'tx_mindshapeseo_label.google_search_preview', extensionName: 'mindshape_seo')}</label>
 
-      <span class="mindshapeseo-preview" data-typo3-version="{typo3Version}"></span>
+      <span class="mindshapeseo-preview" data-label-seocheck="{f:translate(key: 'tx_mindshapeseo_label.preview.seo_check', extensionName: 'mindshape_seo')}" data-typo3-version="{typo3Version}"></span>
       <f:render partial="GoogleSearchPreview" section="Main" arguments="{
         titleAttachment: titleAttachment,
         titleAttachmentSeperator: titleAttachmentSeperator,
@@ -48,7 +48,5 @@
       </div>
     </div>
   </div>
-
-  <f:render partial="AlertModal"/>
 
 </html>

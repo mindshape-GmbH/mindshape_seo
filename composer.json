@@ -1,5 +1,5 @@
 {
-  "name": "mindshape/mindshape_seo",
+  "name": "mindshape/mindshape-seo",
   "type": "typo3-cms-extension",
   "description": "SEO Extension for TYPO3",
   "homepage": "https://mindshape.de",
@@ -16,11 +16,14 @@
     "email": "info@mindshape.de",
     "issues": "https://github.com/mindshape-GmbH/mindshape_seo/issues",
     "source": "https://github.com/mindshape-GmbH/mindshape_seo",
-    "docs": "https://docs.typo3.org/p/mindshape/mindshape_seo/3.0/en-us/"
+    "docs": "https://docs.typo3.org/p/mindshape/mindshape_seo/4.0/en-us/"
   },
   "require": {
-    "php": ">=8.0 <8.4",
-    "typo3/cms-core": "~11.5||~12.4"
+    "php": ">=8.1 <8.5",
+    "typo3/cms-core": "^12.4||^13.4"
+  },
+  "suggest": {
+    "typo3/cms-redirects": "Extends the redirect module with the ability to handle 410 redirects"
   },
   "autoload": {
     "psr-4": {

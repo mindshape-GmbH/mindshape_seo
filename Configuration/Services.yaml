@@ -10,3 +10,10 @@ services:
 
   Mindshape\MindshapeSeo\Controller\BackendController:
     tags: [ 'backend.controller' ]
+
+  Mindshape\MindshapeSeo\Http\Middleware\RedirectHandler:
+    autowire: false
+
+  # Make the RedirectService public to be able to instantiate it outside of the core extension
+  TYPO3\CMS\Redirects\Service\RedirectService:
+    public: true

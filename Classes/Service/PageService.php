@@ -26,28 +26,26 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Mindshape\MindshapeSeo\Utility\BackendUtility;
-use Mindshape\MindshapeSeo\Utility\BackendUtility as MindshapeBackendUtility;
+use Doctrine\DBAL\ParameterType;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
-use Mindshape\MindshapeSeo\Utility\Exception\TypoScriptFrontendControllerBootException;
 use Mindshape\MindshapeSeo\Utility\LinkUtility;
-use Mindshape\MindshapeSeo\Utility\TypoScriptFrontendUtility;
-use PDO;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
-use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Routing\RouterInterface;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Site\Entity\NullSite;
+use TYPO3\CMS\Core\Site\Entity\SiteInterface;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * @package mindshape_seo
@@ -57,11 +55,6 @@ class PageService implements SingletonInterface
 {
     const TREE_DEPTH_INFINITY = -1;
     const TREE_DEPTH_DEFAULT = 1;
-
-    /**
-     * @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder
-     */
-    protected UriBuilder $uriBuilder;
 
     /**
      * @var \TYPO3\CMS\Core\Domain\Repository\PageRepository
@@ -74,43 +67,44 @@ class PageService implements SingletonInterface
     protected static int $pageTreeDepth = 0;
 
     /**
-     * @var \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController|null
+     * @var \TYPO3\CMS\Core\Site\Entity\Site
      */
-    protected ?TypoScriptFrontendController $typoScriptFrontendController;
+    protected SiteInterface $currentSite;
+
+    /**
+     * @var int
+     */
+    protected int $currentPageId;
 
     /**
      * @param \TYPO3\CMS\Core\Domain\Repository\PageRepository $pageRepository
-     * @param \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder
-     * @throws \Mindshape\MindshapeSeo\Service\Exception
-     * @throws \TYPO3\CMS\Core\Authentication\Mfa\MfaRequiredException
      */
-    public function __construct(
-        PageRepository $pageRepository,
-        UriBuilder $uriBuilder
-    ) {
+    public function __construct(PageRepository $pageRepository)
+    {
         $this->pageRepository = $pageRepository;
-        $this->uriBuilder = $uriBuilder;
+        /** @var \TYPO3\CMS\Core\Http\ServerRequest $request */
+        $request = $GLOBALS['TYPO3_REQUEST'];
 
         if (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
-            try {
-                TypoScriptFrontendUtility::bootTypoScriptFrontendController();
-                $this->typoScriptFrontendController = $GLOBALS['TSFE'];
-            } catch (TypoScriptFrontendControllerBootException $exception) {
-                $this->typoScriptFrontendController = null;
-            }
-        } elseif (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isFrontend()) {
-            $this->typoScriptFrontendController = $GLOBALS['TSFE'];
+            $this->currentPageId = $request->getQueryParams()['id']
+                ?? array_key_first($request->getQueryParams()['edit']['pages'] ?? [])
+                ?? 0;
         } else {
-            throw new Exception('Illegal TYPO3 mode');
-        }
-    }
+            /** @var \TYPO3\CMS\Core\Routing\PageArguments $pageArguments */
+            $pageArguments = $request->getAttribute('routing');
 
-    /**
-     * @return bool
-     */
-    public function hasFrontendController(): bool
-    {
-        return $this->typoScriptFrontendController instanceof TypoScriptFrontendController;
+            $this->currentPageId = $pageArguments->getPageId();
+        }
+
+        $this->currentSite = $request->getAttribute('site') ?? new NullSite();
+
+        if (get_class($this->currentSite) === NullSite::class) {
+            try {
+                $this->currentSite = (GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($this->currentPageId));
+            } catch (SiteNotFoundException) {
+                $this->currentSite = new NullSite();
+            }
+        }
     }
 
     /**
@@ -134,19 +128,18 @@ class PageService implements SingletonInterface
      * @param int $pageId
      * @param bool $absolute
      * @param int $sysLanguageUid
-     * @param bool $linkAccessRestrictedPages
      * @return string
      */
-    public function getPageLink(int $pageId, bool $absolute = false, int $sysLanguageUid = 0, bool $linkAccessRestrictedPages = true): string
-    {
-        $this->uriBuilder
-            ->reset()
-            ->setTargetPageUid($pageId)
-            ->setCreateAbsoluteUri($absolute)
-            ->setLanguage($sysLanguageUid)
-            ->setLinkAccessRestrictedPages($linkAccessRestrictedPages);
-
-        return $this->uriBuilder->buildFrontendUri();
+    public function getPageLink(
+        int $pageId,
+        bool $absolute = true,
+        int $sysLanguageUid = 0
+    ): string {
+        return $this->currentSite->getRouter()->generateUri(
+            $pageId,
+            ['_language' => $sysLanguageUid],
+            type: $absolute ? RouterInterface::ABSOLUTE_URL : RouterInterface::ABSOLUTE_PATH
+        );
     }
 
     /**
@@ -166,11 +159,11 @@ class PageService implements SingletonInterface
             ->where(
                 $queryBuilder->expr()->eq(
                     'p.uid',
-                    $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($pageUid, ParameterType::INTEGER)
                 ),
                 $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
                     $sysLanguageUid,
-                    PDO::PARAM_INT)
+                    ParameterType::INTEGER)
                 )
             )
             ->executeQuery();
@@ -188,10 +181,10 @@ class PageService implements SingletonInterface
             $queryBuilder->where(
                 $queryBuilder->expr()->eq(
                     'p.' . $GLOBALS['TCA']['pages']['ctrl']['transOrigPointerField'],
-                    $queryBuilder->createNamedParameter($pageUid, PDO::PARAM_INT)),
+                    $queryBuilder->createNamedParameter($pageUid, ParameterType::INTEGER)),
                 $queryBuilder->expr()->eq('p.sys_language_uid', $queryBuilder->createNamedParameter(
                     $sysLanguageUid,
-                    PDO::PARAM_INT)
+                    ParameterType::INTEGER)
                 )
             );
 
@@ -210,12 +203,8 @@ class PageService implements SingletonInterface
      */
     public function getCurrentPage(): ?array
     {
-        $pageId = $this->typoScriptFrontendController->id;
+        $pageId = $this->currentPageId;
         $languageId = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('language', 'id');
-
-        if (is_null($pageId)) {
-            $pageId = BackendUtility::getCurrentPageTreeSelectedPage();
-        }
 
         return $this->getPage($pageId, $languageId ?? 0);
     }
@@ -308,7 +297,8 @@ class PageService implements SingletonInterface
     {
         $uri = str_replace("/", " › ", rtrim($uri, '/'));
 
-        return substr($uri, 0, strpos($uri, ' ')) . ' <span class="path">' . trim(substr($uri, strpos($uri, ' '))) . '</span>';
+        return substr($uri, 0, strpos($uri, ' ')) . ' <span class="path">' . trim(substr($uri,
+                strpos($uri, ' '))) . '</span>';
     }
 
     /**
@@ -337,24 +327,14 @@ class PageService implements SingletonInterface
     }
 
     /**
-     * @param int|null $pageUid
+     * @param int $pageUid
      * @param int $sysLanguageUid
      * @return array
      * @throws \Doctrine\DBAL\Exception
      */
-    public function getRootline(?int $pageUid = null, int $sysLanguageUid = 0): array
+    public function getRootline(int $pageUid, int $sysLanguageUid = 0): array
     {
         $pages = [];
-
-        $currentPageUid = MindshapeBackendUtility::getCurrentPageTreeSelectedPage();
-
-        if (null === $pageUid) {
-            if (0 < $this->typoScriptFrontendController->id) {
-                $pageUid = $this->typoScriptFrontendController->id;
-            } elseif (0 < $currentPageUid) {
-                $pageUid = $currentPageUid;
-            }
-        }
 
         foreach (GeneralUtility::makeInstance(RootlineUtility::class, $pageUid)->get() as $page) {
             $pages[] = $this->getPage($page['uid'], $sysLanguageUid);
@@ -364,15 +344,19 @@ class PageService implements SingletonInterface
     }
 
     /**
-     * @param int|null $pageUid
+     * @param int $pageUid
      * @param bool $withCurrentPage
      * @param bool $withRootPage
      * @param int $sysLanguageUid
      * @return array
      * @throws \Doctrine\DBAL\Exception
      */
-    public function getRootlineReverse(?int $pageUid = null, bool $withCurrentPage = false, bool $withRootPage = true, int $sysLanguageUid = 0): array
-    {
+    public function getRootlineReverse(
+        int $pageUid,
+        bool $withCurrentPage = false,
+        bool $withRootPage = true,
+        int $sysLanguageUid = 0
+    ): array {
         $rootline = $this->getRootline($pageUid, $sysLanguageUid);
 
         if (false === $withRootPage) {
@@ -415,18 +399,17 @@ class PageService implements SingletonInterface
 
         /** @var \TYPO3\CMS\Backend\Tree\View\PageTreeView $tree */
         $tree = GeneralUtility::makeInstance(PageTreeView::class);
-        $tree->init();
-        $tree->clause = ' AND pages.deleted = 0 AND pages.sys_language_uid = 0';
+        $clause = ' AND pages.deleted = 0 AND pages.sys_language_uid = 0';
 
         if (0 < count($allowedDoktypes)) {
-            $tree->clause .= ' AND (pages.doktype = ' . implode(' OR pages.doktype = ', $allowedDoktypes) . ')';
+            $clause .= ' AND (pages.doktype = ' . implode(' OR pages.doktype = ', $allowedDoktypes) . ')';
         }
 
-        $tree->clause .= ' AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
+        $clause .= ' AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
 
-        $tree->parentField = 'pages.pid';
-        $tree->fieldArray = ['pages.*'];
-        $tree->orderByFields = 'pages.sorting';
+        $tree->init($clause, 'pages.sorting');
+        // $tree->parentField = 'pages.pid';
+        // $tree->fieldArray = ['pages.*'];
 
         /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);

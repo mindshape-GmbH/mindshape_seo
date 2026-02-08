@@ -70,7 +70,7 @@ class HeaderDataService implements SingletonInterface
     /**
      * @var array|null
      */
-    protected ?array $currentPageMetaData;
+    protected ?array $currentPageMetaData = null;
 
     /**
      * @var string
@@ -84,7 +84,6 @@ class HeaderDataService implements SingletonInterface
      * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
      * @throws \Doctrine\DBAL\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
      */
     public function __construct(
         protected ConfigurationRepository $configurationRepository,
@@ -102,10 +101,12 @@ class HeaderDataService implements SingletonInterface
 
         $page = $this->pageService->getCurrentPage();
 
-        $this->currentPageMetaData = $this->pageService->getPageMetaData(
-            $page['uid'],
-            $this->pageService->getCurrentSysLanguageUid()
-        );
+        if (is_array($page) && array_key_exists('uid', $page)) {
+            $this->currentPageMetaData = $this->pageService->getPageMetaData(
+                $page['uid'],
+                $this->pageService->getCurrentSysLanguageUid()
+            );
+        }
 
         $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
 
@@ -128,6 +129,9 @@ class HeaderDataService implements SingletonInterface
         $this->pageRenderer = PageUtility::getPageRenderer();
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     public function manipulateHeaderData(): void
     {
         $this->setRobotsMetaTag();
@@ -182,7 +186,7 @@ class HeaderDataService implements SingletonInterface
     {
         $analyticsDisabled = false;
 
-        if (isset($this->settings['analytics']['disable'])) {
+        if ($this->settings['analytics']['disable'] ?? false) {
             $analyticsDisabled = (bool) $this->settings['analytics']['disable'];
         }
 
@@ -193,7 +197,7 @@ class HeaderDataService implements SingletonInterface
         ) {
             $disableOnBackendLogin = false;
 
-            if (isset($this->settings['analytics']['disableOnBackendLogin'])) {
+            if ($this->settings['analytics']['disableOnBackendLogin'] ?? false) {
                 $disableOnBackendLogin = (bool) $this->settings['analytics']['disableOnBackendLogin'];
             }
 
@@ -274,6 +278,11 @@ class HeaderDataService implements SingletonInterface
 
     protected function setRobotsMetaTag(): void
     {
+        if (!is_array($this->currentPageMetaData)) {
+
+            return;
+        }
+
         $noindexInherited = (bool) $this->currentPageMetaData['meta']['robots']['noindexInherited'];
         $nofollowInherited = (bool) $this->currentPageMetaData['meta']['robots']['nofollowInherited'];
 
@@ -494,7 +503,7 @@ class HeaderDataService implements SingletonInterface
 
         foreach ($socialMediaLinks as $socialMediaLink) {
             if (!empty($socialMediaLink)) {
-                if (!is_array($jsonld['sameAs'])) {
+                if (empty($jsonld['sameAs'])) {
                     $jsonld['sameAs'] = [];
                 }
 
@@ -505,6 +514,9 @@ class HeaderDataService implements SingletonInterface
         return $jsonld;
     }
 
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
     protected function addJsonLdBreadcrumb(): void
     {
         $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
@@ -542,7 +554,12 @@ class HeaderDataService implements SingletonInterface
             'itemListElement' => [],
         ];
 
-        foreach ($this->pageService->getRootlineReverse(null, true) as $index => $page) {
+        /** @var \TYPO3\CMS\Core\Http\ServerRequest $request */
+        $request = $GLOBALS['TYPO3_REQUEST'];
+        /** @var \TYPO3\CMS\Core\Routing\PageArguments $pageArguments */
+        $pageArguments = $request->getAttribute('routing');
+
+        foreach ($this->pageService->getRootlineReverse($pageArguments->getPageId(), true) as $index => $page) {
             if (false === in_array($page['doktype'], $respectDoktypes)) {
                 continue;
             }

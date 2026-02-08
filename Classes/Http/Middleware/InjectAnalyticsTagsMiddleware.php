@@ -28,28 +28,19 @@ namespace Mindshape\MindshapeSeo\Http\Middleware;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Service\HeaderDataService;
+use Mindshape\MindshapeSeo\Utility\TypoScriptUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Http\StreamFactory;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Exception\InvalidExtensionNameException;
 
 
 class InjectAnalyticsTagsMiddleware implements MiddlewareInterface
 {
-
-    protected HeaderDataService $headerDataService;
-
-    /**
-     * @param \Mindshape\MindshapeSeo\Service\HeaderDataService $headerDataService
-     */
-    public function __construct(HeaderDataService $headerDataService)
-    {
-        $this->headerDataService = $headerDataService;
-    }
 
     /**
      * @param \Psr\Http\Message\ServerRequestInterface $request
@@ -62,9 +53,29 @@ class InjectAnalyticsTagsMiddleware implements MiddlewareInterface
 
         if ($applicationType->isFrontend()) {
             $response = $handler->handle($request);
+
+            $backupRequest = null;
+
+            /** @var \TYPO3\CMS\Core\Information\Typo3Version $typo3Version */
+            $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
+            if ($typo3Version->getMajorVersion() >= 13) {
+                /** @var \TYPO3\CMS\Core\TypoScript\FrontendTypoScript $typoScirpt */
+                $frontendTypoScript = $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.typoscript');
+
+                if ($frontendTypoScript->hasSetup() === false) {
+                    $backupRequest = $GLOBALS['TYPO3_REQUEST'];
+                    $GLOBALS['TYPO3_REQUEST'] = $GLOBALS['TYPO3_REQUEST']->withAttribute('frontend.typoscript', TypoScriptUtility::getCoreTypoScriptFrontendByRequest($GLOBALS['TYPO3_REQUEST']));
+                }
+            }
+
+            $headerDataService = GeneralUtility::makeInstance(HeaderDataService::class);
             $html = (string) $response->getBody();
-            $html = $this->headerDataService->addGoogleTagmanagerBodyToHtml($html);
-            $analyticsData = $this->headerDataService->getAnalyticsTags();
+            $html = $headerDataService->addGoogleTagmanagerBodyToHtml($html);
+            $analyticsData = $headerDataService->getAnalyticsTags();
+
+            if ($backupRequest !== null) {
+                $GLOBALS['TYPO3_REQUEST'] = $backupRequest;
+            }
 
             if (count($analyticsData) > 0) {
                 foreach ($analyticsData as $data) {

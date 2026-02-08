@@ -3,9 +3,9 @@
       xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
       xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
 
-  <f:layout name="Backend"/>
+  <f:layout name="Module"/>
 
-  <f:section name="Main">
+  <f:section name="Content">
 
     <f:if condition="{noPageSelected}">
       <f:then>
@@ -20,9 +20,8 @@
       <f:else>
         <f:if condition="{pageTree}">
           <f:then>
-            <div class="mindshapeseo-preview" data-typo3-version="{typo3Version}">
+            <div class="mindshapeseo-preview" data-label-seocheck="{f:translate(key: 'tx_mindshapeseo_label.preview.seo_check', extensionName: 'mindshape_seo')}" data-typo3-version="{typo3Version}">
               <f:render section="Preview" arguments="{_all}"/>
-              <f:render partial="AlertModal"/>
             </div>
           </f:then>
           <f:else>
