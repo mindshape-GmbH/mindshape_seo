@@ -14,7 +14,7 @@
     "mini-css-extract-plugin": "^2.9",
     "sass": "^1.81",
     "sass-loader": "^16.0",
-    "webpack": "^5.96",
+    "webpack": "^5.105",
     "webpack-cli": "^5.1",
     "webpack-remove-empty-scripts": "^1.0"
   },
