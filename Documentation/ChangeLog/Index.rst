@@ -3,6 +3,13 @@
 ChangeLog
 ---------
 
+v4.0.0
+  * Compatibility for TYPO3 v13, drop v11 support
+  * Add proper asset building
+  * Migrate documentation rendering
+  * Add PHP 8.4 support
+  * Several bugfixes and optimizations
+
 v3.0.2
   * Use proper access value for new module registration
   * Update max PHP required version to 8.3

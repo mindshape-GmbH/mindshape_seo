@@ -20,7 +20,7 @@ mindshape SEO Extension
         mindshape,seo,google,preview
 
     :Copyright:
-        2023
+        2026
 
     :Author:
         mindshape GmbH
