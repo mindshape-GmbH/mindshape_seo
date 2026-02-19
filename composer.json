@@ -1,7 +1,7 @@
 {
   "name": "mindshape/mindshape-seo",
   "type": "typo3-cms-extension",
-  "description": "SEO Extension for TYPO3",
+  "description": "Comprehensive SEO suite for TYPO3 featuring Google SERP preview, metadata validation, and 410 support. Provides privacy-compliant analytics integration (GA4/Matomo/GTM) and flexible multi-domain configuration.",
   "homepage": "https://mindshape.de",
   "license": [
     "GPL-2.0-or-later"

@@ -2,7 +2,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'mindshape SEO',
-    'description' => 'Extension to manage the SEO of your site',
+    'description' => 'Comprehensive SEO suite for TYPO3 featuring Google SERP preview, metadata validation, and 410 support. Provides privacy-compliant analytics integration (GA4/Matomo/GTM) and flexible multi-domain configuration.',
     'category' => 'be',
     'author' => 'Daniel Dorndorf',
     'author_email' => 'dorndorf@míndshape.de',
