@@ -3,6 +3,9 @@
 ChangeLog
 ---------
 
+v4.0.1
+  * Add PHP 8.5 support
+
 v4.0.0
   * Compatibility for TYPO3 v13, drop v11 support
   * Add proper asset building
