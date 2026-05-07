@@ -31,6 +31,7 @@ use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use Mindshape\MindshapeSeo\Utility\LinkUtility;
 use Mindshape\MindshapeSeo\Utility\PageUtility;
+use Mindshape\MindshapeSeo\Utility\SettingsUtility;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry;
@@ -38,8 +39,6 @@ use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 
 /**
  * @package mindshape_seo
@@ -84,6 +83,7 @@ class HeaderDataService implements SingletonInterface
      * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
      * @throws \Doctrine\DBAL\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
+     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\NoServerRequestGivenException
      */
     public function __construct(
         protected ConfigurationRepository $configurationRepository,
@@ -91,14 +91,14 @@ class HeaderDataService implements SingletonInterface
         protected StandaloneTemplateRendererService $standaloneTemplateRendererService,
         protected PageRenderer $pageRenderer
     ) {
-        /** @var \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager */
-        $configurationManager = GeneralUtility::makeInstance(ConfigurationManager::class);
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = $GLOBALS['TYPO3_REQUEST'];
 
-        $this->settings = $configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
-            'mindshapeseo'
-        );
+        $extensionTypoScript = (new SettingsUtility(request: $request))->getExtensionTypoScript();
+        $this->settings = $extensionTypoScript['settings'] ?? [];
 
+        /** @var \TYPO3\CMS\Core\Site\Entity\SiteInterface $site */
+        $site = $request->getAttribute('site');
         $page = $this->pageService->getCurrentPage();
 
         if (is_array($page) && array_key_exists('uid', $page)) {
@@ -108,12 +108,12 @@ class HeaderDataService implements SingletonInterface
             );
         }
 
-        $currentDomain = GeneralUtility::getIndpEnv('HTTP_HOST');
+        $currentDomain = $request->getUri()->getHost();
 
         $this->domainConfiguration = $this->configurationRepository->findByDomain($currentDomain, true);
 
         $this->currentDomainUrl = $this->pageService->getPageLink(
-            $GLOBALS['TSFE']->rootLine[0]['uid'],
+            $site->getRootPageId(),
             true,
             $this->pageService->getCurrentSysLanguageUid()
         );

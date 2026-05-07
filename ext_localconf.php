@@ -8,11 +8,11 @@ defined('TYPO3') or die();
 
 call_user_func(function () {
     ExtensionManagementUtility::addTypoScriptConstants(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mindshape_seo/Configuration/TypoScript/constants.typoscript">'
+        '@import \'EXT:mindshape_seo/Configuration/TypoScript/constants.typoscript\''
     );
 
     ExtensionManagementUtility::addTypoScriptSetup(
-        '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mindshape_seo/Configuration/TypoScript/setup.typoscript">'
+        '@import \'EXT:mindshape_seo/Configuration/TypoScript/setup.typoscript\''
     );
 
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-preProcess'][] = RenderPreProcessHook::class . '->main';

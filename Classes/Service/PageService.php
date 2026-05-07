@@ -36,9 +36,8 @@ use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Http\ApplicationType;
-use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Information\Typo3Version;
+use TYPO3\CMS\Core\Imaging\IconSize;
 use TYPO3\CMS\Core\Routing\RouterInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Site\Entity\NullSite;
@@ -394,9 +393,6 @@ class PageService implements SingletonInterface
             return null;
         }
 
-        /** @var \TYPO3\CMS\Core\Information\Typo3Version $typo3Version */
-        $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-
         /** @var \TYPO3\CMS\Backend\Tree\View\PageTreeView $tree */
         $tree = GeneralUtility::makeInstance(PageTreeView::class);
         $clause = ' AND pages.deleted = 0 AND pages.sys_language_uid = 0';
@@ -408,21 +404,17 @@ class PageService implements SingletonInterface
         $clause .= ' AND ' . $GLOBALS['BE_USER']->getPagePermsClause(1);
 
         $tree->init($clause, 'pages.sorting');
-        // $tree->parentField = 'pages.pid';
-        // $tree->fieldArray = ['pages.*'];
 
         /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
         $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
 
         $tree->tree[] = [
             'row' => $page,
-            'HTML' => true === version_compare('11.0', $typo3Version->getVersion(), '<=')
-                ? ''
-                : $iconFactory->getIconForRecord(
-                    'pages',
-                    $page,
-                    Icon::SIZE_SMALL
-                ),
+            'HTML' => $iconFactory->getIconForRecord(
+                'pages',
+                $page,
+                IconSize::SMALL
+            ),
         ];
 
         if (self::TREE_DEPTH_INFINITY === $depth) {
@@ -461,10 +453,10 @@ class PageService implements SingletonInterface
             $icon = $iconFactory->getIconForRecord(
                 'pages',
                 $treeItem['row'],
-                Icon::SIZE_SMALL
+                IconSize::SMALL
             );
 
-            if (true === version_compare('11.0', $typo3Version->getVersion(), '<=')) {
+            if ($icon->getIdentifier() !== 'apps-pagetree-page-domain') {
                 $tree->tree[$key]['HTML'] .= $icon;
             }
         }

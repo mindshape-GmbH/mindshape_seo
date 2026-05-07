@@ -1,14 +1,22 @@
 <?php
 
-use Mindshape\MindshapeSeo\Http\Middleware\InjectAnalyticsTagsMiddleware;
 use Mindshape\MindshapeSeo\Http\Middleware\RedirectHandler;
-use Mindshape\MindshapeSeo\Utility\SettingsUtility;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-if (
-    ExtensionManagementUtility::isLoaded('redirects') &&
-    SettingsUtility::extensionConfigurationValue('enableGoneRedirects')
-) {
+/** @var \TYPO3\CMS\Core\Configuration\ExtensionConfiguration $extensionConfiguration */
+$extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
+
+try {
+    $isEnableGoneRedirects = $extensionConfiguration->get('mindshape_seo', 'enableGoneRedirects');
+} catch (ExtensionConfigurationExtensionNotConfiguredException|ExtensionConfigurationPathDoesNotExistException) {
+    $isEnableGoneRedirects = false;
+}
+
+if ($isEnableGoneRedirects && ExtensionManagementUtility::isLoaded('redirects')) {
     return [
         'frontend' => [
             'mindshape/mindshape-seo/redirecthandler' => [
@@ -20,29 +28,8 @@ if (
                     'typo3/cms-frontend/authentication',
                 ],
             ],
-            'mindshape/mindshape-seo/inject-analytics-tags' => [
-                'target' => InjectAnalyticsTagsMiddleware::class,
-                'before' => [
-                    'typo3/cms-frontend/shortcut-and-mountpoint-redirect',
-                ],
-                'after' => [
-                    'typo3/cms-frontend/prepare-tsfe-rendering',
-                ],
-            ],
         ],
     ];
 }
 
-return [
-    'frontend' => [
-        'mindshape/mindshape-seo/inject-analytics-tags' => [
-            'target' => InjectAnalyticsTagsMiddleware::class,
-            'before' => [
-                'typo3/cms-frontend/shortcut-and-mountpoint-redirect',
-            ],
-            'after' => [
-                'typo3/cms-frontend/prepare-tsfe-rendering',
-            ],
-        ],
-    ],
-];
+return [];
