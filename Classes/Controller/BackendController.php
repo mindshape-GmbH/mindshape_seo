@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -31,7 +31,6 @@ use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use Mindshape\MindshapeSeo\Service\DomainService;
 use Mindshape\MindshapeSeo\Service\LanguageService;
 use Mindshape\MindshapeSeo\Service\SessionService;
-use Mindshape\MindshapeSeo\Service\TranslationService;
 use Mindshape\MindshapeSeo\Service\PageService;
 use Mindshape\MindshapeSeo\Utility\SettingsUtility;
 use Psr\Http\Message\ResponseInterface;
@@ -51,36 +50,13 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class BackendController extends ActionController
 {
-    /**
-     * @var \TYPO3\CMS\Backend\Template\ModuleTemplate
-     */
     protected ModuleTemplate $moduleTemplate;
-
-    /**
-     * @var \TYPO3\CMS\Backend\Template\Components\ButtonBar
-     */
     protected ButtonBar $buttonBar;
 
-    /**
-     * @param \TYPO3\CMS\Backend\Template\ModuleTemplateFactory $moduleTemplateFactory
-     * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
-     * @param \Mindshape\MindshapeSeo\Service\DomainService $domainService
-     * @param \Mindshape\MindshapeSeo\Service\PageService $pageService
-     * @param \Mindshape\MindshapeSeo\Service\LanguageService $languageService
-     * @param \Mindshape\MindshapeSeo\Service\SessionService $sessionService
-     * @param \Mindshape\MindshapeSeo\Service\TranslationService $translationService
-     * @param \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory
-     * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
-     */
     public function __construct(
         protected ModuleTemplateFactory $moduleTemplateFactory,
         protected ConfigurationRepository $configurationRepository,
@@ -88,9 +64,11 @@ class BackendController extends ActionController
         protected PageService $pageService,
         protected LanguageService $languageService,
         protected SessionService $sessionService,
-        protected TranslationService $translationService,
         protected IconFactory $iconFactory,
-        protected PageRenderer $pageRenderer
+        protected PageRenderer $pageRenderer,
+        protected BackendUriBuilder $backendUriBuilder,
+        protected SiteFinder $siteFinder,
+        protected Typo3Version $typo3Version
     ) {
     }
 
@@ -105,30 +83,24 @@ class BackendController extends ActionController
         if (Environment::getContext()->isProduction()) {
             $this->pageRenderer->addCssFile('EXT:mindshape_seo/Resources/Public/StyleSheets/backend.css');
         } else {
+            // Disable caching of the CSS file in non-production contexts so SCSS rebuilds are picked up instantly
             $this->pageRenderer->addCssFile(
-                'EXT:mindshape_seo/Resources/Public/StyleSheets/backend.css',
-                'stylesheet',
-                'all',
-                '',
-                false,
-                false,
-                '',
-                true
+                file: 'EXT:mindshape_seo/Resources/Public/StyleSheets/backend.css',
+                rel: 'stylesheet',
+                media: 'all',
+                title: '',
+                forceOnTop: false,
+                allWrap: ''
             );
         }
     }
 
-    /**
-     * @param array $domains
-     */
     protected function buildDomainMenu(array $domains): void
     {
-        /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $uriBuilder->setRequest($this->request);
+        $uriBuilder = $this->uriBuilder;
 
         $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
-        $menu->setIdentifier('mindshape_seo-DomainMenu');;
+        $menu->setIdentifier('mindshape_seo-DomainMenu');
 
         $arguments = $this->request->getArguments();
 
@@ -179,15 +151,9 @@ class BackendController extends ActionController
         $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
     }
 
-    /**
-     * @param array $languages
-     * @param string|null $domain
-     */
     protected function buildLanguageMenu(array $languages, ?string $domain = null): void
     {
-        /** @var \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder */
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-        $uriBuilder->setRequest($this->request);
+        $uriBuilder = $this->uriBuilder;
 
         $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $menu->setIdentifier('mindshape_seo-languageMenu');
@@ -229,12 +195,8 @@ class BackendController extends ActionController
     }
 
     /**
-     * @param string|null $domain
-     * @param int|null $sysLanguageUid
-     * @return \Psr\Http\Message\ResponseInterface
      * @throws \Doctrine\DBAL\Exception
      * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
      */
     public function settingsAction(?string $domain = null, ?int $sysLanguageUid = null): ResponseInterface
     {
@@ -257,8 +219,6 @@ class BackendController extends ActionController
                     $this->arguments->getArgument('domain')->getValue()
                 )
             );
-        } else {
-            $this->arguments->addNewArgument('sysLanguageUid', 'int', false, 0);
         }
 
         $this->buildButtons();
@@ -298,13 +258,10 @@ class BackendController extends ActionController
         }
 
         if (false === $configuration->_isNew()) {
-            /** @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
-            $uriBuilder = GeneralUtility::makeInstance(BackendUriBuilder::class);
-
             try {
-                $redirectUrl = (string) $uriBuilder->buildUriFromRoute('mindshapeseo_settings');
+                $redirectUrl = (string) $this->backendUriBuilder->buildUriFromRoute('mindshapeseo_settings');
             } catch (RouteNotFoundException) {
-                $redirectUrl = (string) $uriBuilder->buildUriFromRoutePath('/module/MindshapeSeoMindshapeseo/MindshapeSeoSettings');
+                $redirectUrl = (string) $this->backendUriBuilder->buildUriFromRoutePath('/module/MindshapeSeoMindshapeseo/MindshapeSeoSettings');
             }
 
             $deleteButton = $this->buttonBar->makeLinkButton()
@@ -332,10 +289,7 @@ class BackendController extends ActionController
         }
 
         if ($robotsTxtNotExists === true) {
-            /** @var \TYPO3\CMS\Core\Site\SiteFinder $siteFinder */
-            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-            /** @var \TYPO3\CMS\Core\Site\Entity\Site $allSites */
-            $allSites = $siteFinder->getAllSites();
+            $allSites = $this->siteFinder->getAllSites();
 
             /** @var \TYPO3\CMS\Core\Site\Entity\Site $site */
             foreach ($allSites as $site) {
@@ -385,9 +339,6 @@ class BackendController extends ActionController
     }
 
     /**
-     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
-     * @param int $languageUid
-     * @return \Psr\Http\Message\ResponseInterface
      * @throws \Doctrine\DBAL\Exception
      * @throws \Mindshape\MindshapeSeo\Service\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
@@ -395,10 +346,6 @@ class BackendController extends ActionController
      */
     public function saveConfigurationAction(Configuration $configuration, int $languageUid): ResponseInterface
     {
-        if (0 < $languageUid && true === $configuration->_isNew()) {
-            $this->translationService->translate($configuration, $languageUid);
-        }
-
         $this->configurationRepository->save($configuration);
         $this->sessionService->setKey('domain', $configuration->getDomain());
 
@@ -413,10 +360,6 @@ class BackendController extends ActionController
     }
 
     /**
-     * @param int $currentPaginationPage
-     * @param int|null $depth
-     * @param int|null $sysLanguageUid
-     * @return \Psr\Http\Message\ResponseInterface
      * @throws \Doctrine\DBAL\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
@@ -433,8 +376,6 @@ class BackendController extends ActionController
 
         if (0 < count($languages)) {
             $this->buildLanguageMenu($languages);
-        } else {
-            $this->arguments->addNewArgument('sysLanguageUid', 'int', false, 0);
         }
 
         $currentPage = $this->pageService->getCurrentPage();
@@ -509,11 +450,8 @@ class BackendController extends ActionController
                 ]);
             }
 
-            /** @var \TYPO3\CMS\Core\Information\Typo3Version $typo3Version */
-            $typo3Version = GeneralUtility::makeInstance(Typo3Version::class);
-
             $this->moduleTemplate->assignMultiple([
-                'typo3Version' => $typo3Version->getMajorVersion(),
+                'typo3Version' => $this->typo3Version->getMajorVersion(),
                 'sysLanguageUid' => $sysLanguageUid,
                 'depth' => $depth,
                 'levelOptions' => [
@@ -528,10 +466,6 @@ class BackendController extends ActionController
         return $this->moduleTemplate->renderResponse('Backend/Preview');
     }
 
-    /**
-     * @param string|null $domain
-     * @return string
-     */
     protected function getCurrentDomain(?string $domain = null): string
     {
         if (null === $domain) {

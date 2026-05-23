@@ -24,10 +24,6 @@ class AfterCacheableContentIsGeneratedEventListener
     )
     {}
 
-    /**
-     * @param \TYPO3\CMS\Frontend\Event\AfterCacheableContentIsGeneratedEvent $afterCacheableContentIsGeneratedEvent
-     * @throws \Featdd\DpnGlossary\Service\Exception
-     */
     public function __invoke(AfterCacheableContentIsGeneratedEvent $afterCacheableContentIsGeneratedEvent): void
     {
         // Fallback for v13 event where content still lays in the TypoScriptFrontendController

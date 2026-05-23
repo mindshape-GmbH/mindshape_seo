@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -29,6 +29,8 @@ namespace Mindshape\MindshapeSeo\Service;
 use Doctrine\DBAL\ParameterType;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
 use Mindshape\MindshapeSeo\Utility\LinkUtility;
+use Psr\Http\Message\ServerRequestInterface;
+use RuntimeException;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
@@ -38,82 +40,74 @@ use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Imaging\IconSize;
+use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Routing\RouterInterface;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Site\Entity\NullSite;
-use TYPO3\CMS\Core\Site\Entity\SiteInterface;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\RootlineUtility;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class PageService implements SingletonInterface
 {
     const TREE_DEPTH_INFINITY = -1;
     const TREE_DEPTH_DEFAULT = 1;
 
-    /**
-     * @var \TYPO3\CMS\Core\Domain\Repository\PageRepository
-     */
-    protected PageRepository $pageRepository;
 
-    /**
-     * @var int
-     */
+    protected ?Site $currentSite = null;
+
+
+    protected int $currentPageId = 0;
+
     protected static int $pageTreeDepth = 0;
 
-    /**
-     * @var \TYPO3\CMS\Core\Site\Entity\Site
-     */
-    protected SiteInterface $currentSite;
+    public function __construct(
+        protected PageRepository $pageRepository,
+        protected SiteFinder $siteFinder,
+        protected Context $context
+    ) {
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
 
-    /**
-     * @var int
-     */
-    protected int $currentPageId;
+        if (!$request instanceof ServerRequestInterface) {
+            // No request context (CLI, scheduler, …); leave defaults intact.
+            $this->currentSite = null;
 
-    /**
-     * @param \TYPO3\CMS\Core\Domain\Repository\PageRepository $pageRepository
-     */
-    public function __construct(PageRepository $pageRepository)
-    {
-        $this->pageRepository = $pageRepository;
-        /** @var \TYPO3\CMS\Core\Http\ServerRequest $request */
-        $request = $GLOBALS['TYPO3_REQUEST'];
-
-        if (true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()) {
-            $this->currentPageId = $request->getQueryParams()['id']
-                ?? array_key_first($request->getQueryParams()['edit']['pages'] ?? [])
-                ?? 0;
-        } else {
-            /** @var \TYPO3\CMS\Core\Routing\PageArguments $pageArguments */
-            $pageArguments = $request->getAttribute('routing');
-
-            $this->currentPageId = $pageArguments->getPageId();
+            return;
         }
 
-        $this->currentSite = $request->getAttribute('site') ?? new NullSite();
+        if (ApplicationType::fromRequest($request)->isBackend()) {
+            $this->currentPageId = (int) (
+                $request->getQueryParams()['id']
+                ?? array_key_first($request->getQueryParams()['edit']['pages'] ?? [])
+                ?? 0
+            );
+        } else {
+            $pageArguments = $request->getAttribute('routing');
 
-        if (get_class($this->currentSite) === NullSite::class) {
+            if ($pageArguments instanceof PageArguments) {
+                $this->currentPageId = $pageArguments->getPageId();
+            }
+        }
+
+        $site = $request->getAttribute('site');
+        $this->currentSite = $site instanceof Site ? $site : null;
+
+        // The request may carry a NullSite (e.g. in some BE entry paths); in
+        // that case resolve the proper Site by the current page id.
+        if ($this->currentSite === null && $this->currentPageId > 0) {
             try {
-                $this->currentSite = (GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($this->currentPageId));
+                $this->currentSite = $this->siteFinder->getSiteByPageId($this->currentPageId);
             } catch (SiteNotFoundException) {
-                $this->currentSite = new NullSite();
+                $this->currentSite = null;
             }
         }
     }
 
-    /**
-     * @return int
-     */
     public function getCurrentSysLanguageUid(): int
     {
-        /** @var \TYPO3\CMS\Core\Context\LanguageAspect $languageAspect */
         try {
-            $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+            /** @var \TYPO3\CMS\Core\Context\LanguageAspect $languageAspect */
+            $languageAspect = $this->context->getAspect('language');
         } catch (AspectNotFoundException) {
             return 0;
         }
@@ -121,20 +115,24 @@ class PageService implements SingletonInterface
         return $languageAspect->getId();
     }
 
-    /**
-     * Creates a link to a single page
-     *
-     * @param int $pageId
-     * @param bool $absolute
-     * @param int $sysLanguageUid
-     * @return string
-     */
     public function getPageLink(
         int $pageId,
         bool $absolute = true,
         int $sysLanguageUid = 0
     ): string {
-        return $this->currentSite->getRouter()->generateUri(
+        try {
+            $site = !$this->currentSite instanceof Site
+                ? $this->siteFinder->getSiteByPageId($pageId)
+                : $this->currentSite;
+        } catch (SiteNotFoundException) {
+            $site = null;
+        }
+
+        if (!$site instanceof Site) {
+            throw new RuntimeException('Can\'t generate URI without a configured site');
+        }
+
+        return $site->getRouter()->generateUri(
             $pageId,
             ['_language' => $sysLanguageUid],
             type: $absolute ? RouterInterface::ABSOLUTE_URL : RouterInterface::ABSOLUTE_PATH
@@ -142,9 +140,6 @@ class PageService implements SingletonInterface
     }
 
     /**
-     * @param int $pageUid
-     * @param int $sysLanguageUid
-     * @return array|null
      * @throws \Doctrine\DBAL\Exception
      */
     public function getPage(int $pageUid, int $sysLanguageUid = 0): ?array
@@ -196,23 +191,17 @@ class PageService implements SingletonInterface
     }
 
     /**
-     * @return array|null
      * @throws \Doctrine\DBAL\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      */
     public function getCurrentPage(): ?array
     {
-        $pageId = $this->currentPageId;
-        $languageId = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('language', 'id');
+        $languageId = $this->context->getPropertyFromAspect('language', 'id');
 
-        return $this->getPage($pageId, $languageId ?? 0);
+        return $this->getPage($this->currentPageId, (int) ($languageId ?? 0));
     }
 
     /**
-     * @param int $pageUid
-     * @param int $sysLanguageUid
-     * @param string $customUrl
-     * @return array|null
      * @throws \Doctrine\DBAL\Exception
      */
     public function getPageMetaData(int $pageUid, int $sysLanguageUid = 0, string $customUrl = ''): ?array
@@ -256,12 +245,6 @@ class PageService implements SingletonInterface
         ];
     }
 
-    /**
-     * @param int $pageUid
-     * @param int $sysLanguageUid
-     * @param string $customUrl
-     * @return array|string
-     */
     public function getSerpPreviewUrl(int $pageUid, int $sysLanguageUid, string $customUrl = ''): array|string
     {
         $baseUri = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
@@ -288,10 +271,6 @@ class PageService implements SingletonInterface
         return $this->formatUriForPreview($uri);
     }
 
-    /**
-     * @param string $uri
-     * @return string
-     */
     public function formatUriForPreview(string $uri): string
     {
         $uri = str_replace("/", " › ", rtrim($uri, '/'));
@@ -300,19 +279,11 @@ class PageService implements SingletonInterface
                 strpos($uri, ' '))) . '</span>';
     }
 
-    /**
-     * @param string $uri
-     * @return bool
-     */
     public function uriIsTooLong(string $uri): bool
     {
         return (strlen($uri) >= 57);
     }
 
-    /**
-     * @param string $uri
-     * @return bool
-     */
     public function uriPathTooLong(string $uri): bool
     {
         $parts = explode("/", $uri);
@@ -326,9 +297,6 @@ class PageService implements SingletonInterface
     }
 
     /**
-     * @param int $pageUid
-     * @param int $sysLanguageUid
-     * @return array
      * @throws \Doctrine\DBAL\Exception
      */
     public function getRootline(int $pageUid, int $sysLanguageUid = 0): array
@@ -343,11 +311,6 @@ class PageService implements SingletonInterface
     }
 
     /**
-     * @param int $pageUid
-     * @param bool $withCurrentPage
-     * @param bool $withRootPage
-     * @param int $sysLanguageUid
-     * @return array
      * @throws \Doctrine\DBAL\Exception
      */
     public function getRootlineReverse(
@@ -372,12 +335,7 @@ class PageService implements SingletonInterface
     }
 
     /**
-     * @param int $pageUid
-     * @param int $depth
-     * @param int $sysLanguageUid
-     * @param string $customUrl
      * @param int[] $allowedDoktypes
-     * @return array|null
      * @throws \Doctrine\DBAL\Exception
      */
     public function getPageMetadataTree(
@@ -470,9 +428,6 @@ class PageService implements SingletonInterface
      * Checks if a recursive field was set above the page
      * Returns the pid where property was set or false
      *
-     * @param int $pageUid
-     * @param string $property
-     * @return int|bool
      * @throws \Doctrine\DBAL\Exception
      */
     protected function pageInheritedProperty(int $pageUid, string $property): bool|int

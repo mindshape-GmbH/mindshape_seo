@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -25,66 +25,81 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class SessionService implements SingletonInterface
 {
-    const SESSION_KEY_PREFIX = 'mindshape_seo_';
+    public const SESSION_KEY_PREFIX = 'mindshape_seo_';
 
-    /**
-     * @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication|\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
-     */
-    protected BackendUserAuthentication|FrontendUserAuthentication $userAuthentication;
 
-    public function __construct()
-    {
-        $this->userAuthentication = true === ApplicationType::fromRequest($GLOBALS['TYPO3_REQUEST'])->isBackend()
-            ? $GLOBALS['BE_USER']
-            : $GLOBALS['TSFE']->fe_user;
-    }
+    protected BackendUserAuthentication|FrontendUserAuthentication|null $userAuthentication = null;
 
-    /**
-     * @param string $key
-     * @param mixed $data
-     */
+
     public function setKey(string $key, mixed $data): void
     {
-        $this->userAuthentication->setAndSaveSessionData(
+        $this->getUserAuthentication()->setAndSaveSessionData(
             self::SESSION_KEY_PREFIX . $key,
             $data
         );
     }
 
-    /**
-     * @param string $key
-     */
     public function deleteKey(string $key): void
     {
         $this->setKey($key, null);
     }
 
-    /**
-     * @param string $key
-     * @return mixed
-     */
     public function getKey(string $key): mixed
     {
-        return $this->userAuthentication->getSessionData(self::SESSION_KEY_PREFIX . $key);
+        return $this->getUserAuthentication()->getSessionData(self::SESSION_KEY_PREFIX . $key);
+    }
+
+    public function hasKey(string $key): bool
+    {
+        return null !== $this->getUserAuthentication()->getSessionData(self::SESSION_KEY_PREFIX . $key);
     }
 
     /**
-     * @param string $key
-     * @return bool
+     * Lazily resolve the current user authentication. Constructor-time access to
+     * `$GLOBALS['TYPO3_REQUEST']` is unsafe (CLI / scheduler) and `$GLOBALS['TSFE']`
+     * is deprecated, so we resolve on demand from the request attributes that are
+     * guaranteed to exist when this service is actually used.
+     *
+     * @throws \RuntimeException when called outside of a BE/FE request context.
      */
-    public function hasKey(string $key): bool
+    protected function getUserAuthentication(): BackendUserAuthentication|FrontendUserAuthentication
     {
-        return null !== $this->userAuthentication->getSessionData(self::SESSION_KEY_PREFIX . $key);
+        if ($this->userAuthentication !== null) {
+            return $this->userAuthentication;
+        }
+
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+
+        if (!$request instanceof ServerRequestInterface) {
+            throw new \RuntimeException(
+                'SessionService requires an active HTTP request and cannot be used in CLI contexts.',
+                1716460900
+            );
+        }
+
+        $applicationType = ApplicationType::fromRequest($request);
+
+        if ($applicationType->isBackend() && $GLOBALS['BE_USER'] instanceof BackendUserAuthentication) {
+            return $this->userAuthentication = $GLOBALS['BE_USER'];
+        }
+
+        $frontendUser = $request->getAttribute('frontend.user');
+
+        if ($frontendUser instanceof FrontendUserAuthentication) {
+            return $this->userAuthentication = $frontendUser;
+        }
+
+        throw new \RuntimeException(
+            'SessionService could not resolve a user authentication object from the current request.',
+            1716460901
+        );
     }
 }

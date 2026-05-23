@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Domain\Repository;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *
@@ -30,7 +30,6 @@ use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\DBAL\ParameterType;
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
-use PDO;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
@@ -40,18 +39,18 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class ConfigurationRepository extends Repository
 {
-    /**
-     * @var array $defaultOrderings
-     */
     protected $defaultOrderings = [
         'domain' => QueryInterface::ORDER_DESCENDING,
     ];
+
+    protected DataMapper $dataMapper;
+
+    public function injectDataMapper(DataMapper $dataMapper): void
+    {
+        $this->dataMapper = $dataMapper;
+    }
 
     public function initializeObject(): void
     {
@@ -62,12 +61,6 @@ class ConfigurationRepository extends Repository
         $this->setDefaultQuerySettings($querySettings);
     }
 
-    /**
-     * @param string $domain
-     * @param bool $returnDefaultIfNotFound
-     * @param int|null $sysLanguageUid
-     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
-     */
     public function findByDomain(
         string $domain,
         bool $returnDefaultIfNotFound = false,
@@ -93,10 +86,6 @@ class ConfigurationRepository extends Repository
     }
 
     /**
-     * @param string $domain
-     * @param bool $returnDefaultIfNotFound
-     * @param int|null $sysLanguageUid
-     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
      * @throws \Doctrine\DBAL\Exception
      */
     public function findByDomainTranslation(
@@ -118,7 +107,6 @@ class ConfigurationRepository extends Repository
                     $queryBuilder->createNamedParameter($sysLanguageUid, ParameterType::INTEGER)
                 )
             );
-
 
         $domainQueryExpression = $queryBuilder->expr()->eq(
             'domain',
@@ -145,15 +133,9 @@ class ConfigurationRepository extends Repository
         return null;
     }
 
-    /**
-     * @param array $record
-     * @return \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
-     */
     protected function mapRawConfiguration(array $record): ?Configuration
     {
-        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\Mapper\DataMapper $dataMapper */
-        $dataMapper = GeneralUtility::makeInstance(DataMapper::class);
-        $records = $dataMapper->map(Configuration::class, [$record]);
+        $records = $this->dataMapper->map(Configuration::class, [$record]);
 
         if (count($records) > 0) {
             /** @var \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration */
@@ -166,7 +148,6 @@ class ConfigurationRepository extends Repository
     }
 
     /**
-     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
      * @throws \Doctrine\DBAL\Exception
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
@@ -183,9 +164,6 @@ class ConfigurationRepository extends Repository
         }
     }
 
-    /**
-     * @param \Mindshape\MindshapeSeo\Domain\Model\Configuration $configuration
-     */
     public function mergeConfigurationWithDefault(Configuration $configuration): void
     {
         if (Configuration::DEFAULT_DOMAIN !== $configuration->getDomain()) {

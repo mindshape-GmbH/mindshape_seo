@@ -4,7 +4,7 @@ namespace Mindshape\MindshapeSeo\Hook;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>
  *
  *  All rights reserved
  *
@@ -30,15 +30,9 @@ use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class RenderPreProcessHook
 {
     /**
-     * @param array $params
-     * @param PageRenderer $pageRenderer
      * @throws \Doctrine\DBAL\Exception
      */
     public function main(array &$params, PageRenderer $pageRenderer): void

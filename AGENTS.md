@@ -26,7 +26,8 @@ TYPO3 CMS extension (`mindshape_seo`) — SEO suite: SERP preview, metadata vali
   - Custom FormEngine node `googlePreview` → `Backend\Form\Element\GooglePreviewElement` (registered under key `1594739604`).
 - DB schema in `ext_tables.sql` adds `mindshapeseo_*` columns to `pages` plus the `tx_mindshapeseo_domain_model_configuration` table. Update both this file and matching TCA in `Configuration/TCA/` when changing fields.
 - Backend module + AJAX routes registered in `Configuration/Backend/Modules.php` and `Configuration/Backend/AjaxRoutes.php`; AJAX handled by `Classes/Handler/AjaxHandler.php`.
-- Services / DI in `Configuration/Services.yaml`.
+- Services / DI in `Configuration/Services.yaml` plus a conditional `Configuration/Services.php` that only wires up the `Http/Middleware/RedirectHandler` when the optional `typo3/cms-redirects` extension is loaded. `Classes/Http/Middleware/*` is excluded from the YAML autodiscovery for that reason.
+- PSR-14 events live in `Classes/Event/` (`BeforeJsonLdRenderingEvent`, `BeforeJsonLdBreadcrumbRenderingEvent`); they replace the deprecated `EXTCONF['mindshape_seo'][...]` userFunc hooks, which still fire with `E_USER_DEPRECATED` for one release.
 
 ## Conventions
 

@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Backend\Form\Element;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2024 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -35,14 +35,9 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class GooglePreviewElement extends AbstractFormElement
 {
     /**
-     * @return array
      * @throws \Doctrine\DBAL\Exception
      */
     public function render(): array

@@ -10,7 +10,7 @@ namespace Mindshape\MindshapeSeo\Http\Middleware;
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  ***/
 
@@ -27,25 +27,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\ErrorController;
 use TYPO3\CMS\Redirects\Service\RedirectService;
 
-/**
- * @package Mindshape\MindshapeCustomer\Http\Middleware
- */
 class RedirectHandler implements MiddlewareInterface
 {
-    /**
-     * @var \TYPO3\CMS\Redirects\Service\RedirectService
-     */
-    protected RedirectService $redirectService;
-
-    public function __construct()
-    {
-        $this->redirectService = GeneralUtility::makeInstance(RedirectService::class);
+    public function __construct(
+        protected RedirectService $redirectService
+    ) {
     }
 
     /**
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @param \Psr\Http\Server\RequestHandlerInterface $handler
-     * @return \Psr\Http\Message\ResponseInterface
      * @throws \TYPO3\CMS\Core\Error\Http\PageNotFoundException
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -54,7 +43,7 @@ class RedirectHandler implements MiddlewareInterface
         $matchedRedirect = $this->redirectService->matchRedirect(
             $request->getUri()->getHost() . ($port ? ':' . $port : ''),
             $request->getUri()->getPath(),
-            $request->getUri()->getQuery() ?? ''
+            $request->getUri()->getQuery()
         );
 
         if (

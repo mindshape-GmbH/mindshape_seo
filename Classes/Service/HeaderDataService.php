@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -29,9 +29,11 @@ namespace Mindshape\MindshapeSeo\Service;
 use InvalidArgumentException;
 use Mindshape\MindshapeSeo\Domain\Model\Configuration;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
+use Mindshape\MindshapeSeo\Event\BeforeJsonLdBreadcrumbRenderingEvent;
+use Mindshape\MindshapeSeo\Event\BeforeJsonLdRenderingEvent;
 use Mindshape\MindshapeSeo\Utility\LinkUtility;
-use Mindshape\MindshapeSeo\Utility\PageUtility;
 use Mindshape\MindshapeSeo\Utility\SettingsUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Context\Exception\AspectNotFoundException;
 use TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry;
@@ -40,47 +42,27 @@ use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class HeaderDataService implements SingletonInterface
 {
-    /**
-     * @var \Mindshape\MindshapeSeo\Domain\Model\Configuration|null
-     */
+
     protected ?Configuration $domainConfiguration;
 
-    /**
-     * @var array
-     */
+
     protected array $params = [];
 
-    /**
-     * @var array
-     */
+
     protected array $jsonLd = [];
 
-    /**
-     * @var array
-     */
+
     protected array $settings = [];
 
-    /**
-     * @var array|null
-     */
+
     protected ?array $currentPageMetaData = null;
 
-    /**
-     * @var string
-     */
+
     protected string $currentDomainUrl;
 
     /**
-     * @param \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository
-     * @param \Mindshape\MindshapeSeo\Service\PageService $pageService
-     * @param \Mindshape\MindshapeSeo\Service\StandaloneTemplateRendererService $standaloneTemplateRendererService
-     * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer
      * @throws \Doctrine\DBAL\Exception
      * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
      * @throws \TYPO3\CMS\Extbase\Configuration\Exception\NoServerRequestGivenException
@@ -89,7 +71,11 @@ class HeaderDataService implements SingletonInterface
         protected ConfigurationRepository $configurationRepository,
         protected PageService $pageService,
         protected StandaloneTemplateRendererService $standaloneTemplateRendererService,
-        protected PageRenderer $pageRenderer
+        protected PageRenderer $pageRenderer,
+        protected Context $context,
+        protected MetaTagManagerRegistry $metaTagManagerRegistry,
+        protected ResourceFactory $resourceFactory,
+        protected EventDispatcherInterface $eventDispatcher
     ) {
         /** @var \Psr\Http\Message\ServerRequestInterface $request */
         $request = $GLOBALS['TYPO3_REQUEST'];
@@ -125,8 +111,6 @@ class HeaderDataService implements SingletonInterface
             $this->configurationRepository->mergeConfigurationWithDefault($this->domainConfiguration);
             $this->addJsonLd();
         }
-
-        $this->pageRenderer = PageUtility::getPageRenderer();
     }
 
     /**
@@ -149,9 +133,6 @@ class HeaderDataService implements SingletonInterface
         }
     }
 
-    /**
-     * @return array
-     */
     public function getAnalyticsTags(): array
     {
         $data = [];
@@ -179,9 +160,6 @@ class HeaderDataService implements SingletonInterface
         return $data;
     }
 
-    /**
-     * @return bool
-     */
     protected function injectAnalyticsData(): bool
     {
         $analyticsDisabled = false;
@@ -201,12 +179,9 @@ class HeaderDataService implements SingletonInterface
                 $disableOnBackendLogin = (bool) $this->settings['analytics']['disableOnBackendLogin'];
             }
 
-            /** @var \TYPO3\CMS\Core\Context\Context $context */
-            $context = GeneralUtility::makeInstance(Context::class);
-
             try {
-                $backendIsLoggedIn = $context->getPropertyFromAspect('backend.user', 'isLoggedIn');
-            } catch (AspectNotFoundException $e) {
+                $backendIsLoggedIn = $this->context->getPropertyFromAspect('backend.user', 'isLoggedIn');
+            } catch (AspectNotFoundException) {
                 $backendIsLoggedIn = false;
             }
 
@@ -241,26 +216,16 @@ class HeaderDataService implements SingletonInterface
         $this->pageRenderer->setTitle($title);
     }
 
-    /**
-     * @return array
-     */
     public function getJsonLd(): array
     {
         return $this->jsonLd;
     }
 
-    /**
-     * @param array $jsonLd
-     */
     public function setJsonLd(array $jsonLd): void
     {
         $this->jsonLd = $jsonLd;
     }
 
-    /**
-     * @param string $html
-     * @return string
-     */
     public function addGoogleTagmanagerBodyToHtml(string $html): string
     {
         if ($this->injectAnalyticsData()) {
@@ -293,9 +258,7 @@ class HeaderDataService implements SingletonInterface
             $noindex = false;
             $nofollow = false;
 
-            /** @var \TYPO3\CMS\Core\MetaTag\MetaTagManagerRegistry $metaTagManagerRegistry */
-            $metaTagManagerRegistry = GeneralUtility::makeInstance(MetaTagManagerRegistry::class);
-            $robotsMetaTagManager = $metaTagManagerRegistry->getManagerForProperty('robots');
+            $robotsMetaTagManager = $this->metaTagManagerRegistry->getManagerForProperty('robots');
 
             $originalRobotsMetaTagValue = $robotsMetaTagManager->getProperty('robots');
 
@@ -326,9 +289,6 @@ class HeaderDataService implements SingletonInterface
         }
     }
 
-    /**
-     * @return string
-     */
     protected function getGoogleAnalyticsTag(): string
     {
         return $this->standaloneTemplateRendererService->render(
@@ -339,9 +299,6 @@ class HeaderDataService implements SingletonInterface
             ['analyticsId' => $this->domainConfiguration->getGoogleAnalytics()]);
     }
 
-    /**
-     * @return string
-     */
     protected function getGoogleAnalyticsV4Tag(): string
     {
         return $this->standaloneTemplateRendererService->render(
@@ -352,9 +309,6 @@ class HeaderDataService implements SingletonInterface
             ['analyticsId' => $this->domainConfiguration->getGoogleAnalyticsV4()]);
     }
 
-    /**
-     * @return string
-     */
     protected function getGoogleTagmanagerTag(): string
     {
         return $this->standaloneTemplateRendererService->render(
@@ -368,9 +322,6 @@ class HeaderDataService implements SingletonInterface
         );
     }
 
-    /**
-     * @return string
-     */
     protected function getMatomoTag(): string
     {
         return $this->standaloneTemplateRendererService->render(
@@ -395,18 +346,31 @@ class HeaderDataService implements SingletonInterface
 
     protected function renderJsonLd(): void
     {
-        // TODO: remove old hooks and replace with custom event
+        // Backwards-compatible invocation of the legacy userFunc hook. New listeners
+        // should subscribe to BeforeJsonLdRenderingEvent. The hook will be removed
+        // in a future major release.
+        $legacyHooks = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'] ?? null;
 
-        if (
-            true === array_key_exists('mindshape_seo', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']) &&
-            true === is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'] ?? null)
-        ) {
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonld_preRendering'] as $userFunc) {
+        if (is_array($legacyHooks) && $legacyHooks !== []) {
+            trigger_error(
+                'The userFunc hook $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTCONF\'][\'mindshape_seo\'][\'jsonld_preRendering\']'
+                . ' is deprecated and will be removed in a future major release of mindshape_seo.'
+                . ' Subscribe a listener to ' . BeforeJsonLdRenderingEvent::class . ' instead.',
+                E_USER_DEPRECATED
+            );
+
+            foreach ($legacyHooks as $userFunc) {
                 $params = ['jsonld' => &$this->jsonLd];
 
                 GeneralUtility::callUserFunction($userFunc, $params, $this);
             }
         }
+
+        /** @var BeforeJsonLdRenderingEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new BeforeJsonLdRenderingEvent($this->jsonLd, $this->domainConfiguration)
+        );
+        $this->jsonLd = $event->getJsonLd();
 
         if (0 < count($this->jsonLd)) {
             $this->pageRenderer->addHeaderData(
@@ -415,9 +379,6 @@ class HeaderDataService implements SingletonInterface
         }
     }
 
-    /**
-     * @return array
-     */
     protected function renderJsonWebsiteName(): array
     {
         return [
@@ -429,9 +390,6 @@ class HeaderDataService implements SingletonInterface
         ];
     }
 
-    /**
-     * @return array
-     */
     protected function renderJsonLdInformation(): array
     {
         $jsonLdLogo = $this->settings['jsonLdLogo'] ?? null;
@@ -475,11 +433,8 @@ class HeaderDataService implements SingletonInterface
             !empty($jsonLdLogo) &&
             Configuration::JSONLD_TYPE_ORGANIZATION === $this->domainConfiguration->getJsonldType()
         ) {
-            /** @var \TYPO3\CMS\Core\Resource\ResourceFactory $resourceFactory */
-            $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
-
             try {
-                $jsonLdLogoFile = $resourceFactory->getFileObjectFromCombinedIdentifier($jsonLdLogo);
+                $jsonLdLogoFile = $this->resourceFactory->getFileObjectFromCombinedIdentifier($jsonLdLogo);
                 $jsonld['logo'] = LinkUtility::renderTypoLink(
                     sprintf('t3://file?uid=%d', $jsonLdLogoFile->getUid()),
                     true
@@ -521,20 +476,33 @@ class HeaderDataService implements SingletonInterface
     {
         $jsonLdbreadcrumb = $this->renderJsonLdBreadcrum();
 
-        // TODO: remove old hooks and replace with custom event
+        // Backwards-compatible invocation of the legacy userFunc hook. New listeners
+        // should subscribe to BeforeJsonLdBreadcrumbRenderingEvent. The hook will be
+        // removed in a future major release.
+        $legacyHooks = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'] ?? null;
 
-        if (
-            true === array_key_exists('mindshape_seo', $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']) &&
-            true === is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'] ?? null)
-        ) {
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mindshape_seo']['jsonldBreadcrumb_preRendering'] as $userFunc) {
+        if (is_array($legacyHooks) && $legacyHooks !== []) {
+            trigger_error(
+                'The userFunc hook $GLOBALS[\'TYPO3_CONF_VARS\'][\'EXTCONF\'][\'mindshape_seo\'][\'jsonldBreadcrumb_preRendering\']'
+                . ' is deprecated and will be removed in a future major release of mindshape_seo.'
+                . ' Subscribe a listener to ' . BeforeJsonLdBreadcrumbRenderingEvent::class . ' instead.',
+                E_USER_DEPRECATED
+            );
+
+            foreach ($legacyHooks as $userFunc) {
                 $params = ['jsonldBreadcrumb' => &$jsonLdbreadcrumb];
 
                 GeneralUtility::callUserFunction($userFunc, $params, $this);
             }
         }
 
-        if (0 < count($jsonLdbreadcrumb['itemListElement'])) {
+        /** @var BeforeJsonLdBreadcrumbRenderingEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new BeforeJsonLdBreadcrumbRenderingEvent($jsonLdbreadcrumb, $this->domainConfiguration)
+        );
+        $jsonLdbreadcrumb = $event->getJsonLdBreadcrumb();
+
+        if (0 < count($jsonLdbreadcrumb['itemListElement'] ?? [])) {
             $this->pageRenderer->addFooterData(
                 '<script type="application/ld+json" data-ignore="1">' . json_encode($jsonLdbreadcrumb) . '</script>'
             );
@@ -542,7 +510,6 @@ class HeaderDataService implements SingletonInterface
     }
 
     /**
-     * @return array
      * @throws \Doctrine\DBAL\Exception
      */
     protected function renderJsonLdBreadcrum(): array

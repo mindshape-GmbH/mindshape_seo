@@ -8,7 +8,6 @@ return [
         'label' => 'domain',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'dividers2tabs' => true,
         'versioningWS' => false,
         'hideTable' => true,
         'languageField' => 'sys_language_uid',
@@ -23,7 +22,7 @@ return [
         'iconfile' => 'EXT:mindshape_seo/Resources/Public/Icons/tx_mindshapeseo_domain_model_configuration.gif',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, domain, merge_with_default, google_analytics, google_tagmanager, matomo_url, matomo_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, google_analytics_use_cookie_consent, tagmanager_use_cookie_consent, matomo_use_cookie_consent, add_jsonld, add_jsonld_breadcrumb, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_logo, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '],
+        '1' => ['showitem' => 'sys_language_uid, domain, merge_with_default, google_analytics, google_tagmanager, matomo_url, matomo_idsite, title_attachment, title_attachment_seperator, title_attachment_position, add_analytics, google_analytics_use_cookie_consent, tagmanager_use_cookie_consent, matomo_use_cookie_consent, add_jsonld, add_jsonld_breadcrumb, jsonld_custom_url, jsonld_type, jsonld_telephone, jsonld_fax, jsonld_email, jsonld_same_as_facebook, jsonld_same_as_twitter, jsonld_same_as_instagram, jsonld_same_as_youtube, jsonld_same_as_linkedin, jsonld_same_as_xing, jsonld_same_as_printerest, jsonld_same_as_soundcloud, jsonld_same_as_tumblr, jsonld_address_locality, jsonld_address_postalcode, jsonld_address_street, '],
     ],
     'palettes' => [
         '1' => ['showitem' => ''],
@@ -330,15 +329,6 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim',
-            ],
-        ],
-        'jsonld_logo' => [
-            'exclude' => 1,
-            'label' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang.xlf:tx_mindshapeseo_domain_model_configuration.jsonld.logo',
-            'config' => [
-                'type' => 'file',
-                'maxitems' => 1,
-                'allowed' => 'common-image-types',
             ],
         ],
         'jsonld_address_locality' => [

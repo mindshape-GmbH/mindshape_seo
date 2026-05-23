@@ -33,9 +33,9 @@ use TYPO3\CMS\Core\Utility\RootlineUtility;
 
 class SettingsUtility
 {
-    protected ?Site $site;
-    protected ?int $pageId;
-    protected ?ServerRequestInterface $request;
+    protected ?Site $site = null;
+    protected ?int $pageId = null;
+    protected ?ServerRequestInterface $request = null;
     protected ?array $typoScriptCache = null;
 
     public function __construct(
@@ -67,11 +67,11 @@ class SettingsUtility
             $queryParameters = $this->request->getQueryParams();
 
             // Page ID from pagetree selection
-            if ($pageid = (int) ($queryParameters['id'] ?? 0)) {
-                $this->pageId = $pageId;
+            if ($resolvedPageId = (int) ($queryParameters['id'] ?? 0)) {
+                $this->pageId = $resolvedPageId;
             // Page ID from edit page record view
-            } elseif ($pageId = array_key_first($queryParameters['edit']['pages'] ?? [])) {
-                $this->pageId = $pageId;
+            } elseif ($resolvedPageId = array_key_first($queryParameters['edit']['pages'] ?? [])) {
+                $this->pageId = (int) $resolvedPageId;
             }
         }
     }
