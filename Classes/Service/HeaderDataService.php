@@ -424,7 +424,7 @@ class HeaderDataService implements SingletonInterface
             $jsonld['address'] = [
                 '@type' => 'PostalAddress',
                 'addressLocality' => $this->domainConfiguration->getJsonldAddressLocality(),
-                'postalcode' => $this->domainConfiguration->getJsonldAddressPostalcode(),
+                'postalCode' => $this->domainConfiguration->getJsonldAddressPostalcode(),
                 'streetAddress' => $this->domainConfiguration->getJsonldAddressStreet(),
             ];
         }
