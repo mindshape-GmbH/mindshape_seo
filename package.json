@@ -6,9 +6,9 @@
     "node": "^24.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.29",
-    "@babel/preset-env": "^7.29",
-    "@babel/register": "^7.28",
+    "@babel/core": "^8.0",
+    "@babel/preset-env": "^8.0",
+    "@babel/register": "^8.0",
     "cross-env": "^10.1",
     "css-loader": "^7.1",
     "mini-css-extract-plugin": "^2.10",
