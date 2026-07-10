@@ -80,13 +80,13 @@ class StandaloneTemplateRendererService implements SingletonInterface
         $templatePaths->setLayoutRootPaths(
             array_map(
                 GeneralUtility::class . '::getFileAbsFileName',
-                $this->viewSettings['layoutRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Templates/']
+                $this->viewSettings['layoutRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Layouts/']
             )
         );
         $templatePaths->setTemplateRootPaths(
             array_map(
                 GeneralUtility::class . '::getFileAbsFileName',
-                $this->viewSettings['templateRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Layouts/']
+                $this->viewSettings['templateRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Templates/']
             )
         );
         $templatePaths->setPartialRootPaths(

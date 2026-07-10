@@ -247,7 +247,7 @@ class PageService implements SingletonInterface
 
     public function getSerpPreviewUrl(int $pageUid, int $sysLanguageUid, string $customUrl = ''): array|string
     {
-        $baseUri = '' !== $customUrl ? $customUrl : GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
+        $baseUri = '' !== $customUrl ? $customUrl : $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams')->getRequestHost();
         $baseUri = str_replace('https://', "", rtrim($baseUri, '/'));
         $pageUrlNonAbsolute = parse_url($this->getPageLink($pageUid, false, $sysLanguageUid), PHP_URL_PATH);
         $uri = $baseUri . $pageUrlNonAbsolute;

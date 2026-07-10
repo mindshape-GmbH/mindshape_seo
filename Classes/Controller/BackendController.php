@@ -37,6 +37,7 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder as BackendUriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\Components\Menu\MenuItem;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Core\Environment;
@@ -79,20 +80,7 @@ class BackendController extends ActionController
         $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
         $this->moduleTemplate->getDocHeaderComponent()->setMetaInformation([]);
-
-        if (Environment::getContext()->isProduction()) {
-            $this->pageRenderer->addCssFile('EXT:mindshape_seo/Resources/Public/StyleSheets/backend.css');
-        } else {
-            // Disable caching of the CSS file in non-production contexts so SCSS rebuilds are picked up instantly
-            $this->pageRenderer->addCssFile(
-                file: 'EXT:mindshape_seo/Resources/Public/StyleSheets/backend.css',
-                rel: 'stylesheet',
-                media: 'all',
-                title: '',
-                forceOnTop: false,
-                allWrap: ''
-            );
-        }
+        $this->pageRenderer->addCssFile('EXT:mindshape_seo/Resources/Public/StyleSheets/backend.css');
     }
 
     protected function buildDomainMenu(array $domains): void
@@ -151,10 +139,8 @@ class BackendController extends ActionController
         $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->addMenu($menu);
     }
 
-    protected function buildLanguageMenu(array $languages, ?string $domain = null): void
+    protected function buildLanguageMenu(array $languages): void
     {
-        $uriBuilder = $this->uriBuilder;
-
         $menu = $this->moduleTemplate->getDocHeaderComponent()->getMenuRegistry()->makeMenu();
         $menu->setIdentifier('mindshape_seo-languageMenu');
 
@@ -171,11 +157,13 @@ class BackendController extends ActionController
 
         foreach ($languages as $language) {
             $menuItemParameters = ['sysLanguageUid' => $language['uid']];
+            /** @var \TYPO3\CMS\Backend\Template\Components\Menu\MenuItem $menuItem */
+            $menuItem = GeneralUtility::makeInstance(MenuItem::class);
 
             $menu->addMenuItem(
-                $menu->makeMenuItem()
+                $menuItem
                     ->setTitle($language['title'])
-                    ->setHref($uriBuilder->reset()->uriFor($currentAction, $menuItemParameters, 'Backend'))
+                    ->setHref($this->uriBuilder->reset()->uriFor($currentAction, $menuItemParameters, 'Backend'))
                     ->setActive($sysLanguageUid === (int) $language['uid'])
             );
         }
@@ -213,12 +201,7 @@ class BackendController extends ActionController
         $languages = $this->languageService->getLanguagesAvailable($domain);
 
         if (0 < count($languages)) {
-            $this->buildLanguageMenu(
-                $languages,
-                $this->getCurrentDomain(
-                    $this->arguments->getArgument('domain')->getValue()
-                )
-            );
+            $this->buildLanguageMenu($languages);
         }
 
         $this->buildButtons();
@@ -282,7 +265,10 @@ class BackendController extends ActionController
 
         $robotsTxtNotExists = true;
         $robotsContent = false;
-        $currentDomain = $domain === Configuration::DEFAULT_DOMAIN ? GeneralUtility::getIndpEnv('HTTP_HOST') : $domain;
+
+        /** @var \TYPO3\CMS\Core\Http\NormalizedParams $normalizedParams */
+        $normalizedParams = $this->request->getAttribute('normalizedParams');
+        $currentDomain = $domain === Configuration::DEFAULT_DOMAIN ? $normalizedParams->getHttpHost() : $domain;
 
         if (file_exists(Environment::getPublicPath() . '/robots.txt')) {
             $robotsTxtNotExists = false;
@@ -291,7 +277,6 @@ class BackendController extends ActionController
         if ($robotsTxtNotExists === true) {
             $allSites = $this->siteFinder->getAllSites();
 
-            /** @var \TYPO3\CMS\Core\Site\Entity\Site $site */
             foreach ($allSites as $site) {
                 if ($site->getBase()->getHost() === $currentDomain) {
                     $siteConf = $site->getConfiguration();
@@ -327,7 +312,7 @@ class BackendController extends ActionController
                 Configuration::JSONLD_TYPE_ORGANIZATION => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.organization', 'mindshape_seo'),
                 Configuration::JSONLD_TYPE_PERSON => LocalizationUtility::translate('tx_mindshapeseo_domain_model_configuration.jsonld.type.person', 'mindshape_seo'),
             ],
-            'domainUrl' => (GeneralUtility::getIndpEnv('TYPO3_SSL') ? 'https' : 'http') . '://' . ($domain !== Configuration::DEFAULT_DOMAIN ? $domain : GeneralUtility::getIndpEnv('HTTP_HOST')),
+            'domainUrl' => ($normalizedParams->isHttps() ? 'https' : 'http') . '://' . ($domain !== Configuration::DEFAULT_DOMAIN ? $domain : $normalizedParams->getHttpHost()),
             'robotsTxtNotExists' => $robotsTxtNotExists,
             'robotsTxtContent' => $robotsContent,
             'cookieExtensionIsActive' => ExtensionManagementUtility::isLoaded('mindshape_cookie_consent'),

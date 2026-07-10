@@ -386,7 +386,7 @@ class HeaderDataService implements SingletonInterface
             '@type' => 'WebSite',
             'url' => '' !== $this->domainConfiguration->getJsonldCustomUrl() ?
                 $this->domainConfiguration->getJsonldCustomUrl() :
-                GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST'),
+                $GLOBALS['TYPO3_REQUEST']->getAttribute('normalizedParams')->getRequestHost(),
         ];
     }
 
