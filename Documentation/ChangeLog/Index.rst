@@ -3,6 +3,10 @@
 ChangeLog
 ---------
 
+v5.0.0
+  * Compatibility for TYPO3 v14, drop v12 support
+  * Refactorings, bugfixes and optimizations
+
 v4.0.1
   * Add PHP 8.5 support
 
