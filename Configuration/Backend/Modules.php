@@ -13,7 +13,7 @@ return [
         'access' => 'user',
         'iconIdentifier' => 'module-mindshapeseo-preview',
         'labels' => 'LLL:EXT:mindshape_seo/Resources/Private/Language/locallang_backend_preview.xlf',
-        'navigationComponent' => '@typo3/backend/page-tree/page-tree-element',
+        'navigationComponent' => '@typo3/backend/tree/page-tree-element',
         'extensionName' => 'MindshapeSeo',
         'controllerActions' => [
             BackendController::class => ['preview'],

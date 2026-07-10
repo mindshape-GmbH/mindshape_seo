@@ -6,7 +6,7 @@ namespace Mindshape\MindshapeSeo\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -30,16 +30,8 @@ namespace Mindshape\MindshapeSeo\Utility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
-/**
- * @package Mindshape\MindshapeSeo\Utility
- */
 class LinkUtility
 {
-    /**
-     * @param string $parameter
-     * @param bool $absolute
-     * @return string
-     */
     public static function renderTypoLink(string $parameter, bool $absolute = false): string
     {
         /** @var ContentObjectRenderer $contentObjectRenderer */

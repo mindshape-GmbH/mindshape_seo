@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Service;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -27,32 +27,22 @@ namespace Mindshape\MindshapeSeo\Service;
  ***************************************************************/
 
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
-use PDO;
 use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Site\SiteFinder;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class LanguageService implements SingletonInterface
 {
-    /**
-     * @var \TYPO3\CMS\Core\Site\SiteFinder
-     */
+
     protected SiteFinder $siteFinder;
 
-    /**
-     * @param \TYPO3\CMS\Core\Site\SiteFinder $siteFinder
-     */
+
     public function __construct(SiteFinder $siteFinder)
     {
         $this->siteFinder = $siteFinder;
     }
 
     /**
-     * @return array
      * @throws \Doctrine\DBAL\Exception
      */
     public function getLanguagesAvailable(?string $domain = null): array
@@ -80,10 +70,6 @@ class LanguageService implements SingletonInterface
         return $languages;
     }
 
-    /**
-     * @param int $pageUid
-     * @return array
-     */
     public function getPageLanguagesAvailable(int $pageUid): array
     {
         foreach ($this->siteFinder->getSiteByPageId($pageUid)->getAllLanguages() as $siteLanguage) {

@@ -1,11 +1,12 @@
 <?php
+
 namespace Mindshape\MindshapeSeo\Service;
 
 /***************************************************************
  *
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -26,74 +27,81 @@ namespace Mindshape\MindshapeSeo\Service;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Mindshape\MindshapeSeo\Utility\SettingsUtility;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\View\TemplateView;
+use TYPO3Fluid\Fluid\View\ViewInterface;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class StandaloneTemplateRendererService implements SingletonInterface
 {
-    /**
-     * @var array
-     */
+    protected array $viewSettings;
     protected array $settings;
 
-    /**
-     * @param \TYPO3\CMS\Extbase\Configuration\ConfigurationManager $configurationManager
-     * @throws \TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException
-     */
-    public function __construct(ConfigurationManager $configurationManager)
+    public function __construct()
     {
-        $config = $configurationManager->getConfiguration(ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK, 'mindshapeseo');
-        $this->settings = $config;
+        $settingsUtility = new SettingsUtility();
+        $extensionTypoScript = $settingsUtility->getExtensionTypoScript();
+
+        $this->viewSettings = $extensionTypoScript['view'] ?? [];
+        $this->settings = $extensionTypoScript['settings'] ?? [];
     }
 
-    /**
-     * @param string $templateFolder
-     * @param string $templateName
-     * @param array $variables
-     * @param string $format
-     * @return string
-     */
     public function render(
         string $templateFolder,
         string $templateName,
         array $variables,
-        string $format = 'html'
+        string $format = 'html',
+        ?RenderingContextInterface $renderingContext = null
     ): string {
-        if ('/' !== $templateFolder[-1]) {
-            $templateFolder .= '/';
-        }
-
         $view = $this->getView($templateFolder, $templateName, $format);
 
-        if (0 < count($variables)) {
-            $view->assignMultiple($variables);
+        if (false === array_key_exists('settings', $variables)) {
+            $variables['settings'] = $this->settings;
         }
+
+        $view->assignMultiple($variables);
 
         return $view->render();
     }
 
-    /**
-     * @param string $templateFolder
-     * @param string $templateName
-     * @param string $format
-     * @return \TYPO3\CMS\Fluid\View\StandaloneView
-     */
-    protected function getView(string $templateFolder, string $templateName, string $format = 'html'): StandaloneView
-    {
-        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
-        $view = GeneralUtility::makeInstance(StandaloneView::class);
-        $view->setFormat($format);
-        $view->setTemplateRootPaths($this->settings['view']['templateRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Templates/']);
-        $view->setLayoutRootPaths($this->settings['view']['layoutRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Layouts/']);
-        $view->setPartialRootPaths($this->settings['view']['partialRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Partials/']);
-        $view->setTemplate($templateFolder . $templateName . '.' . $format);
+    protected function getView(
+        string $templateFolder,
+        string $templateName,
+        string $format = 'html',
+        ?RenderingContextInterface $renderingContext = null
+    ): ViewInterface {
+        /** @var \TYPO3Fluid\Fluid\View\TemplateView $view */
+        $view = GeneralUtility::makeInstance(TemplateView::class, $renderingContext);
+        $templatePaths = $view->getRenderingContext()->getTemplatePaths();
+
+        // We need the absolute path here for TYPO3Fluid\Fluid\View\TemplatePaths, this works different from TYPO3\CMS\Fluid\View\TemplatePaths
+        $templatePaths->setLayoutRootPaths(
+            array_map(
+                GeneralUtility::class . '::getFileAbsFileName',
+                $this->viewSettings['layoutRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Layouts/']
+            )
+        );
+        $templatePaths->setTemplateRootPaths(
+            array_map(
+                GeneralUtility::class . '::getFileAbsFileName',
+                $this->viewSettings['templateRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Templates/']
+            )
+        );
+        $templatePaths->setPartialRootPaths(
+            array_map(
+                GeneralUtility::class . '::getFileAbsFileName',
+                $this->viewSettings['partialRootPaths'] ?? [0 => 'EXT:mindshape_seo/Resources/Private/Partials/']
+            )
+        );
+
+        $templatePaths->setTemplatePathAndFilename(
+            $templatePaths->resolveTemplateFileForControllerAndActionAndFormat(
+                $templateFolder,
+                $templateName
+            )
+        );
 
         return $view;
     }

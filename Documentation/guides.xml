@@ -15,9 +15,9 @@
     />
 
     <project title="mindshape_seo"
-             release="4.0"
-             version="4.0"
-             copyright="mindshape GmbH 2024"
+             release="5.0"
+             version="5.0"
+             copyright="mindshape GmbH 2026"
     />
 
     <inventory id="t3tsref" url="https://docs.typo3.org/typo3cms/TyposcriptReference/"/>

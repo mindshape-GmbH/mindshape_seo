@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Handler;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -29,25 +29,20 @@ namespace Mindshape\MindshapeSeo\Handler;
 use Doctrine\DBAL\ParameterType;
 use Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository;
 use Mindshape\MindshapeSeo\Utility\DatabaseUtility;
-use Mindshape\MindshapeSeo\Utility\PageUtility;
-use PDO;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class AjaxHandler implements SingletonInterface
 {
-    /**
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \Psr\Http\Message\ResponseInterface
-     */
+    public function __construct(
+        protected ConfigurationRepository $configurationRepository,
+        protected PersistenceManager $persistenceManager
+    ) {
+    }
+
     public function savePage(ServerRequestInterface $request): ResponseInterface
     {
         $data = json_decode($request->getBody()->getContents(), true);
@@ -82,17 +77,10 @@ class AjaxHandler implements SingletonInterface
     }
 
     /**
-     * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \Psr\Http\Message\ResponseInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
     public function deleteConfiguration(ServerRequestInterface $request): ResponseInterface
     {
-        /** @var \Mindshape\MindshapeSeo\Domain\Repository\ConfigurationRepository $configurationRepository */
-        $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
-        /** @var \TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager $persistenceManager */
-        $persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
-
         $data = json_decode($request->getBody()->getContents(), true);
 
         $response = ['deleted' => false];
@@ -100,11 +88,16 @@ class AjaxHandler implements SingletonInterface
 
         if (is_array($data)) {
             if (0 < (int)$data['configurationUid']) {
-                $configuration = $configurationRepository->findByUid($data['configurationUid']);
-                $configurationRepository->remove($configuration);
-                $persistenceManager->persistAll();
+                $configuration = $this->configurationRepository->findByUid($data['configurationUid']);
 
-                $response['deleted'] = true;
+                if ($configuration !== null) {
+                    $this->configurationRepository->remove($configuration);
+                    $this->persistenceManager->persistAll();
+
+                    $response['deleted'] = true;
+                } else {
+                    $statusCode = 404;
+                }
             } else {
                 $statusCode = 500;
             }
@@ -116,9 +109,6 @@ class AjaxHandler implements SingletonInterface
     }
 
     /**
-     * @param int $pageUid
-     * @param int $sysLanguageUid
-     * @param array $data
      * @throws \Doctrine\DBAL\Exception
      */
     protected function savePageData(int $pageUid, int $sysLanguageUid, array $data): void

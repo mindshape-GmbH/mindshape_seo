@@ -5,7 +5,7 @@ namespace Mindshape\MindshapeSeo\Backend\Form\Element;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2024 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -35,14 +35,9 @@ use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Page\JavaScriptModuleInstruction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * @package mindshape_seo
- * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
- */
 class GooglePreviewElement extends AbstractFormElement
 {
     /**
-     * @return array
      * @throws \Doctrine\DBAL\Exception
      */
     public function render(): array
@@ -64,7 +59,7 @@ class GooglePreviewElement extends AbstractFormElement
             $configuration = $domainService->getPageDomainConfiguration($pageUid, $languageUid);
 
             $titleAttachment = null;
-            $titleAttachmentSeperator = null;
+            $titleAttachmentSeparator = null;
             $titleAttachmentPosition = null;
 
             if ($configuration instanceof Configuration) {
@@ -75,7 +70,7 @@ class GooglePreviewElement extends AbstractFormElement
                 );
 
                 $titleAttachment = $configuration->getTitleAttachment();
-                $titleAttachmentSeperator = $configuration->getTitleAttachmentSeperator();
+                $titleAttachmentSeparator = $configuration->getTitleAttachmentSeparator();
                 $titleAttachmentPosition = $configuration->getTitleAttachmentPosition();
             } else {
                 $metadata = $pageService->getPageMetaData(
@@ -88,7 +83,7 @@ class GooglePreviewElement extends AbstractFormElement
                 'typo3Version' => GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion(),
                 'metadata' => $metadata,
                 'titleAttachment' => $titleAttachment,
-                'titleAttachmentSeperator' => $titleAttachmentSeperator,
+                'titleAttachmentSeparator' => $titleAttachmentSeparator,
                 'titleAttachmentPosition' => $titleAttachmentPosition,
                 'tcaName' => $this->data['parameterArray']['itemFormElName'],
                 'focusKeyword' => $this->data['parameterArray']['itemFormElValue'],

@@ -6,7 +6,7 @@ namespace Mindshape\MindshapeSeo\Utility;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2023 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
+ *  (c) 2026 Daniel Dorndorf <dorndorf@mindshape.de>, mindshape GmbH
  *
  *  All rights reserved
  *
@@ -33,43 +33,33 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * @package Mindshape\MindshapeSeo\Utility
- */
 class DatabaseUtility
 {
-    /**
-     * @var \TYPO3\CMS\Core\Database\Connection
-     */
-    private static Connection $databaseConnection;
 
-    /**
-     * @return \TYPO3\CMS\Core\Database\Connection
-     */
+    private static ?Connection $databaseConnection = null;
+
+
     public static function databaseConnection(): Connection
     {
-        if (static::$databaseConnection ?? null instanceof Connection) {
+        if (static::$databaseConnection instanceof Connection) {
             return static::$databaseConnection;
         }
 
         /** @var ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $connection = null;
 
         try {
             $connection = $connectionPool->getConnectionByName(ConnectionPool::DEFAULT_CONNECTION_NAME);
-        } catch (DBALException $exception) {
-            // ignore
+        } catch (DBALException) {
+            throw new \RuntimeException(
+                'Unable to obtain default database connection for mindshape_seo.',
+                1716460800
+            );
         }
 
-        static::$databaseConnection = $connection;
-
-        return $connection;
+        return static::$databaseConnection = $connection;
     }
 
-    /**
-     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
-     */
     public static function queryBuilder(): QueryBuilder
     {
         $connection = static::databaseConnection();

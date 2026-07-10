@@ -68,7 +68,7 @@ $lightgrey: #666;
         top: 50%;
         transform: translateY(-50%);
         white-space: nowrap;
-        margin-left: .3em;
+        margin-left: 0.3em;
       }
 
       .title-wrapper {
@@ -92,7 +92,7 @@ $lightgrey: #666;
         &:before {
           border-left: 1px dotted $lightgrey;
           bottom: 0;
-          content: '';
+          content: "";
           left: 50%;
           position: absolute;
           top: calc(50% + 8px);
@@ -109,7 +109,7 @@ $lightgrey: #666;
       &:before {
         border-left: 1px dotted $lightgrey;
         bottom: 0;
-        content: '';
+        content: "";
         left: 8px;
         position: absolute;
         top: 50%;
@@ -118,8 +118,8 @@ $lightgrey: #666;
     }
   }
 
-  &[data-typo3-version="12"],
-  &[data-typo3-version="13"] {
+  &[data-typo3-version="13"],
+  &[data-typo3-version="14"] {
     .depth-markup {
       .icon {
         top: unset;
@@ -142,7 +142,7 @@ $lightgrey: #666;
   }
 
   ul.pagination {
-    margin: .5em 0 1.5em;
+    margin: 0.5em 0 1.5em;
   }
 
   .msh-tooltip {
@@ -152,7 +152,7 @@ $lightgrey: #666;
 
     &:hover {
       &:after {
-        background: rgba($darkgrey, .8);
+        background: rgba($darkgrey, 0.8);
         border-radius: 5px;
         bottom: 26px;
         color: $white;
@@ -169,7 +169,7 @@ $lightgrey: #666;
         border-color: $darkgrey transparent;
         border-width: 6px 6px 0;
         bottom: 20px;
-        content: '';
+        content: "";
         left: 20%;
         position: absolute;
         z-index: 99;
@@ -185,7 +185,7 @@ $lightgrey: #666;
 
   .google-preview-column {
     vertical-align: top;
-    color: #1A1A1A;
+    color: #1a1a1a;
   }
 
   .seo-check {
@@ -196,13 +196,13 @@ $lightgrey: #666;
     .fa-exclamation-circle {
       color: $bootstrap-danger-red;
       font-size: 16px;
-      line-height: .9;
+      line-height: 0.9;
     }
 
     .fa-check-circle {
       color: $bootstrap-success-green;
       font-size: 16px;
-      line-height: .9;
+      line-height: 0.9;
     }
 
     .error {
@@ -221,7 +221,7 @@ $lightgrey: #666;
   }
 
   .robots {
-    margin-bottom: .4em;
+    margin-bottom: 0.4em;
 
     .danger {
       color: $bootstrap-danger-red;
@@ -230,7 +230,7 @@ $lightgrey: #666;
 
   .canonical-icon {
     height: 1.3em;
-    margin-top: -.1em;
+    margin-top: -0.1em;
     width: 1.3em;
   }
 }
@@ -238,7 +238,7 @@ $lightgrey: #666;
 .google-preview {
   .thumbnail {
     margin: 0 0 1.5em;
-    padding: .8em;
+    padding: 0.8em;
     position: relative;
     width: 620px;
     display: block;
@@ -246,7 +246,7 @@ $lightgrey: #666;
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 2px;
-    transition: border .2s ease-in-out
+    transition: border 0.2s ease-in-out;
   }
 
   .preview-box {
@@ -336,8 +336,8 @@ $lightgrey: #666;
     }
 
     hr {
-      background-color: rgba(#000, .12);
-      left: -.8em;
+      background-color: rgba(#000, 0.12);
+      left: -0.8em;
       margin: 10px 0;
       position: relative;
       width: calc(100% + 1.6em);
@@ -353,9 +353,9 @@ $lightgrey: #666;
       color: #000;
       background-color: $bootstrap-border-gray;
       border: solid 1px $bootstrap-border-gray;
-      border-bottom-left-radius: .5em;
-      border-bottom-right-radius: .5em;
-      font-size: .8em;
+      border-bottom-left-radius: 0.5em;
+      border-bottom-right-radius: 0.5em;
+      font-size: 0.8em;
       left: 50%;
 
       margin-top: 1em;
@@ -363,7 +363,7 @@ $lightgrey: #666;
       transform: translateX(-50%);
 
       &:hover {
-        background-color: $grey
+        background-color: $grey;
       }
 
       .abort-text {
