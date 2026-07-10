@@ -33,7 +33,7 @@ class Configuration extends AbstractEntity
     public const TABLE = 'tx_mindshapeseo_domain_model_configuration';
 
     public const DEFAULT_DOMAIN = '*';
-    public const DEFAULT_TITLE_ATTACHMENT_SEPERATOR = '|';
+    public const DEFAULT_TITLE_ATTACHMENT_SEPARATOR = '|';
 
     public const JSONLD_TYPE_ORGANIZATION = 'Organization';
     public const JSONLD_TYPE_PERSON = 'Person';
@@ -48,7 +48,7 @@ class Configuration extends AbstractEntity
     protected string $googleAnalyticsV4 = '';
     protected string $googleTagmanager = '';
     protected string $titleAttachment = '';
-    protected string $titleAttachmentSeperator = '';
+    protected string $titleAttachmentSeparator = '';
     protected string $titleAttachmentPosition = '';
     protected bool $addAnalytics = false;
     protected bool $googleAnalyticsUseCookieConsent = false;
@@ -138,14 +138,14 @@ class Configuration extends AbstractEntity
         $this->titleAttachment = $titleAttachment;
     }
 
-    public function getTitleAttachmentSeperator(): string
+    public function getTitleAttachmentSeparator(): string
     {
-        return $this->titleAttachmentSeperator;
+        return $this->titleAttachmentSeparator;
     }
 
-    public function setTitleAttachmentSeperator(string $titleAttachmentSeperator): void
+    public function setTitleAttachmentSeparator(string $titleAttachmentSeparator): void
     {
-        $this->titleAttachmentSeperator = $titleAttachmentSeperator;
+        $this->titleAttachmentSeparator = $titleAttachmentSeparator;
     }
 
     public function getTitleAttachmentPosition(): string

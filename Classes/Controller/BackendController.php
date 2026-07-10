@@ -243,7 +243,7 @@ class BackendController extends ActionController
         if (!$configuration instanceof Configuration) {
             $configuration = new Configuration();
             $configuration->setDomain($domain);
-            $configuration->setTitleAttachmentSeperator(Configuration::DEFAULT_TITLE_ATTACHMENT_SEPERATOR);
+            $configuration->setTitleAttachmentSeparator(Configuration::DEFAULT_TITLE_ATTACHMENT_SEPARATOR);
             $configuration->setTitleAttachmentPosition(Configuration::TITLE_ATTACHMENT_POSITION_SUFFIX);
         } elseif (0 === count($domains)) {
             $configuration->setDomain(Configuration::DEFAULT_DOMAIN);
@@ -425,7 +425,7 @@ class BackendController extends ActionController
                 $this->moduleTemplate->assignMultiple([
                     'pageTree' => $pageTree,
                     'titleAttachment' => $configuration->getTitleAttachment(),
-                    'titleAttachmentSeperator' => $configuration->getTitleAttachmentSeperator(),
+                    'titleAttachmentSeparator' => $configuration->getTitleAttachmentSeparator(),
                     'titleAttachmentPosition' => $configuration->getTitleAttachmentPosition(),
                 ]);
             } else {

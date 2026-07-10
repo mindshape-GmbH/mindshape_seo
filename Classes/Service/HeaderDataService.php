@@ -207,9 +207,9 @@ class HeaderDataService implements SingletonInterface
             !empty($this->domainConfiguration->getTitleAttachment())
         ) {
             if ($this->domainConfiguration->getTitleAttachmentPosition() === Configuration::TITLE_ATTACHMENT_POSITION_PREFIX) {
-                $title = $this->domainConfiguration->getTitleAttachment() . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $title;
+                $title = $this->domainConfiguration->getTitleAttachment() . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeparator()) . ' ' . $title;
             } else {
-                $title = $title . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeperator()) . ' ' . $this->domainConfiguration->getTitleAttachment();
+                $title = $title . ' ' . trim($this->domainConfiguration->getTitleAttachmentSeparator()) . ' ' . $this->domainConfiguration->getTitleAttachment();
             }
         }
 

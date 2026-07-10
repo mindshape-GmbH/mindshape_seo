@@ -52,7 +52,7 @@
     <f:render section="PageTreeTable" arguments="{
       pageTree: '{f:if(condition: settings.pageTree.usePagination, then: pageTreePaginator.paginatedItems, else: pageTree)}',
       titleAttachment: titleAttachment,
-      titleAttachmentSeperator: titleAttachmentSeperator,
+      titleAttachmentSeparator: titleAttachmentSeparator,
       titleAttachmentPosition: titleAttachmentPosition,
       sysLanguageUid: sysLanguageUid
     }"/>
@@ -87,7 +87,7 @@
               <f:if condition="{page.row}">
                 <f:render partial="GoogleSearchPreview" section="Main" arguments="{
                   titleAttachment: titleAttachment,
-                  titleAttachmentSeperator: titleAttachmentSeperator,
+                  titleAttachmentSeparator: titleAttachmentSeparator,
                   titleAttachmentPosition: titleAttachmentPosition,
                   disableTitleAttachment: page.metadata.disableTitleAttachment,
                   title: page.metadata.title,

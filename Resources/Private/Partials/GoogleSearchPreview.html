@@ -60,12 +60,12 @@
                 <f:else>
                   <f:if condition="{titleAttachmentPosition} == 'prefix'">
                     <f:then>
-                      <span class="attachment">{titleAttachment}&nbsp;{titleAttachmentSeperator}</span>
+                      <span class="attachment">{titleAttachment}&nbsp;{titleAttachmentSeparator}</span>
                       <span class="title">{f:if(condition: seoTitle, then: seoTitle, else: title)}</span>
                     </f:then>
                     <f:else>
                       <span class="title">{f:if(condition: seoTitle, then: seoTitle, else: title)}</span>
-                      <span class="attachment">{titleAttachmentSeperator}&nbsp;{titleAttachment}</span>
+                      <span class="attachment">{titleAttachmentSeparator}&nbsp;{titleAttachment}</span>
                     </f:else>
                   </f:if>
                 </f:else>

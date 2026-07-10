@@ -59,7 +59,7 @@ class GooglePreviewElement extends AbstractFormElement
             $configuration = $domainService->getPageDomainConfiguration($pageUid, $languageUid);
 
             $titleAttachment = null;
-            $titleAttachmentSeperator = null;
+            $titleAttachmentSeparator = null;
             $titleAttachmentPosition = null;
 
             if ($configuration instanceof Configuration) {
@@ -70,7 +70,7 @@ class GooglePreviewElement extends AbstractFormElement
                 );
 
                 $titleAttachment = $configuration->getTitleAttachment();
-                $titleAttachmentSeperator = $configuration->getTitleAttachmentSeperator();
+                $titleAttachmentSeparator = $configuration->getTitleAttachmentSeparator();
                 $titleAttachmentPosition = $configuration->getTitleAttachmentPosition();
             } else {
                 $metadata = $pageService->getPageMetaData(
@@ -83,7 +83,7 @@ class GooglePreviewElement extends AbstractFormElement
                 'typo3Version' => GeneralUtility::makeInstance(Typo3Version::class)->getMajorVersion(),
                 'metadata' => $metadata,
                 'titleAttachment' => $titleAttachment,
-                'titleAttachmentSeperator' => $titleAttachmentSeperator,
+                'titleAttachmentSeparator' => $titleAttachmentSeparator,
                 'titleAttachmentPosition' => $titleAttachmentPosition,
                 'tcaName' => $this->data['parameterArray']['itemFormElName'],
                 'focusKeyword' => $this->data['parameterArray']['itemFormElValue'],

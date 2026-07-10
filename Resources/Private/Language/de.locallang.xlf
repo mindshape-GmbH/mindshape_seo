@@ -274,7 +274,7 @@
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_position.suffix">
                 <target>Suffix</target>
             </trans-unit>
-            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_seperator">
+            <trans-unit id="tx_mindshapeseo_domain_model_configuration.title_attachment_separator">
                 <target>Trenner</target>
             </trans-unit>
             <trans-unit id="tx_mindshapeseo_domain_model_configuration.add_analytics">
