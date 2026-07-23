@@ -542,7 +542,7 @@ class HeaderDataService implements SingletonInterface
                     ),
                     'name' => false === empty($page['mindshapeseo_jsonld_breadcrumb_title'])
                         ? $page['mindshapeseo_jsonld_breadcrumb_title']
-                        : $page['title'],
+                        : (!empty($page['nav_title']) ? $page['nav_title'] : $page['title']),
                 ],
             ];
         }
