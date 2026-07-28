@@ -16,7 +16,7 @@
     "email": "info@mindshape.de",
     "issues": "https://github.com/mindshape-GmbH/mindshape_seo/issues",
     "source": "https://github.com/mindshape-GmbH/mindshape_seo",
-    "docs": "https://docs.typo3.org/p/mindshape/mindshape_seo/5.0/en-us/"
+    "docs": "https://docs.typo3.org/p/mindshape/mindshape-seo/5.0/en-us/"
   },
   "require": {
     "php": ">=8.2 <8.6",
