@@ -9,7 +9,7 @@
     "cross-env": "^10.1",
     "css-loader": "^7.1",
     "mini-css-extract-plugin": "^2.10",
-    "sass": "^1.102",
+    "sass": "^1.103",
     "sass-loader": "^17.0",
     "webpack": "^5.109",
     "webpack-cli": "^7.2",
